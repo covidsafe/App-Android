@@ -1,3 +1,6 @@
 <resources>
-    <string name="app_name">corona</string>
+    <string name="app_name">Virus\nWatch</string>
+    <string name="main_header_text">Virus\nWatch</string>
+    <string name="help_header_text">Help</string>
+    <string name="history_header_text">History</string>
 </resources>
