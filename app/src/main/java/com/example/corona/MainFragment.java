@@ -112,7 +112,9 @@ public class MainFragment extends Fragment {
             Log.e("logme","onlocationchanged");
             Log.e("logme",loc.getLatitude() +","+ loc.getLongitude()+","+Utils.time());
 
-            if (Utils.locationInBlacklist(getActivity(), loc)) {
+            boolean inBlacklist = Utils.locationInBlacklist(getActivity(), loc);
+            Log.e("logme","in blacklist");
+            if (!inBlacklist) {
                 FileOperations.append(System.currentTimeMillis() + "," + loc.getLongitude() + "," + loc.getLongitude(),
                         getActivity(), Constants.gpsDirName, Utils.getLogName());
             }
