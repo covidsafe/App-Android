@@ -37,6 +37,11 @@ public class Utils {
         snackBar.show();
     }
 
+    public static void gpsLog(Context cxt, Location loc) {
+        FileOperations.append(System.currentTimeMillis() + "," + loc.getLongitude() + "," + loc.getLongitude(),
+                cxt, Constants.gpsDirName, Utils.getLogName());
+    }
+
     public static boolean locationInBlacklist(Context cxt, Location loc) {
         if (Constants.blacklist == null) {
             Constants.blacklist = FileOperations.readBlacklist(cxt);

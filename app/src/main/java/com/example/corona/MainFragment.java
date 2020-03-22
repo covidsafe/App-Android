@@ -1,8 +1,6 @@
 package com.example.corona;
 
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -20,23 +18,13 @@ import androidx.fragment.app.Fragment;
 import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.ISingleAccountPublicClientApplication;
 
-import java.util.List;
-import java.util.Locale;
-
 public class MainFragment extends Fragment {
 
     Button trackButton;
     String TAG = "err";
     TextView tv1;
     boolean tracking = false;
-    LocationListener locationListener;
     TextView riskTv;
-
-    /* Azure AD Variables */
-    private ISingleAccountPublicClientApplication mSingleAccountApp;
-    private IAccount mAccount;
-
-    LocationManager locationManager;
 
     @Nullable
     @Override
@@ -54,10 +42,6 @@ public class MainFragment extends Fragment {
         Constants.CurrentFragment = this;
         Constants.MainFragment = this;
 
-//        locationManager = (LocationManager)
-//                getActivity().getSystemService(getActivity().LOCATION_SERVICE);
-//        locationListener = new MyLocationListener();
-
         tv1 = (TextView)getActivity().findViewById(R.id.textView);
         trackButton = (Button)getActivity().findViewById(R.id.trackButton);
         riskTv = (TextView)getActivity().findViewById(R.id.riskStatusTv);
@@ -68,18 +52,16 @@ public class MainFragment extends Fragment {
             public void onClick(View v) {
                 if (!tracking) {
                     try {
-                        Log.e("logme", "request");
-//                        locationManager.requestLocationUpdates(
-//                                LocationManager.NETWORK_PROVIDER, 1000, 1, locationListener);
-                        getActivity().startService(new Intent(getActivity(), MyService.class));
-
+                        Log.e("logme","start service");
+                        getActivity().startService(new Intent(getActivity(), LocationService.class));
                     } catch (SecurityException e) {
                         Log.e("log", e.getMessage());
                     }
                     tracking = true;
                 }
                 else {
-                    locationManager.removeUpdates(locationListener);
+                    Log.e("logme","stop service");
+                    getActivity().stopService(new Intent(getActivity(), LocationService.class));
                     tracking = false;
                 }
                 updateUI();
@@ -115,8 +97,7 @@ public class MainFragment extends Fragment {
             boolean inBlacklist = Utils.locationInBlacklist(getActivity(), loc);
             Log.e("logme","in blacklist");
             if (!inBlacklist) {
-                FileOperations.append(System.currentTimeMillis() + "," + loc.getLongitude() + "," + loc.getLongitude(),
-                        getActivity(), Constants.gpsDirName, Utils.getLogName());
+                Utils.gpsLog(getActivity(), loc);
             }
 
             tv1.setText(Utils.time()+"\n"+loc.getLatitude()+"\n"+loc.getLongitude());

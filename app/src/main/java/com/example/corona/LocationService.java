@@ -8,11 +8,15 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
-public class MyService extends Service {
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class LocationService extends Service {
 
     private static final String TAG = "BOOMBOOMTESTGPS";
     private LocationManager mLocationManager = null;
-    private static final int LOCATION_INTERVAL = 1000;
+    private static final int LOCATION_INTERVAL = 1000*60;
     private static final float LOCATION_DISTANCE = 10f;
 
     private class LocationListener implements android.location.LocationListener {
@@ -25,8 +29,12 @@ public class MyService extends Service {
 
         @Override
         public void onLocationChanged(Location location) {
-            Log.e(TAG, "onLocationChanged: " + location);
+//            Log.e(TAG, "onLocationChanged: " + location);
             mLastLocation.set(location);
+            DateFormat dateFormat = new SimpleDateFormat("hh:mm.ss aa");
+            Date dd = new Date();
+            Log.e("logme", dateFormat.format(dd));
+            Utils.gpsLog(getApplicationContext(), location);
         }
 
         @Override
