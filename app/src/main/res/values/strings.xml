@@ -3,4 +3,18 @@
     <string name="main_header_text">Virus\nWatch</string>
     <string name="help_header_text">Help</string>
     <string name="history_header_text">History</string>
+    <string name="report_header_text">Daily Symptom Report</string>
+    <string name="symptom_help_text">Use this form to provide a daily report of any symptoms you have. You may submit this form once a day.</string>
+    <string name="certError">"Please check the box to certify that all the information in this form is correct."</string>
+
+    <string name="ok">Ok</string>
+
+    <string name="symptom1">Fever</string>
+    <string name="symptom2">Cough</string>
+    <string name="symptom3">Shortness of breath</string>
+    <string name="symptom4">Trouble breathing</string>
+    <string name="symptom5">Persistent pain or pressure in the chest</string>
+    <string name="symptom6">New confusion or inability to arouse</string>
+    <string name="symptom7">Bluish lips or face</string>
+    <string name="certText">I certify that the information submitted in this report is true and correct to the best of my knowledge.</string>
 </resources>

@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -34,10 +35,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        requestPermissions();
+    }
+
+    public void requestPermissions() {
         if (!Utils.hasPermissions(this)) {
             Log.e("logme", "no perms");
             ActivityCompat.requestPermissions(this, Constants.permissions, 1);
-         }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        // this code block should only execute if the user pressed the button
+        if (!Utils.hasPermissions(this)) {
+            Toast.makeText(this, "Permissions must be enabled before measurement can take place. Please try again.", Toast.LENGTH_LONG).show();
+            ActivityCompat.requestPermissions(this, Constants.permissions, 1);
+        }
     }
 
     @Override
@@ -69,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.action_history:
                         selectedFragment = Constants.HistoryFragment;
+                        break;
+                    case R.id.action_report:
+                        selectedFragment = Constants.ReportFragment;
                         break;
                     case R.id.action_help:
                         selectedFragment = Constants.HelpFragment;

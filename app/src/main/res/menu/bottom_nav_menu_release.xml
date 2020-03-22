@@ -17,6 +17,13 @@
         app:showAsAction="always|withText" />
 
     <item
+        android:id="@+id/action_report"
+        android:enabled="true"
+        android:icon="@drawable/ic_send_black_24dp"
+        android:title="Help"
+        app:showAsAction="always|withText" />
+
+    <item
         android:id="@+id/action_help"
         android:enabled="true"
         android:icon="@drawable/ic_help"

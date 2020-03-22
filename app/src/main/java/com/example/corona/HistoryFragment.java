@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -32,5 +34,11 @@ public class HistoryFragment extends Fragment {
 
         Constants.HistoryFragment = this;
         Constants.CurrentFragment = this;
+
+        String[] fileList = FileOperations.readfilelist(getActivity(), Constants.gpsDirName);
+
+        Spinner spinner = (Spinner) getActivity().findViewById(R.id.spinner);
+        spinner.setAdapter(new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_spinner_item, fileList));
     }
 }

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <CheckBox
+        android:id="@+id/symptom1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/symptom1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/symptomHelpText" />
+
+    <CheckBox
+        android:id="@+id/symptom2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/symptom2"
+        app:layout_constraintStart_toStartOf="@+id/symptom1"
+        app:layout_constraintTop_toBottomOf="@+id/symptom1" />
+
+    <CheckBox
+        android:id="@+id/symptom3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/symptom3"
+        app:layout_constraintStart_toStartOf="@+id/symptom2"
+        app:layout_constraintTop_toBottomOf="@+id/symptom2" />
+
+    <CheckBox
+        android:id="@+id/symptom5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/symptom5"
+        app:layout_constraintStart_toStartOf="@+id/symptom4"
+        app:layout_constraintTop_toBottomOf="@+id/symptom4" />
+
+    <CheckBox
+        android:id="@+id/symptom6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/symptom6"
+        app:layout_constraintStart_toStartOf="@+id/symptom5"
+        app:layout_constraintTop_toBottomOf="@+id/symptom5" />
+
+    <CheckBox
+        android:id="@+id/symptom7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/symptom7"
+        app:layout_constraintStart_toStartOf="@+id/symptom6"
+        app:layout_constraintTop_toBottomOf="@+id/symptom6" />
+
+    <CheckBox
+        android:id="@+id/symptom4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/symptom4"
+        app:layout_constraintStart_toStartOf="@+id/symptom3"
+        app:layout_constraintTop_toBottomOf="@+id/symptom3" />
+
+    <TextView
+        android:id="@+id/symptomHelpText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/symptom_help_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/submitForm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="40dp"
+        android:text="Submit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/certBox" />
+
+    <CheckBox
+        android:id="@+id/certBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/certText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/symptom7" />
+
+    <TextView
+        android:id="@+id/lastSubmittedTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="13dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/certBox" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -33,6 +33,21 @@ public class Utils {
         snackBar.show();
     }
 
+    public static String formatDate(String s) {
+        s = s.substring(0,s.length()-4);
+        String[] ss = s.split("-");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date = format.parse(s);
+            SimpleDateFormat human = new SimpleDateFormat("E, dd MMMM yyyy");
+            return human.format(date);
+        }
+        catch(Exception e) {
+            Log.e("test",e.getMessage());
+        }
+        return "";
+    }
+
     public static boolean hasPermissions(Context context) {
         Log.e("results", "check for permission");
         if (context != null && Constants.permissions != null) {
@@ -54,7 +69,7 @@ public class Utils {
     }
 
     public static String time() {
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm.ss");
+        DateFormat dateFormat = new SimpleDateFormat("hh:mm.ss aa");
         Date date = new Date();
         return dateFormat.format(date);
     }
@@ -63,5 +78,48 @@ public class Utils {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         return dateFormat.format(date)+".txt";
+    }
+
+    public static String getFormRecordName() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
+
+    public static Date getLastSubmitTime(Context cxt) {
+        String ss = FileOperations.readSubmitLog(cxt);
+        if (ss.isEmpty()) {
+            return null;
+        }
+        Log.e("logme","last line "+ss);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date date = null;
+        try {
+            return dateFormat.parse(ss);
+        }
+        catch(Exception e) {
+            Log.e("logme",e.getMessage());
+        }
+        return null;
+    }
+
+    public static boolean compareDates(Date d1) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        try {
+            Date d2 = new Date();
+
+            int diff = Utils.daysBetween(d2, d1);
+            Log.e("logme", "days betweeen " + diff);
+
+            return diff >= Constants.SubmitThresh;
+        }
+        catch(Exception e) {
+            Log.e("logme",e.getMessage());
+        }
+       return false;
+    }
+
+    public static int daysBetween(Date d1, Date d2) {
+        return (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
     }
 }
