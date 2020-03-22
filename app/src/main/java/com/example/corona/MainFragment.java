@@ -111,8 +111,12 @@ public class MainFragment extends Fragment {
         public void onLocationChanged(Location loc) {
             Log.e("logme","onlocationchanged");
             Log.e("logme",loc.getLatitude() +","+ loc.getLongitude()+","+Utils.time());
-            FileOperations.append(System.currentTimeMillis()+","+loc.getLongitude()+","+loc.getLongitude(),
-                    getActivity(), Constants.gpsDirName, Utils.getLogName());
+
+            if (Utils.locationInBlacklist(getActivity(), loc)) {
+                FileOperations.append(System.currentTimeMillis() + "," + loc.getLongitude() + "," + loc.getLongitude(),
+                        getActivity(), Constants.gpsDirName, Utils.getLogName());
+            }
+
             tv1.setText(Utils.time()+"\n"+loc.getLatitude()+"\n"+loc.getLongitude());
         }
 

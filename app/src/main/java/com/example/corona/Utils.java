@@ -3,6 +3,9 @@ package com.example.corona;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 
 public class Utils {
 
@@ -33,6 +37,24 @@ public class Utils {
         snackBar.show();
     }
 
+    public static boolean locationInBlacklist(Context cxt, Location loc) {
+        if (Constants.blacklist == null) {
+            Constants.blacklist = FileOperations.readBlacklist(cxt);
+        }
+
+        for (BlacklistRecord record : Constants.blacklist) {
+            Location loc1 = new Location("");
+            loc1.setLatitude(record.lat);
+            loc1.setLongitude(record.longi);
+
+            float distanceInMeters = loc1.distanceTo(loc);
+            if (distanceInMeters < Constants.DistanceThresholdInMeters) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static String formatDate(String s) {
         s = s.substring(0,s.length()-4);
         String[] ss = s.split("-");
@@ -46,6 +68,22 @@ public class Utils {
             Log.e("test",e.getMessage());
         }
         return "";
+    }
+
+    public static double[] address2gps(Context cxt, String addr) {
+        Geocoder geocoder = new Geocoder(cxt);
+        List<Address> addresses;
+        try {
+            addresses = geocoder.getFromLocationName(addr, 1);
+            Log.e("logme","ADDRESS 2 GPS");
+            double latitude = addresses.get(0).getLatitude();
+            double longitude = addresses.get(0).getLongitude();
+            return new double[] {latitude,longitude};
+        }
+        catch(Exception e) {
+            Log.e("logme", e.getMessage());
+        }
+        return null;
     }
 
     public static String convertDate(String s) {

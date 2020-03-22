@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 public class FileOperations {
 
-    public static ArrayList<GpsRecord> readGps(Context cxt, String filename) {
+    public static ArrayList<GpsRecord> readGpsRecords(Context cxt, String filename) {
         ArrayList<GpsRecord> ll = new ArrayList<GpsRecord>();
         File dir = new File(cxt.getExternalFilesDir(null).toString()+"/"+Constants.gpsDirName+"/"+filename);
         if (!dir.exists()) {
@@ -35,6 +35,27 @@ public class FileOperations {
         return ll;
     }
 
+    public static ArrayList<BlacklistRecord> readBlacklist(Context cxt) {
+        ArrayList<BlacklistRecord> ll = new ArrayList<BlacklistRecord>();
+        File dir = new File(cxt.getExternalFilesDir(null).toString()+"/"+Constants.blacklistDirName+"/"+Constants.blacklistFileName);
+        if (!dir.exists()) {
+            return null;
+        }
+        try {
+            Scanner inp = new Scanner(dir);
+            while (inp.hasNextLine()) {
+                String line = inp.nextLine();
+                if (line.length()>0) {
+                    ll.add(new BlacklistRecord(line));
+                }
+            }
+        }
+        catch(Exception e) {
+            Log.e("logme",e.getMessage());
+        }
+        return ll;
+    }
+
     public static String[] readfilelist(Context cxt, String dirname) {
         File dir = new File(cxt.getExternalFilesDir(null).toString()+"/"+Constants.gpsDirName);
         if (!dir.exists()) {
@@ -45,10 +66,6 @@ public class FileOperations {
 
         for (int i = 0; i < files.length; i++) {
             String name = files[i].getName();
-//            String formatted = Utils.formatDate(name);
-//            if (!formatted.isEmpty()) {
-//                ss[i] = formatted;
-//            }
             ss[i] = name;
         }
 
