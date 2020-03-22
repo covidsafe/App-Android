@@ -10,12 +10,16 @@ public class Constants {
     public static Fragment HelpFragment;
     public static Fragment HistoryFragment;
     public static Fragment ReportFragment;
+    public static Fragment WarningFragment;
+    public static Fragment SettingsFragment;
     public static Fragment CurrentFragment;
     public static String gpsDirName = "gps";
     public static String bleDirName = "ble";
     public static String formDirName = "form";
     public static String logFileName = "log.txt";
-    public static int SubmitThresh = 1;
+    public static boolean DEBUG = false;
+    public static int NumFilesToDisplay = 14;
+    public static int SubmitThresh = 0;
 //    public static String[] scope = {"user.read"};
 //    public static String baliResourceURL = "https://graph.microsoft.com/v1.0/me";
     public static String[] permissions={
@@ -27,5 +31,7 @@ public class Constants {
         HelpFragment = new HelpFragment();
         HistoryFragment = new HistoryFragment();
         ReportFragment = new ReportFragment();
+        WarningFragment = new WarningFragment();
+        SettingsFragment = new SettingsFragment();
     }
 }

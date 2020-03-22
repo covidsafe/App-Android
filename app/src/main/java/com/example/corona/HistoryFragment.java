@@ -1,14 +1,18 @@
 package com.example.corona;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import java.util.ArrayList;
 
 public class HistoryFragment extends Fragment {
 
@@ -35,10 +39,29 @@ public class HistoryFragment extends Fragment {
         Constants.HistoryFragment = this;
         Constants.CurrentFragment = this;
 
-        String[] fileList = FileOperations.readfilelist(getActivity(), Constants.gpsDirName);
+        final String[] fileList = FileOperations.readfilelist(getActivity(), Constants.gpsDirName);
+        if (fileList != null) {
+            Spinner spinner = (Spinner) getActivity().findViewById(R.id.spinner);
+            spinner.setAdapter(new ArrayAdapter<String>(getActivity(),
+                    android.R.layout.simple_spinner_item, fileList));
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    Log.e("logme","SELECTED "+fileList[position]);
+                    ArrayList<GpsRecord> records = FileOperations.readGps(getActivity(), Utils.convertDate(fileList[position]));
+                    displayPoints(records);
+                }
 
-        Spinner spinner = (Spinner) getActivity().findViewById(R.id.spinner);
-        spinner.setAdapter(new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_spinner_item, fileList));
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                    // your code here
+                }
+
+            });
+        }
+    }
+
+    public void displayPoints(ArrayList<GpsRecord> records) {
+        
     }
 }

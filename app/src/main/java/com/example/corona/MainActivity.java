@@ -35,6 +35,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        if (Constants.DEBUG) {
+            bottomNavigationView.getMenu().clear();
+            bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_debug);
+        }
+        else {
+            bottomNavigationView.getMenu().clear();
+            bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_release);
+        }
+
         requestPermissions();
     }
 
@@ -73,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void initBottomNav() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -87,8 +98,16 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.action_report:
                         selectedFragment = Constants.ReportFragment;
                         break;
+                    case R.id.action_warning:
+                        Log.e("logme","WARNING-nav");
+                        selectedFragment = Constants.WarningFragment;
+                        break;
                     case R.id.action_help:
+                        Log.e("logme","HELP-nav");
                         selectedFragment = Constants.HelpFragment;
+                        break;
+                    case R.id.action_settings:
+                        selectedFragment = Constants.SettingsFragment;
                         break;
                 }
 

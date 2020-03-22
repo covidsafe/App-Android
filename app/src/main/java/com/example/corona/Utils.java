@@ -48,6 +48,18 @@ public class Utils {
         return "";
     }
 
+    public static String convertDate(String s) {
+        SimpleDateFormat d1 = new SimpleDateFormat("E, dd MMMM yyyy");
+        SimpleDateFormat d2 = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            return d2.format(d1.parse(s));
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
     public static boolean hasPermissions(Context context) {
         Log.e("results", "check for permission");
         if (context != null && Constants.permissions != null) {

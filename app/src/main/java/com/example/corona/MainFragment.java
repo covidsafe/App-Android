@@ -30,6 +30,7 @@ public class MainFragment extends Fragment {
     TextView tv1;
     boolean tracking = false;
     LocationListener locationListener;
+    TextView riskTv;
 
     /* Azure AD Variables */
     private ISingleAccountPublicClientApplication mSingleAccountApp;
@@ -59,6 +60,8 @@ public class MainFragment extends Fragment {
 
         tv1 = (TextView)getActivity().findViewById(R.id.textView);
         trackButton = (Button)getActivity().findViewById(R.id.trackButton);
+        riskTv = (TextView)getActivity().findViewById(R.id.riskStatusTv);
+        riskTv.setText(getString(R.string.risk_low));
         updateUI();
 
         trackButton.setOnClickListener(new View.OnClickListener() {

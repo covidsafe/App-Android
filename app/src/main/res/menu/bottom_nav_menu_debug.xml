@@ -10,6 +10,20 @@
         app:showAsAction="always|withText" />
 
     <item
+        android:id="@+id/action_history"
+        android:enabled="true"
+        android:icon="@drawable/ic_history_black_24dp"
+        android:title="History"
+        app:showAsAction="always|withText" />
+
+    <item
+        android:id="@+id/action_report"
+        android:enabled="true"
+        android:icon="@drawable/ic_send_black_24dp"
+        android:title="Symptoms"
+        app:showAsAction="always|withText" />
+
+    <item
         android:id="@+id/action_warning"
         android:enabled="true"
         android:icon="@drawable/ic_warning_black_24dp"
@@ -17,10 +31,9 @@
         app:showAsAction="always|withText" />
 
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_help"
         android:enabled="true"
-        android:icon="@drawable/ic_settings_black_24dp"
-        android:title="Settings"
+        android:icon="@drawable/ic_help"
+        android:title="Help"
         app:showAsAction="always|withText" />
-
 </menu>
