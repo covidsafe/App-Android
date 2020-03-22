@@ -23,6 +23,7 @@ public class Constants {
     public static String logFileName = "log.txt";
     public static String blacklistFileName = "blacklist.txt";
     public static boolean DEBUG = false;
+    public static int MaxBlacklistSize = 3;
     public static int NumFilesToDisplay = 14;
     public static int SubmitThresh = 0;
     public static float DistanceThresholdInMeters = 1609.34f;

@@ -8,9 +8,11 @@
     <string name="warning_header_text">Diagnosis Report</string>
     <string name="symptom_help_text">Use this form to provide a daily report of any symptoms you have. You may submit this form once a day.</string>
     <string name="warning_help_text">Use this form to report if you have been tested positive for COVID-19.</string>
-    <string name="settings_help_text">You can use this panel to create a 1 mile radius around locations you don\'t want to be tracked.</string>
+    <string name="settings_help_text">You can use this panel to create a 1 mile radius around locations you don\'t want to be tracked. You can add up to %1$d locations.</string>
+
     <string name="certError">Please check the box to certify that all the information in this form is correct.</string>
     <string name="addressError">The address you have entered is invalid. Please try again.</string>
+    <string name="maxBlacklistSizeError">Maximum blacklist size reached.</string>
 
     <string name="risk_low">No known transmission vectors</string>
     <string name="risk_high">Risk of transmission</string>

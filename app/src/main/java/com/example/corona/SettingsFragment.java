@@ -53,26 +53,34 @@ public class SettingsFragment extends Fragment {
         addButton = (Button) getActivity().findViewById(R.id.addButton);
         addressText = (EditText) getActivity().findViewById(R.id.addressText);
         settingsHelperText = (TextView) getActivity().findViewById(R.id.settingsHelperText);
-        settingsHelperText.setText(getActivity().getString(R.string.settings_help_text));
+        settingsHelperText.setText(getActivity().getString(R.string.settings_help_text, Constants.MaxBlacklistSize));
 
         refresh();
 
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String address = addressText.getText().toString();
-                double[] gps = Utils.address2gps(getActivity(),address);
-                if (gps == null) {
+                if (Constants.blacklist.size() > Constants.MaxBlacklistSize) {
                     AlertDialog dialog = new MaterialAlertDialogBuilder(getActivity())
                             .setTitle("Error")
-                            .setMessage(getActivity().getString(R.string.addressError))
-                            .setPositiveButton(R.string.ok,null)
+                            .setMessage(getActivity().getString(R.string.maxBlacklistSizeError))
+                            .setPositiveButton(R.string.ok, null)
                             .setCancelable(false).create();
-                    dialog.show();
                 }
                 else {
-                    FileOperations.append(gps[0]+","+gps[1]+","+address, getActivity(), Constants.blacklistDirName, Constants.blacklistFileName);
-                    Utils.mkSnack(getActivity(),view,"Address successfully added");
-                    refresh();
+                    String address = addressText.getText().toString();
+                    double[] gps = Utils.address2gps(getActivity(), address);
+                    if (gps == null) {
+                        AlertDialog dialog = new MaterialAlertDialogBuilder(getActivity())
+                                .setTitle("Error")
+                                .setMessage(getActivity().getString(R.string.addressError))
+                                .setPositiveButton(R.string.ok, null)
+                                .setCancelable(false).create();
+                        dialog.show();
+                    } else {
+                        FileOperations.append(gps[0] + "," + gps[1] + "," + address, getActivity(), Constants.blacklistDirName, Constants.blacklistFileName);
+                        Utils.mkSnack(getActivity(), view, "Address successfully added");
+                        refresh();
+                    }
                 }
             }
         });
@@ -90,6 +98,17 @@ public class SettingsFragment extends Fragment {
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             adapter = new MyAdapter(blacklistAddresses);
             recyclerView.setAdapter(adapter);
+            recyclerView.addOnItemTouchListener(
+                    new RecyclerItemClickListener(getActivity(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+                        @Override public void onItemClick(View view, int position) {
+                            // do whatever
+                        }
+
+                        @Override public void onLongItemClick(View view, int position) {
+                            // do whatever
+                        }
+                    })
+            );
 
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),DividerItemDecoration.VERTICAL);
             recyclerView.addItemDecoration(dividerItemDecoration);
