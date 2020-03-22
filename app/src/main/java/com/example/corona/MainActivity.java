@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Permissions must be enabled before measurement can take place. Please try again.", Toast.LENGTH_LONG).show();
             ActivityCompat.requestPermissions(this, Constants.permissions, 1);
         }
+        Utils.createNotificationChannel(this);
     }
 
     @Override
@@ -71,6 +72,12 @@ public class MainActivity extends AppCompatActivity {
         Constants.init();
         initView();
         initBottomNav();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.e("logme","activity destroyed");
     }
 
     public void initView() {

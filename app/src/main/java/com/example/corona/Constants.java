@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Constants {
+    public static String NOTIFICATION_CHANNEL = "channel";
     public static Fragment MainFragment;
     public static Fragment HelpFragment;
     public static Fragment HistoryFragment;
@@ -23,6 +24,7 @@ public class Constants {
     public static String logFileName = "log.txt";
     public static String blacklistFileName = "blacklist.txt";
     public static boolean DEBUG = false;
+    public static boolean tracking = false;
     public static int MaxBlacklistSize = 3;
     public static int NumFilesToDisplay = 14;
     public static int SubmitThresh = 0;

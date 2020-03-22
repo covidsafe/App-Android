@@ -1,62 +1,64 @@
 package com.example.corona;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Binder;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.util.Log;
+import android.widget.TextView;
+
+import androidx.core.app.NotificationCompat;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class LocationService extends Service {
-
-    private static final String TAG = "BOOMBOOMTESTGPS";
     private LocationManager mLocationManager = null;
-    private static final int LOCATION_INTERVAL = 1000*60;
-    private static final float LOCATION_DISTANCE = 10f;
+    private static final int LOCATION_INTERVAL = 1000;
+    private static final float LOCATION_DISTANCE = 1f;
+    LocationListener locListener;
+    Handler serviceHandler;
+//    IBinder mBinder = new LocalBinder();
+
+//    public class LocalBinder extends Binder {
+//        public void registerHandler(Handler handler) {
+//            Log.e("logme","handler registered "+(handler==null));
+//            serviceHandler = handler;
+//        }
+//    }
 
     private class LocationListener implements android.location.LocationListener {
-        Location mLastLocation;
-
-        public LocationListener(String provider) {
-            Log.e(TAG, "LocationListener " + provider);
-            mLastLocation = new Location(provider);
-        }
 
         @Override
         public void onLocationChanged(Location location) {
-//            Log.e(TAG, "onLocationChanged: " + location);
-            mLastLocation.set(location);
             DateFormat dateFormat = new SimpleDateFormat("hh:mm.ss aa");
             Date dd = new Date();
             Log.e("logme", dateFormat.format(dd));
             Utils.gpsLog(getApplicationContext(), location);
+
+//            if (serviceHandler!=null) {
+//                Message msg = serviceHandler.obtainMessage(1, dateFormat.format(dd));
+//                serviceHandler.sendMessage(msg);
+//            }
         }
 
         @Override
-        public void onProviderDisabled(String provider) {
-            Log.e(TAG, "onProviderDisabled: " + provider);
-        }
+        public void onProviderDisabled(String provider) { }
 
         @Override
-        public void onProviderEnabled(String provider) {
-            Log.e(TAG, "onProviderEnabled: " + provider);
-        }
+        public void onProviderEnabled(String provider) { }
 
         @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-            Log.e(TAG, "onStatusChanged: " + provider);
-        }
+        public void onStatusChanged(String provider, int status, Bundle extras) { }
     }
-
-    LocationListener[] mLocationListeners = new LocationListener[]{
-            new LocationListener(LocationManager.GPS_PROVIDER),
-            new LocationListener(LocationManager.NETWORK_PROVIDER)
-    };
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -65,53 +67,51 @@ public class LocationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.e(TAG, "onStartCommand");
         super.onStartCommand(intent, flags, startId);
-        return START_STICKY;
+        Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(getString(R.string.notif_message))
+                .setSmallIcon(R.drawable.ic_android_black_24dp)
+                .build();
+        startForeground(1,notification);
+        return START_NOT_STICKY;
     }
 
     @Override
     public void onCreate() {
-        Log.e(TAG, "onCreate");
         initializeLocationManager();
         try {
+            Log.e("logme","request");
+            locListener = new LocationListener();
             mLocationManager.requestLocationUpdates(
                     LocationManager.NETWORK_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
-                    mLocationListeners[1]);
+                    locListener);
         } catch (java.lang.SecurityException ex) {
-            Log.i(TAG, "fail to request location update, ignore", ex);
+            Log.e("logme", "fail to request location update, ignore", ex);
         } catch (IllegalArgumentException ex) {
-            Log.d(TAG, "network provider does not exist, " + ex.getMessage());
-        }
-        try {
-            mLocationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
-                    mLocationListeners[0]);
-        } catch (java.lang.SecurityException ex) {
-            Log.i(TAG, "fail to request location update, ignore", ex);
-        } catch (IllegalArgumentException ex) {
-            Log.d(TAG, "gps provider does not exist " + ex.getMessage());
+            Log.e("logme", "gps provider does not exist " + ex.getMessage());
+        } catch(Exception e ){
+            Log.e("logme",e.getMessage());
         }
     }
 
     @Override
     public void onDestroy() {
-        Log.e(TAG, "onDestroy");
+        Log.e("logme", "service destroyed");
         super.onDestroy();
         if (mLocationManager != null) {
-            for (int i = 0; i < mLocationListeners.length; i++) {
-                try {
-                    mLocationManager.removeUpdates(mLocationListeners[i]);
-                } catch (Exception ex) {
-                    Log.i(TAG, "fail to remove location listners, ignore", ex);
-                }
+            try {
+                mLocationManager.removeUpdates(locListener);
+            } catch (Exception ex) {
+                Log.e("logme", "fail to remove location listners, ignore", ex);
             }
         }
     }
 
     private void initializeLocationManager() {
-        Log.e(TAG, "initializeLocationManager");
+        Log.e("logme", "initializeLocationManager");
         if (mLocationManager == null) {
+            Log.e("logme", "initializeLocationManager2");
             mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         }
     }

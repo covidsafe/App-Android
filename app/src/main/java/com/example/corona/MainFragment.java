@@ -1,29 +1,32 @@
 package com.example.corona;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.microsoft.identity.client.IAccount;
-import com.microsoft.identity.client.ISingleAccountPublicClientApplication;
-
 public class MainFragment extends Fragment {
 
     Button trackButton;
-    String TAG = "err";
     TextView tv1;
-    boolean tracking = false;
     TextView riskTv;
 
     @Nullable
@@ -31,7 +34,8 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(getActivity().getString(R.string.main_header_text));
-
+//        Intent mIntent = new Intent(getActivity(), LocationService.class);
+//        getActivity().bindService(mIntent, mConnection, getActivity().BIND_AUTO_CREATE);
         return view;
     }
 
@@ -50,27 +54,48 @@ public class MainFragment extends Fragment {
 
         trackButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (!tracking) {
+                if (!Constants.tracking) {
                     try {
                         Log.e("logme","start service");
-                        getActivity().startService(new Intent(getActivity(), LocationService.class));
+                        Intent ii = new Intent(getActivity(), LocationService.class);
+                        getActivity().startService(ii);
                     } catch (SecurityException e) {
                         Log.e("log", e.getMessage());
                     }
-                    tracking = true;
+                    Constants.tracking = true;
                 }
                 else {
                     Log.e("logme","stop service");
                     getActivity().stopService(new Intent(getActivity(), LocationService.class));
-                    tracking = false;
+                    Constants.tracking = false;
                 }
                 updateUI();
             }
         });
     }
 
+//    ServiceConnection mConnection = new ServiceConnection() {
+//        @Override
+//        public void onServiceDisconnected(ComponentName name) {
+//        }
+//
+//        @Override
+//        public void onServiceConnected(ComponentName name, IBinder service) {
+//            Log.e("logme","service connected");
+//            LocationService.LocalBinder mLocalBinder = (LocationService.LocalBinder)service;
+//            mLocalBinder.registerHandler(serviceHandler);
+//        }
+//    };
+
+    private Handler serviceHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            riskTv.setText(msg.toString());
+        }
+    };
+
     public void updateUI() {
-        if (tracking) {
+        if (Constants.tracking) {
             trackButton.setText("Stop tracking");
             trackButton.setBackgroundResource(R.drawable.stopbutton);
         }
@@ -86,33 +111,5 @@ public class MainFragment extends Fragment {
 
         Constants.MainFragment = this;
         Constants.CurrentFragment = this;
-    }
-
-    private class MyLocationListener implements LocationListener {
-        @Override
-        public void onLocationChanged(Location loc) {
-            Log.e("logme","onlocationchanged");
-            Log.e("logme",loc.getLatitude() +","+ loc.getLongitude()+","+Utils.time());
-
-            boolean inBlacklist = Utils.locationInBlacklist(getActivity(), loc);
-            Log.e("logme","in blacklist");
-            if (!inBlacklist) {
-                Utils.gpsLog(getActivity(), loc);
-            }
-
-            tv1.setText(Utils.time()+"\n"+loc.getLatitude()+"\n"+loc.getLongitude());
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {}
-
-        @Override
-        public void onProviderEnabled(String provider) {
-            Log.e("logme","onproviderenabled");}
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-            Log.e("logme","onstatuschanged");
-        }
     }
 }

@@ -1,6 +1,8 @@
 package com.example.corona;
 
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -127,6 +129,19 @@ public class Utils {
         DateFormat dateFormat = new SimpleDateFormat("hh:mm.ss aa");
         Date date = new Date();
         return dateFormat.format(date);
+    }
+
+    public static void createNotificationChannel(Context cxt) {
+        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.O) {
+            NotificationChannel serviceChannel = new NotificationChannel(
+                    Constants.NOTIFICATION_CHANNEL,
+                    "Example",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            NotificationManager manager = cxt.getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(serviceChannel);
+
+        }
     }
 
     public static String getLogName() {
