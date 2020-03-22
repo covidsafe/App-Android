@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Constants {
+    public static boolean startingToTrack = false;
     public static String NOTIFICATION_CHANNEL = "channel";
     public static Fragment MainFragment;
     public static Fragment HelpFragment;

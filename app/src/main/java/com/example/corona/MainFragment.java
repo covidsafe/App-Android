@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 public class MainFragment extends Fragment {
@@ -34,8 +35,6 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(getActivity().getString(R.string.main_header_text));
-//        Intent mIntent = new Intent(getActivity(), LocationService.class);
-//        getActivity().bindService(mIntent, mConnection, getActivity().BIND_AUTO_CREATE);
         return view;
     }
 
@@ -55,14 +54,23 @@ public class MainFragment extends Fragment {
         trackButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (!Constants.tracking) {
+                    Constants.startingToTrack = true;
                     try {
                         Log.e("logme","start service");
-                        Intent ii = new Intent(getActivity(), LocationService.class);
-                        getActivity().startService(ii);
+
+                        if (!Utils.hasPermissions(getActivity())) {
+                            ActivityCompat.requestPermissions(getActivity(), Constants.permissions, 1);
+                        }
+                        else {
+                            Utils.createNotificationChannel(getActivity());
+                            getActivity().startService(new Intent(getActivity(), LocationService.class));
+                            Constants.tracking = true;
+                            Constants.startingToTrack = false;
+                        }
+
                     } catch (SecurityException e) {
                         Log.e("log", e.getMessage());
                     }
-                    Constants.tracking = true;
                 }
                 else {
                     Log.e("logme","stop service");
@@ -73,26 +81,6 @@ public class MainFragment extends Fragment {
             }
         });
     }
-
-//    ServiceConnection mConnection = new ServiceConnection() {
-//        @Override
-//        public void onServiceDisconnected(ComponentName name) {
-//        }
-//
-//        @Override
-//        public void onServiceConnected(ComponentName name, IBinder service) {
-//            Log.e("logme","service connected");
-//            LocationService.LocalBinder mLocalBinder = (LocationService.LocalBinder)service;
-//            mLocalBinder.registerHandler(serviceHandler);
-//        }
-//    };
-
-    private Handler serviceHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            riskTv.setText(msg.toString());
-        }
-    };
 
     public void updateUI() {
         if (Constants.tracking) {

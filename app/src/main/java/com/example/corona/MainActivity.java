@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.Manifest;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -57,12 +58,26 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        Log.e("logme","on request permission");
         // this code block should only execute if the user pressed the button
         if (!Utils.hasPermissions(this)) {
+            Log.e("logme","does not have permissions");
             Toast.makeText(this, "Permissions must be enabled before measurement can take place. Please try again.", Toast.LENGTH_LONG).show();
-            ActivityCompat.requestPermissions(this, Constants.permissions, 1);
+//            ActivityCompat.requestPermissions(this, Constants.permissions, 1);
         }
-        Utils.createNotificationChannel(this);
+        else {
+            Log.e("logme","has permissions");
+            if (Constants.startingToTrack) {
+                Log.e("logme","starting to track");
+                Utils.createNotificationChannel(this);
+                startService(new Intent(this, LocationService.class));
+                Constants.tracking = true;
+                Constants.startingToTrack = false;
+                Button trackButton = (Button)findViewById(R.id.trackButton);
+                trackButton.setText("Stop tracking");
+                trackButton.setBackgroundResource(R.drawable.stopbutton);
+            }
+        }
     }
 
     @Override
