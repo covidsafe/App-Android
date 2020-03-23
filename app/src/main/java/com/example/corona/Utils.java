@@ -22,10 +22,16 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import unused.BlacklistRecord;
 
 public class Utils {
+
+    public static String randomGUID() {
+        return UUID.randomUUID().toString();
+    }
+
     public static void mkSnack(Activity av, View v, String msg) {
         final Snackbar snackBar = Snackbar.make(v, msg, Snackbar.LENGTH_LONG);
 

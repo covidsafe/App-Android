@@ -18,6 +18,7 @@ import unused.SettingsFragment;
 
 public class Constants {
 
+    public static String insertAsyncTaskRunning = "";
 
     public static boolean DEBUG = false;
     public static boolean BLUETOOTH_ENABLED = false;
