@@ -85,7 +85,9 @@ public class LocationService extends Service {
                     locListener);
             ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
             Constants.uploadTask = exec.scheduleWithFixedDelay(new UploadTask(getApplicationContext()), 0, 1, TimeUnit.HOURS);
-
+            if (Constants.BLUETOOTH_ENABLED) {
+                Constants.bluetoothTask = exec.scheduleWithFixedDelay(new BluetoothHelper(), 0, 1, TimeUnit.HOURS);
+            }
         } catch (java.lang.SecurityException ex) {
             Log.e("logme", "fail to request location update, ignore", ex);
         } catch (IllegalArgumentException ex) {

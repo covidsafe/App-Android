@@ -118,7 +118,7 @@ public class UploadTask implements Runnable {
 
                     conn.disconnect();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Log.e("logme",e.getMessage());
                 }
             }
         });

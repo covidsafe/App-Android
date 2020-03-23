@@ -1,6 +1,9 @@
 package com.example.corona;
 
 import android.Manifest;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGatt;
 import android.content.Context;
 
 import androidx.fragment.app.Fragment;
@@ -10,8 +13,13 @@ import java.util.LinkedList;
 import java.util.concurrent.ScheduledFuture;
 
 public class Constants {
+    static boolean BLUETOOTH_ENABLED = false;
+    static BluetoothDevice device;
+    static BluetoothGatt gatt;
+    static BluetoothAdapter blueAdapter;
     public static int statusSubmitted = -1;
     public static ScheduledFuture uploadTask;
+    public static ScheduledFuture bluetoothTask;
     public static boolean startingToTrack = false;
     public static String NOTIFICATION_CHANNEL = "channel";
     public static Fragment MainFragment;
@@ -41,7 +49,11 @@ public class Constants {
     public static String[] permissions={
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_BACKGROUND_LOCATION};
+            Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+        Manifest.permission.FOREGROUND_SERVICE,
+        Manifest.permission.BLUETOOTH_ADMIN,
+        Manifest.permission.BLUETOOTH,
+            Manifest.permission.INTERNET};
     public static void init() {
         MainFragment = new MainFragment();
         HelpFragment = new HelpFragment();

@@ -2,7 +2,11 @@ package com.example.corona;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothProfile;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.location.Location;
@@ -17,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,8 +63,16 @@ public class MainFragment extends Fragment {
                     try {
                         Log.e("logme","start service");
 
+                        BluetoothManager bluetoothManager =
+                                (BluetoothManager) getActivity().getSystemService(Context.BLUETOOTH_SERVICE);
+                        Constants.blueAdapter = bluetoothManager.getAdapter();
+
                         if (!Utils.hasPermissions(getActivity())) {
                             ActivityCompat.requestPermissions(getActivity(), Constants.permissions, 1);
+                        }
+                        else if (Constants.BLUETOOTH_ENABLED && (Constants.blueAdapter == null || !Constants.blueAdapter.isEnabled())) {
+                            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                            getActivity().startActivityForResult(enableBtIntent, 0);
                         }
                         else {
                             Utils.createNotificationChannel(getActivity());
