@@ -39,7 +39,7 @@ public class HistoryFragment extends Fragment {
         Constants.HistoryFragment = this;
         Constants.CurrentFragment = this;
 
-        final String[] fileList = FileOperations.readfilelist(getActivity());
+        final String[] fileList = FileOperations.readfilelisthuman(getActivity());
         if (fileList != null) {
             Spinner spinner = (Spinner) getActivity().findViewById(R.id.spinner);
             spinner.setAdapter(new ArrayAdapter<String>(getActivity(),

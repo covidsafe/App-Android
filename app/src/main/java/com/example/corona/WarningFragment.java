@@ -21,7 +21,7 @@ public class WarningFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.e("logme","WARNING");
+//        Log.e("logme","WARNING");
         View view = inflater.inflate(R.layout.fragment_warning, container, false);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(getActivity().getString(R.string.warning_header_text));
         return view;
@@ -30,7 +30,7 @@ public class WarningFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.e("logme","WARNING");
+//        Log.e("logme","WARNING");
         Constants.WarningFragment = this;
         Constants.CurrentFragment = this;
 

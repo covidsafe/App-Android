@@ -152,11 +152,11 @@ public class MainActivity extends AppCompatActivity {
                         selectedFragment = Constants.ReportFragment;
                         break;
                     case R.id.action_warning:
-                        Log.e("logme","WARNING-nav");
+//                        Log.e("logme","WARNING-nav");
                         selectedFragment = Constants.WarningFragment;
                         break;
                     case R.id.action_help:
-                        Log.e("logme","HELP-nav");
+//                        Log.e("logme","HELP-nav");
                         selectedFragment = Constants.HelpFragment;
                         break;
                     case R.id.action_settings:

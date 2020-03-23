@@ -7,9 +7,12 @@ import android.util.Log;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class FileOperations {
@@ -48,6 +51,11 @@ public class FileOperations {
 
     public static ArrayList<GpsRecord> readGpsRecords(Context cxt, String filename) {
         ArrayList<GpsRecord> ll = new ArrayList<GpsRecord>();
+
+        if (!filename.endsWith(".txt")) {
+            filename += ".txt";
+        }
+
         File dir = new File(cxt.getExternalFilesDir(null).toString()+"/"+Constants.gpsDirName+"/"+filename);
         if (!dir.exists()) {
             return null;
@@ -88,7 +96,7 @@ public class FileOperations {
         return ll;
     }
 
-    public static String[] readfilelist(Context cxt) {
+    public static String[] readfilelisthuman(Context cxt) {
         File dir = new File(cxt.getExternalFilesDir(null).toString()+"/"+Constants.gpsDirName);
         if (!dir.exists()) {
             return null;
@@ -108,6 +116,37 @@ public class FileOperations {
             out[i] = Utils.formatDate(ss[i]);
         }
         return out;
+    }
+
+    public static Date[] readfilelist(Context cxt, boolean ascending) {
+        File dir = new File(cxt.getExternalFilesDir(null).toString()+"/"+Constants.gpsDirName);
+        if (!dir.exists()) {
+            return null;
+        }
+        File[] files = dir.listFiles();
+        if (ascending) {
+            Arrays.sort(files);
+        }
+        else {
+            Arrays.sort(files, Collections.reverseOrder());
+        }
+
+        LinkedList<Date> ss = new LinkedList();
+
+        for (int i = 0; i < files.length; i++) {
+            String name = files[i].getName();
+            if (!name.equals(Constants.lastSentFileName)) {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+                    ss.add(format.parse(name));
+                }
+                catch(Exception e) {
+                    Log.e("logme",e.getMessage());
+                }
+            }
+        }
+
+        return ss.toArray(new Date[ss.size()]);
     }
 
     public static String readLastSentLog(Context cxt) {
@@ -130,6 +169,28 @@ public class FileOperations {
         }
 
         return "";
+    }
+
+    public static void writeLastSentLog(Context cxt, long lastTimestamp) {
+        String dir = cxt.getExternalFilesDir(null).toString()+"/"+Constants.gpsDirName+"/"+Constants.lastSentFileName;
+        File path = new File(dir);
+
+        try {
+            if (!path.exists()) {
+                path.createNewFile();
+            }
+
+            BufferedWriter buf = new BufferedWriter(new FileWriter(path,false));
+
+            buf.append(lastTimestamp+"");
+            buf.newLine();
+
+            buf.flush();
+            buf.close();
+        }
+        catch(Exception e) {
+            Log.e("logme",e.getMessage());
+        }
     }
 
     public static String readSubmitLog(Context cxt) {
