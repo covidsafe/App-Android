@@ -37,14 +37,8 @@ public class UploadTask implements Runnable {
         Date dd = new Date();
         Log.e("logme", "upload task "+dateFormat.format(dd));
 
-        Date lastSentDate = null;
-        String lastSent = FileOperations.readLastSentLog(cxt);
-        if (!lastSent.isEmpty()) {
-            lastSentDate = new Date(Long.parseLong(lastSent));
-        }
-        else {
-            lastSentDate = new Date(0000000000000L);
-        }
+        long lastSent = Utils.readLastSentLog(cxt);
+        Date lastSentDate = new Date(lastSent);
 
         DateFormat fileDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date[] dates = FileOperations.readfilelist(cxt, true);
@@ -109,7 +103,7 @@ public class UploadTask implements Runnable {
                     int resp = conn.getResponseCode();
                     if (resp == 200) {
                         long lastTimestamp = records.records.getLast().ts;
-                        FileOperations.writeLastSentLog(cxt, lastTimestamp);
+                        Utils.writeLastSentLog(cxt, lastTimestamp);
                         DateFormat fileDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                         Log.e("logme", "last sent "+fileDateFormat.format(new Date(lastTimestamp)));
                     }

@@ -1,18 +1,14 @@
 package com.example.corona;
 import android.app.Notification;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Binder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.util.Log;
-import android.widget.TextView;
 
 import androidx.core.app.NotificationCompat;
 
@@ -21,6 +17,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import unused.BluetoothHelper;
 
 public class LocationService extends Service {
     private LocationManager mLocationManager = null;

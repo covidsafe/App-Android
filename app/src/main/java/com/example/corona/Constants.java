@@ -4,23 +4,28 @@ import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
-import android.content.Context;
 
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.concurrent.ScheduledFuture;
 
+import unused.BlacklistRecord;
+import unused.HelpFragment;
+import unused.HistoryFragment;
+import unused.ReportFragment;
+import unused.SettingsFragment;
+
 public class Constants {
-    static boolean BLUETOOTH_ENABLED = false;
-    static BluetoothDevice device;
-    static BluetoothGatt gatt;
-    static BluetoothAdapter blueAdapter;
+    public static boolean BLUETOOTH_ENABLED = false;
+    public static BluetoothDevice device;
+    public static BluetoothGatt gatt;
+    public static BluetoothAdapter blueAdapter;
     public static int statusSubmitted = -1;
     public static ScheduledFuture uploadTask;
     public static ScheduledFuture bluetoothTask;
     public static boolean startingToTrack = false;
+    public static String preferenceFile = "preferences";
     public static String NOTIFICATION_CHANNEL = "channel";
     public static Fragment MainFragment;
     public static Fragment HelpFragment;
@@ -34,7 +39,7 @@ public class Constants {
     public static String formDirName = "form";
     public static String blacklistDirName = "blacklist";
     public static String logFileName = "log.txt";
-    public static String lastSentFileName = "lastsent.txt";
+    public static String lastSentName = "lastsent";
     public static String blacklistFileName = "blacklist.txt";
     public static String DiagnosisReportFileName = "diagnosis.txt";
     public static boolean DEBUG = false;

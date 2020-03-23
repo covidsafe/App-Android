@@ -1,4 +1,4 @@
-package com.example.corona;
+package unused;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +11,13 @@ import android.widget.Spinner;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.example.corona.Constants;
+import com.example.corona.FileOperations;
+import com.example.corona.GpsRecord;
+import com.example.corona.MainActivity;
+import com.example.corona.R;
+import com.example.corona.Utils;
 
 import java.util.ArrayList;
 

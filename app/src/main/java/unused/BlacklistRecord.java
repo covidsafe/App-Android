@@ -1,9 +1,9 @@
-package com.example.corona;
+package unused;
 
 public class BlacklistRecord {
-    double lat;
-    double longi;
-    String address;
+    public double lat;
+    public double longi;
+    public String address;
 
     public BlacklistRecord(String ss) {
         String[] elts = ss.split(",");

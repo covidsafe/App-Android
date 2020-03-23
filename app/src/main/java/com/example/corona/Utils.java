@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -20,13 +21,12 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
-public class Utils {
+import unused.BlacklistRecord;
 
+public class Utils {
     public static void mkSnack(Activity av, View v, String msg) {
         final Snackbar snackBar = Snackbar.make(v, msg, Snackbar.LENGTH_LONG);
 
@@ -123,13 +123,6 @@ public class Utils {
         return true;
     }
 
-    /**
-     * Display the error message
-     */
-    public static void displayError(@NonNull final Exception exception) {
-        Log.e("err",exception.toString());
-    }
-
     public static String time() {
         DateFormat dateFormat = new SimpleDateFormat("hh:mm.ss aa");
         Date date = new Date();
@@ -210,5 +203,18 @@ public class Utils {
 
     public static int daysBetween(Date d1, Date d2) {
         return (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
+    }
+
+    public static void writeLastSentLog(Context cxt, long ts) {
+        SharedPreferences.Editor sharedPref = cxt.getSharedPreferences(
+                Constants.preferenceFile, Context.MODE_PRIVATE).edit();
+        sharedPref.putLong(Constants.lastSentName, ts);
+        sharedPref.commit();
+    }
+
+    public static long readLastSentLog(Context cxt) {
+        SharedPreferences sharedPref = cxt.getSharedPreferences(
+                Constants.preferenceFile, Context.MODE_PRIVATE);
+        return sharedPref.getLong(Constants.lastSentName, 0L);
     }
 }

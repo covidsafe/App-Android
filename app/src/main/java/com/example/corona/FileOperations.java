@@ -1,7 +1,6 @@
 package com.example.corona;
 
 import android.content.Context;
-import android.os.Environment;
 import android.util.Log;
 
 import java.io.BufferedWriter;
@@ -14,6 +13,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Scanner;
+
+import unused.BlacklistRecord;
 
 public class FileOperations {
 
@@ -135,62 +136,16 @@ public class FileOperations {
 
         for (int i = 0; i < files.length; i++) {
             String name = files[i].getName();
-            if (!name.equals(Constants.lastSentFileName)) {
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                try {
-                    ss.add(format.parse(name));
-                }
-                catch(Exception e) {
-                    Log.e("logme",e.getMessage());
-                }
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                ss.add(format.parse(name));
+            }
+            catch(Exception e) {
+                Log.e("logme",e.getMessage());
             }
         }
 
         return ss.toArray(new Date[ss.size()]);
-    }
-
-    public static String readLastSentLog(Context cxt) {
-        String dir = cxt.getExternalFilesDir(null).toString()+"/"+Constants.gpsDirName+"/"+Constants.lastSentFileName;
-        File path = new File(dir);
-        if (!path.exists()) {
-            return "";
-        }
-
-        try {
-            Scanner inp = new Scanner(path);
-            String lastLine = "";
-            while (inp.hasNextLine()) {
-                lastLine = inp.nextLine();
-            }
-            return lastLine;
-        }
-        catch(Exception e) {
-            Log.e("logme",e.getMessage());
-        }
-
-        return "";
-    }
-
-    public static void writeLastSentLog(Context cxt, long lastTimestamp) {
-        String dir = cxt.getExternalFilesDir(null).toString()+"/"+Constants.gpsDirName+"/"+Constants.lastSentFileName;
-        File path = new File(dir);
-
-        try {
-            if (!path.exists()) {
-                path.createNewFile();
-            }
-
-            BufferedWriter buf = new BufferedWriter(new FileWriter(path,false));
-
-            buf.append(lastTimestamp+"");
-            buf.newLine();
-
-            buf.flush();
-            buf.close();
-        }
-        catch(Exception e) {
-            Log.e("logme",e.getMessage());
-        }
     }
 
     public static String readSubmitLog(Context cxt) {

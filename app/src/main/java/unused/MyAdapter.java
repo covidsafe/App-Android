@@ -1,13 +1,12 @@
-package com.example.corona;
+package unused;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.Text;
+import com.example.corona.R;
 
 import java.util.List;
 

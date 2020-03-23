@@ -1,4 +1,4 @@
-package com.example.corona;
+package unused;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +8,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.example.corona.Constants;
+import com.example.corona.MainActivity;
+import com.example.corona.R;
 
 public class HelpFragment extends Fragment {
 

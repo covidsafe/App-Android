@@ -53,7 +53,7 @@ public class MainFragment extends Fragment {
         tv1 = (TextView)getActivity().findViewById(R.id.textView);
         trackButton = (Button)getActivity().findViewById(R.id.trackButton);
         riskTv = (TextView)getActivity().findViewById(R.id.riskStatusTv);
-        riskTv.setText(getString(R.string.risk_low));
+//        riskTv.setText(getString(R.string.risk_low));
         updateUI();
 
         trackButton.setOnClickListener(new View.OnClickListener() {

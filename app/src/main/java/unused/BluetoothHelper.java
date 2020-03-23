@@ -1,4 +1,4 @@
-package com.example.corona;
+package unused;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -9,6 +9,8 @@ import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
+import com.example.corona.Constants;
 
 public class BluetoothHelper implements Runnable {
     @Override
