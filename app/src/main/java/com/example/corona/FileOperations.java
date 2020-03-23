@@ -13,6 +13,39 @@ import java.util.Collections;
 import java.util.Scanner;
 
 public class FileOperations {
+
+    public static void markStatusSubmitted(Context cxt) {
+        File dir = new File(cxt.getExternalFilesDir(null).toString()+"/");
+        if (!dir.exists()) {
+            return;
+        }
+        try {
+            File file = new File(dir + File.separator + Constants.DiagnosisReportFileName);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            BufferedWriter buf = new BufferedWriter(new FileWriter(file, true));
+
+            buf.append(System.currentTimeMillis()+"");
+            buf.newLine();
+
+            buf.flush();
+            buf.close();
+        }
+        catch(Exception e) {
+            Log.e("logme",e.getMessage());
+        }
+    }
+
+    public static boolean reportStatusSubmitted(Context cxt) {
+        File dir = new File(cxt.getExternalFilesDir(null).toString()+"/");
+        if (!dir.exists()) {
+            return false;
+        }
+        File file = new File(dir + File.separator + Constants.DiagnosisReportFileName);
+        return file.exists();
+    }
+
     public static ArrayList<GpsRecord> readGpsRecords(Context cxt, String filename) {
         ArrayList<GpsRecord> ll = new ArrayList<GpsRecord>();
         File dir = new File(cxt.getExternalFilesDir(null).toString()+"/"+Constants.gpsDirName+"/"+filename);

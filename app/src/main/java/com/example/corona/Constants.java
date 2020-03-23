@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.concurrent.ScheduledFuture;
 
 public class Constants {
+    public static int statusSubmitted = -1;
     public static ScheduledFuture uploadTask;
     public static boolean startingToTrack = false;
     public static String NOTIFICATION_CHANNEL = "channel";
@@ -27,6 +28,7 @@ public class Constants {
     public static String logFileName = "log.txt";
     public static String lastSentFileName = "lastsent.txt";
     public static String blacklistFileName = "blacklist.txt";
+    public static String DiagnosisReportFileName = "diagnosis.txt";
     public static boolean DEBUG = false;
     public static boolean tracking = false;
     public static int MaxBlacklistSize = 3;
