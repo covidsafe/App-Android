@@ -19,6 +19,8 @@ import androidx.core.app.NotificationCompat;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class LocationService extends Service {
     private LocationManager mLocationManager = null;
@@ -43,11 +45,6 @@ public class LocationService extends Service {
             Date dd = new Date();
             Log.e("logme", dateFormat.format(dd));
             Utils.gpsLog(getApplicationContext(), location);
-
-//            if (serviceHandler!=null) {
-//                Message msg = serviceHandler.obtainMessage(1, dateFormat.format(dd));
-//                serviceHandler.sendMessage(msg);
-//            }
         }
 
         @Override
@@ -86,6 +83,9 @@ public class LocationService extends Service {
             mLocationManager.requestLocationUpdates(
                     LocationManager.NETWORK_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
                     locListener);
+            ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
+            Constants.uploadTask = exec.scheduleWithFixedDelay(new UploadTask(getApplicationContext()), 0, 1, TimeUnit.HOURS);
+
         } catch (java.lang.SecurityException ex) {
             Log.e("logme", "fail to request location update, ignore", ex);
         } catch (IllegalArgumentException ex) {

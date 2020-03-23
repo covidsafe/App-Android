@@ -11,6 +11,7 @@ import android.location.Location;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -35,6 +36,10 @@ public class Utils {
                 snackBar.dismiss();
             }
         });
+
+        View snackbarView = snackBar.getView();
+        TextView textView = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
+        textView.setMaxLines(5);
 
         snackBar.show();
     }
@@ -186,7 +191,21 @@ public class Utils {
         catch(Exception e) {
             Log.e("logme",e.getMessage());
         }
-       return false;
+        return false;
+    }
+
+    public static int compareDates(Date d1, Date d2) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        try {
+            int diff = Utils.daysBetween(d2, d1);
+            Log.e("logme", "days betweeen " + diff);
+
+            return diff;
+        }
+        catch(Exception e) {
+            Log.e("logme",e.getMessage());
+        }
+        return -1;
     }
 
     public static int daysBetween(Date d1, Date d2) {

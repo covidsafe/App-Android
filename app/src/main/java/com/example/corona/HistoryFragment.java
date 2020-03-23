@@ -39,7 +39,7 @@ public class HistoryFragment extends Fragment {
         Constants.HistoryFragment = this;
         Constants.CurrentFragment = this;
 
-        final String[] fileList = FileOperations.readfilelist(getActivity(), Constants.gpsDirName);
+        final String[] fileList = FileOperations.readfilelist(getActivity());
         if (fileList != null) {
             Spinner spinner = (Spinner) getActivity().findViewById(R.id.spinner);
             spinner.setAdapter(new ArrayAdapter<String>(getActivity(),

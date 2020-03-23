@@ -75,6 +75,9 @@ public class MainFragment extends Fragment {
                 else {
                     Log.e("logme","stop service");
                     getActivity().stopService(new Intent(getActivity(), LocationService.class));
+                    if (Constants.uploadTask!=null) {
+                        Constants.uploadTask.cancel(true);
+                    }
                     Constants.tracking = false;
                 }
                 updateUI();

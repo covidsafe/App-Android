@@ -1,14 +1,17 @@
 package com.example.corona;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -16,7 +19,9 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,16 +29,18 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-
+    Activity activity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.activity = this;
         setContentView(R.layout.activity_main);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -45,25 +52,49 @@ public class MainActivity extends AppCompatActivity {
             bottomNavigationView.getMenu().clear();
             bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_release);
         }
-
-        requestPermissions();
-    }
-
-    public void requestPermissions() {
-        if (!Utils.hasPermissions(this)) {
-            Log.e("logme", "no perms");
-            ActivityCompat.requestPermissions(this, Constants.permissions, 1);
-        }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        Log.e("logme","on request permission");
-        // this code block should only execute if the user pressed the button
-        if (!Utils.hasPermissions(this)) {
-            Log.e("logme","does not have permissions");
-            Toast.makeText(this, "Permissions must be enabled before measurement can take place. Please try again.", Toast.LENGTH_LONG).show();
-//            ActivityCompat.requestPermissions(this, Constants.permissions, 1);
+
+
+        Log.e("logme","on request permission "+requestCode);
+        for (int i = 0; i < grantResults.length; i++) {
+            Log.e("logme","grant results "+permissions[i]+","+grantResults[i]);
+        }
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            boolean shouldAsk = ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+            Log.e("logme","does not have permissions "+shouldAsk);
+            if (requestCode == 1 && shouldAsk) {
+                AlertDialog dialog = new MaterialAlertDialogBuilder(this)
+                        .setTitle("Permission denied")
+                        .setMessage(getString(R.string.perm_rationale))
+                        .setNegativeButton(R.string.retry, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, 2);
+                            }
+                        })
+                        .setPositiveButton(R.string.sure, null)
+                        .setCancelable(false).create();
+                dialog.show();
+            }
+            else if (!shouldAsk){
+                AlertDialog dialog = new MaterialAlertDialogBuilder(this)
+                        .setTitle("Permission denied")
+                        .setMessage(getString(R.string.perm_ask))
+                        .setNegativeButton(R.string.no, null)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                Uri uri = Uri.fromParts("package", getPackageName(), null);
+                                intent.setData(uri);
+                                startActivity(intent);
+                            }
+                        })
+                        .setCancelable(false).create();
+                dialog.show();
+            }
         }
         else {
             Log.e("logme","has permissions");

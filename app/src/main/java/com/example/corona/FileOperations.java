@@ -13,7 +13,6 @@ import java.util.Collections;
 import java.util.Scanner;
 
 public class FileOperations {
-
     public static ArrayList<GpsRecord> readGpsRecords(Context cxt, String filename) {
         ArrayList<GpsRecord> ll = new ArrayList<GpsRecord>();
         File dir = new File(cxt.getExternalFilesDir(null).toString()+"/"+Constants.gpsDirName+"/"+filename);
@@ -56,7 +55,7 @@ public class FileOperations {
         return ll;
     }
 
-    public static String[] readfilelist(Context cxt, String dirname) {
+    public static String[] readfilelist(Context cxt) {
         File dir = new File(cxt.getExternalFilesDir(null).toString()+"/"+Constants.gpsDirName);
         if (!dir.exists()) {
             return null;
@@ -76,6 +75,28 @@ public class FileOperations {
             out[i] = Utils.formatDate(ss[i]);
         }
         return out;
+    }
+
+    public static String readLastSentLog(Context cxt) {
+        String dir = cxt.getExternalFilesDir(null).toString()+"/"+Constants.gpsDirName+"/"+Constants.lastSentFileName;
+        File path = new File(dir);
+        if (!path.exists()) {
+            return "";
+        }
+
+        try {
+            Scanner inp = new Scanner(path);
+            String lastLine = "";
+            while (inp.hasNextLine()) {
+                lastLine = inp.nextLine();
+            }
+            return lastLine;
+        }
+        catch(Exception e) {
+            Log.e("logme",e.getMessage());
+        }
+
+        return "";
     }
 
     public static String readSubmitLog(Context cxt) {
