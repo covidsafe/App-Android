@@ -103,6 +103,9 @@ public class UploadTask implements Runnable {
                     int resp = conn.getResponseCode();
                     if (resp == 200) {
                         long lastTimestamp = records.records.getLast().ts;
+                        if (Constants.LOG_TO_DISK) {
+                            FileOperations.writeLastSentLog(cxt, lastTimestamp);
+                        }
                         Utils.writeLastSentLog(cxt, lastTimestamp);
                         DateFormat fileDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                         Log.e("logme", "last sent "+fileDateFormat.format(new Date(lastTimestamp)));

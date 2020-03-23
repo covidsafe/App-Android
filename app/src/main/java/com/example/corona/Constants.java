@@ -17,7 +17,12 @@ import unused.ReportFragment;
 import unused.SettingsFragment;
 
 public class Constants {
+
+
+    public static boolean DEBUG = false;
     public static boolean BLUETOOTH_ENABLED = false;
+    public static boolean LOG_TO_DISK = false;
+
     public static BluetoothDevice device;
     public static BluetoothGatt gatt;
     public static BluetoothAdapter blueAdapter;
@@ -25,7 +30,7 @@ public class Constants {
     public static ScheduledFuture uploadTask;
     public static ScheduledFuture bluetoothTask;
     public static boolean startingToTrack = false;
-    public static String preferenceFile = "preferences";
+    public static String SHARED_PREFENCE_NAME = "preferences";
     public static String NOTIFICATION_CHANNEL = "channel";
     public static Fragment MainFragment;
     public static Fragment HelpFragment;
@@ -40,9 +45,9 @@ public class Constants {
     public static String blacklistDirName = "blacklist";
     public static String logFileName = "log.txt";
     public static String lastSentName = "lastsent";
+    public static String lastSentFileName = "lastsent.txt";
     public static String blacklistFileName = "blacklist.txt";
     public static String DiagnosisReportFileName = "diagnosis.txt";
-    public static boolean DEBUG = false;
     public static boolean tracking = false;
     public static int MaxBlacklistSize = 3;
     public static int NumFilesToDisplay = 14;
@@ -59,6 +64,7 @@ public class Constants {
         Manifest.permission.BLUETOOTH_ADMIN,
         Manifest.permission.BLUETOOTH,
             Manifest.permission.INTERNET};
+
     public static void init() {
         MainFragment = new MainFragment();
         HelpFragment = new HelpFragment();
@@ -66,5 +72,11 @@ public class Constants {
         ReportFragment = new ReportFragment();
         WarningFragment = new WarningFragment();
         SettingsFragment = new SettingsFragment();
+        if (!DEBUG) {
+            LOG_TO_DISK = false;
+        }
+        else {
+            LOG_TO_DISK = true;
+        }
     }
 }

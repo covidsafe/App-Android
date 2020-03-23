@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -205,16 +204,23 @@ public class Utils {
         return (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
     }
 
+    public static void clearPreferences(Context cxt) {
+        SharedPreferences.Editor sharedPref = cxt.getSharedPreferences(
+                Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
+        sharedPref.remove(Constants.lastSentName);
+        sharedPref.commit();
+    }
+
     public static void writeLastSentLog(Context cxt, long ts) {
         SharedPreferences.Editor sharedPref = cxt.getSharedPreferences(
-                Constants.preferenceFile, Context.MODE_PRIVATE).edit();
-        sharedPref.putLong(Constants.lastSentName, ts);
+                Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
+        sharedPref.putString(Constants.lastSentName, CryptoUtils.encryptTimestamp(cxt, ts));
         sharedPref.commit();
     }
 
     public static long readLastSentLog(Context cxt) {
         SharedPreferences sharedPref = cxt.getSharedPreferences(
-                Constants.preferenceFile, Context.MODE_PRIVATE);
-        return sharedPref.getLong(Constants.lastSentName, 0L);
+                Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        return CryptoUtils.decryptTimestamp(cxt, sharedPref.getString(Constants.lastSentName, ""));
     }
 }

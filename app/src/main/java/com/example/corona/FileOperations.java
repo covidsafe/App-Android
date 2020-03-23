@@ -18,6 +18,28 @@ import unused.BlacklistRecord;
 
 public class FileOperations {
 
+    public static void writeLastSentLog(Context cxt, long lastTimestamp) {
+        String dir = cxt.getExternalFilesDir(null).toString()+"/"+Constants.gpsDirName+"/"+Constants.lastSentFileName;
+        File path = new File(dir);
+
+        try {
+            if (!path.exists()) {
+                path.createNewFile();
+            }
+
+            BufferedWriter buf = new BufferedWriter(new FileWriter(path,false));
+
+            buf.append(lastTimestamp+"");
+            buf.newLine();
+
+            buf.flush();
+            buf.close();
+        }
+        catch(Exception e) {
+            Log.e("logme",e.getMessage());
+        }
+    }
+
     public static void markStatusSubmitted(Context cxt) {
         File dir = new File(cxt.getExternalFilesDir(null).toString()+"/");
         if (!dir.exists()) {

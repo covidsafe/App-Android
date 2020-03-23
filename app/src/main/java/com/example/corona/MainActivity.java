@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class MainActivity extends AppCompatActivity {
@@ -15,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.activity = this;
         setContentView(R.layout.activity_main);
-
+        CryptoUtils.keyInit(this);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         if (Constants.DEBUG) {
             bottomNavigationView.getMenu().clear();
@@ -53,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
         } else {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.MainFragment).commit();
         }
+    }
+
+    public void reset(View v) {
+        Utils.clearPreferences(this);
     }
 
     public void initBottomNav() {
