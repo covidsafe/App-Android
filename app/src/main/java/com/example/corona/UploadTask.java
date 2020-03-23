@@ -40,7 +40,7 @@ public class UploadTask implements Runnable {
         Date lastSentDate = null;
         String lastSent = FileOperations.readLastSentLog(cxt);
         if (!lastSent.isEmpty()) {
-            lastSentDate = new Date(lastSent);
+            lastSentDate = new Date(Long.parseLong(lastSent));
         }
         else {
             lastSentDate = new Date(0000000000000L);
@@ -77,7 +77,10 @@ public class UploadTask implements Runnable {
                 Log.e("logme", e.getMessage());
             }
         }
-        sendRecords(recordsToSend);
+
+        if (recordsToSend.records.size() > 0) {
+            sendRecords(recordsToSend);
+        }
     }
 
     public void sendRecords(final GpsRecords records) {
