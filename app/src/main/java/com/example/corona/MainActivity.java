@@ -3,10 +3,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class MainActivity extends AppCompatActivity {
@@ -31,6 +33,29 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         PermissionLogic.permissionLogic(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
+//        int result = data.getIntExtra(StartActivityForResult.this.getString(R.string.result), -1);
+//        String msg = "requestCode=" + requestCode + ", resultCode=" + resultCode + ", result=" + result;
+//        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+        Log.e("aa","onactivityresult "+requestCode+","+resultCode);
+
+        //bluetooth is now turned on
+        if (requestCode == 0 && resultCode == -1) {
+            if (Constants.startingToTrack) {
+                Log.e("logme","starting to track");
+                Utils.createNotificationChannel(this);
+                startService(new Intent(this, LocationService.class));
+                Constants.tracking = true;
+                Constants.startingToTrack = false;
+                Button trackButton = (Button)findViewById(R.id.trackButton);
+                trackButton.setText("Stop tracking");
+                trackButton.setBackgroundResource(R.drawable.stopbutton);
+            }
+        }
     }
 
     @Override

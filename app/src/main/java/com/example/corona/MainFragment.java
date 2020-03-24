@@ -65,7 +65,9 @@ public class MainFragment extends Fragment {
                             Log.e("aa","PERMS");
                             ActivityCompat.requestPermissions(getActivity(), Constants.permissions, 1);
                         }
-                        if (Constants.BLUETOOTH_ENABLED && (Constants.blueAdapter == null || !Constants.blueAdapter.isEnabled())) {
+
+                        if (Utils.hasPermissions(getActivity()) &&
+                            Constants.BLUETOOTH_ENABLED && (Constants.blueAdapter == null || !Constants.blueAdapter.isEnabled())) {
                             Log.e("aa","BLE");
                             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                             getActivity().startActivityForResult(enableBtIntent, 0);

@@ -126,8 +126,10 @@ public class PermissionLogic {
 //            }
 //        }
         else {
-            Log.e("logme","has permissions");
-            if (Constants.BLUETOOTH_ENABLED && (Constants.blueAdapter == null || !Constants.blueAdapter.isEnabled())) {
+            Log.e("logme","has permissions ");
+            Log.e("logme","ble status "+(Constants.blueAdapter==null)+","+Constants.blueAdapter.isEnabled());
+            if (Constants.BLUETOOTH_ENABLED &&
+                (Constants.blueAdapter == null || !Constants.blueAdapter.isEnabled())) {
                 Log.e("aa","BLE");
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 av.startActivityForResult(enableBtIntent, 0);
