@@ -3,7 +3,6 @@ package com.example.corona;
 import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,6 +14,8 @@ import android.widget.Button;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 
+import com.example.corona.utils.Constants;
+import com.example.corona.utils.Utils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class PermissionLogic {

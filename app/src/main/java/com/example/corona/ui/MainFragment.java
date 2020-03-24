@@ -1,4 +1,4 @@
-package com.example.corona;
+package com.example.corona.ui;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
@@ -21,6 +21,13 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+
+import com.example.corona.utils.Constants;
+import com.example.corona.LocationService;
+import com.example.corona.R;
+import com.example.corona.UploadAllBleTask;
+import com.example.corona.UploadAllGpsTask;
+import com.example.corona.utils.Utils;
 
 public class MainFragment extends Fragment {
 

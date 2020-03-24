@@ -12,12 +12,12 @@ import android.widget.Spinner;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.corona.Constants;
-import com.example.corona.FileOperations;
-import com.example.corona.GpsRecord;
-import com.example.corona.MainActivity;
+import com.example.corona.utils.Constants;
+import com.example.corona.utils.FileOperations;
+import com.example.corona.models.GpsRecord;
+import com.example.corona.ui.MainActivity;
 import com.example.corona.R;
-import com.example.corona.Utils;
+import com.example.corona.utils.Utils;
 
 import java.util.ArrayList;
 

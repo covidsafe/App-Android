@@ -1,4 +1,4 @@
-package com.example.corona;
+package com.example.corona.models;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

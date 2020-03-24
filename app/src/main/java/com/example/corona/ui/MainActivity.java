@@ -1,4 +1,4 @@
-package com.example.corona;
+package com.example.corona.ui;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -9,9 +9,13 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.Switch;
 
+import com.example.corona.utils.Constants;
+import com.example.corona.utils.CryptoUtils;
+import com.example.corona.LocationService;
+import com.example.corona.PermissionLogic;
+import com.example.corona.R;
+import com.example.corona.utils.Utils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class MainActivity extends AppCompatActivity {
     Activity activity;
