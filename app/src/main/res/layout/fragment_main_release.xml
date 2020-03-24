@@ -100,4 +100,14 @@
         app:layout_constraintStart_toStartOf="@+id/riskStatusTv"
         app:layout_constraintTop_toTopOf="@+id/riskStatusTv" />
 
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="3dp"
+        android:text="Bluetooth"
+        app:layout_constraintStart_toStartOf="@+id/uploadBleButton"
+        app:layout_constraintTop_toBottomOf="@+id/trackButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
