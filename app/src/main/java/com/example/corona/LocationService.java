@@ -1,37 +1,39 @@
 package com.example.corona;
+import android.app.IntentService;
 import android.app.Notification;
-import android.app.Service;
+import android.bluetooth.le.AdvertiseCallback;
+import android.bluetooth.le.AdvertiseData;
+import android.bluetooth.le.AdvertiseSettings;
+import android.bluetooth.le.BluetoothLeAdvertiser;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.ParcelUuid;
+import android.os.RemoteException;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class LocationService extends Service {
+public class LocationService extends IntentService {
+
     private LocationManager mLocationManager = null;
     private static final int LOCATION_INTERVAL = 1000;
     private static final float LOCATION_DISTANCE = 1f;
     LocationListener[] locListeners = new LocationListener[2];
-    Handler serviceHandler;
-//    IBinder mBinder = new LocalBinder();
-
-//    public class LocalBinder extends Binder {
-//        public void registerHandler(Handler handler) {
-//            Log.e("logme","handler registered "+(handler==null));
-//            serviceHandler = handler;
-//        }
-//    }
+    Messenger messenger;
 
     private class LocationListener implements android.location.LocationListener {
 
@@ -46,7 +48,19 @@ public class LocationService extends Service {
             DateFormat dateFormat = new SimpleDateFormat("hh:mm.ss aa");
             Date dd = new Date();
             Log.e("logme", dateFormat.format(dd));
-            Utils.gpsLog(getApplicationContext(), location);
+
+            Bundle bb = new Bundle();
+            bb.putString("gps", location.getLatitude()+","+location.getLongitude());
+            Message msg = new Message();
+            msg.setData(bb);
+            try {
+//                Log.e("test","sending");
+                messenger.send(msg);
+            } catch (RemoteException e) {
+                Log.i("error", "error");
+            }
+
+            Utils.gpsLog(getApplicationContext(), location, provider);
         }
 
         @Override
@@ -59,25 +73,23 @@ public class LocationService extends Service {
         public void onStatusChanged(String provider, int status, Bundle extras) { }
     }
 
-    @Override
-    public IBinder onBind(Intent arg0) {
-        return null;
+    public LocationService() {
+        super("LocationService");
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        super.onStartCommand(intent, flags, startId);
-        Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL)
-                .setContentTitle(getString(R.string.app_name))
-                .setContentText(getString(R.string.notif_message))
-                .setSmallIcon(R.drawable.ic_android_black_24dp)
-                .build();
-        startForeground(1,notification);
-        return START_NOT_STICKY;
+    protected void onHandleIntent(@Nullable Intent intent) {
+        Log.e("logme","handle intent");
     }
 
     @Override
-    public void onCreate() {
+    public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            messenger = (Messenger) bundle.get("messenger");
+//            msg = Message.obtain();
+        }
+
         initializeLocationManager();
         try {
             String[] providers = new String[] {LocationManager.NETWORK_PROVIDER, LocationManager.GPS_PROVIDER};
@@ -93,10 +105,12 @@ public class LocationService extends Service {
                     locListeners[1]);
 
             ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
-            Constants.uploadTask = exec.scheduleWithFixedDelay(new UploadTask(getApplicationContext()), 0, 1, TimeUnit.HOURS);
+//            Constants.uploadTask = exec.scheduleWithFixedDelay(new UploadTask(getApplicationContext()), 0, 1, TimeUnit.HOURS);
             if (Constants.BLUETOOTH_ENABLED) {
                 Log.e("ble","spin out task");
-                Constants.bluetoothTask = exec.scheduleWithFixedDelay(new BluetoothHelper(), 0, 1, TimeUnit.HOURS);
+                Constants.bluetoothTask = exec.scheduleWithFixedDelay(new BluetoothHelper(getApplicationContext(), messenger), 0, 1, TimeUnit.HOURS);
+                Log.e("ble","make beacon");
+                mkBeacon();
             }
         } catch (java.lang.SecurityException ex) {
             Log.e("logme", "fail to request location update, ignore", ex);
@@ -105,16 +119,61 @@ public class LocationService extends Service {
         } catch(Exception e ){
             Log.e("logme",e.getMessage());
         }
+
+        Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(getString(R.string.notif_message))
+                .setSmallIcon(R.drawable.ic_android_black_24dp)
+                .build();
+        startForeground(1,notification);
+
+        return START_NOT_STICKY;
     }
+
+    public void mkBeacon() {
+
+        if (Constants.BLUETOOTH_ENABLED) {
+            AdvertiseSettings settings = new AdvertiseSettings.Builder()
+                    .setConnectable(true)
+                    .build();
+
+            AdvertiseData advertiseData = new AdvertiseData.Builder()
+                    .setIncludeDeviceName(true)
+                    .setIncludeTxPowerLevel(true)
+                    .build();
+            AdvertiseData scanResponseData = new AdvertiseData.Builder()
+                    .addServiceUuid(new ParcelUuid(UUID.fromString("6e400001-b5a3-f393-e0a9-e50e24dcca3e")))
+                    .setIncludeTxPowerLevel(true)
+                    .build();
+
+            Constants.blueAdapter.setName(getString(R.string.app_name));
+            BluetoothLeAdvertiser bluetoothLeAdvertiser = Constants.blueAdapter.getBluetoothLeAdvertiser();
+            bluetoothLeAdvertiser.startAdvertising(settings, advertiseData, scanResponseData, callback);
+        }
+    }
+
+    AdvertiseCallback callback = new AdvertiseCallback() {
+        @Override
+        public void onStartSuccess(AdvertiseSettings settingsInEffect) {
+            Log.d("ble", "BLE advertisement added successfully");
+        }
+
+        @Override
+        public void onStartFailure(int errorCode) {
+            Log.e("ble", "Failed to add BLE advertisement, reason: " + errorCode);
+        }
+    };
 
     @Override
     public void onDestroy() {
-        Log.e("logme", "service destroyed");
         super.onDestroy();
+        Log.e("logme", "service destroyed");
         if (mLocationManager != null) {
             try {
                 mLocationManager.removeUpdates(locListeners[0]);
                 mLocationManager.removeUpdates(locListeners[1]);
+                Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(callback);
+                Constants.blueAdapter.getBluetoothLeScanner().stopScan(BluetoothHelper.mLeScanCallback);
             } catch (Exception ex) {
                 Log.e("logme", "fail to remove location listners, ignore", ex);
             }

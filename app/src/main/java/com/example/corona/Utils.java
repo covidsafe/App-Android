@@ -3,6 +3,7 @@ package com.example.corona;
 import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -49,9 +50,14 @@ public class Utils {
         snackBar.show();
     }
 
-    public static void gpsLog(Context cxt, Location loc) {
+    public static void gpsLog(Context cxt, Location loc,String provider) {
         FileOperations.append(System.currentTimeMillis() + "," + loc.getLatitude() + "," + loc.getLongitude(),
-                cxt, Constants.gpsDirName, Utils.getLogName());
+                cxt, Constants.gpsDirName+"/"+provider, Utils.getGpsLogName());
+    }
+
+    public static void bleLog(Context cxt, ScanResult result) {
+        FileOperations.append(System.currentTimeMillis() + ","+ result.getDevice().getAddress()+","+result.getRssi(),
+                cxt, Constants.bleDirName, Utils.getBleLogName());
     }
 
     public static boolean locationInBlacklist(Context cxt, Location loc) {
@@ -147,7 +153,13 @@ public class Utils {
         }
     }
 
-    public static String getLogName() {
+    public static String getGpsLogName() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        return dateFormat.format(date)+".txt";
+    }
+
+    public static String getBleLogName() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         return dateFormat.format(date)+".txt";

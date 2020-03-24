@@ -55,7 +55,7 @@ public class HistoryFragment extends Fragment {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                     Log.e("logme","SELECTED "+fileList[position]);
-                    ArrayList<GpsRecord> records = FileOperations.readGpsRecords(getActivity(), Utils.convertDate(fileList[position]));
+                    ArrayList<GpsRecord> records = FileOperations.readGpsRecords(getActivity(), "network", Utils.convertDate(fileList[position]));
                     displayPoints(records);
                 }
 

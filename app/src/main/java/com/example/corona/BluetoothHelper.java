@@ -1,36 +1,56 @@
 package com.example.corona;
 
-import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothManager;
-import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
 import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.util.Log;
 
-import com.example.corona.Constants;
-
 public class BluetoothHelper implements Runnable {
+
+    static Context cxt;
+    static Messenger messenger;
+
+    public BluetoothHelper(Context cxt, Messenger messenger) {
+        this.cxt = cxt;
+        this.messenger = messenger;
+    }
+
     @Override
     public void run() {
         Log.e("ble","mytask-run ");
         Constants.blueAdapter.getBluetoothLeScanner().startScan(mLeScanCallback);
     }
 
-    ScanCallback mLeScanCallback =
+    static ScanCallback mLeScanCallback =
             new ScanCallback() {
                 @Override
                 public void onScanResult(int callbackType, final ScanResult result) {
                     super.onScanResult(callbackType, result);
-                    if (result.getDevice().getName()!=null) {
-                        Log.e("ble","onscanresult "+result.getDevice().getName());
-                        Constants.device = result.getDevice();
-                        Log.e("ble", "got device " + Constants.device.getName().toString());
-                        Log.e("ble", "got device address " + Constants.device.getAddress());
-                        Constants.blueAdapter.getBluetoothLeScanner().stopScan(this);
+//                    Log.e("ble",result+"");
+
+                    Bundle bb = new Bundle();
+                    bb.putString("ble", result.getDevice().getAddress()+","+result.getRssi());
+                    Message msg = new Message();
+                    msg.setData(bb);
+                    try {
+//                        Log.e("test","sending");
+                        messenger.send(msg);
+                    } catch (RemoteException e) {
+                        Log.i("error", "error");
                     }
+
+//                    if (result.getDevice().getName()!=null) {
+//                        Log.e("ble","onscanresult "+result.getDevice().getName());
+//                        Constants.device = result.getDevice();
+//                        Log.e("ble", "got device " + Constants.device.getName().toString());
+//                        Log.e("ble", "got device address " + Constants.device.getAddress());
+//                        Constants.blueAdapter.getBluetoothLeScanner().stopScan(this);
+//                    }
+                    Utils.bleLog(cxt, result);
                 }
 
                 @Override

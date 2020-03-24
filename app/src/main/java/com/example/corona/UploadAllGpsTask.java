@@ -1,7 +1,9 @@
 package com.example.corona;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+import android.widget.TextView;
 
 import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
@@ -12,12 +14,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class UploadTask implements Runnable {
+public class UploadAllGpsTask implements Runnable {
 
     public Context cxt;
 
-    public UploadTask(Context cxt) {
+    public UploadAllGpsTask(Activity av, Context cxt) {
         this.cxt = cxt;
+        TextView tv = (TextView)av.findViewById(R.id.lastSentTime);
+        DateFormat fileDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm.ss aa");
+        Date date = new Date(System.currentTimeMillis());
+        tv.setText("Last sent "+fileDateFormat.format(date));
     }
 
     @Override
@@ -26,8 +32,8 @@ public class UploadTask implements Runnable {
         Date dd = new Date();
         Log.e("logme", "upload task "+dateFormat.format(dd));
 
-        long lastSent = Utils.readLastSentLog(cxt);
-        Date lastSentDate = new Date(lastSent);
+//        long lastSent = Utils.readLastSentLog(cxt);
+//        Date lastSentDate = new Date(lastSent);
 
         DateFormat fileDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date[] dates = FileOperations.readGpsFileList(cxt, true,"network");
@@ -35,27 +41,27 @@ public class UploadTask implements Runnable {
         GpsRecords recordsToSend = new GpsRecords();
         for (Date date : dates) {
             try {
-                int daysBetween = Utils.daysBetween(lastSentDate, date);
-                Log.e("logme", "diff " + fileDateFormat.format(lastSentDate) + "," + fileDateFormat.format(date) + "," +
-                        daysBetween);
+//                int daysBetween = Utils.daysBetween(lastSentDate, date);
+//                Log.e("logme", "diff " + fileDateFormat.format(lastSentDate) + "," + fileDateFormat.format(date) + "," +
+//                        daysBetween);
 
                 String niceDate = fileDateFormat.format(date);
-                if (daysBetween > 0) {
+//                if (daysBetween > 0) {
                     ArrayList<GpsRecord> records = FileOperations.readGpsRecords(cxt, "network", niceDate);
                     if (records != null) {
                         recordsToSend.addAll(records);
                     }
-                }
-                else if (daysBetween == 0) {
-                    ArrayList<GpsRecord> records = FileOperations.readGpsRecords(cxt, "network", niceDate);
-                    if (records != null) {
-                        for (GpsRecord record : records) {
-                            if (record.ts > lastSentDate.getTime()) {
-                                recordsToSend.add(record);
-                            }
-                        }
-                    }
-                }
+//                }
+//                else if (daysBetween == 0) {
+//                    ArrayList<GpsRecord> records = FileOperations.readGpsRecords(cxt, niceDate);
+//                    if (records != null) {
+//                        for (GpsRecord record : records) {
+//                            if (record.ts > lastSentDate.getTime()) {
+//                                recordsToSend.add(record);
+//                            }
+//                        }
+//                    }
+//                }
             } catch (Exception e) {
                 Log.e("logme", e.getMessage());
             }

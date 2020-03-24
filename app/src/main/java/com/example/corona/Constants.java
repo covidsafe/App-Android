@@ -57,13 +57,14 @@ public class Constants {
 //    public static String[] scope = {"user.read"};
 //    public static String baliResourceURL = "https://graph.microsoft.com/v1.0/me";
     public static String[] permissions={
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-        Manifest.permission.FOREGROUND_SERVICE,
-        Manifest.permission.BLUETOOTH_ADMIN,
-        Manifest.permission.BLUETOOTH,
-            Manifest.permission.INTERNET};
+        Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+//            Manifest.permission.ACCESS_FINE_LOCATION,
+//            Manifest.permission.ACCESS_COARSE_LOCATION,
+//        Manifest.permission.FOREGROUND_SERVICE,
+//        Manifest.permission.BLUETOOTH_ADMIN,
+//        Manifest.permission.BLUETOOTH,
+//            Manifest.permission.INTERNET
+    };
 
     public static void init() {
         MainFragment = new MainFragment();

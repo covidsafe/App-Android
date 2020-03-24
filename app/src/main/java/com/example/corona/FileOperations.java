@@ -72,14 +72,14 @@ public class FileOperations {
         return file.exists();
     }
 
-    public static ArrayList<GpsRecord> readGpsRecords(Context cxt, String filename) {
+    public static ArrayList<GpsRecord> readGpsRecords(Context cxt, String dirname, String filename) {
         ArrayList<GpsRecord> ll = new ArrayList<GpsRecord>();
 
         if (!filename.endsWith(".txt")) {
             filename += ".txt";
         }
 
-        File dir = new File(cxt.getExternalFilesDir(null).toString()+"/"+Constants.gpsDirName+"/"+filename);
+        File dir = new File(cxt.getExternalFilesDir(null).toString()+"/"+Constants.gpsDirName+"/"+dirname+"/"+filename);
         if (!dir.exists()) {
             return null;
         }
@@ -89,6 +89,32 @@ public class FileOperations {
                 String line = inp.nextLine();
                 if (line.length()>0) {
                     ll.add(new GpsRecord(line));
+                }
+            }
+        }
+        catch(Exception e) {
+            Log.e("logme",e.getMessage());
+        }
+        return ll;
+    }
+
+    public static ArrayList<BleRecord> readBleRecords(Context cxt, String filename) {
+        ArrayList<BleRecord> ll = new ArrayList<BleRecord>();
+
+        if (!filename.endsWith(".txt")) {
+            filename += ".txt";
+        }
+
+        File dir = new File(cxt.getExternalFilesDir(null).toString()+"/"+Constants.bleDirName+"/"+filename);
+        if (!dir.exists()) {
+            return null;
+        }
+        try {
+            Scanner inp = new Scanner(dir);
+            while (inp.hasNextLine()) {
+                String line = inp.nextLine();
+                if (line.length()>0) {
+                    ll.add(new BleRecord(line));
                 }
             }
         }
@@ -141,8 +167,8 @@ public class FileOperations {
         return out;
     }
 
-    public static Date[] readfilelist(Context cxt, boolean ascending) {
-        File dir = new File(cxt.getExternalFilesDir(null).toString()+"/"+Constants.gpsDirName);
+    public static Date[] readBleFileList(Context cxt, boolean ascending) {
+        File dir = new File(cxt.getExternalFilesDir(null).toString()+"/"+Constants.bleDirName);
         if (!dir.exists()) {
             return null;
         }
@@ -158,6 +184,41 @@ public class FileOperations {
 
         for (int i = 0; i < files.length; i++) {
             String name = files[i].getName();
+            if (name.endsWith(".txt")) {
+                name = name.substring(0,name.length()-4);
+            }
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                ss.add(format.parse(name));
+            }
+            catch(Exception e) {
+                Log.e("logme",e.getMessage());
+            }
+        }
+
+        return ss.toArray(new Date[ss.size()]);
+    }
+
+    public static Date[] readGpsFileList(Context cxt, boolean ascending, String direc) {
+        File dir = new File(cxt.getExternalFilesDir(null).toString()+"/"+Constants.gpsDirName+"/"+direc);
+        if (!dir.exists()) {
+            return null;
+        }
+        File[] files = dir.listFiles();
+        if (ascending) {
+            Arrays.sort(files);
+        }
+        else {
+            Arrays.sort(files, Collections.reverseOrder());
+        }
+
+        LinkedList<Date> ss = new LinkedList();
+
+        for (int i = 0; i < files.length; i++) {
+            String name = files[i].getName();
+            if (name.endsWith(".txt")) {
+                name = name.substring(0,name.length()-4);
+            }
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             try {
                 ss.add(format.parse(name));

@@ -31,7 +31,11 @@ public class CryptoUtils {
     }
 
     public static long decryptTimestamp(Context cxt, String encryptedB64) {
-        return ByteUtils.bytesToLong(decryptHelper(cxt, encryptedB64));
+        byte[] bb = decryptHelper(cxt, encryptedB64);
+        if (bb == null) {
+            return 0;
+        }
+        return ByteUtils.bytesToLong(bb);
     }
 
     static KeyStore keyStore;
