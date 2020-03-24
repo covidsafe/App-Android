@@ -15,7 +15,6 @@ import android.widget.Switch;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class MainActivity extends AppCompatActivity {
     Activity activity;
-    Switch sw1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,13 +30,6 @@ public class MainActivity extends AppCompatActivity {
             bottomNavigationView.getMenu().clear();
             bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_release);
         }
-        sw1 = (Switch)findViewById(R.id.switch1);
-        sw1.setChecked(Constants.BLUETOOTH_ENABLED);
-        sw1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Constants.BLUETOOTH_ENABLED = isChecked;
-            }
-        });
     }
 
     @Override

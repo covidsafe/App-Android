@@ -14,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -51,6 +53,14 @@ public class MainFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        Switch sw1 = (Switch)getActivity().findViewById(R.id.switch1);
+        sw1.setChecked(Constants.BLUETOOTH_ENABLED);
+        sw1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Constants.BLUETOOTH_ENABLED = isChecked;
+            }
+        });
 
         Constants.CurrentFragment = this;
         Constants.MainFragment = this;
