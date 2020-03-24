@@ -16,19 +16,15 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.corona.Constants;
-import com.example.corona.FileOperations;
-import com.example.corona.MainActivity;
+import com.example.corona.utils.Constants;
+import com.example.corona.utils.FileOperations;
+import com.example.corona.ui.MainActivity;
 import com.example.corona.R;
-import com.example.corona.Utils;
+import com.example.corona.utils.Utils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import unused.BlacklistRecord;
-import unused.MyAdapter;
-import unused.RecyclerItemClickListener;
 
 public class SettingsFragment extends Fragment {
 

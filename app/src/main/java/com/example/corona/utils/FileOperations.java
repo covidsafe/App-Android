@@ -1,7 +1,12 @@
-package com.example.corona;
+package com.example.corona.utils;
 
 import android.content.Context;
 import android.util.Log;
+
+import com.example.corona.models.BleRecord;
+import com.example.corona.models.GpsRecord;
+import com.example.corona.utils.Constants;
+import com.example.corona.utils.Utils;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -19,7 +24,7 @@ import unused.BlacklistRecord;
 public class FileOperations {
 
     public static void writeLastSentLog(Context cxt, long lastTimestamp) {
-        String dir = cxt.getExternalFilesDir(null).toString()+"/"+Constants.gpsDirName+"/"+Constants.lastSentFileName;
+        String dir = cxt.getExternalFilesDir(null).toString()+"/"+ Constants.gpsDirName+"/"+Constants.lastSentFileName;
         File path = new File(dir);
 
         try {

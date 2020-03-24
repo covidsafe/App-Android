@@ -11,9 +11,11 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.example.corona.utils.Constants;
+import com.example.corona.utils.Utils;
+
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Vector;
 
 public class BluetoothHelper implements Runnable {
 
@@ -66,7 +68,7 @@ public class BluetoothHelper implements Runnable {
 //                        Log.e("ble", "got device address " + Constants.device.getAddress());
 //                        Constants.blueAdapter.getBluetoothLeScanner().stopScan(this);
 //                    }
-                    Utils.bleLog(cxt, result);
+                    Utils.bleLogToFile(cxt, result);
                 }
 
                 @Override

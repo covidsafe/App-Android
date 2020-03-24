@@ -1,4 +1,4 @@
-package com.example.corona;
+package com.example.corona.utils;
 
 import java.nio.ByteBuffer;
 

@@ -1,4 +1,4 @@
-package com.example.corona;
+package com.example.corona.utils;
 
 import android.app.Activity;
 import android.app.NotificationChannel;
@@ -50,14 +50,22 @@ public class Utils {
         snackBar.show();
     }
 
-    public static void gpsLog(Context cxt, Location loc,String provider) {
+    public static void gpsLogToFile(Context cxt, Location loc, String provider) {
         FileOperations.append(System.currentTimeMillis() + "," + loc.getLatitude() + "," + loc.getLongitude(),
                 cxt, Constants.gpsDirName+"/"+provider, Utils.getGpsLogName());
     }
 
-    public static void bleLog(Context cxt, ScanResult result) {
+    public static void gpsLogToDatabase(Context cxt, Location loc, String provider) {
+
+    }
+
+    public static void bleLogToFile(Context cxt, ScanResult result) {
         FileOperations.append(System.currentTimeMillis() + ","+ result.getDevice().getAddress()+","+result.getRssi(),
                 cxt, Constants.bleDirName, Utils.getBleLogName());
+    }
+
+    public static void bleLogToDatabase(Context cxt, ScanResult result) {
+
     }
 
     public static boolean locationInBlacklist(Context cxt, Location loc) {

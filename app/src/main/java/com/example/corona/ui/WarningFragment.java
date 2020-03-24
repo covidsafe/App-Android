@@ -1,7 +1,6 @@
-package com.example.corona;
+package com.example.corona.ui;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.example.corona.utils.Constants;
+import com.example.corona.utils.FileOperations;
+import com.example.corona.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class WarningFragment extends Fragment {

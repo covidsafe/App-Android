@@ -1,4 +1,4 @@
-package com.example.corona;
+package com.example.corona.utils;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
@@ -6,6 +6,10 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 
 import androidx.fragment.app.Fragment;
+
+import com.example.corona.ui.MainFragment;
+import com.example.corona.ui.ReportFragment;
+import com.example.corona.ui.WarningFragment;
 
 import java.util.ArrayList;
 import java.util.concurrent.ScheduledFuture;

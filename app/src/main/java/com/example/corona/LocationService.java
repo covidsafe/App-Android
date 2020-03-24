@@ -8,22 +8,22 @@ import android.bluetooth.le.BluetoothLeAdvertiser;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Messenger;
-import android.os.ParcelUuid;
 import android.os.RemoteException;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
+import com.example.corona.utils.Constants;
+import com.example.corona.utils.Utils;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -60,7 +60,7 @@ public class LocationService extends IntentService {
                 Log.i("error", "error");
             }
 
-            Utils.gpsLog(getApplicationContext(), location, provider);
+            Utils.gpsLogToFile(getApplicationContext(), location, provider);
         }
 
         @Override
