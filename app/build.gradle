@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.protobuf'
 
 android {
     compileSdkVersion 29
@@ -14,13 +15,26 @@ android {
     }
 
     buildTypes {
+        debug { minifyEnabled false }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
 }
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/debug/grpc'
+            srcDirs 'build/generated/source/proto/debug/java'
+        }
+    }
+}
+
+def grpcVersion = '1.28.0'
+def protobufVersion = '3.11.0'
+def protocVersion = protobufVersion
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -37,8 +51,32 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.google.android.gms:play-services-auth-api-phone:17.4.0'
 
+    // gRPC components
+    implementation "io.grpc:grpc-okhttp:${grpcVersion}"
+    implementation "io.grpc:grpc-protobuf-lite:${grpcVersion}"
+    implementation "io.grpc:grpc-stub:${grpcVersion}"
+    implementation 'javax.annotation:javax.annotation-api:1.2'
+
     // Room components
     implementation "androidx.room:room-runtime:2.2.1"
     annotationProcessor "androidx.room:room-compiler:2.2.1"
     androidTestImplementation "androidx.room:room-testing:2.2.1"
+}
+
+protobuf {
+    protoc { artifact = "com.google.protobuf:protoc:${protocVersion}" }
+    plugins {
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
+        }
+    }
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                java { option 'lite' }
+            }
+            task.plugins {
+                grpc { option 'lite' }
+            }
+        }
+    }
 }

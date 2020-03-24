@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.example.corona.comms";
+option java_outer_classname = "TestProto";
+option objc_class_prefix = "CC";
+
+package corona;
+
+service TestService {
+  rpc SendTest (TestRequest) returns (TestReply) {}
+}
+
+message TestRequest {
+  string messsage = 1;
+}
+
+message TestReply {
+  string message = 1;
+}
