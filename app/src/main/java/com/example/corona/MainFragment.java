@@ -62,19 +62,27 @@ public class MainFragment extends Fragment {
                         Constants.blueAdapter = bluetoothManager.getAdapter();
 
                         if (!Utils.hasPermissions(getActivity())) {
+                            Log.e("aa","PERMS");
                             ActivityCompat.requestPermissions(getActivity(), Constants.permissions, 1);
                         }
-                        else if (Constants.BLUETOOTH_ENABLED && (Constants.blueAdapter == null || !Constants.blueAdapter.isEnabled())) {
+                        if (Constants.BLUETOOTH_ENABLED && (Constants.blueAdapter == null || !Constants.blueAdapter.isEnabled())) {
+                            Log.e("aa","BLE");
                             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                             getActivity().startActivityForResult(enableBtIntent, 0);
                         }
-                        else {
+
+                        boolean hasPerms = Utils.hasPermissions(getActivity());
+                        Log.e("aa","has perms?" +hasPerms);
+                        Log.e("aa","ble status "+Constants.blueAdapter+","+Constants.blueAdapter.isEnabled());
+                        if (hasPerms &&
+                            (Constants.BLUETOOTH_ENABLED && Constants.blueAdapter != null && Constants.blueAdapter.isEnabled()) ||
+                            (!Constants.BLUETOOTH_ENABLED)) {
+                            Log.e("aa","START");
                             Utils.createNotificationChannel(getActivity());
                             getActivity().startService(new Intent(getActivity(), LocationService.class));
                             Constants.tracking = true;
                             Constants.startingToTrack = false;
                         }
-
                     } catch (SecurityException e) {
                         Log.e("log", e.getMessage());
                     }
@@ -93,11 +101,14 @@ public class MainFragment extends Fragment {
     }
 
     public void updateUI() {
+        Log.e("aa","updateui");
         if (Constants.tracking) {
+            Log.e("aa","yes");
             trackButton.setText("Stop logging");
             trackButton.setBackgroundResource(R.drawable.stopbutton);
         }
         else {
+            Log.e("aa","no");
             trackButton.setText("Start logging");
             trackButton.setBackgroundResource(R.drawable.startbutton);
         }

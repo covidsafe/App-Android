@@ -95,6 +95,7 @@ public class LocationService extends Service {
             ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
             Constants.uploadTask = exec.scheduleWithFixedDelay(new UploadTask(getApplicationContext()), 0, 1, TimeUnit.HOURS);
             if (Constants.BLUETOOTH_ENABLED) {
+                Log.e("ble","spin out task");
                 Constants.bluetoothTask = exec.scheduleWithFixedDelay(new BluetoothHelper(), 0, 1, TimeUnit.HOURS);
             }
         } catch (java.lang.SecurityException ex) {

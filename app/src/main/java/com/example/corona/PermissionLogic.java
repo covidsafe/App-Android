@@ -2,6 +2,7 @@ package com.example.corona;
 
 import android.Manifest;
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -56,77 +57,82 @@ public class PermissionLogic {
                 dialog.show();
             }
         }
-        else if (ActivityCompat.checkSelfPermission(av, Manifest.permission.BLUETOOTH_ADMIN) == PackageManager.PERMISSION_DENIED) {
-            if (Constants.BLUETOOTH_ENABLED) {
-                boolean shouldAsk = ActivityCompat.shouldShowRequestPermissionRationale(av, Manifest.permission.BLUETOOTH_ADMIN);
-                Log.e("logme", "does not have permissions for bluetooth " + shouldAsk);
-                if (requestCode == 1 && shouldAsk) {
-                    AlertDialog dialog = new MaterialAlertDialogBuilder(av)
-                            .setTitle("Permission denied")
-                            .setMessage(av.getString(R.string.perm_ble_rationale))
-                            .setNegativeButton(R.string.retry, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    ActivityCompat.requestPermissions(av, new String[]{Manifest.permission.BLUETOOTH_ADMIN}, 2);
-                                }
-                            })
-                            .setPositiveButton(R.string.sure, null)
-                            .setCancelable(false).create();
-                    dialog.show();
-                } else if (!shouldAsk) {
-                    AlertDialog dialog = new MaterialAlertDialogBuilder(av)
-                            .setTitle("Permission denied")
-                            .setMessage(av.getString(R.string.perm_ble_ask))
-                            .setNegativeButton(R.string.no, null)
-                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                    Uri uri = Uri.fromParts("package", av.getPackageName(), null);
-                                    intent.setData(uri);
-                                    av.startActivity(intent);
-                                }
-                            })
-                            .setCancelable(false).create();
-                    dialog.show();
-                }
-            }
-        }
-        else if (ActivityCompat.checkSelfPermission(av, Manifest.permission.BLUETOOTH) == PackageManager.PERMISSION_DENIED) {
-            if (Constants.BLUETOOTH_ENABLED) {
-                boolean shouldAsk = ActivityCompat.shouldShowRequestPermissionRationale(av, Manifest.permission.BLUETOOTH);
-                Log.e("logme", "does not have permissions for bluetooth " + shouldAsk);
-                if (requestCode == 1 && shouldAsk) {
-                    AlertDialog dialog = new MaterialAlertDialogBuilder(av)
-                            .setTitle("Permission denied")
-                            .setMessage(av.getString(R.string.perm_ble_rationale))
-                            .setNegativeButton(R.string.retry, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    ActivityCompat.requestPermissions(av, new String[]{Manifest.permission.BLUETOOTH}, 2);
-                                }
-                            })
-                            .setPositiveButton(R.string.sure, null)
-                            .setCancelable(false).create();
-                    dialog.show();
-                } else if (!shouldAsk) {
-                    AlertDialog dialog = new MaterialAlertDialogBuilder(av)
-                            .setTitle("Permission denied")
-                            .setMessage(av.getString(R.string.perm_ble_ask))
-                            .setNegativeButton(R.string.no, null)
-                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                    Uri uri = Uri.fromParts("package", av.getPackageName(), null);
-                                    intent.setData(uri);
-                                    av.startActivity(intent);
-                                }
-                            })
-                            .setCancelable(false).create();
-                    dialog.show();
-                }
-            }
-        }
+//        else if (ActivityCompat.checkSelfPermission(av, Manifest.permission.BLUETOOTH_ADMIN) == PackageManager.PERMISSION_DENIED) {
+//            if (Constants.BLUETOOTH_ENABLED) {
+//                boolean shouldAsk = ActivityCompat.shouldShowRequestPermissionRationale(av, Manifest.permission.BLUETOOTH_ADMIN);
+//                Log.e("logme", "does not have permissions for bluetooth " + shouldAsk);
+//                if (requestCode == 1 && shouldAsk) {
+//                    AlertDialog dialog = new MaterialAlertDialogBuilder(av)
+//                            .setTitle("Permission denied")
+//                            .setMessage(av.getString(R.string.perm_ble_rationale))
+//                            .setNegativeButton(R.string.retry, new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    ActivityCompat.requestPermissions(av, new String[]{Manifest.permission.BLUETOOTH_ADMIN}, 2);
+//                                }
+//                            })
+//                            .setPositiveButton(R.string.sure, null)
+//                            .setCancelable(false).create();
+//                    dialog.show();
+//                } else if (!shouldAsk) {
+//                    AlertDialog dialog = new MaterialAlertDialogBuilder(av)
+//                            .setTitle("Permission denied")
+//                            .setMessage(av.getString(R.string.perm_ble_ask))
+//                            .setNegativeButton(R.string.no, null)
+//                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+//                                    Uri uri = Uri.fromParts("package", av.getPackageName(), null);
+//                                    intent.setData(uri);
+//                                    av.startActivity(intent);
+//                                }
+//                            })
+//                            .setCancelable(false).create();
+//                    dialog.show();
+//                }
+//            }
+//        }
+//        else if (ActivityCompat.checkSelfPermission(av, Manifest.permission.BLUETOOTH) == PackageManager.PERMISSION_DENIED) {
+//            if (Constants.BLUETOOTH_ENABLED) {
+//                boolean shouldAsk = ActivityCompat.shouldShowRequestPermissionRationale(av, Manifest.permission.BLUETOOTH);
+//                Log.e("logme", "does not have permissions for bluetooth " + shouldAsk);
+//                if (requestCode == 1 && shouldAsk) {
+//                    AlertDialog dialog = new MaterialAlertDialogBuilder(av)
+//                            .setTitle("Permission denied")
+//                            .setMessage(av.getString(R.string.perm_ble_rationale))
+//                            .setNegativeButton(R.string.retry, new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    ActivityCompat.requestPermissions(av, new String[]{Manifest.permission.BLUETOOTH}, 2);
+//                                }
+//                            })
+//                            .setPositiveButton(R.string.sure, null)
+//                            .setCancelable(false).create();
+//                    dialog.show();
+//                } else if (!shouldAsk) {
+//                    AlertDialog dialog = new MaterialAlertDialogBuilder(av)
+//                            .setTitle("Permission denied")
+//                            .setMessage(av.getString(R.string.perm_ble_ask))
+//                            .setNegativeButton(R.string.no, null)
+//                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+//                                    Uri uri = Uri.fromParts("package", av.getPackageName(), null);
+//                                    intent.setData(uri);
+//                                    av.startActivity(intent);
+//                                }
+//                            })
+//                            .setCancelable(false).create();
+//                    dialog.show();
+//                }
+//            }
+//        }
         else {
             Log.e("logme","has permissions");
-            if (Constants.startingToTrack) {
+            if (Constants.BLUETOOTH_ENABLED && (Constants.blueAdapter == null || !Constants.blueAdapter.isEnabled())) {
+                Log.e("aa","BLE");
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                av.startActivityForResult(enableBtIntent, 0);
+            }
+            else if (Constants.startingToTrack) {
                 Log.e("logme","starting to track");
                 Utils.createNotificationChannel(av);
                 av.startService(new Intent(av, LocationService.class));
