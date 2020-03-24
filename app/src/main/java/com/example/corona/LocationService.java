@@ -124,6 +124,7 @@ public class LocationService extends IntentService {
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(getString(R.string.notif_message))
                 .setSmallIcon(R.drawable.ic_android_black_24dp)
+                .setCategory(Notification.CATEGORY_SERVICE)
                 .build();
         startForeground(1,notification);
 
@@ -134,21 +135,26 @@ public class LocationService extends IntentService {
 
         if (Constants.BLUETOOTH_ENABLED) {
             AdvertiseSettings settings = new AdvertiseSettings.Builder()
+                    .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
+                    .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)
                     .setConnectable(true)
                     .build();
 
             AdvertiseData advertiseData = new AdvertiseData.Builder()
                     .setIncludeDeviceName(true)
                     .setIncludeTxPowerLevel(true)
+//                    .addServiceUuid(ParcelUuid(serviceUUID))
+//                    .addServiceData(ParcelUuid(serviceUUID), contactEventUUID?.toBytes())
                     .build();
-            AdvertiseData scanResponseData = new AdvertiseData.Builder()
-                    .addServiceUuid(new ParcelUuid(UUID.fromString("6e400001-b5a3-f393-e0a9-e50e24dcca3e")))
-                    .setIncludeTxPowerLevel(true)
-                    .build();
+
+//            AdvertiseData scanResponseData = new AdvertiseData.Builder()
+//                    .addServiceUuid(new ParcelUuid(UUID.fromString("6e400001-b5a3-f393-e0a9-e50e24dcca3e")))
+//                    .setIncludeTxPowerLevel(true)
+//                    .build();
 
             Constants.blueAdapter.setName(getString(R.string.app_name));
             BluetoothLeAdvertiser bluetoothLeAdvertiser = Constants.blueAdapter.getBluetoothLeAdvertiser();
-            bluetoothLeAdvertiser.startAdvertising(settings, advertiseData, scanResponseData, callback);
+            bluetoothLeAdvertiser.startAdvertising(settings, advertiseData, callback);
         }
     }
 
