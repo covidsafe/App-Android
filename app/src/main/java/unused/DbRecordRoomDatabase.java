@@ -1,4 +1,4 @@
-package com.example.corona;
+package unused;
 
 import android.content.Context;
 

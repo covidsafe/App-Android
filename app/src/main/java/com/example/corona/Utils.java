@@ -50,7 +50,7 @@ public class Utils {
     }
 
     public static void gpsLog(Context cxt, Location loc) {
-        FileOperations.append(System.currentTimeMillis() + "," + loc.getLongitude() + "," + loc.getLongitude(),
+        FileOperations.append(System.currentTimeMillis() + "," + loc.getLatitude() + "," + loc.getLongitude(),
                 cxt, Constants.gpsDirName, Utils.getLogName());
     }
 

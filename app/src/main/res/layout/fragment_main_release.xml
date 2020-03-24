@@ -21,7 +21,6 @@
         android:layout_width="181dp"
         android:layout_height="83dp"
         android:layout_marginTop="200dp"
-        android:text="Start tracking"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

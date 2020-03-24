@@ -13,7 +13,6 @@ import java.util.concurrent.ScheduledFuture;
 import unused.BlacklistRecord;
 import unused.HelpFragment;
 import unused.HistoryFragment;
-import unused.ReportFragment;
 import unused.SettingsFragment;
 
 public class Constants {
@@ -21,7 +20,7 @@ public class Constants {
     public static String insertAsyncTaskRunning = "";
 
     public static boolean DEBUG = false;
-    public static boolean BLUETOOTH_ENABLED = false;
+    public static boolean BLUETOOTH_ENABLED = true;
     public static boolean LOG_TO_DISK = false;
 
     public static BluetoothDevice device;

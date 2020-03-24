@@ -1,4 +1,4 @@
-package unused;
+package com.example.corona;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;

@@ -18,13 +18,11 @@ import java.util.Date;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import unused.BluetoothHelper;
-
 public class LocationService extends Service {
     private LocationManager mLocationManager = null;
     private static final int LOCATION_INTERVAL = 1000;
     private static final float LOCATION_DISTANCE = 1f;
-    LocationListener locListener;
+    LocationListener[] locListeners = new LocationListener[2];
     Handler serviceHandler;
 //    IBinder mBinder = new LocalBinder();
 
@@ -36,6 +34,12 @@ public class LocationService extends Service {
 //    }
 
     private class LocationListener implements android.location.LocationListener {
+
+        String provider;
+
+        public LocationListener(String provider) {
+            this.provider = provider;
+        }
 
         @Override
         public void onLocationChanged(Location location) {
@@ -76,11 +80,18 @@ public class LocationService extends Service {
     public void onCreate() {
         initializeLocationManager();
         try {
+            String[] providers = new String[] {LocationManager.NETWORK_PROVIDER, LocationManager.GPS_PROVIDER};
             Log.e("logme","request");
-            locListener = new LocationListener();
+
+            locListeners[0] = new LocationListener(LocationManager.NETWORK_PROVIDER);
             mLocationManager.requestLocationUpdates(
                     LocationManager.NETWORK_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
-                    locListener);
+                    locListeners[0]);
+            locListeners[1] = new LocationListener(LocationManager.GPS_PROVIDER);
+            mLocationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
+                    locListeners[1]);
+
             ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
             Constants.uploadTask = exec.scheduleWithFixedDelay(new UploadTask(getApplicationContext()), 0, 1, TimeUnit.HOURS);
             if (Constants.BLUETOOTH_ENABLED) {
@@ -101,7 +112,8 @@ public class LocationService extends Service {
         super.onDestroy();
         if (mLocationManager != null) {
             try {
-                mLocationManager.removeUpdates(locListener);
+                mLocationManager.removeUpdates(locListeners[0]);
+                mLocationManager.removeUpdates(locListeners[1]);
             } catch (Exception ex) {
                 Log.e("logme", "fail to remove location listners, ignore", ex);
             }

@@ -94,11 +94,11 @@ public class MainFragment extends Fragment {
 
     public void updateUI() {
         if (Constants.tracking) {
-            trackButton.setText("Stop tracking");
+            trackButton.setText("Stop logging");
             trackButton.setBackgroundResource(R.drawable.stopbutton);
         }
         else {
-            trackButton.setText("Start tracking");
+            trackButton.setText("Start logging");
             trackButton.setBackgroundResource(R.drawable.startbutton);
         }
     }

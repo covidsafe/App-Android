@@ -1,8 +1,6 @@
-package com.example.corona;
+package unused;
 
 import android.content.Context;
-
-import java.util.List;
 
 class DbRecordRepository {
     private DbRecordDao mRecordDao;

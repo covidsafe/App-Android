@@ -78,29 +78,29 @@
     <Button
         android:id="@+id/submitForm"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="40dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
         android:text="Submit"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/certBox" />
+        app:layout_constraintTop_toBottomOf="@+id/certBoxReport" />
 
     <CheckBox
-        android:id="@+id/certBoxWarning"
+        android:id="@+id/certBoxReport"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="422dp"
         android:text="@string/certText"
+        app:layout_constraintBottom_toTopOf="@+id/submitForm"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/symptom7" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/lastSubmittedTv"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="17dp"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/certBox" />
+        app:layout_constraintTop_toTopOf="@+id/submitForm" />
 </androidx.constraintlayout.widget.ConstraintLayout>

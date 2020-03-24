@@ -1,9 +1,13 @@
-package com.example.corona;
+package unused;
 
 import android.content.Context;
 import android.os.AsyncTask;
 
-import androidx.fragment.app.FragmentActivity;
+import com.example.corona.Constants;
+import com.example.corona.Utils;
+
+import unused.DbRecord;
+import unused.DbRecordRepository;
 
 public class InsertAsyncTask extends AsyncTask<Void, Void, Void> {
     private Context context;

@@ -1,4 +1,4 @@
-package unused;
+package com.example.corona;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -49,7 +49,7 @@ public class ReportFragment extends Fragment {
         CheckBox cb6 = (CheckBox) getActivity().findViewById(R.id.symptom6);
         CheckBox cb7 = (CheckBox) getActivity().findViewById(R.id.symptom7);
 
-        final CheckBox certBox = (CheckBox) getActivity().findViewById(R.id.certBox);
+        final CheckBox certBox = (CheckBox) getActivity().findViewById(R.id.certBoxReport);
 
         cb1.setText(getString(R.string.symptom1));
         cb2.setText(getString(R.string.symptom2));
