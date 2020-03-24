@@ -1,13 +1,19 @@
 package com.example.corona;
 
 import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
+import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
 
 public class BluetoothHelper implements Runnable {
 
@@ -22,7 +28,17 @@ public class BluetoothHelper implements Runnable {
     @Override
     public void run() {
         Log.e("ble","mytask-run ");
-        Constants.blueAdapter.getBluetoothLeScanner().startScan(mLeScanCallback);
+
+        ScanSettings.Builder builder = new ScanSettings.Builder();
+        builder.setScanMode(ScanSettings.SCAN_MODE_LOW_POWER);
+//        builder.setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES);
+//        builder.setMatchMode(ScanSettings.MATCH_MODE_AGGRESSIVE);
+//        builder.setNumOfMatches(ScanSettings.MATCH_NUM_ONE_ADVERTISEMENT);
+//        builder.setReportDelay(1000);
+
+        List<ScanFilter> filters = new LinkedList<ScanFilter>();
+
+        Constants.blueAdapter.getBluetoothLeScanner().startScan(filters, builder.build(), mLeScanCallback);
     }
 
     static ScanCallback mLeScanCallback =
