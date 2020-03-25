@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.covidsafe.utils.Constants;
 import com.example.covidsafe.utils.FileOperations;
-import com.example.covidsafe.models.GpsRecord;
 import com.example.covidsafe.ui.MainActivity;
 import com.example.covidsafe.R;
 import com.example.covidsafe.utils.Utils;
@@ -55,8 +54,8 @@ public class HistoryFragment extends Fragment {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                     Log.e("logme","SELECTED "+fileList[position]);
-                    ArrayList<GpsRecord> records = FileOperations.readGpsRecords(getActivity(), "network", Utils.convertDate(fileList[position]));
-                    displayPoints(records);
+//                    ArrayList<GpsRecord> records = FileOperations.readGpsRecords(getActivity(), "network", Utils.convertDate(fileList[position]));
+//                    displayPoints(records);
                 }
 
                 @Override
@@ -66,9 +65,5 @@ public class HistoryFragment extends Fragment {
 
             });
         }
-    }
-
-    public void displayPoints(ArrayList<GpsRecord> records) {
-        
     }
 }

@@ -1,4 +1,4 @@
-package com.example.covidsafe;
+package com.example.covidsafe.gps;
 import android.app.IntentService;
 import android.app.Notification;
 import android.bluetooth.le.AdvertiseCallback;
@@ -18,6 +18,8 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
+import com.example.covidsafe.R;
+import com.example.covidsafe.ble.BluetoothHelper;
 import com.example.covidsafe.utils.Constants;
 import com.example.covidsafe.utils.Utils;
 
@@ -60,7 +62,7 @@ public class LocationService extends IntentService {
                 Log.i("error", "error");
             }
 
-            Utils.gpsLogToFile(getApplicationContext(), location, provider);
+            Utils.gpsLogToDatabase(getApplicationContext(), location);
         }
 
         @Override
@@ -85,6 +87,7 @@ public class LocationService extends IntentService {
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
+        Log.e("ex","bundle status "+(bundle==null));
         if (bundle != null) {
             messenger = (Messenger) bundle.get("messenger");
 //            msg = Message.obtain();
@@ -107,7 +110,7 @@ public class LocationService extends IntentService {
             ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
 //            Constants.uploadTask = exec.scheduleWithFixedDelay(new UploadTask(getApplicationContext()), 0, 1, TimeUnit.HOURS);
             if (Constants.BLUETOOTH_ENABLED) {
-                Log.e("ble","spin out task");
+                Log.e("ble","spin out task "+(messenger==null));
                 Constants.bluetoothTask = exec.scheduleWithFixedDelay(new BluetoothHelper(getApplicationContext(), messenger), 0, 1, TimeUnit.HOURS);
                 Log.e("ble","make beacon");
                 mkBeacon();

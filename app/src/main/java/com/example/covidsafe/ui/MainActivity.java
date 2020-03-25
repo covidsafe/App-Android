@@ -12,8 +12,7 @@ import android.widget.Button;
 
 import com.example.covidsafe.utils.Constants;
 import com.example.covidsafe.utils.CryptoUtils;
-import com.example.covidsafe.LocationService;
-import com.example.covidsafe.PermissionLogic;
+import com.example.covidsafe.gps.LocationService;
 import com.example.covidsafe.R;
 import com.example.covidsafe.utils.Utils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -26,14 +25,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         CryptoUtils.keyInit(this);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        if (Constants.DEBUG) {
-            bottomNavigationView.getMenu().clear();
-            bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_debug);
-        }
-        else {
+//        if (Constants.DEBUG) {
+//            bottomNavigationView.getMenu().clear();
+//            bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_debug);
+//        }
+//        else {
             bottomNavigationView.getMenu().clear();
             bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_release);
-        }
+//        }
     }
 
     @Override

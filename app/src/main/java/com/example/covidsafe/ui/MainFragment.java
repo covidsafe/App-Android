@@ -5,8 +5,6 @@ import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.os.Messenger;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -22,11 +20,11 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.covidsafe.ble.BleOpsAsyncTask;
+import com.example.covidsafe.gps.GpsOpsAsyncTask;
 import com.example.covidsafe.utils.Constants;
-import com.example.covidsafe.LocationService;
+import com.example.covidsafe.gps.LocationService;
 import com.example.covidsafe.R;
-import com.example.covidsafe.UploadAllBleTask;
-import com.example.covidsafe.UploadAllGpsTask;
 import com.example.covidsafe.utils.Utils;
 
 public class MainFragment extends Fragment {
@@ -35,23 +33,18 @@ public class MainFragment extends Fragment {
     Button uploadGpsButton;
     Button uploadBleButton;
     TextView tv1;
-    TextView gpsResults;
-    TextView bleResults;
     TextView riskTv;
-    Handler serviceHandler;
-    int gpsLines = 0;
-    int bleLines = 0;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view;
-        if (Constants.DEBUG) {
-            view = inflater.inflate(R.layout.fragment_main_debug, container, false);
-        }
-        else {
+//        if (Constants.DEBUG) {
+//            view = inflater.inflate(R.layout.fragment_main_debug, container, false);
+//        }
+//        else {
             view = inflater.inflate(R.layout.fragment_main_release, container, false);
-        }
+//        }
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(getActivity().getString(R.string.main_header_text));
         return view;
@@ -74,13 +67,13 @@ public class MainFragment extends Fragment {
 
         tv1 = (TextView)getActivity().findViewById(R.id.textView);
 
-        gpsResults = (TextView)getActivity().findViewById(R.id.gpsResults);
-        gpsResults.setText("");
-        gpsResults.setMovementMethod(new ScrollingMovementMethod());
+        Utils.gpsResults = (TextView)getActivity().findViewById(R.id.gpsResults);
+        Utils.gpsResults.setText("");
+        Utils.gpsResults.setMovementMethod(new ScrollingMovementMethod());
 
-        bleResults = (TextView)getActivity().findViewById(R.id.bleResults);
-        bleResults.setText("");
-        bleResults.setMovementMethod(new ScrollingMovementMethod());
+        Utils.bleResults = (TextView)getActivity().findViewById(R.id.bleResults);
+        Utils.bleResults.setText("");
+        Utils.bleResults.setMovementMethod(new ScrollingMovementMethod());
 
         trackButton = (Button)getActivity().findViewById(R.id.trackButton);
         uploadGpsButton = (Button)getActivity().findViewById(R.id.uploadGpsButton);
@@ -89,18 +82,17 @@ public class MainFragment extends Fragment {
 //        riskTv.setText(getString(R.string.risk_low));
         updateUI();
 
-
         uploadGpsButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Handler handler = new Handler();
-                handler.postDelayed(new UploadAllGpsTask(getActivity(), getActivity()), 0);
+//                new GpsDbAsyncTask(getContext(), new GpsDbRecord(System.currentTimeMillis(),42,43, LocationManager.NETWORK_PROVIDER)).execute();
+                new GpsOpsAsyncTask(getActivity()).execute();
             }
         });
 
         uploadBleButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Handler handler = new Handler();
-                handler.postDelayed(new UploadAllBleTask(getActivity(), getActivity()), 0);
+//                new BleDbAsyncTask(getContext(), new BleDbRecord("1234",System.currentTimeMillis(),false,false)).execute();
+                new BleOpsAsyncTask(getActivity()).execute();
             }
         });
 
@@ -135,46 +127,13 @@ public class MainFragment extends Fragment {
                             (!Constants.BLUETOOTH_ENABLED)) {
                             Log.e("aa","START");
 
-                            bleResults.setText("");
-                            gpsResults.setText("");
+                            Utils.bleResults.setText("");
+                            Utils.gpsResults.setText("");
 
                             Utils.createNotificationChannel(getActivity());
 
-                            serviceHandler = new Handler() {
-                                @Override
-                                public void handleMessage(Message msg) {
-                                    Bundle reply = msg.getData();
-                                    String out1 = reply.getString("gps");
-                                    String out2 = reply.getString("ble");
-                                    if (out1!=null) {
-                                        if (gpsLines > 20) {
-                                            String ss = gpsResults.getText().toString();
-                                            int ii = ss.indexOf("\n");
-                                            String oo = ss.substring(ii+1,ss.length()) + out1+"\n";
-                                            gpsResults.setText(oo);
-                                        }
-                                        else {
-                                            gpsResults.append(out1 + "\n");
-                                        }
-                                        gpsLines+=1;
-                                    }
-                                    if (out2!=null) {
-                                        if (bleLines > 20) {
-                                            String ss = bleResults.getText().toString();
-                                            int ii = ss.indexOf("\n");
-                                            String oo = ss.substring(ii+1,ss.length()) + out2+"\n";
-                                            bleResults.setText(oo);
-                                        }
-                                        else {
-                                            bleResults.append(out2 + "\n");
-                                        }
-                                        bleLines+=1;
-                                    }
-                                }
-                            };
-
                             Intent intent = new Intent(getActivity(), LocationService.class);
-                            intent.putExtra("messenger", new Messenger(serviceHandler));
+                            intent.putExtra("messenger", new Messenger(Utils.serviceHandler));
                             getActivity().startService(intent);
 
                             Constants.tracking = true;

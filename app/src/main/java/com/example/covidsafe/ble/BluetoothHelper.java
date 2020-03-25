@@ -1,4 +1,4 @@
-package com.example.covidsafe;
+package com.example.covidsafe.ble;
 
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
@@ -43,7 +43,7 @@ public class BluetoothHelper implements Runnable {
         Constants.blueAdapter.getBluetoothLeScanner().startScan(filters, builder.build(), mLeScanCallback);
     }
 
-    static ScanCallback mLeScanCallback =
+    public static ScanCallback mLeScanCallback =
             new ScanCallback() {
                 @Override
                 public void onScanResult(int callbackType, final ScanResult result) {
@@ -56,19 +56,21 @@ public class BluetoothHelper implements Runnable {
                     msg.setData(bb);
                     try {
 //                        Log.e("test","sending");
+                        Log.e("ex","messenger is "+(messenger==null));
+                        Log.e("ex","msg is "+(msg==null));
                         messenger.send(msg);
                     } catch (RemoteException e) {
                         Log.i("error", "error");
                     }
 
-//                    if (result.getDevice().getName()!=null) {
+                    if (result.getDevice().getName()!=null) {
 //                        Log.e("ble","onscanresult "+result.getDevice().getName());
 //                        Constants.device = result.getDevice();
 //                        Log.e("ble", "got device " + Constants.device.getName().toString());
 //                        Log.e("ble", "got device address " + Constants.device.getAddress());
 //                        Constants.blueAdapter.getBluetoothLeScanner().stopScan(this);
-//                    }
-                    Utils.bleLogToFile(cxt, result);
+                        Utils.bleLogToDatabase(cxt,result);
+                    }
                 }
 
                 @Override

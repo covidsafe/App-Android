@@ -21,9 +21,24 @@ import unused.SettingsFragment;
 
 public class Constants {
 
+    public enum UploadSources {
+        Disk, Db
+    }
+
+    public static boolean WRITE_TO_DISK = true;
+    public static boolean DEBUG = true;
+    public static UploadSources UploadSource = UploadSources.Disk;
+
+    public enum BleDatabaseOps {
+        Insert,ViewAll
+    }
+
+    public enum GpsDatabaseOps {
+        Insert,ViewAll
+    }
+
     public static String insertAsyncTaskRunning = "";
 
-    public static boolean DEBUG = false;
     public static boolean BLUETOOTH_ENABLED = true;
     public static boolean LOG_TO_DISK = false;
 
@@ -58,16 +73,15 @@ public class Constants {
     public static int SubmitThresh = 0;
     public static float DistanceThresholdInMeters = 1609.34f;
     public static ArrayList<BlacklistRecord> blacklist;
-//    public static String[] scope = {"user.read"};
-//    public static String baliResourceURL = "https://graph.microsoft.com/v1.0/me";
+
     public static String[] permissions={
         Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-//            Manifest.permission.ACCESS_FINE_LOCATION,
-//            Manifest.permission.ACCESS_COARSE_LOCATION,
-//        Manifest.permission.FOREGROUND_SERVICE,
-//        Manifest.permission.BLUETOOTH_ADMIN,
-//        Manifest.permission.BLUETOOTH,
-//            Manifest.permission.INTERNET
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.FOREGROUND_SERVICE,
+        Manifest.permission.BLUETOOTH_ADMIN,
+        Manifest.permission.BLUETOOTH,
+            Manifest.permission.INTERNET
     };
 
     public static void init() {

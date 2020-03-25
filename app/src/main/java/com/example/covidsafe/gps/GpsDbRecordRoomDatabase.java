@@ -1,4 +1,4 @@
-package com.example.covidsafe.data;
+package com.example.covidsafe.gps;
 
 import android.content.Context;
 
@@ -11,7 +11,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {GpsDbRecord.class}, version = 1, exportSchema = false)
+@Database(entities = {GpsRecord.class}, version = 1, exportSchema = false)
 public abstract class GpsDbRecordRoomDatabase extends RoomDatabase {
 
     private static final int NUMBER_OF_THREADS = 4;
@@ -38,12 +38,11 @@ public abstract class GpsDbRecordRoomDatabase extends RoomDatabase {
     };
 
     static GpsDbRecordRoomDatabase getDatabase(final Context context) {
-
         if (INSTANCE == null) {
             synchronized (GpsDbRecordRoomDatabase.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            GpsDbRecordRoomDatabase.class, "record_database")
+                    INSTANCE = Room.databaseBuilder(context,
+                            GpsDbRecordRoomDatabase.class, "gps_record_database")
                             .build();
                 }
             }
