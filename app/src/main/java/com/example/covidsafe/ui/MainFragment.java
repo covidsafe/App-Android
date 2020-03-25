@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Messenger;
+import android.os.ParcelUuid;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,10 +26,13 @@ import androidx.fragment.app.Fragment;
 import com.example.covidsafe.ble.BleOpsAsyncTask;
 import com.example.covidsafe.ble.BluetoothHelper;
 import com.example.covidsafe.gps.GpsOpsAsyncTask;
+import com.example.covidsafe.utils.ByteUtils;
 import com.example.covidsafe.utils.Constants;
 import com.example.covidsafe.BackgroundService;
 import com.example.covidsafe.R;
 import com.example.covidsafe.utils.Utils;
+
+import java.util.UUID;
 
 public class MainFragment extends Fragment {
 
@@ -58,13 +62,13 @@ public class MainFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        Switch sw1 = (Switch)getActivity().findViewById(R.id.switch1);
-        sw1.setChecked(Constants.BLUETOOTH_ENABLED);
-        sw1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Constants.BLUETOOTH_ENABLED = isChecked;
-            }
-        });
+//        Switch sw1 = (Switch)getActivity().findViewById(R.id.switch1);
+//        sw1.setChecked(Constants.BLUETOOTH_ENABLED);
+//        sw1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                Constants.BLUETOOTH_ENABLED = isChecked;
+//            }
+//        });
 
         Constants.CurrentFragment = this;
         Constants.MainFragment = this;
@@ -85,9 +89,12 @@ public class MainFragment extends Fragment {
         uploadGpsButton = (Button)getActivity().findViewById(R.id.uploadGpsButton);
         uploadBleButton = (Button)getActivity().findViewById(R.id.uploadBleButton);
         rotateButton = (Button)getActivity().findViewById(R.id.rotateButton);
-        riskTv = (TextView)getActivity().findViewById(R.id.riskStatusTv);
+//        riskTv = (TextView)getActivity().findViewById(R.id.riskStatusTv);
 //        riskTv.setText(getString(R.string.risk_low));
         updateUI();
+
+        Constants.contactUUID = UUID.randomUUID();
+        tv1.setText(Constants.contactUUID.toString());
 
         uploadGpsButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -105,18 +112,24 @@ public class MainFragment extends Fragment {
 
         rotateButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothHelper.callback);
-                AdvertiseSettings settings = new AdvertiseSettings.Builder()
-                        .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
-                        .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)
-                        .setConnectable(true)
-                        .build();
+                Constants.contactUUID = UUID.randomUUID();
+                tv1.setText(Constants.contactUUID.toString());
 
-                AdvertiseData advertiseData = new AdvertiseData.Builder()
-                        .setIncludeDeviceName(true)
-                        .setIncludeTxPowerLevel(true)
-                        .build();
-                Constants.blueAdapter.getBluetoothLeAdvertiser().startAdvertising(settings, advertiseData, BluetoothHelper.callback);
+                if (Constants.blueAdapter != null && Constants.blueAdapter.getBluetoothLeAdvertiser() != null) {
+                    Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothHelper.callback);
+                    AdvertiseSettings settings = new AdvertiseSettings.Builder()
+                            .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
+                            .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)
+                            .setConnectable(true)
+                            .build();
+
+                    AdvertiseData advertiseData = new AdvertiseData.Builder()
+                            .setIncludeDeviceName(false)
+                            .addServiceUuid(new ParcelUuid(Constants.serviceUUID))
+                            .addServiceData(new ParcelUuid(Constants.serviceUUID), ByteUtils.uuid2bytes(Constants.contactUUID))
+                            .build();
+                    Constants.blueAdapter.getBluetoothLeAdvertiser().startAdvertising(settings, advertiseData, BluetoothHelper.callback);
+                }
             }
         });
 

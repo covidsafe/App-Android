@@ -12,6 +12,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Messenger;
+import android.os.ParcelUuid;
 import android.os.RemoteException;
 import android.util.Log;
 
@@ -20,6 +21,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.covidsafe.R;
 import com.example.covidsafe.ble.BluetoothHelper;
+import com.example.covidsafe.utils.ByteUtils;
 import com.example.covidsafe.utils.Constants;
 import com.example.covidsafe.utils.Utils;
 
@@ -135,7 +137,6 @@ public class BackgroundService extends IntentService {
     }
 
     public void mkBeacon() {
-
         if (Constants.BLUETOOTH_ENABLED) {
             AdvertiseSettings settings = new AdvertiseSettings.Builder()
                     .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
@@ -144,18 +145,11 @@ public class BackgroundService extends IntentService {
                     .build();
 
             AdvertiseData advertiseData = new AdvertiseData.Builder()
-                    .setIncludeDeviceName(true)
-                    .setIncludeTxPowerLevel(true)
-//                    .addServiceUuid(ParcelUuid(serviceUUID))
-//                    .addServiceData(ParcelUuid(serviceUUID), contactEventUUID?.toBytes())
+                    .setIncludeDeviceName(false)
+                    .addServiceUuid(new ParcelUuid(Constants.serviceUUID))
+                    .addServiceData(new ParcelUuid(Constants.serviceUUID), ByteUtils.uuid2bytes(Constants.contactUUID))
                     .build();
 
-//            AdvertiseData scanResponseData = new AdvertiseData.Builder()
-//                    .addServiceUuid(new ParcelUuid(UUID.fromString("6e400001-b5a3-f393-e0a9-e50e24dcca3e")))
-//                    .setIncludeTxPowerLevel(true)
-//                    .build();
-
-            Constants.blueAdapter.setName(getString(R.string.app_name));
             BluetoothLeAdvertiser bluetoothLeAdvertiser = Constants.blueAdapter.getBluetoothLeAdvertiser();
             bluetoothLeAdvertiser.startAdvertising(settings, advertiseData, BluetoothHelper.callback);
         }

@@ -10,14 +10,18 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Messenger;
+import android.os.ParcelUuid;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.example.covidsafe.utils.ByteUtils;
 import com.example.covidsafe.utils.Constants;
 import com.example.covidsafe.utils.Utils;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class BluetoothHelper implements Runnable {
 
@@ -47,43 +51,35 @@ public class BluetoothHelper implements Runnable {
 
         ScanSettings.Builder builder = new ScanSettings.Builder();
         builder.setScanMode(ScanSettings.SCAN_MODE_LOW_POWER);
-//        builder.setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES);
-//        builder.setMatchMode(ScanSettings.MATCH_MODE_AGGRESSIVE);
-//        builder.setNumOfMatches(ScanSettings.MATCH_NUM_ONE_ADVERTISEMENT);
-//        builder.setReportDelay(1000);
 
         List<ScanFilter> filters = new LinkedList<ScanFilter>();
 
         Constants.blueAdapter.getBluetoothLeScanner().startScan(filters, builder.build(), mLeScanCallback);
     }
 
+    static String firstDevice = null;
     public static ScanCallback mLeScanCallback =
             new ScanCallback() {
                 @Override
                 public void onScanResult(int callbackType, final ScanResult result) {
                     super.onScanResult(callbackType, result);
-//                    Log.e("ble",result+"");
+                    Map<ParcelUuid, byte[]> map = result.getScanRecord().getServiceData();
+                    List<ParcelUuid> keys = new ArrayList<ParcelUuid>(map.keySet());
+                    if (keys.size() > 0 && keys.get(0).getUuid().equals(Constants.serviceUUID)) {
+                        String contactUuid = ByteUtils.byte2string(map.get(keys.get(0)));
+                        String[] elts = contactUuid.split("-");
 
-                    Bundle bb = new Bundle();
-                    bb.putString("ble", result.getDevice().getAddress()+","+result.getRssi());
-                    Message msg = new Message();
-                    msg.setData(bb);
-                    try {
-//                        Log.e("test","sending");
-                        Log.e("ex","messenger is "+(messenger==null));
-                        Log.e("ex","msg is "+(msg==null));
-                        messenger.send(msg);
-                    } catch (RemoteException e) {
-                        Log.i("error", "error");
-                    }
+                        Bundle bb = new Bundle();
+                        bb.putString("ble",elts[elts.length-1]);
+                        Message msg = new Message();
+                        msg.setData(bb);
+                        try {
+                            messenger.send(msg);
+                        } catch (RemoteException e) {
+                            Log.i("error", "error");
+                        }
 
-                    if (result.getDevice().getName()!=null) {
-//                        Log.e("ble","onscanresult "+result.getDevice().getName());
-//                        Constants.device = result.getDevice();
-//                        Log.e("ble", "got device " + Constants.device.getName().toString());
-//                        Log.e("ble", "got device address " + Constants.device.getAddress());
-//                        Constants.blueAdapter.getBluetoothLeScanner().stopScan(this);
-                        Utils.bleLogToDatabase(cxt,result);
+                        Utils.bleLogToDatabase(cxt,contactUuid);
                     }
                 }
 
