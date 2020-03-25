@@ -111,8 +111,8 @@ public class Utils {
                 cxt, Constants.bleDirName, Utils.getBleLogName());
     }
 
-    public static void bleLogToDatabase(Context cxt, ScanResult result) {
-        new BleOpsAsyncTask(cxt, result).execute();
+    public static void bleLogToDatabase(Context cxt, String id) {
+        new BleOpsAsyncTask(cxt, id).execute();
     }
 
     public static JsonObject gps2json(List<GpsRecord> records) {

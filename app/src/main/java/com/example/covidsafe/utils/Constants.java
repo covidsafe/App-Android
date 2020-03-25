@@ -12,6 +12,7 @@ import com.example.covidsafe.ui.ReportFragment;
 import com.example.covidsafe.ui.WarningFragment;
 
 import java.util.ArrayList;
+import java.util.UUID;
 import java.util.concurrent.ScheduledFuture;
 
 import unused.BlacklistRecord;
@@ -36,6 +37,9 @@ public class Constants {
     public enum GpsDatabaseOps {
         Insert,ViewAll
     }
+
+    public static UUID serviceUUID = UUID.fromString("0000c019-0000-1000-8000-00805f9b34fb");
+    public static UUID contactUUID = UUID.fromString("0000c019-0000-1000-8000-00805f9b34fc");
 
     public static String insertAsyncTaskRunning = "";
 

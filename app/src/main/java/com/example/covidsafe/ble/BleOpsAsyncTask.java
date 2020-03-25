@@ -15,15 +15,16 @@ import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.URL;
 import java.util.List;
+import java.util.UUID;
 
 public class BleOpsAsyncTask extends AsyncTask<Void, Void, Void> {
     private Context context;
     private BleRecord result;
     private Constants.BleDatabaseOps op;
 
-    public BleOpsAsyncTask(Context activity, ScanResult result) {
+    public BleOpsAsyncTask(Context activity, String id) {
         this.context = activity;
-        this.result = new BleRecord(result.getDevice().getName(), System.currentTimeMillis(), false, false);
+        this.result = new BleRecord(id, System.currentTimeMillis(), false, false);
         this.op = Constants.BleDatabaseOps.Insert;
     }
 

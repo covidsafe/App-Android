@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="19dp"
         android:gravity="center_horizontal"
-        android:textSize="30dp"
+        android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -79,24 +79,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/trackButton" />
 
-    <Switch
-        android:id="@+id/switch1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="3dp"
-        android:text="Bluetooth"
-        app:layout_constraintStart_toStartOf="@+id/uploadBleButton"
-        app:layout_constraintTop_toBottomOf="@+id/trackButton" />
-
     <Button
         android:id="@+id/rotateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="11dp"
+        android:layout_marginStart="158dp"
+        android:layout_marginTop="96dp"
+        android:layout_marginEnd="165dp"
         android:text="Rotate"
-        app:layout_constraintStart_toEndOf="@+id/uploadBleButton"
-        app:layout_constraintTop_toBottomOf="@+id/uploadBleButton" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/trackButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
