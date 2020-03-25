@@ -1,5 +1,9 @@
 package com.example.covidsafe.comms;
 
+import com.example.corona.comms.TestReply;
+import com.example.corona.comms.TestRequest;
+import com.example.corona.comms.TestServiceGrpc;
+
 import java.util.concurrent.TimeUnit;
 
 import io.grpc.CallCredentials;
