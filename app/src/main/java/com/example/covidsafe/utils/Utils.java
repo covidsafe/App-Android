@@ -38,8 +38,8 @@ import unused.BlacklistRecord;
 
 public class Utils {
 
-    static int gpsLines = 0;
-    static int bleLines = 0;
+    public static int gpsLines = 0;
+    public static int bleLines = 0;
     public static TextView gpsResults;
     public static TextView bleResults;
 
