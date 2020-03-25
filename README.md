@@ -1,4 +1,4 @@
-# corona
+# CovidSafe
 
-Updated code now lives on:
-https://github.com/TraceDefense/App-Android
+Video demo
+https://www.youtube.com/watch?v=0iWl9uaQ5Ds
