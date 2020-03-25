@@ -16,7 +16,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 
 import com.example.covidsafe.R;
-import com.example.covidsafe.gps.LocationService;
+import com.example.covidsafe.BackgroundService;
 import com.example.covidsafe.utils.Constants;
 import com.example.covidsafe.utils.Utils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -141,7 +141,7 @@ public class PermissionLogic {
             else if (Constants.startingToTrack) {
                 Log.e("logme","starting to track");
                 Utils.createNotificationChannel(av);
-                Intent ii = new Intent(av, LocationService.class);
+                Intent ii = new Intent(av, BackgroundService.class);
                 ii.putExtra("messenger", new Messenger(Utils.serviceHandler));
                 av.startService(ii);
                 Constants.tracking = true;

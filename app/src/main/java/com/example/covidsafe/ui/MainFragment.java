@@ -2,6 +2,8 @@ package com.example.covidsafe.ui;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.le.AdvertiseData;
+import android.bluetooth.le.AdvertiseSettings;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,9 +23,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.covidsafe.ble.BleOpsAsyncTask;
+import com.example.covidsafe.ble.BluetoothHelper;
 import com.example.covidsafe.gps.GpsOpsAsyncTask;
 import com.example.covidsafe.utils.Constants;
-import com.example.covidsafe.gps.LocationService;
+import com.example.covidsafe.BackgroundService;
 import com.example.covidsafe.R;
 import com.example.covidsafe.utils.Utils;
 
@@ -32,6 +35,7 @@ public class MainFragment extends Fragment {
     Button trackButton;
     Button uploadGpsButton;
     Button uploadBleButton;
+    Button rotateButton;
     TextView tv1;
     TextView riskTv;
 
@@ -80,6 +84,7 @@ public class MainFragment extends Fragment {
         trackButton = (Button)getActivity().findViewById(R.id.trackButton);
         uploadGpsButton = (Button)getActivity().findViewById(R.id.uploadGpsButton);
         uploadBleButton = (Button)getActivity().findViewById(R.id.uploadBleButton);
+        rotateButton = (Button)getActivity().findViewById(R.id.rotateButton);
         riskTv = (TextView)getActivity().findViewById(R.id.riskStatusTv);
 //        riskTv.setText(getString(R.string.risk_low));
         updateUI();
@@ -95,6 +100,23 @@ public class MainFragment extends Fragment {
             public void onClick(View v) {
 //                new BleDbAsyncTask(getContext(), new BleDbRecord("1234",System.currentTimeMillis(),false,false)).execute();
                 new BleOpsAsyncTask(getActivity()).execute();
+            }
+        });
+
+        rotateButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothHelper.callback);
+                AdvertiseSettings settings = new AdvertiseSettings.Builder()
+                        .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
+                        .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)
+                        .setConnectable(true)
+                        .build();
+
+                AdvertiseData advertiseData = new AdvertiseData.Builder()
+                        .setIncludeDeviceName(true)
+                        .setIncludeTxPowerLevel(true)
+                        .build();
+                Constants.blueAdapter.getBluetoothLeAdvertiser().startAdvertising(settings, advertiseData, BluetoothHelper.callback);
             }
         });
 
@@ -134,7 +156,7 @@ public class MainFragment extends Fragment {
 
                             Utils.createNotificationChannel(getActivity());
 
-                            Intent intent = new Intent(getActivity(), LocationService.class);
+                            Intent intent = new Intent(getActivity(), BackgroundService.class);
                             intent.putExtra("messenger", new Messenger(Utils.serviceHandler));
                             getActivity().startService(intent);
 
@@ -147,7 +169,7 @@ public class MainFragment extends Fragment {
                 }
                 else {
                     Log.e("logme","stop service");
-                    getActivity().stopService(new Intent(getActivity(), LocationService.class));
+                    getActivity().stopService(new Intent(getActivity(), BackgroundService.class));
                     if (Constants.uploadTask!=null) {
                         Constants.uploadTask.cancel(true);
                     }
@@ -162,12 +184,12 @@ public class MainFragment extends Fragment {
         Log.e("aa","updateui");
         if (Constants.tracking) {
             Log.e("aa","yes");
-            trackButton.setText("Stop logging");
+            trackButton.setText(getString(R.string.stop));
             trackButton.setBackgroundResource(R.drawable.stopbutton);
         }
         else {
             Log.e("aa","no");
-            trackButton.setText("Start logging");
+            trackButton.setText(getString(R.string.start));
             trackButton.setBackgroundResource(R.drawable.startbutton);
         }
     }
