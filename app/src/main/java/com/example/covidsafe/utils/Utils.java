@@ -11,13 +11,22 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
 
+import com.example.covidsafe.ble.BleOpsAsyncTask;
+import com.example.covidsafe.ble.BleRecord;
+import com.example.covidsafe.gps.GpsOpsAsyncTask;
+import com.example.covidsafe.gps.GpsRecord;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -28,6 +37,44 @@ import java.util.UUID;
 import unused.BlacklistRecord;
 
 public class Utils {
+
+    static int gpsLines = 0;
+    static int bleLines = 0;
+    public static TextView gpsResults;
+    public static TextView bleResults;
+
+    public static Handler serviceHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            Bundle reply = msg.getData();
+            String out1 = reply.getString("gps");
+            String out2 = reply.getString("ble");
+            if (out1!=null) {
+                if (gpsLines > 20) {
+                    String ss = gpsResults.getText().toString();
+                    int ii = ss.indexOf("\n");
+                    String oo = ss.substring(ii+1,ss.length()) + out1+"\n";
+                    gpsResults.setText(oo);
+                }
+                else {
+                    gpsResults.append(out1 + "\n");
+                }
+                gpsLines+=1;
+            }
+            if (out2!=null) {
+                if (bleLines > 20) {
+                    String ss = bleResults.getText().toString();
+                    int ii = ss.indexOf("\n");
+                    String oo = ss.substring(ii+1,ss.length()) + out2+"\n";
+                    bleResults.setText(oo);
+                }
+                else {
+                    bleResults.append(out2 + "\n");
+                }
+                bleLines+=1;
+            }
+        }
+    };
 
     public static String randomGUID() {
         return UUID.randomUUID().toString();
@@ -50,22 +97,42 @@ public class Utils {
         snackBar.show();
     }
 
-    public static void gpsLogToFile(Context cxt, Location loc, String provider) {
-        FileOperations.append(System.currentTimeMillis() + "," + loc.getLatitude() + "," + loc.getLongitude(),
-                cxt, Constants.gpsDirName+"/"+provider, Utils.getGpsLogName());
+    public static void gpsLogToFile(Context cxt, GpsRecord rec) {
+        FileOperations.append(rec.toString(),
+                cxt, Constants.gpsDirName, Utils.getGpsLogName());
     }
 
-    public static void gpsLogToDatabase(Context cxt, Location loc, String provider) {
-
+    public static void gpsLogToDatabase(Context cxt, Location loc) {
+        new GpsOpsAsyncTask(cxt, loc, System.currentTimeMillis()).execute();
     }
 
-    public static void bleLogToFile(Context cxt, ScanResult result) {
-        FileOperations.append(System.currentTimeMillis() + ","+ result.getDevice().getAddress()+","+result.getRssi(),
+    public static void bleLogToFile(Context cxt, BleRecord rec) {
+        FileOperations.append(rec.toString(),
                 cxt, Constants.bleDirName, Utils.getBleLogName());
     }
 
     public static void bleLogToDatabase(Context cxt, ScanResult result) {
+        new BleOpsAsyncTask(cxt, result).execute();
+    }
 
+    public static JsonObject gps2json(List<GpsRecord> records) {
+        JsonArray arr = new JsonArray();
+        for (GpsRecord rec : records) {
+            arr.add(rec.toJson());
+        }
+        JsonObject obj = new JsonObject();
+        obj.add("data", arr);
+        return obj;
+    }
+
+    public static JsonObject ble2json(List<BleRecord> records) {
+        JsonArray arr = new JsonArray();
+        for (BleRecord rec : records) {
+            arr.add(rec.toJson());
+        }
+        JsonObject obj = new JsonObject();
+        obj.add("data", arr);
+        return obj;
     }
 
     public static boolean locationInBlacklist(Context cxt, Location loc) {

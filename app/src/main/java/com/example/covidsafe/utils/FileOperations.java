@@ -3,8 +3,8 @@ package com.example.covidsafe.utils;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.covidsafe.models.BleRecord;
-import com.example.covidsafe.models.GpsRecord;
+import com.example.covidsafe.ble.BleRecord;
+import com.example.covidsafe.gps.GpsRecord;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -268,6 +268,7 @@ public class FileOperations {
             if(!file.exists()) {
                 file.createNewFile();
             }
+            Log.e("gps","writing to "+file.toString());
             BufferedWriter buf = new BufferedWriter(new FileWriter(file,true));
 
             buf.append(s);
