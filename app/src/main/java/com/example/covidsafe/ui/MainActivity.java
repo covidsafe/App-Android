@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Messenger;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,7 +13,7 @@ import android.widget.Button;
 
 import com.example.covidsafe.utils.Constants;
 import com.example.covidsafe.utils.CryptoUtils;
-import com.example.covidsafe.gps.LocationService;
+import com.example.covidsafe.BackgroundService;
 import com.example.covidsafe.R;
 import com.example.covidsafe.utils.Utils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -53,7 +54,9 @@ public class MainActivity extends AppCompatActivity {
             if (Constants.startingToTrack) {
                 Log.e("logme","starting to track");
                 Utils.createNotificationChannel(this);
-                startService(new Intent(this, LocationService.class));
+                Intent ii = new Intent(this, BackgroundService.class);
+                ii.putExtra("messenger", new Messenger(Utils.serviceHandler));
+                startService(ii);
                 Constants.tracking = true;
                 Constants.startingToTrack = false;
                 Button trackButton = (Button)findViewById(R.id.trackButton);

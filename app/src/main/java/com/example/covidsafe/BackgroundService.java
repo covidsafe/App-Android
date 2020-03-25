@@ -1,4 +1,4 @@
-package com.example.covidsafe.gps;
+package com.example.covidsafe;
 import android.app.IntentService;
 import android.app.Notification;
 import android.bluetooth.le.AdvertiseCallback;
@@ -29,7 +29,7 @@ import java.util.Date;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class LocationService extends IntentService {
+public class BackgroundService extends IntentService {
 
     private LocationManager mLocationManager = null;
     private static final int LOCATION_INTERVAL = 1000;
@@ -75,7 +75,7 @@ public class LocationService extends IntentService {
         public void onStatusChanged(String provider, int status, Bundle extras) { }
     }
 
-    public LocationService() {
+    public BackgroundService() {
         super("LocationService");
     }
 
@@ -157,21 +157,9 @@ public class LocationService extends IntentService {
 
             Constants.blueAdapter.setName(getString(R.string.app_name));
             BluetoothLeAdvertiser bluetoothLeAdvertiser = Constants.blueAdapter.getBluetoothLeAdvertiser();
-            bluetoothLeAdvertiser.startAdvertising(settings, advertiseData, callback);
+            bluetoothLeAdvertiser.startAdvertising(settings, advertiseData, BluetoothHelper.callback);
         }
     }
-
-    AdvertiseCallback callback = new AdvertiseCallback() {
-        @Override
-        public void onStartSuccess(AdvertiseSettings settingsInEffect) {
-            Log.d("ble", "BLE advertisement added successfully");
-        }
-
-        @Override
-        public void onStartFailure(int errorCode) {
-            Log.e("ble", "Failed to add BLE advertisement, reason: " + errorCode);
-        }
-    };
 
     @Override
     public void onDestroy() {
@@ -181,7 +169,7 @@ public class LocationService extends IntentService {
             try {
                 mLocationManager.removeUpdates(locListeners[0]);
                 mLocationManager.removeUpdates(locListeners[1]);
-                Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(callback);
+                Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothHelper.callback);
                 Constants.blueAdapter.getBluetoothLeScanner().stopScan(BluetoothHelper.mLeScanCallback);
             } catch (Exception ex) {
                 Log.e("logme", "fail to remove location listners, ignore", ex);

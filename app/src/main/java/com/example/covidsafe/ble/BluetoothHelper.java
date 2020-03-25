@@ -1,5 +1,7 @@
 package com.example.covidsafe.ble;
 
+import android.bluetooth.le.AdvertiseCallback;
+import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
@@ -18,6 +20,18 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class BluetoothHelper implements Runnable {
+
+    public static AdvertiseCallback callback = new AdvertiseCallback() {
+        @Override
+        public void onStartSuccess(AdvertiseSettings settingsInEffect) {
+            Log.d("ble", "BLE advertisement added successfully");
+        }
+
+        @Override
+        public void onStartFailure(int errorCode) {
+            Log.e("ble", "Failed to add BLE advertisement, reason: " + errorCode);
+        }
+    };
 
     static Context cxt;
     static Messenger messenger;

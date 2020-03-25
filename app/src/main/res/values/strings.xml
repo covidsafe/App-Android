@@ -26,6 +26,9 @@
     <string name="risk_low">No known transmission vectors</string>
     <string name="risk_high">Risk of transmission</string>
 
+    <string name="start">Start logging</string>
+    <string name="stop">Stop logging</string>
+
     <string name="ok">Ok</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
