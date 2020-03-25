@@ -9,4 +9,3 @@ https://www.youtube.com/watch?v=0iWl9uaQ5Ds
 Rotating Bluetooth IDs in realtime
 
 https://www.youtube.com/watch?v=9EkTWEod3Bk
-
