@@ -70,10 +70,12 @@ public class MainFragment extends Fragment {
         Utils.gpsResults = (TextView)getActivity().findViewById(R.id.gpsResults);
         Utils.gpsResults.setText("");
         Utils.gpsResults.setMovementMethod(new ScrollingMovementMethod());
+        Utils.gpsLines = 0;
 
         Utils.bleResults = (TextView)getActivity().findViewById(R.id.bleResults);
         Utils.bleResults.setText("");
         Utils.bleResults.setMovementMethod(new ScrollingMovementMethod());
+        Utils.bleLines = 0;
 
         trackButton = (Button)getActivity().findViewById(R.id.trackButton);
         uploadGpsButton = (Button)getActivity().findViewById(R.id.uploadGpsButton);
