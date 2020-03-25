@@ -16,11 +16,11 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.corona.utils.Constants;
-import com.example.corona.utils.FileOperations;
-import com.example.corona.ui.MainActivity;
-import com.example.corona.R;
-import com.example.corona.utils.Utils;
+import com.example.covidsafe.utils.Constants;
+import com.example.covidsafe.utils.FileOperations;
+import com.example.covidsafe.ui.MainActivity;
+import com.example.covidsafe.R;
+import com.example.covidsafe.utils.Utils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;

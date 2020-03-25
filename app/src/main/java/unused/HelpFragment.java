@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.corona.utils.Constants;
-import com.example.corona.ui.MainActivity;
-import com.example.corona.R;
+import com.example.covidsafe.utils.Constants;
+import com.example.covidsafe.ui.MainActivity;
+import com.example.covidsafe.R;
 
 public class HelpFragment extends Fragment {
 
