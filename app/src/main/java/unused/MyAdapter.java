@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.corona.R;
+import com.example.covidsafe.R;
 
 import java.util.List;
 
