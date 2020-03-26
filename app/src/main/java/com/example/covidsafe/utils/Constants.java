@@ -7,10 +7,12 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
 import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.covidsafe.BackgroundService;
 import com.example.covidsafe.R;
 import com.example.covidsafe.ui.MainFragment;
 import com.example.covidsafe.ui.ReportFragment;
@@ -83,6 +85,8 @@ public class Constants {
     public static int SubmitThresh = 0;
     public static float DistanceThresholdInMeters = 1609.34f;
     public static ArrayList<BlacklistRecord> blacklist;
+    public static LocationManager mLocationManager = null;
+    public static BackgroundService.LocationListener[] locListeners = new BackgroundService.LocationListener[2];
 
     public static String[] gpsPermissions= {
             Manifest.permission.ACCESS_BACKGROUND_LOCATION,
