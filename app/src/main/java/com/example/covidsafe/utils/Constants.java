@@ -1,12 +1,17 @@
 package com.example.covidsafe.utils;
 
 import android.Manifest;
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.covidsafe.R;
 import com.example.covidsafe.ui.MainFragment;
 import com.example.covidsafe.ui.ReportFragment;
 import com.example.covidsafe.ui.WarningFragment;
@@ -93,7 +98,8 @@ public class Constants {
             Manifest.permission.INTERNET
     };
 
-    public static void init() {
+    public static void init(Activity av) {
+        Log.e("logme","constants init");
         MainFragment = new MainFragment();
         HelpFragment = new HelpFragment();
         HistoryFragment = new HistoryFragment();
@@ -106,5 +112,9 @@ public class Constants {
         else {
             LOG_TO_DISK = true;
         }
+
+        SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        Constants.BLUETOOTH_ENABLED = prefs.getBoolean(av.getString(R.string.ble_enabled_pkey), Constants.BLUETOOTH_ENABLED);
+        Constants.GPS_ENABLED = prefs.getBoolean(av.getString(R.string.gps_enabled_pkey), Constants.GPS_ENABLED);
     }
 }

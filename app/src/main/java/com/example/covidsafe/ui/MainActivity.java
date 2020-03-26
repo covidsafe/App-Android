@@ -60,15 +60,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 0 && resultCode == -1) {
             if (Constants.startingToTrack) {
                 Log.e("logme","starting to track");
-                Utils.createNotificationChannel(this);
-                Intent ii = new Intent(this, BackgroundService.class);
-                ii.putExtra("messenger", new Messenger(Utils.serviceHandler));
-                startService(ii);
-                Constants.tracking = true;
-                Constants.startingToTrack = false;
-                Button trackButton = (Button)findViewById(R.id.trackButton);
-                trackButton.setText("Stop tracking");
-                trackButton.setBackgroundResource(R.drawable.stopbutton);
+                Utils.startBackgroundService(this);
             }
         }
     }
@@ -77,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        Constants.init();
+        Constants.init(this);
         initView();
         initBottomNav();
     }
