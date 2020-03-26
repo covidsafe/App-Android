@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Messenger;
 import android.provider.Settings;
 import android.util.Log;
@@ -28,7 +29,7 @@ public class PermissionLogic {
             Log.e("logme","grant results "+permissions[i]+","+grantResults[i]);
         }
 
-        if (ActivityCompat.checkSelfPermission(av, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_DENIED) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && ActivityCompat.checkSelfPermission(av, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_DENIED) {
             boolean shouldAsk = ActivityCompat.shouldShowRequestPermissionRationale(av, Manifest.permission.ACCESS_BACKGROUND_LOCATION);
             Log.e("logme","does not have permissions for tracking "+shouldAsk);
             if (requestCode == 1 && shouldAsk) {
