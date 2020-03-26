@@ -18,6 +18,8 @@ import com.example.covidsafe.BackgroundService;
 import com.example.covidsafe.R;
 import com.example.covidsafe.utils.Utils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+
 public class MainActivity extends AppCompatActivity {
     Activity activity;
     @Override
