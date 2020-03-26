@@ -43,6 +43,7 @@ public class Constants {
 
     public static String insertAsyncTaskRunning = "";
 
+    public static boolean GPS_ENABLED = true;
     public static boolean BLUETOOTH_ENABLED = true;
     public static boolean LOG_TO_DISK = false;
 
@@ -78,13 +79,17 @@ public class Constants {
     public static float DistanceThresholdInMeters = 1609.34f;
     public static ArrayList<BlacklistRecord> blacklist;
 
-    public static String[] permissions={
-        Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+    public static String[] gpsPermissions= {
+            Manifest.permission.ACCESS_BACKGROUND_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-        Manifest.permission.FOREGROUND_SERVICE,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+    };
+    public static String[] blePermissions= {
         Manifest.permission.BLUETOOTH_ADMIN,
         Manifest.permission.BLUETOOTH,
+    };
+    public static String[] miscPermissions= {
+            Manifest.permission.FOREGROUND_SERVICE,
             Manifest.permission.INTERNET
     };
 

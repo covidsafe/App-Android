@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.bluetooth.le.ScanResult;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -14,12 +15,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Messenger;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
 
+import com.example.covidsafe.BackgroundService;
+import com.example.covidsafe.R;
 import com.example.covidsafe.ble.BleOpsAsyncTask;
 import com.example.covidsafe.ble.BleRecord;
 import com.example.covidsafe.gps.GpsOpsAsyncTask;
@@ -196,13 +201,86 @@ public class Utils {
         return "";
     }
 
-    public static boolean hasPermissions(Context context) {
+    public static void startBackgroundService(Activity av) {
+        Utils.bleResults.setText("");
+        Utils.gpsResults.setText("");
+
+        Utils.createNotificationChannel(av);
+
+        Intent intent = new Intent(av, BackgroundService.class);
+        intent.putExtra("messenger", new Messenger(Utils.serviceHandler));
+        av.startService(intent);
+
+        Constants.tracking = true;
+        Constants.startingToTrack = false;
+
+        Button trackButton = (Button)av.findViewById(R.id.trackButton);
+        trackButton.setText("Stop tracking");
+        trackButton.setBackgroundResource(R.drawable.stopbutton);
+    }
+
+    public static boolean permCheck(Activity av) {
+        return gpsCheck(av) && bleCheck(av);
+    }
+
+    public static boolean gpsCheck(Activity av) {
+        boolean hasPerms = Utils.hasGpsPermissions(av);
+        if ((hasPerms && Constants.GPS_ENABLED) || !Constants.GPS_ENABLED) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean bleCheck(Activity av) {
+        boolean hasPerms = Utils.hasBlePermissions(av);
+        if (hasPerms &&
+                (Constants.BLUETOOTH_ENABLED && Constants.blueAdapter != null && Constants.blueAdapter.isEnabled()) ||
+                (!Constants.BLUETOOTH_ENABLED)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean hasBlePermissions(Context context) {
         Log.e("results", "check for permission");
-        if (context != null && Constants.permissions != null) {
-            for (String permission : Constants.permissions) {
-                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                    Log.e("results", "return false on " + permission);
-                    return false;
+        if (context != null) {
+            if (Constants.BLUETOOTH_ENABLED && Constants.blePermissions != null) {
+                for (String permission : Constants.blePermissions) {
+                    if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                        Log.e("results", "return false on " + permission);
+                        return false;
+                    }
+                }
+            }
+            if (Constants.miscPermissions != null) {
+                for (String permission : Constants.miscPermissions) {
+                    if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                        Log.e("results", "return false on " + permission);
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    public static boolean hasGpsPermissions(Context context) {
+        Log.e("results", "check for permission");
+        if (context != null) {
+            if (Constants.GPS_ENABLED && Constants.gpsPermissions != null) {
+                for (String permission : Constants.gpsPermissions) {
+                    if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                        Log.e("results", "return false on " + permission);
+                        return false;
+                    }
+                }
+            }
+            if (Constants.miscPermissions != null) {
+                for (String permission : Constants.miscPermissions) {
+                    if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                        Log.e("results", "return false on " + permission);
+                        return false;
+                    }
                 }
             }
         }
