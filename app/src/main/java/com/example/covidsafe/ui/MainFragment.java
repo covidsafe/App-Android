@@ -6,6 +6,7 @@ import android.bluetooth.le.AdvertiseData;
 import android.bluetooth.le.AdvertiseSettings;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Messenger;
 import android.os.ParcelUuid;
@@ -60,12 +61,15 @@ public class MainFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
+        Log.e("logme","fragment onresume");
         Switch bleSwitch = (Switch)getActivity().findViewById(R.id.bleSwitch);
         bleSwitch.setChecked(Constants.BLUETOOTH_ENABLED);
         bleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Constants.BLUETOOTH_ENABLED = isChecked;
+                SharedPreferences.Editor editor = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
+                editor.putBoolean("bleEnabled", isChecked);
+                editor.commit();
             }
         });
 
@@ -74,6 +78,9 @@ public class MainFragment extends Fragment {
         gpsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Constants.GPS_ENABLED = isChecked;
+                SharedPreferences.Editor editor = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
+                editor.putBoolean("gpsEnabled", isChecked);
+                editor.commit();
             }
         });
 

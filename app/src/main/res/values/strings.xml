@@ -18,6 +18,9 @@
 
     <string name="prompt_to_enable_error">Enable Bluetooth or GPS to start logging.</string>
 
+    <string name="gps_enabled_pkey">gpsEnabled</string>
+    <string name="ble_enabled_pkey">bleEnabled</string>
+
     <string name="perm_ble_rationale">Without this permission, we will be unable to capture Bluetooth information of users around you. Are you sure you want to deny this permission?</string>
     <string name="perm_ble_ask">We require access to Bluetooth information when the app is closed. Would you like to open app settings to enable this?</string>
 
