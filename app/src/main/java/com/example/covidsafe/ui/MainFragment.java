@@ -40,13 +40,12 @@ public class MainFragment extends Fragment {
     Button uploadGpsButton;
     Button uploadBleButton;
     Button rotateButton;
-    TextView tv1;
-    TextView riskTv;
+    TextView bleBeaconId;
+    View view;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view;
 //        if (Constants.DEBUG) {
 //            view = inflater.inflate(R.layout.fragment_main_debug, container, false);
 //        }
@@ -62,18 +61,26 @@ public class MainFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-//        Switch sw1 = (Switch)getActivity().findViewById(R.id.switch1);
-//        sw1.setChecked(Constants.BLUETOOTH_ENABLED);
-//        sw1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                Constants.BLUETOOTH_ENABLED = isChecked;
-//            }
-//        });
+        Switch bleSwitch = (Switch)getActivity().findViewById(R.id.bleSwitch);
+        bleSwitch.setChecked(Constants.BLUETOOTH_ENABLED);
+        bleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Constants.BLUETOOTH_ENABLED = isChecked;
+            }
+        });
+
+        Switch gpsSwitch = (Switch)getActivity().findViewById(R.id.gpsSwitch);
+        gpsSwitch.setChecked(Constants.GPS_ENABLED);
+        gpsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Constants.GPS_ENABLED = isChecked;
+            }
+        });
 
         Constants.CurrentFragment = this;
         Constants.MainFragment = this;
 
-        tv1 = (TextView)getActivity().findViewById(R.id.textView);
+        bleBeaconId = (TextView)getActivity().findViewById(R.id.textView);
 
         Utils.gpsResults = (TextView)getActivity().findViewById(R.id.gpsResults);
         Utils.gpsResults.setText("");
@@ -89,12 +96,10 @@ public class MainFragment extends Fragment {
         uploadGpsButton = (Button)getActivity().findViewById(R.id.uploadGpsButton);
         uploadBleButton = (Button)getActivity().findViewById(R.id.uploadBleButton);
         rotateButton = (Button)getActivity().findViewById(R.id.rotateButton);
-//        riskTv = (TextView)getActivity().findViewById(R.id.riskStatusTv);
-//        riskTv.setText(getString(R.string.risk_low));
         updateUI();
 
         Constants.contactUUID = UUID.randomUUID();
-        tv1.setText(Constants.contactUUID.toString());
+        bleBeaconId.setText(Constants.contactUUID.toString());
 
         uploadGpsButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -113,7 +118,7 @@ public class MainFragment extends Fragment {
         rotateButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Constants.contactUUID = UUID.randomUUID();
-                tv1.setText(Constants.contactUUID.toString());
+                bleBeaconId.setText(Constants.contactUUID.toString());
 
                 if (Constants.blueAdapter != null && Constants.blueAdapter.getBluetoothLeAdvertiser() != null) {
                     Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothHelper.callback);
@@ -144,37 +149,29 @@ public class MainFragment extends Fragment {
                                 (BluetoothManager) getActivity().getSystemService(Context.BLUETOOTH_SERVICE);
                         Constants.blueAdapter = bluetoothManager.getAdapter();
 
-                        if (!Utils.hasPermissions(getActivity())) {
-                            Log.e("aa","PERMS");
-                            ActivityCompat.requestPermissions(getActivity(), Constants.permissions, 1);
+                        if (Constants.BLUETOOTH_ENABLED && !Utils.hasBlePermissions(getActivity())) {
+                            Log.e("aa","NO BLE PERMS");
+                            ActivityCompat.requestPermissions(getActivity(), Constants.blePermissions, 1);
                         }
 
-                        if (Utils.hasPermissions(getActivity()) &&
+                        if (Utils.hasBlePermissions(getActivity()) &&
                             Constants.BLUETOOTH_ENABLED && (Constants.blueAdapter == null || !Constants.blueAdapter.isEnabled())) {
                             Log.e("aa","BLE");
                             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                             getActivity().startActivityForResult(enableBtIntent, 0);
                         }
 
-                        boolean hasPerms = Utils.hasPermissions(getActivity());
-                        Log.e("aa","has perms?" +hasPerms);
-                        Log.e("aa","ble status "+Constants.blueAdapter+","+Constants.blueAdapter.isEnabled());
-                        if (hasPerms &&
-                            (Constants.BLUETOOTH_ENABLED && Constants.blueAdapter != null && Constants.blueAdapter.isEnabled()) ||
-                            (!Constants.BLUETOOTH_ENABLED)) {
-                            Log.e("aa","START");
+                        if (Constants.GPS_ENABLED && !Utils.hasGpsPermissions(getActivity())) {
+                            Log.e("aa","PERMS");
+                            ActivityCompat.requestPermissions(getActivity(), Constants.gpsPermissions, 2);
+                        }
 
-                            Utils.bleResults.setText("");
-                            Utils.gpsResults.setText("");
+                        if ((Constants.GPS_ENABLED || Constants.BLUETOOTH_ENABLED) && Utils.permCheck(getActivity())) {
+                            Utils.startBackgroundService(getActivity());
+                        }
 
-                            Utils.createNotificationChannel(getActivity());
-
-                            Intent intent = new Intent(getActivity(), BackgroundService.class);
-                            intent.putExtra("messenger", new Messenger(Utils.serviceHandler));
-                            getActivity().startService(intent);
-
-                            Constants.tracking = true;
-                            Constants.startingToTrack = false;
+                        if (!Constants.GPS_ENABLED && !Constants.BLUETOOTH_ENABLED) {
+                            Utils.mkSnack(getActivity(), view, getString(R.string.prompt_to_enable_error));
                         }
                     } catch (SecurityException e) {
                         Log.e("log", e.getMessage());

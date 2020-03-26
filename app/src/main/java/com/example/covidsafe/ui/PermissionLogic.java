@@ -29,8 +29,90 @@ public class PermissionLogic {
             Log.e("logme","grant results "+permissions[i]+","+grantResults[i]);
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && ActivityCompat.checkSelfPermission(av, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_DENIED) {
-            boolean shouldAsk = ActivityCompat.shouldShowRequestPermissionRationale(av, Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+        if (requestCode == 1 &&
+            ActivityCompat.checkSelfPermission(av, Manifest.permission.BLUETOOTH_ADMIN) == PackageManager.PERMISSION_DENIED) {
+            if (Constants.BLUETOOTH_ENABLED) {
+                boolean shouldAsk = ActivityCompat.shouldShowRequestPermissionRationale(av, Manifest.permission.BLUETOOTH_ADMIN);
+                Log.e("logme", "does not have permissions for bluetooth " + shouldAsk);
+                if (requestCode == 1 && shouldAsk) {
+                    AlertDialog dialog = new MaterialAlertDialogBuilder(av)
+                            .setTitle("Permission denied")
+                            .setMessage(av.getString(R.string.perm_ble_rationale))
+                            .setNegativeButton(R.string.retry, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ActivityCompat.requestPermissions(av, new String[]{Manifest.permission.BLUETOOTH_ADMIN}, 3);
+                                }
+                            })
+                            .setPositiveButton(R.string.sure, null)
+                            .setCancelable(false).create();
+                    dialog.show();
+                } else if (!shouldAsk) {
+                    AlertDialog dialog = new MaterialAlertDialogBuilder(av)
+                            .setTitle("Permission denied")
+                            .setMessage(av.getString(R.string.perm_ble_ask))
+                            .setNegativeButton(R.string.no, null)
+                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    Uri uri = Uri.fromParts("package", av.getPackageName(), null);
+                                    intent.setData(uri);
+                                    av.startActivity(intent);
+                                }
+                            })
+                            .setCancelable(false).create();
+                    dialog.show();
+                }
+            }
+        }
+        else if (ActivityCompat.checkSelfPermission(av, Manifest.permission.BLUETOOTH) == PackageManager.PERMISSION_DENIED) {
+            if (Constants.BLUETOOTH_ENABLED) {
+                boolean shouldAsk = ActivityCompat.shouldShowRequestPermissionRationale(av, Manifest.permission.BLUETOOTH);
+                Log.e("logme", "does not have permissions for bluetooth " + shouldAsk);
+                if (requestCode == 1 && shouldAsk) {
+                    AlertDialog dialog = new MaterialAlertDialogBuilder(av)
+                            .setTitle("Permission denied")
+                            .setMessage(av.getString(R.string.perm_ble_rationale))
+                            .setNegativeButton(R.string.retry, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ActivityCompat.requestPermissions(av, new String[]{Manifest.permission.BLUETOOTH}, 4);
+                                }
+                            })
+                            .setPositiveButton(R.string.sure, null)
+                            .setCancelable(false).create();
+                    dialog.show();
+                } else if (!shouldAsk) {
+                    AlertDialog dialog = new MaterialAlertDialogBuilder(av)
+                            .setTitle("Permission denied")
+                            .setMessage(av.getString(R.string.perm_ble_ask))
+                            .setNegativeButton(R.string.no, null)
+                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    Uri uri = Uri.fromParts("package", av.getPackageName(), null);
+                                    intent.setData(uri);
+                                    av.startActivity(intent);
+                                }
+                            })
+                            .setCancelable(false).create();
+                    dialog.show();
+                }
+            }
+        }
+        if (requestCode == 2 &&
+            (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+            ActivityCompat.checkSelfPermission(av, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_DENIED) ||
+            (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q &&
+            ActivityCompat.checkSelfPermission(av, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED)) {
+
+            String perm;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                perm = Manifest.permission.ACCESS_BACKGROUND_LOCATION;
+            }
+            else {
+                perm = Manifest.permission.ACCESS_FINE_LOCATION;
+            }
+
+            boolean shouldAsk = ActivityCompat.shouldShowRequestPermissionRationale(av, perm);
             Log.e("logme","does not have permissions for tracking "+shouldAsk);
             if (requestCode == 1 && shouldAsk) {
                 AlertDialog dialog = new MaterialAlertDialogBuilder(av)
@@ -38,7 +120,7 @@ public class PermissionLogic {
                         .setMessage(av.getString(R.string.perm_ble_rationale))
                         .setNegativeButton(R.string.retry, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                ActivityCompat.requestPermissions(av, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, 2);
+                                ActivityCompat.requestPermissions(av, new String[]{perm}, 5);
                             }
                         })
                         .setPositiveButton(R.string.sure, null)
@@ -62,74 +144,6 @@ public class PermissionLogic {
                 dialog.show();
             }
         }
-//        else if (ActivityCompat.checkSelfPermission(av, Manifest.permission.BLUETOOTH_ADMIN) == PackageManager.PERMISSION_DENIED) {
-//            if (Constants.BLUETOOTH_ENABLED) {
-//                boolean shouldAsk = ActivityCompat.shouldShowRequestPermissionRationale(av, Manifest.permission.BLUETOOTH_ADMIN);
-//                Log.e("logme", "does not have permissions for bluetooth " + shouldAsk);
-//                if (requestCode == 1 && shouldAsk) {
-//                    AlertDialog dialog = new MaterialAlertDialogBuilder(av)
-//                            .setTitle("Permission denied")
-//                            .setMessage(av.getString(R.string.perm_ble_rationale))
-//                            .setNegativeButton(R.string.retry, new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                    ActivityCompat.requestPermissions(av, new String[]{Manifest.permission.BLUETOOTH_ADMIN}, 2);
-//                                }
-//                            })
-//                            .setPositiveButton(R.string.sure, null)
-//                            .setCancelable(false).create();
-//                    dialog.show();
-//                } else if (!shouldAsk) {
-//                    AlertDialog dialog = new MaterialAlertDialogBuilder(av)
-//                            .setTitle("Permission denied")
-//                            .setMessage(av.getString(R.string.perm_ble_ask))
-//                            .setNegativeButton(R.string.no, null)
-//                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-//                                    Uri uri = Uri.fromParts("package", av.getPackageName(), null);
-//                                    intent.setData(uri);
-//                                    av.startActivity(intent);
-//                                }
-//                            })
-//                            .setCancelable(false).create();
-//                    dialog.show();
-//                }
-//            }
-//        }
-//        else if (ActivityCompat.checkSelfPermission(av, Manifest.permission.BLUETOOTH) == PackageManager.PERMISSION_DENIED) {
-//            if (Constants.BLUETOOTH_ENABLED) {
-//                boolean shouldAsk = ActivityCompat.shouldShowRequestPermissionRationale(av, Manifest.permission.BLUETOOTH);
-//                Log.e("logme", "does not have permissions for bluetooth " + shouldAsk);
-//                if (requestCode == 1 && shouldAsk) {
-//                    AlertDialog dialog = new MaterialAlertDialogBuilder(av)
-//                            .setTitle("Permission denied")
-//                            .setMessage(av.getString(R.string.perm_ble_rationale))
-//                            .setNegativeButton(R.string.retry, new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                    ActivityCompat.requestPermissions(av, new String[]{Manifest.permission.BLUETOOTH}, 2);
-//                                }
-//                            })
-//                            .setPositiveButton(R.string.sure, null)
-//                            .setCancelable(false).create();
-//                    dialog.show();
-//                } else if (!shouldAsk) {
-//                    AlertDialog dialog = new MaterialAlertDialogBuilder(av)
-//                            .setTitle("Permission denied")
-//                            .setMessage(av.getString(R.string.perm_ble_ask))
-//                            .setNegativeButton(R.string.no, null)
-//                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-//                                    Uri uri = Uri.fromParts("package", av.getPackageName(), null);
-//                                    intent.setData(uri);
-//                                    av.startActivity(intent);
-//                                }
-//                            })
-//                            .setCancelable(false).create();
-//                    dialog.show();
-//                }
-//            }
-//        }
         else {
             Log.e("logme","has permissions ");
             Log.e("logme","ble status "+(Constants.blueAdapter==null)+","+Constants.blueAdapter.isEnabled());
@@ -141,15 +155,7 @@ public class PermissionLogic {
             }
             else if (Constants.startingToTrack) {
                 Log.e("logme","starting to track");
-                Utils.createNotificationChannel(av);
-                Intent ii = new Intent(av, BackgroundService.class);
-                ii.putExtra("messenger", new Messenger(Utils.serviceHandler));
-                av.startService(ii);
-                Constants.tracking = true;
-                Constants.startingToTrack = false;
-                Button trackButton = (Button)av.findViewById(R.id.trackButton);
-                trackButton.setText("Stop tracking");
-                trackButton.setBackgroundResource(R.drawable.stopbutton);
+                Utils.startBackgroundService(av);
             }
         }
     }

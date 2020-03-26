@@ -92,37 +92,39 @@ public class BackgroundService extends IntentService {
         Log.e("ex","bundle status "+(bundle==null));
         if (bundle != null) {
             messenger = (Messenger) bundle.get("messenger");
-//            msg = Message.obtain();
         }
 
-        initializeLocationManager();
-        try {
-            String[] providers = new String[] {LocationManager.NETWORK_PROVIDER, LocationManager.GPS_PROVIDER};
-            Log.e("logme","request");
-
-            locListeners[0] = new LocationListener(LocationManager.NETWORK_PROVIDER);
-            mLocationManager.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
-                    locListeners[0]);
-            locListeners[1] = new LocationListener(LocationManager.GPS_PROVIDER);
-            mLocationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
-                    locListeners[1]);
-
+        if (Constants.BLUETOOTH_ENABLED) {
             ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
+            Log.e("ble","spin out task "+(messenger==null));
+            Constants.bluetoothTask = exec.scheduleWithFixedDelay(new BluetoothHelper(getApplicationContext(), messenger), 0, 1, TimeUnit.HOURS);
+            Log.e("ble","make beacon");
+            mkBeacon();
+        }
+
+        if (Constants.GPS_ENABLED) {
+            initializeLocationManager();
+            try {
+                Log.e("logme", "request");
+
+                locListeners[0] = new LocationListener(LocationManager.NETWORK_PROVIDER);
+                mLocationManager.requestLocationUpdates(
+                        LocationManager.NETWORK_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
+                        locListeners[0]);
+                locListeners[1] = new LocationListener(LocationManager.GPS_PROVIDER);
+                mLocationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
+                        locListeners[1]);
+
 //            Constants.uploadTask = exec.scheduleWithFixedDelay(new UploadTask(getApplicationContext()), 0, 1, TimeUnit.HOURS);
-            if (Constants.BLUETOOTH_ENABLED) {
-                Log.e("ble","spin out task "+(messenger==null));
-                Constants.bluetoothTask = exec.scheduleWithFixedDelay(new BluetoothHelper(getApplicationContext(), messenger), 0, 1, TimeUnit.HOURS);
-                Log.e("ble","make beacon");
-                mkBeacon();
+
+            } catch (java.lang.SecurityException ex) {
+                Log.e("logme", "fail to request location update, ignore", ex);
+            } catch (IllegalArgumentException ex) {
+                Log.e("logme", "gps provider does not exist " + ex.getMessage());
+            } catch (Exception e) {
+                Log.e("logme", e.getMessage());
             }
-        } catch (java.lang.SecurityException ex) {
-            Log.e("logme", "fail to request location update, ignore", ex);
-        } catch (IllegalArgumentException ex) {
-            Log.e("logme", "gps provider does not exist " + ex.getMessage());
-        } catch(Exception e ){
-            Log.e("logme",e.getMessage());
         }
 
         Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL)

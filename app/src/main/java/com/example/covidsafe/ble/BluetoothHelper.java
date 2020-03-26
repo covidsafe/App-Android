@@ -56,7 +56,7 @@ public class BluetoothHelper implements Runnable {
                 .setServiceUuid(new ParcelUuid(Constants.serviceUUID))
                 .build();
         List<ScanFilter> filters = new LinkedList<ScanFilter>();
-        filters.add(filter);
+//        filters.add(filter);
 
         Constants.blueAdapter.getBluetoothLeScanner().startScan(filters, builder.build(), mLeScanCallback);
     }
@@ -69,19 +69,21 @@ public class BluetoothHelper implements Runnable {
                     super.onScanResult(callbackType, result);
                     Map<ParcelUuid, byte[]> map = result.getScanRecord().getServiceData();
                     List<ParcelUuid> keys = new ArrayList<ParcelUuid>(map.keySet());
+                    Bundle bb = new Bundle();
+                    bb.putString("ble",result.getDevice().getAddress());
+                    Message msg = new Message();
+                    msg.setData(bb);
+                    try {
+                        messenger.send(msg);
+                    } catch (RemoteException e) {
+                        Log.i("error", "error");
+                    }
                     if (keys.size() > 0 && keys.get(0).getUuid().equals(Constants.serviceUUID)) {
                         String contactUuid = ByteUtils.byte2string(map.get(keys.get(0)));
                         String[] elts = contactUuid.split("-");
 
-                        Bundle bb = new Bundle();
-                        bb.putString("ble",elts[elts.length-1]);
-                        Message msg = new Message();
-                        msg.setData(bb);
-                        try {
-                            messenger.send(msg);
-                        } catch (RemoteException e) {
-                            Log.i("error", "error");
-                        }
+//                        bb.putString("ble",elts[elts.length-1]);
+
 
                         Utils.bleLogToDatabase(cxt,contactUuid);
                     }
