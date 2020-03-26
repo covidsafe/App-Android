@@ -86,7 +86,7 @@ public class BackgroundService extends IntentService {
             Log.e("ble","spin out task "+(messenger==null));
             Constants.bluetoothTask = exec.scheduleWithFixedDelay(new BluetoothHelper(getApplicationContext(), messenger), 0, 1, TimeUnit.HOURS);
             Log.e("ble","make beacon");
-//            mkBeacon();
+            mkBeacon();
         }
 
         if (Constants.GPS_ENABLED) {

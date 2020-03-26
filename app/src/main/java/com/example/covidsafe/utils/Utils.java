@@ -226,7 +226,7 @@ public class Utils {
 
     public static boolean gpsCheck(Activity av) {
         boolean hasPerms = Utils.hasGpsPermissions(av);
-        if ((hasPerms && Constants.GPS_ENABLED) || !Constants.GPS_ENABLED) {
+        if ((hasPerms && Constants.GPS_ENABLED) || (!Constants.GPS_ENABLED && Build.VERSION.SDK_INT < Build.VERSION_CODES.M)) {
             return true;
         }
         return false;
@@ -280,9 +280,11 @@ public class Utils {
     public static boolean hasGpsPermissions(Context context) {
         Log.e("results", "check for permission");
         if (context != null) {
-            if (Constants.GPS_ENABLED && Constants.gpsPermissions != null) {
+            if ((Constants.GPS_ENABLED  || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) && Constants.gpsPermissions != null) {
                 for (String permission : Constants.gpsPermissions) {
-                    if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    int result = ActivityCompat.checkSelfPermission(context, permission);
+                    Log.e("logme","perm "+result);
+                    if (result != PackageManager.PERMISSION_GRANTED) {
                         Log.e("results", "return false on " + permission);
                         return false;
                     }
