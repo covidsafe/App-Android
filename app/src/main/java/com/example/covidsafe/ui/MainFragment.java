@@ -190,6 +190,18 @@ public class MainFragment extends Fragment {
                 else {
                     Log.e("logme","stop service");
                     getActivity().stopService(new Intent(getActivity(), BackgroundService.class));
+
+                    if (Constants.mLocationManager != null) {
+                        try {
+                            Constants.mLocationManager.removeUpdates(Constants.locListeners[0]);
+                            Constants.mLocationManager.removeUpdates(Constants.locListeners[1]);
+                        } catch (Exception ex) {
+                            Log.e("logme", "fail to remove location listners, ignore", ex);
+                        }
+                    }
+
+                    Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothHelper.advertiseCallback);
+                    Constants.blueAdapter.getBluetoothLeScanner().stopScan(BluetoothHelper.mLeScanCallback);
                     if (Constants.uploadTask!=null) {
                         Constants.uploadTask.cancel(true);
                     }

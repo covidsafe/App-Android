@@ -29,13 +29,11 @@ import java.util.concurrent.TimeUnit;
 
 public class BackgroundService extends IntentService {
 
-    private LocationManager mLocationManager = null;
     private static final int LOCATION_INTERVAL = 1000;
     private static final float LOCATION_DISTANCE = 1f;
-    LocationListener[] locListeners = new LocationListener[2];
     Messenger messenger;
 
-    private class LocationListener implements android.location.LocationListener {
+    public class LocationListener implements android.location.LocationListener {
 
         String provider;
 
@@ -94,14 +92,14 @@ public class BackgroundService extends IntentService {
             try {
                 Log.e("logme", "request");
 
-                locListeners[0] = new LocationListener(LocationManager.NETWORK_PROVIDER);
-                mLocationManager.requestLocationUpdates(
+                Constants.locListeners[0] = new LocationListener(LocationManager.NETWORK_PROVIDER);
+                Constants.mLocationManager.requestLocationUpdates(
                         LocationManager.NETWORK_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
-                        locListeners[0]);
-                locListeners[1] = new LocationListener(LocationManager.GPS_PROVIDER);
-                mLocationManager.requestLocationUpdates(
+                        Constants.locListeners[0]);
+                Constants.locListeners[1] = new LocationListener(LocationManager.GPS_PROVIDER);
+                Constants.mLocationManager.requestLocationUpdates(
                         LocationManager.GPS_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
-                        locListeners[1]);
+                        Constants.locListeners[1]);
 
 //            Constants.uploadTask = exec.scheduleWithFixedDelay(new UploadTask(getApplicationContext()), 0, 1, TimeUnit.HOURS);
 
@@ -144,27 +142,18 @@ public class BackgroundService extends IntentService {
         }
     }
 
+    //this call is not guaranteed by android system
     @Override
     public void onDestroy() {
         super.onDestroy();
         Log.e("logme", "service destroyed");
-        if (mLocationManager != null) {
-            try {
-                mLocationManager.removeUpdates(locListeners[0]);
-                mLocationManager.removeUpdates(locListeners[1]);
-                Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothHelper.advertiseCallback);
-                Constants.blueAdapter.getBluetoothLeScanner().stopScan(BluetoothHelper.mLeScanCallback);
-            } catch (Exception ex) {
-                Log.e("logme", "fail to remove location listners, ignore", ex);
-            }
-        }
     }
 
     private void initializeLocationManager() {
         Log.e("logme", "initializeLocationManager");
-        if (mLocationManager == null) {
+        if (Constants.mLocationManager == null) {
             Log.e("logme", "initializeLocationManager2");
-            mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+            Constants.mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         }
     }
 }
