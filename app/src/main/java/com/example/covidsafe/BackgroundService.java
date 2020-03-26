@@ -51,7 +51,7 @@ public class BackgroundService extends IntentService {
         public void onLocationChanged(Location location) {
             DateFormat dateFormat = new SimpleDateFormat("hh:mm.ss aa");
             Date dd = new Date();
-            Log.e("logme", dateFormat.format(dd));
+            Log.e("gps", location.getLatitude()+","+location.getLongitude());
 
             Bundle bb = new Bundle();
             bb.putString("gps", location.getLatitude()+","+location.getLongitude());

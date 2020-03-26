@@ -52,7 +52,11 @@ public class BluetoothHelper implements Runnable {
         ScanSettings.Builder builder = new ScanSettings.Builder();
         builder.setScanMode(ScanSettings.SCAN_MODE_LOW_POWER);
 
+        ScanFilter filter = new ScanFilter.Builder()
+                .setServiceUuid(new ParcelUuid(Constants.serviceUUID))
+                .build();
         List<ScanFilter> filters = new LinkedList<ScanFilter>();
+        filters.add(filter);
 
         Constants.blueAdapter.getBluetoothLeScanner().startScan(filters, builder.build(), mLeScanCallback);
     }
