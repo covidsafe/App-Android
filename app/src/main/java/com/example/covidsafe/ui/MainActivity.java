@@ -1,5 +1,6 @@
 package com.example.covidsafe.ui;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import android.app.Activity;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 //        }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         PermissionLogic.permissionLogic(requestCode, permissions, grantResults, this);

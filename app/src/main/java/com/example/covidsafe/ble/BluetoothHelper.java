@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class BluetoothHelper implements Runnable {
 
-    public static AdvertiseCallback callback = new AdvertiseCallback() {
+    public static AdvertiseCallback advertiseCallback = new AdvertiseCallback() {
         @Override
         public void onStartSuccess(AdvertiseSettings settingsInEffect) {
             Log.d("ble", "BLE advertisement added successfully");
@@ -52,9 +52,9 @@ public class BluetoothHelper implements Runnable {
         ScanSettings.Builder builder = new ScanSettings.Builder();
         builder.setScanMode(ScanSettings.SCAN_MODE_LOW_POWER);
 
-        ScanFilter filter = new ScanFilter.Builder()
-                .setServiceUuid(new ParcelUuid(Constants.serviceUUID))
-                .build();
+//        ScanFilter filter = new ScanFilter.Builder()
+//                .setServiceUuid(new ParcelUuid(Constants.serviceUUID))
+//                .build();
         List<ScanFilter> filters = new LinkedList<ScanFilter>();
 //        filters.add(filter);
 
@@ -69,24 +69,18 @@ public class BluetoothHelper implements Runnable {
                     super.onScanResult(callbackType, result);
                     Map<ParcelUuid, byte[]> map = result.getScanRecord().getServiceData();
                     List<ParcelUuid> keys = new ArrayList<ParcelUuid>(map.keySet());
-                    Bundle bb = new Bundle();
-                    bb.putString("ble",result.getDevice().getAddress());
-                    Message msg = new Message();
-                    msg.setData(bb);
-                    try {
-                        messenger.send(msg);
-                    } catch (RemoteException e) {
-                        Log.i("error", "error");
+                    Utils.sendDataToUI(messenger, "ble",result.getDevice().getAddress()+","+keys.size());
+
+                    if (keys.size() > 0) {
+                        Utils.sendDataToUI(messenger, "ble",result.getDevice().getAddress());
                     }
-                    if (keys.size() > 0 && keys.get(0).getUuid().equals(Constants.serviceUUID)) {
-                        String contactUuid = ByteUtils.byte2string(map.get(keys.get(0)));
-                        String[] elts = contactUuid.split("-");
 
-//                        bb.putString("ble",elts[elts.length-1]);
-
-
-                        Utils.bleLogToDatabase(cxt,contactUuid);
-                    }
+//                    if (keys.size() > 0 && keys.get(0).getUuid().equals(Constants.serviceUUID)) {
+//                        String contactUuid = ByteUtils.byte2string(map.get(keys.get(0)));
+//                        String[] elts = contactUuid.split("-");
+////                        Utils.sendDataToUI(messenger, "ble",elts[elts.length-1]);
+//                        Utils.bleLogToDatabase(cxt,contactUuid);
+//                    }
                 }
 
                 @Override

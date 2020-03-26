@@ -7,8 +7,8 @@ import android.bluetooth.le.AdvertiseSettings;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Messenger;
 import android.os.ParcelUuid;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -128,7 +128,7 @@ public class MainFragment extends Fragment {
                 bleBeaconId.setText(Constants.contactUUID.toString());
 
                 if (Constants.blueAdapter != null && Constants.blueAdapter.getBluetoothLeAdvertiser() != null) {
-                    Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothHelper.callback);
+                    Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothHelper.advertiseCallback);
                     AdvertiseSettings settings = new AdvertiseSettings.Builder()
                             .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
                             .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)
@@ -140,7 +140,7 @@ public class MainFragment extends Fragment {
                             .addServiceUuid(new ParcelUuid(Constants.serviceUUID))
                             .addServiceData(new ParcelUuid(Constants.serviceUUID), ByteUtils.uuid2bytes(Constants.contactUUID))
                             .build();
-                    Constants.blueAdapter.getBluetoothLeAdvertiser().startAdvertising(settings, advertiseData, BluetoothHelper.callback);
+                    Constants.blueAdapter.getBluetoothLeAdvertiser().startAdvertising(settings, advertiseData, BluetoothHelper.advertiseCallback);
                 }
             }
         });
@@ -168,7 +168,7 @@ public class MainFragment extends Fragment {
                             getActivity().startActivityForResult(enableBtIntent, 0);
                         }
 
-                        if (Constants.GPS_ENABLED && !Utils.hasGpsPermissions(getActivity())) {
+                        if ((Constants.GPS_ENABLED || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) && !Utils.hasGpsPermissions(getActivity())) {
                             Log.e("aa","PERMS");
                             ActivityCompat.requestPermissions(getActivity(), Constants.gpsPermissions, 2);
                         }
@@ -179,7 +179,10 @@ public class MainFragment extends Fragment {
 
                         if (!Constants.GPS_ENABLED && !Constants.BLUETOOTH_ENABLED) {
                             Utils.mkSnack(getActivity(), view, getString(R.string.prompt_to_enable_error));
+                            gpsSwitch.setEnabled(false);
+                            bleSwitch.setEnabled(false);
                         }
+
                     } catch (SecurityException e) {
                         Log.e("log", e.getMessage());
                     }
@@ -191,6 +194,8 @@ public class MainFragment extends Fragment {
                         Constants.uploadTask.cancel(true);
                     }
                     Constants.tracking = false;
+                    gpsSwitch.setEnabled(true);
+                    bleSwitch.setEnabled(true);
                 }
                 updateUI();
             }
