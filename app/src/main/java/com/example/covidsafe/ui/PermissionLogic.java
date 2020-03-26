@@ -186,15 +186,7 @@ public class PermissionLogic {
             }
             else if (Constants.startingToTrack) {
                 Log.e("logme","starting to track");
-                Utils.createNotificationChannel(av);
-                Intent ii = new Intent(av, BackgroundService.class);
-                ii.putExtra("messenger", new Messenger(Utils.serviceHandler));
-                av.startService(ii);
-                Constants.tracking = true;
-                Constants.startingToTrack = false;
-                Button trackButton = (Button)av.findViewById(R.id.trackButton);
-                trackButton.setText("Stop tracking");
-                trackButton.setBackgroundResource(R.drawable.stopbutton);
+                Utils.startBackgroundService(av);
             }
         }
     }

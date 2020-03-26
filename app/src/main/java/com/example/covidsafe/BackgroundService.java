@@ -1,7 +1,6 @@
 package com.example.covidsafe;
 import android.app.IntentService;
 import android.app.Notification;
-import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseData;
 import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.BluetoothLeAdvertiser;
@@ -10,16 +9,13 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Message;
 import android.os.Messenger;
 import android.os.ParcelUuid;
-import android.os.RemoteException;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import com.example.covidsafe.R;
 import com.example.covidsafe.ble.BluetoothHelper;
 import com.example.covidsafe.utils.ByteUtils;
 import com.example.covidsafe.utils.Constants;
@@ -53,16 +49,7 @@ public class BackgroundService extends IntentService {
             Date dd = new Date();
             Log.e("gps", location.getLatitude()+","+location.getLongitude());
 
-            Bundle bb = new Bundle();
-            bb.putString("gps", location.getLatitude()+","+location.getLongitude());
-            Message msg = new Message();
-            msg.setData(bb);
-            try {
-//                Log.e("test","sending");
-                messenger.send(msg);
-            } catch (RemoteException e) {
-                Log.i("error", "error");
-            }
+            Utils.sendDataToUI(messenger, "gps",location.getLatitude()+","+location.getLongitude());
 
             Utils.gpsLogToDatabase(getApplicationContext(), location);
         }
@@ -99,7 +86,7 @@ public class BackgroundService extends IntentService {
             Log.e("ble","spin out task "+(messenger==null));
             Constants.bluetoothTask = exec.scheduleWithFixedDelay(new BluetoothHelper(getApplicationContext(), messenger), 0, 1, TimeUnit.HOURS);
             Log.e("ble","make beacon");
-            mkBeacon();
+//            mkBeacon();
         }
 
         if (Constants.GPS_ENABLED) {
@@ -153,7 +140,7 @@ public class BackgroundService extends IntentService {
                     .build();
 
             BluetoothLeAdvertiser bluetoothLeAdvertiser = Constants.blueAdapter.getBluetoothLeAdvertiser();
-            bluetoothLeAdvertiser.startAdvertising(settings, advertiseData, BluetoothHelper.callback);
+            bluetoothLeAdvertiser.startAdvertising(settings, advertiseData, BluetoothHelper.advertiseCallback);
         }
     }
 
@@ -165,7 +152,7 @@ public class BackgroundService extends IntentService {
             try {
                 mLocationManager.removeUpdates(locListeners[0]);
                 mLocationManager.removeUpdates(locListeners[1]);
-                Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothHelper.callback);
+                Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothHelper.advertiseCallback);
                 Constants.blueAdapter.getBluetoothLeScanner().stopScan(BluetoothHelper.mLeScanCallback);
             } catch (Exception ex) {
                 Log.e("logme", "fail to remove location listners, ignore", ex);

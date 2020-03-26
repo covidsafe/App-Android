@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -239,6 +240,18 @@ public class Utils {
             return true;
         }
         return false;
+    }
+
+    public static void sendDataToUI(Messenger messenger, String tag, String log) {
+        Bundle bb = new Bundle();
+        bb.putString(tag, log);
+        Message msg = new Message();
+        msg.setData(bb);
+        try {
+            messenger.send(msg);
+        } catch (RemoteException e) {
+            Log.i("error", "error");
+        }
     }
 
     public static boolean hasBlePermissions(Context context) {
