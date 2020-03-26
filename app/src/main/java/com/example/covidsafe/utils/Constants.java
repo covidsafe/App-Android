@@ -38,8 +38,8 @@ public class Constants {
         Insert,ViewAll
     }
 
-    public static UUID serviceUUID = UUID.fromString("0000c019-0000-1000-8000-00805f9b34fb");
-    public static UUID contactUUID = UUID.fromString("0000c019-0000-1000-8000-00805f9b34fc");
+    public static UUID serviceUUID = UUID.fromString("379a7af7-c8a6-4ae4-aa7b-87cb4bef0aab");
+    public static UUID contactUUID = null;
 
     public static String insertAsyncTaskRunning = "";
 
