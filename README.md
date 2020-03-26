@@ -1,5 +1,7 @@
 # CovidSafe
 
+[![CircleCI](https://circleci.com/gh/covidsafe/App-Android.svg?style=svg)](https://circleci.com/gh/covidsafe/App-Android)
+
 Video demo
 =======
 Logging GPS/BLE and sending data to a local server
