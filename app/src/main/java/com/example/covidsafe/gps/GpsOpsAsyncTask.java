@@ -56,12 +56,7 @@ GpsOpsAsyncTask extends AsyncTask<Void, Void, Void> {
                 Log.e("gps",record.toString());
             }
 
-            if (records.size() > 0) {
-                if (records.size() > 10) {
-                    records = records.subList(0,10);
-                }
-                sendRecords(Utils.gps2json(records));
-            }
+            //TODO: package up GPS records and send to cloud
         }
         return null;
     }
