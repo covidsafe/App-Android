@@ -136,7 +136,7 @@ public class BackgroundService extends IntentService {
                     .addServiceUuid(new ParcelUuid(Constants.serviceUUID))
                     .addServiceData(new ParcelUuid(Constants.serviceUUID), ByteUtils.uuid2bytes(Constants.contactUUID))
                     .build();
-
+            Log.e("ble","mkBeacon");
             BluetoothLeAdvertiser bluetoothLeAdvertiser = Constants.blueAdapter.getBluetoothLeAdvertiser();
             bluetoothLeAdvertiser.startAdvertising(settings, advertiseData, BluetoothHelper.advertiseCallback);
         }
