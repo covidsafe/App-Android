@@ -19,6 +19,7 @@ import com.example.covidsafe.ui.ReportFragment;
 import com.example.covidsafe.ui.WarningFragment;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.UUID;
 import java.util.concurrent.ScheduledFuture;
 
@@ -45,6 +46,13 @@ public class Constants {
         Insert,ViewAll
     }
 
+    public enum UUIDDatabaseOps {
+        Insert,ViewAll
+    }
+
+    public static int BluetoothScanIntervalInMinutes = 5;
+    public static int BluetoothScanPeriodInSeconds = 10;
+    public static int PullFromServerIntervalInMinutes = 60;
     public static int UUIDGenerationIntervalInMinutes = 5;
     public static UUID serviceUUID = UUID.fromString("0000D028-0000-1000-8000-00805F9B34FB");
     public static UUID contactUUID = null;
@@ -62,6 +70,7 @@ public class Constants {
     public static ScheduledFuture uploadTask;
     public static ScheduledFuture uuidGeneartionTask;
     public static ScheduledFuture bluetoothTask;
+    public static ScheduledFuture pullFromServerTask;
     public static boolean startingToTrack = false;
     public static String SHARED_PREFENCE_NAME = "preferences";
     public static String NOTIFICATION_CHANNEL = "channel";
@@ -74,6 +83,7 @@ public class Constants {
     public static Fragment CurrentFragment;
     public static String gpsDirName = "gps";
     public static String bleDirName = "ble";
+    public static String uuidDirName = "uuid";
     public static String formDirName = "form";
     public static String blacklistDirName = "blacklist";
     public static String logFileName = "log.txt";
@@ -89,6 +99,7 @@ public class Constants {
     public static ArrayList<BlacklistRecord> blacklist;
     public static LocationManager mLocationManager = null;
     public static BackgroundService.LocationListener[] locListeners = new BackgroundService.LocationListener[2];
+    public static HashSet<String> scannedUUIDs;
 
     public static String[] gpsPermissions= {
             Manifest.permission.ACCESS_BACKGROUND_LOCATION,

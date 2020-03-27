@@ -26,6 +26,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.covidsafe.ble.BleOpsAsyncTask;
 import com.example.covidsafe.ble.BluetoothHelper;
+import com.example.covidsafe.ble.BluetoothUtils;
 import com.example.covidsafe.gps.GpsOpsAsyncTask;
 import com.example.covidsafe.utils.ByteUtils;
 import com.example.covidsafe.utils.Constants;
@@ -91,12 +92,10 @@ public class MainFragment extends Fragment {
         Utils.gpsResults = (TextView)getActivity().findViewById(R.id.gpsResults);
         Utils.gpsResults.setText("");
         Utils.gpsResults.setMovementMethod(new ScrollingMovementMethod());
-        Utils.gpsLines = 0;
 
         Utils.bleResults = (TextView)getActivity().findViewById(R.id.bleResults);
         Utils.bleResults.setText("");
         Utils.bleResults.setMovementMethod(new ScrollingMovementMethod());
-        Utils.bleLines = 0;
 
         Utils.bleBeaconId = (TextView)getActivity().findViewById(R.id.uuidView);
 
@@ -125,6 +124,8 @@ public class MainFragment extends Fragment {
         trackButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (!Constants.tracking) {
+                    Utils.gpsLines = 0;
+                    Utils.bleLines = 0;
                     Constants.startingToTrack = true;
                     try {
                         Log.e("logme","start service");
@@ -178,9 +179,18 @@ public class MainFragment extends Fragment {
                     }
 
                     Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothHelper.advertiseCallback);
-                    Constants.blueAdapter.getBluetoothLeScanner().stopScan(BluetoothHelper.mLeScanCallback);
+                    BluetoothUtils.finishScan(getContext());
                     if (Constants.uploadTask!=null) {
                         Constants.uploadTask.cancel(true);
+                    }
+                    if (Constants.uuidGeneartionTask!=null) {
+                        Constants.uuidGeneartionTask.cancel(true);
+                    }
+                    try {
+                        getContext().unregisterReceiver(BluetoothUtils.mReceiver);
+                    }
+                    catch(Exception e) {
+                        Log.e("frag","unregister fail");
                     }
                     Constants.tracking = false;
                     gpsSwitch.setEnabled(true);
