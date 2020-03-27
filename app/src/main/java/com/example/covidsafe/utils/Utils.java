@@ -226,7 +226,8 @@ public class Utils {
 
     public static boolean gpsCheck(Activity av) {
         boolean hasPerms = Utils.hasGpsPermissions(av);
-        if ((hasPerms && Constants.GPS_ENABLED) || (!Constants.GPS_ENABLED && Build.VERSION.SDK_INT < Build.VERSION_CODES.M)) {
+        if ((hasPerms && Constants.GPS_ENABLED) ||
+            (!Constants.GPS_ENABLED && (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || hasPerms))) {
             return true;
         }
         return false;
