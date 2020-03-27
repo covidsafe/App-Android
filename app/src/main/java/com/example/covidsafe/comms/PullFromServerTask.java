@@ -37,5 +37,10 @@ public class PullFromServerTask implements Runnable {
             Log.e("uuid",record.toString());
         }
         //TODO: pull UUIDs from server and compare with locally generated UUIDs
+        //TODO send this info to user if they have been infected:
+//        King County COVID-19 call center: 206-477-3977. Open daily from 8 a.m. to 7 p.m
+//        Washington State COVID-19 call center: 800-525-0127
+//        https://scanpublichealth.org/faq
+
     }
 }
