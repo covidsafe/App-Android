@@ -40,7 +40,6 @@ public class MainFragment extends Fragment {
     Button trackButton;
     Button uploadGpsButton;
     Button uploadBleButton;
-    Button rotateButton;
     TextView bleBeaconId;
     View view;
 
@@ -87,7 +86,7 @@ public class MainFragment extends Fragment {
         Constants.CurrentFragment = this;
         Constants.MainFragment = this;
 
-        bleBeaconId = (TextView)getActivity().findViewById(R.id.textView);
+        bleBeaconId = (TextView)getActivity().findViewById(R.id.uuidView);
 
         Utils.gpsResults = (TextView)getActivity().findViewById(R.id.gpsResults);
         Utils.gpsResults.setText("");
@@ -99,10 +98,11 @@ public class MainFragment extends Fragment {
         Utils.bleResults.setMovementMethod(new ScrollingMovementMethod());
         Utils.bleLines = 0;
 
+        Utils.bleBeaconId = (TextView)getActivity().findViewById(R.id.uuidView);
+
         trackButton = (Button)getActivity().findViewById(R.id.trackButton);
         uploadGpsButton = (Button)getActivity().findViewById(R.id.uploadGpsButton);
         uploadBleButton = (Button)getActivity().findViewById(R.id.uploadBleButton);
-        rotateButton = (Button)getActivity().findViewById(R.id.rotateButton);
         updateUI();
 
         Constants.contactUUID = UUID.randomUUID();
@@ -119,29 +119,6 @@ public class MainFragment extends Fragment {
             public void onClick(View v) {
 //                new BleDbAsyncTask(getContext(), new BleDbRecord("1234",System.currentTimeMillis(),false,false)).execute();
                 new BleOpsAsyncTask(getActivity()).execute();
-            }
-        });
-
-        rotateButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Constants.contactUUID = UUID.randomUUID();
-                bleBeaconId.setText(Constants.contactUUID.toString());
-
-                if (Constants.blueAdapter != null && Constants.blueAdapter.getBluetoothLeAdvertiser() != null) {
-                    Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothHelper.advertiseCallback);
-                    AdvertiseSettings settings = new AdvertiseSettings.Builder()
-                            .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
-                            .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)
-                            .setConnectable(true)
-                            .build();
-
-                    AdvertiseData advertiseData = new AdvertiseData.Builder()
-                            .setIncludeDeviceName(false)
-                            .addServiceUuid(new ParcelUuid(Constants.serviceUUID))
-                            .addServiceData(new ParcelUuid(Constants.serviceUUID), ByteUtils.uuid2bytes(Constants.contactUUID))
-                            .build();
-                    Constants.blueAdapter.getBluetoothLeAdvertiser().startAdvertising(settings, advertiseData, BluetoothHelper.advertiseCallback);
-                }
             }
         });
 

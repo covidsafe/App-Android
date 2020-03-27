@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.example.covidsafe.ble.BluetoothHelper;
+import com.example.covidsafe.ble.UUIDGeneratorTask;
 import com.example.covidsafe.utils.ByteUtils;
 import com.example.covidsafe.utils.Constants;
 import com.example.covidsafe.utils.Utils;
@@ -79,12 +80,13 @@ public class BackgroundService extends IntentService {
             messenger = (Messenger) bundle.get("messenger");
         }
 
+        ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
         if (Constants.BLUETOOTH_ENABLED) {
-            ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
             Log.e("ble","spin out task "+(messenger==null));
             Constants.bluetoothTask = exec.scheduleWithFixedDelay(new BluetoothHelper(getApplicationContext(), messenger), 0, 1, TimeUnit.HOURS);
             Log.e("ble","make beacon");
             mkBeacon();
+            Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(new UUIDGeneratorTask(messenger), 0, Constants.UUIDGenerationIntervalInMinutes, TimeUnit.MINUTES);
         }
 
         if (Constants.GPS_ENABLED) {
@@ -100,8 +102,6 @@ public class BackgroundService extends IntentService {
                 Constants.mLocationManager.requestLocationUpdates(
                         LocationManager.GPS_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
                         Constants.locListeners[1]);
-
-//            Constants.uploadTask = exec.scheduleWithFixedDelay(new UploadTask(getApplicationContext()), 0, 1, TimeUnit.HOURS);
 
             } catch (java.lang.SecurityException ex) {
                 Log.e("logme", "fail to request location update, ignore", ex);
@@ -136,7 +136,7 @@ public class BackgroundService extends IntentService {
                     .addServiceUuid(new ParcelUuid(Constants.serviceUUID))
                     .addServiceData(new ParcelUuid(Constants.serviceUUID), ByteUtils.uuid2bytes(Constants.contactUUID))
                     .build();
-
+            Log.e("ble","mkBeacon");
             BluetoothLeAdvertiser bluetoothLeAdvertiser = Constants.blueAdapter.getBluetoothLeAdvertiser();
             bluetoothLeAdvertiser.startAdvertising(settings, advertiseData, BluetoothHelper.advertiseCallback);
         }
