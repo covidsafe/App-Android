@@ -44,12 +44,7 @@ public class PermissionLogic {
                         .setMessage(av.getString(R.string.perm_ble_rationale))
                         .setNegativeButton(R.string.retry, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q) {
-                                    ActivityCompat.requestPermissions(av, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, 2);
-                                }
-                                else {
-                                    ActivityCompat.requestPermissions(av, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, 2);
-                                }
+                                ActivityCompat.requestPermissions(av, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, 2);
                             }
                         })
                         .setPositiveButton(R.string.sure, null)
