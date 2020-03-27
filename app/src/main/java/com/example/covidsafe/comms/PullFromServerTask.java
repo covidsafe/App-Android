@@ -36,5 +36,6 @@ public class PullFromServerTask implements Runnable {
         for (UUIDRecord record : records) {
             Log.e("uuid",record.toString());
         }
+        //TODO: pull UUIDs from server and compare with locally generated UUIDs
     }
 }

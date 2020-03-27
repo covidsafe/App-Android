@@ -55,12 +55,7 @@ public class BleOpsAsyncTask extends AsyncTask<Void, Void, Void> {
                 Log.e("ble",record.toString());
             }
 
-            if (records.size() > 0) {
-                if (records.size() > 10) {
-                    records = records.subList(0, 10);
-                }
-                sendRecords(Utils.ble2json(records));
-            }
+            //TODO: package up BLE records and send to cloud
         }
         return null;
     }
