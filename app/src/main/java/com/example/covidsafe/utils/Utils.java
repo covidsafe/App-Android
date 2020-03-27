@@ -48,6 +48,7 @@ public class Utils {
     public static int bleLines = 0;
     public static TextView gpsResults;
     public static TextView bleResults;
+    public static TextView bleBeaconId;
 
     public static Handler serviceHandler = new Handler() {
         @Override
@@ -55,6 +56,7 @@ public class Utils {
             Bundle reply = msg.getData();
             String out1 = reply.getString("gps");
             String out2 = reply.getString("ble");
+            String out3 = reply.getString("uuid");
             if (out1!=null) {
                 if (gpsLines > 20) {
                     String ss = gpsResults.getText().toString();
@@ -78,6 +80,9 @@ public class Utils {
                     bleResults.append(out2 + "\n");
                 }
                 bleLines+=1;
+            }
+            if (out3 != null) {
+                bleBeaconId.setText(out3);
             }
         }
     };
