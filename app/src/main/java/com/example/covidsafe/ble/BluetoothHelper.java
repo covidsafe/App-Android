@@ -67,12 +67,14 @@ public class BluetoothHelper implements Runnable {
                 public void onScanResult(int callbackType, final ScanResult result) {
                     super.onScanResult(callbackType, result);
                     Map<ParcelUuid, byte[]> map = result.getScanRecord().getServiceData();
-                    List<ParcelUuid> keys = new ArrayList<ParcelUuid>(map.keySet());
+                    byte[] data = map.get(new ParcelUuid(Constants.serviceUUID));
 
-                    String contactUuid = ByteUtils.byte2string(map.get(keys.get(0)));
-                    String[] elts = contactUuid.split("-");
-                    Utils.sendDataToUI(messenger, "ble",elts[elts.length-1]);
+                    if (data.length == 16) {
+                        String contactUuid = ByteUtils.byte2string(data);
+                        String[] elts = contactUuid.split("-");
+                        Utils.sendDataToUI(messenger, "ble", elts[elts.length - 1]);
 //                        Utils.bleLogToDatabase(cxt,contactUuid);
+                    }
                 }
 
                 @Override
