@@ -45,6 +45,7 @@ public class Constants {
         Insert,ViewAll
     }
 
+    public static int UUIDGenerationIntervalInMinutes = 5;
     public static UUID serviceUUID = UUID.fromString("0000D028-0000-1000-8000-00805F9B34FB");
     public static UUID contactUUID = null;
 
@@ -59,6 +60,7 @@ public class Constants {
     public static BluetoothAdapter blueAdapter;
     public static int statusSubmitted = -1;
     public static ScheduledFuture uploadTask;
+    public static ScheduledFuture uuidGeneartionTask;
     public static ScheduledFuture bluetoothTask;
     public static boolean startingToTrack = false;
     public static String SHARED_PREFENCE_NAME = "preferences";
