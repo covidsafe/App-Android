@@ -4,7 +4,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Messenger;
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         Log.e("metadata","RELEASE "+android.os.Build.VERSION.RELEASE+"");
         Log.e("metadata","MANUFACTURER "+manufacturer);
         Log.e("metadata","MODEL "+model);
+
         CryptoUtils.keyInit(this);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 //        if (Constants.DEBUG) {

@@ -30,6 +30,8 @@ import com.example.covidsafe.ble.BleOpsAsyncTask;
 import com.example.covidsafe.ble.BleRecord;
 import com.example.covidsafe.gps.GpsOpsAsyncTask;
 import com.example.covidsafe.gps.GpsRecord;
+import com.example.covidsafe.uuid.UUIDOpsAsyncTask;
+import com.example.covidsafe.uuid.UUIDRecord;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -124,6 +126,15 @@ public class Utils {
 
     public static void bleLogToDatabase(Context cxt, String id) {
         new BleOpsAsyncTask(cxt, id).execute();
+    }
+
+    public static void uuidLogToDatabase(Context cxt) {
+        new UUIDOpsAsyncTask(cxt, Constants.contactUUID).execute();
+    }
+
+    public static void uuidLogToFile(Context cxt, UUIDRecord rec) {
+        FileOperations.append(rec.toString(),
+                cxt, Constants.uuidDirName, Utils.getUuidLogName());
     }
 
     public static JsonObject gps2json(List<GpsRecord> records) {
@@ -334,6 +345,12 @@ public class Utils {
     }
 
     public static String getBleLogName() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        return dateFormat.format(date)+".txt";
+    }
+
+    public static String getUuidLogName() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         return dateFormat.format(date)+".txt";

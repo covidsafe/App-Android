@@ -12,7 +12,7 @@ import java.util.List;
 public interface BleDbRecordDao {
 
     @Query("SELECT * FROM ble_record_table")
-    LiveData<List<BleRecord>> getAllRecords();
+    List<BleRecord> getAllRecords();
 
     // allowing the insert of the same word multiple times by passing a
     // conflict resolution strategy

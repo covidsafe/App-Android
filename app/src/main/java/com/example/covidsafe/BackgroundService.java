@@ -1,14 +1,18 @@
 package com.example.covidsafe;
 import android.app.IntentService;
 import android.app.Notification;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.AdvertiseData;
 import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.BluetoothLeAdvertiser;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Messenger;
 import android.os.ParcelUuid;
 import android.util.Log;
@@ -17,7 +21,9 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.example.covidsafe.ble.BluetoothHelper;
+import com.example.covidsafe.ble.BluetoothUtils;
 import com.example.covidsafe.ble.UUIDGeneratorTask;
+import com.example.covidsafe.comms.PullFromServerTask;
 import com.example.covidsafe.utils.ByteUtils;
 import com.example.covidsafe.utils.Constants;
 import com.example.covidsafe.utils.Utils;
@@ -82,11 +88,14 @@ public class BackgroundService extends IntentService {
 
         ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
         if (Constants.BLUETOOTH_ENABLED) {
+            BluetoothUtils.messenger = messenger;
+            this.registerReceiver(BluetoothUtils.mReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
+
             Log.e("ble","spin out task "+(messenger==null));
-            Constants.bluetoothTask = exec.scheduleWithFixedDelay(new BluetoothHelper(getApplicationContext(), messenger), 0, 1, TimeUnit.HOURS);
+            BluetoothUtils.startBluetoothScan(getApplicationContext(), messenger);
             Log.e("ble","make beacon");
-            mkBeacon();
-            Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(new UUIDGeneratorTask(messenger), 0, Constants.UUIDGenerationIntervalInMinutes, TimeUnit.MINUTES);
+            BluetoothUtils.mkBeacon();
+            Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(new UUIDGeneratorTask(messenger, getApplicationContext()), 0, Constants.UUIDGenerationIntervalInMinutes, TimeUnit.MINUTES);
         }
 
         if (Constants.GPS_ENABLED) {
@@ -112,6 +121,8 @@ public class BackgroundService extends IntentService {
             }
         }
 
+        Constants.pullFromServerTask = exec.scheduleWithFixedDelay(new PullFromServerTask(messenger,getApplicationContext()), 0, Constants.PullFromServerIntervalInMinutes, TimeUnit.MINUTES);
+
         Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(getString(R.string.notif_message))
@@ -123,29 +134,16 @@ public class BackgroundService extends IntentService {
         return START_NOT_STICKY;
     }
 
-    public void mkBeacon() {
-        if (Constants.BLUETOOTH_ENABLED) {
-            AdvertiseSettings settings = new AdvertiseSettings.Builder()
-                    .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
-                    .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)
-                    .setConnectable(true)
-                    .build();
-
-            AdvertiseData advertiseData = new AdvertiseData.Builder()
-                    .setIncludeDeviceName(false)
-                    .addServiceUuid(new ParcelUuid(Constants.serviceUUID))
-                    .addServiceData(new ParcelUuid(Constants.serviceUUID), ByteUtils.uuid2bytes(Constants.contactUUID))
-                    .build();
-            Log.e("ble","mkBeacon");
-            BluetoothLeAdvertiser bluetoothLeAdvertiser = Constants.blueAdapter.getBluetoothLeAdvertiser();
-            bluetoothLeAdvertiser.startAdvertising(settings, advertiseData, BluetoothHelper.advertiseCallback);
-        }
-    }
-
     //this call is not guaranteed by android system
     @Override
     public void onDestroy() {
         super.onDestroy();
+        try {
+            unregisterReceiver(BluetoothUtils.mReceiver);
+        }
+        catch(Exception e) {
+            Log.e("ble","unregister fail");
+        }
         Log.e("logme", "service destroyed");
     }
 
