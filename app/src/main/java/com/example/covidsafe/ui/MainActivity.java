@@ -23,6 +23,9 @@ import com.example.covidsafe.R;
 import com.example.covidsafe.utils.ServiceUtils;
 import com.example.covidsafe.utils.Utils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.microsoft.appcenter.AppCenter;
+import com.microsoft.appcenter.analytics.Analytics;
+import com.microsoft.appcenter.crashes.Crashes;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -41,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
         Log.e("metadata","RELEASE "+android.os.Build.VERSION.RELEASE+"");
         Log.e("metadata","MANUFACTURER "+manufacturer);
         Log.e("metadata","MODEL "+model);
+
+        AppCenter.start(getApplication(), Constants.AnalyticsSecret, Analytics.class, Crashes.class);
+        Crashes.setEnabled(true);
 
         CryptoUtils.keyInit(this);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
