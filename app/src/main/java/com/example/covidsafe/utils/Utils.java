@@ -1,5 +1,6 @@
 package com.example.covidsafe.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -271,6 +272,26 @@ public class Utils {
         }
     }
 
+    public static boolean hasMiscPermissions(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            if (Constants.miscPermissions != null) {
+                for (String permission : Constants.miscPermissions) {
+                    if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                        Log.e("results", "return false on " + permission);
+                        return false;
+                    }
+                }
+            }
+        }
+        else {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
+                Log.e("results", "return false on " + Manifest.permission.INTERNET);
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static boolean hasBlePermissions(Context context) {
         Log.e("results", "check for permission");
         if (context != null) {
@@ -282,14 +303,7 @@ public class Utils {
                     }
                 }
             }
-            if (Constants.miscPermissions != null) {
-                for (String permission : Constants.miscPermissions) {
-                    if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                        Log.e("results", "return false on " + permission);
-                        return false;
-                    }
-                }
-            }
+            hasMiscPermissions(context);
         }
         return true;
     }
@@ -307,14 +321,7 @@ public class Utils {
                     }
                 }
             }
-            if (Constants.miscPermissions != null) {
-                for (String permission : Constants.miscPermissions) {
-                    if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                        Log.e("results", "return false on " + permission);
-                        return false;
-                    }
-                }
-            }
+            hasMiscPermissions(context);
         }
         return true;
     }
