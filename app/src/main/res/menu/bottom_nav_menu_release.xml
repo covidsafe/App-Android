@@ -10,13 +10,6 @@
         app:showAsAction="always|withText" />
 
     <item
-        android:id="@+id/action_report"
-        android:enabled="true"
-        android:icon="@drawable/ic_send_black_24dp"
-        android:title="Symptoms"
-        app:showAsAction="always|withText" />
-
-    <item
         android:id="@+id/action_warning"
         android:enabled="true"
         android:icon="@drawable/ic_warning_black_24dp"

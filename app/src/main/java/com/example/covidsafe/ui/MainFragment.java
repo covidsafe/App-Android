@@ -1,5 +1,8 @@
 package com.example.covidsafe.ui;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.AdvertiseData;
@@ -7,6 +10,9 @@ import android.bluetooth.le.AdvertiseSettings;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelUuid;
@@ -22,11 +28,17 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.covidsafe.ble.BleOpsAsyncTask;
 import com.example.covidsafe.ble.BluetoothHelper;
 import com.example.covidsafe.ble.BluetoothUtils;
+import com.example.covidsafe.comms.CommunicationConfig;
+import com.example.covidsafe.comms.NetworkConstant;
+import com.example.covidsafe.comms.PullFromServerTask;
+import com.example.covidsafe.comms.QueryBuilder;
 import com.example.covidsafe.gps.GpsOpsAsyncTask;
 import com.example.covidsafe.utils.ByteUtils;
 import com.example.covidsafe.utils.Constants;
@@ -35,12 +47,12 @@ import com.example.covidsafe.R;
 import com.example.covidsafe.utils.Utils;
 
 import java.util.UUID;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class MainFragment extends Fragment {
 
     Button trackButton;
-    Button uploadGpsButton;
-    Button uploadBleButton;
     TextView bleBeaconId;
     View view;
 
@@ -100,26 +112,10 @@ public class MainFragment extends Fragment {
         Utils.bleBeaconId = (TextView)getActivity().findViewById(R.id.uuidView);
 
         trackButton = (Button)getActivity().findViewById(R.id.trackButton);
-        uploadGpsButton = (Button)getActivity().findViewById(R.id.uploadGpsButton);
-        uploadBleButton = (Button)getActivity().findViewById(R.id.uploadBleButton);
         updateUI();
 
         Constants.contactUUID = UUID.randomUUID();
         bleBeaconId.setText(Constants.contactUUID.toString());
-
-        uploadGpsButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-//                new GpsDbAsyncTask(getContext(), new GpsDbRecord(System.currentTimeMillis(),42,43, LocationManager.NETWORK_PROVIDER)).execute();
-                new GpsOpsAsyncTask(getActivity()).execute();
-            }
-        });
-
-        uploadBleButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-//                new BleDbAsyncTask(getContext(), new BleDbRecord("1234",System.currentTimeMillis(),false,false)).execute();
-                new BleOpsAsyncTask(getActivity()).execute();
-            }
-        });
 
         trackButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

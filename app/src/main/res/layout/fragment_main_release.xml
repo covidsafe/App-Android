@@ -59,44 +59,24 @@
             android:scrollbars="vertical" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/uploadBleButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="42dp"
-        android:layout_marginTop="37dp"
-        android:text="Upload BLE"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/trackButton" />
-
-    <Button
-        android:id="@+id/uploadGpsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="37dp"
-        android:layout_marginEnd="42dp"
-        android:text="Upload GPS"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/trackButton" />
-
     <Switch
         android:id="@+id/bleSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
+        android:layout_marginStart="60dp"
         android:layout_marginTop="4dp"
         android:text="Bluetooth"
-        app:layout_constraintStart_toStartOf="@+id/uploadBleButton"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/trackButton" />
 
     <Switch
         android:id="@+id/gpsSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
         android:layout_marginTop="5dp"
+        android:layout_marginEnd="79dp"
         android:text="GPS"
-        app:layout_constraintStart_toStartOf="@+id/uploadGpsButton"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/trackButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

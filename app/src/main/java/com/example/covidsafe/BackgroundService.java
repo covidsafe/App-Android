@@ -20,7 +20,6 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import com.example.corona.comms.Registered;
 import com.example.covidsafe.ble.BluetoothHelper;
 import com.example.covidsafe.ble.BluetoothUtils;
 import com.example.covidsafe.ble.UUIDGeneratorTask;

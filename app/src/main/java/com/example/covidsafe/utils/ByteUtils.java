@@ -1,5 +1,7 @@
 package com.example.covidsafe.utils;
 
+import com.google.protobuf.ByteString;
+
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
@@ -29,5 +31,14 @@ public class ByteUtils {
         ByteBuffer bb = ByteBuffer.wrap(b);
         UUID id = new UUID(bb.getLong(),bb.getLong());
         return id.toString();
+    }
+
+    public static UUID byte2uuid(byte[] b) {
+        ByteBuffer bb = ByteBuffer.wrap(b);
+        return new UUID(bb.getLong(),bb.getLong());
+    }
+
+    public static ByteString string2bytestring(String s) {
+        return ByteString.copyFrom(uuid2bytes(UUID.fromString(s)));
     }
 }

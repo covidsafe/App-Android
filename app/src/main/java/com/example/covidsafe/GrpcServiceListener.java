@@ -8,11 +8,14 @@ import com.example.corona.comms.AddedLogs;
 import com.example.corona.comms.BLTContactLog;
 import com.example.corona.comms.Registered;
 import com.example.covidsafe.comms.CommunicationConfig;
+import com.example.covidsafe.comms.GetBLTContactLogsAsyncTask;
 import com.example.covidsafe.comms.NetworkConstant;
 import com.example.covidsafe.comms.QueryBuilder;
 import com.example.covidsafe.event.ContactLogEvent;
 import com.example.covidsafe.event.RegistrationEvent;
 import com.example.covidsafe.event.SendInfectedLogEvent;
+import com.example.covidsafe.uuid.UUIDDbRecordRepository;
+import com.example.covidsafe.uuid.UUIDRecord;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -28,7 +31,7 @@ public class GrpcServiceListener extends JobService {
         CommunicationConfig config = new CommunicationConfig(NetworkConstant.HOSTNAME, NetworkConstant.PORT, "TestServer");
         QueryBuilder queryBuilder = new QueryBuilder(config);
 //        queryBuilder.registerUser();
-        queryBuilder.sendInfectedLogsOfUser();
+//        queryBuilder.sendInfectedLogsOfUser();
 //        queryBuilder.getBLTContactLogs();
         return true;
     }
@@ -76,6 +79,7 @@ public class GrpcServiceListener extends JobService {
         if (contactLogEvent.isRequestStatus()) {
             Log.d("[BLTContactLog] ", "Successfully received a response from server");
             List<BLTContactLog> logs = contactLogEvent.getContactLogs();
+            new GetBLTContactLogsAsyncTask(getApplicationContext(), logs).execute();
         } else {
             Log.e("[BLTContactLog] ", "Failed to reach the server. Bad Internet connection or server downtime.");
         }
