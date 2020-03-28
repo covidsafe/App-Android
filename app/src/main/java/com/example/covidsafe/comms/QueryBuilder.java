@@ -54,7 +54,7 @@ public class QueryBuilder {
     public QueryBuilder(CommunicationConfig config) {
         this.config = config;
         GrpcClient client = new GrpcClient(config);
-        query = new RPCQuery(client.channel);
+        query = new RPCQuery(client.getChannel());
     }
 
     private Empty createEmptyRequest() {
