@@ -29,6 +29,7 @@
             </intent-filter>
         </activity>
         <service android:name="com.example.covidsafe.BackgroundService"></service>
+        <service android:name="com.example.covidsafe.GrpcServiceListener" android:permission="android.permission.BIND_JOB_SERVICE"></service>
     </application>
 
 </manifest>

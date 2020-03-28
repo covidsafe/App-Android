@@ -20,13 +20,18 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
+import com.example.corona.comms.Registered;
 import com.example.covidsafe.ble.BluetoothHelper;
 import com.example.covidsafe.ble.BluetoothUtils;
 import com.example.covidsafe.ble.UUIDGeneratorTask;
 import com.example.covidsafe.comms.PullFromServerTask;
+import com.example.covidsafe.event.RegistrationEvent;
 import com.example.covidsafe.utils.ByteUtils;
 import com.example.covidsafe.utils.Constants;
 import com.example.covidsafe.utils.Utils;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

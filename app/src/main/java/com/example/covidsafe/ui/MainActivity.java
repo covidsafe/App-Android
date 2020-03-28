@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
@@ -19,17 +20,21 @@ import com.example.covidsafe.utils.Constants;
 import com.example.covidsafe.utils.CryptoUtils;
 import com.example.covidsafe.BackgroundService;
 import com.example.covidsafe.R;
+import com.example.covidsafe.utils.ServiceUtils;
 import com.example.covidsafe.utils.Utils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 public class MainActivity extends AppCompatActivity {
+    private Context mContext;
+
     Activity activity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.activity = this;
         setContentView(R.layout.activity_main);
+        mContext = this;
         String manufacturer = Build.MANUFACTURER;
         String model = Build.MODEL;
         Log.e("metadata","BUILD "+android.os.Build.VERSION.SDK_INT+"");
@@ -47,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
             bottomNavigationView.getMenu().clear();
             bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_release);
 //        }
+
+        ServiceUtils.scheduleLookupJob(mContext);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
