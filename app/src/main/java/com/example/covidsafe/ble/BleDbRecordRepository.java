@@ -4,14 +4,14 @@ import android.content.Context;
 
 import java.util.List;
 
-class BleDbRecordRepository {
+public class BleDbRecordRepository {
     private BleDbRecordDao mRecordDao;
 
     // Note that in order to unit test the WordRepository, you have to remove the Application
     // dependency. This adds complexity and much more code, and this sample is not about testing.
     // See the BasicSample in the android-architecture-components repository at
     // https://github.com/googlesamples
-    BleDbRecordRepository(Context application) {
+    public BleDbRecordRepository(Context application) {
         BleDbRecordRoomDatabase db = BleDbRecordRoomDatabase.getDatabase(application);
         mRecordDao = db.recordDao();
 //        mAllRecords = mRecordDao.getSortedRecords();
@@ -19,7 +19,7 @@ class BleDbRecordRepository {
 
     // Room executes all queries on a separate thread.
     // Observed LiveData will notify the observer when the data has changed.
-    List<BleRecord> getAllRecords() {
+    public List<BleRecord> getAllRecords() {
         return mRecordDao.getSortedRecordsByTimestamp();
     }
 

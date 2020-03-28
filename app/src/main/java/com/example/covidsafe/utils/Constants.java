@@ -55,6 +55,7 @@ public class Constants {
     public static int BluetoothScanPeriodInSeconds = 10;
     public static int PullFromServerIntervalInMinutes = 60;
     public static int UUIDGenerationIntervalInMinutes = 5;
+    public static int TimestampDeviationInMilliseconds = 10*1000;
     public static UUID serviceUUID = UUID.fromString("0000D028-0000-1000-8000-00805F9B34FB");
     public static UUID contactUUID = null;
 
