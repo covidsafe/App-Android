@@ -79,7 +79,7 @@ public class BluetoothHelper implements Runnable {
                     Map<ParcelUuid, byte[]> map = result.getScanRecord().getServiceData();
                     byte[] data = map.get(new ParcelUuid(Constants.serviceUUID));
 
-                    if (data.length == 16) {
+                    if (data != null && data.length == 16) {
                         String contactUuid = ByteUtils.byte2string(data);
 //                        Log.e("uuid","CONTACT "+contactUuid);
                         if (!Constants.scannedUUIDs.contains(contactUuid)) {
