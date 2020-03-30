@@ -1,23 +1,16 @@
 package com.example.covidsafe.comms;
 
-import android.app.Notification;
 import android.content.Context;
 import android.os.AsyncTask;
-
-import androidx.core.app.NotificationCompat;
-
 import com.example.corona.comms.BLTContactLog;
-import com.example.covidsafe.R;
 import com.example.covidsafe.utils.ByteUtils;
 import com.example.covidsafe.utils.Constants;
 import com.example.covidsafe.uuid.UUIDDbRecordRepository;
 import com.example.covidsafe.uuid.UUIDRecord;
 import com.google.protobuf.ByteString;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.UUID;
 
 public class GetBLTContactLogsAsyncTask extends AsyncTask<Void, Void, Void> {
 
