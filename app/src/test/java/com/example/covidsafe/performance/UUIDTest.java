@@ -14,7 +14,7 @@ public class UUIDTest {
         Set<UUID> uuidset = new HashSet<>();
         Set<UUID> subset = new HashSet<>();
 
-        for (int i=0; i<10000000; i++) {
+        for (int i=0; i<1000; i++) {
             UUID r = UUID.randomUUID();
             uuidset.add(r);
             if (i%100 == 0) {
