@@ -96,6 +96,11 @@ public class ReportFragment extends Fragment {
         Date date = Utils.getLastSubmitTime(getActivity());
         if (date == null || Utils.compareDates(date)) {
             FileOperations.append(Utils.getFormRecordName(), getActivity(), Constants.formDirName, Constants.logFileName);
+            AlertDialog dialog = new MaterialAlertDialogBuilder(getActivity())
+                    .setTitle("Thank you")
+                    .setPositiveButton(R.string.ok,null)
+                    .setCancelable(false).create();
+            dialog.show();
         }
     }
 
