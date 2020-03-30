@@ -28,27 +28,16 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.covidsafe.ble.BleOpsAsyncTask;
 import com.example.covidsafe.ble.BluetoothHelper;
 import com.example.covidsafe.ble.BluetoothUtils;
-import com.example.covidsafe.comms.CommunicationConfig;
-import com.example.covidsafe.comms.NetworkConstant;
-import com.example.covidsafe.comms.PullFromServerTask;
-import com.example.covidsafe.comms.QueryBuilder;
-import com.example.covidsafe.gps.GpsOpsAsyncTask;
-import com.example.covidsafe.utils.ByteUtils;
 import com.example.covidsafe.utils.Constants;
 import com.example.covidsafe.BackgroundService;
 import com.example.covidsafe.R;
 import com.example.covidsafe.utils.Utils;
 
 import java.util.UUID;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 public class MainFragment extends Fragment {
 

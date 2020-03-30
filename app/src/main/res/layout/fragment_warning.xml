@@ -77,7 +77,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="date"
+        android:clickable="true"
+        android:focusable="true"
+        android:editable="false"
         app:layout_constraintStart_toStartOf="@+id/nameSubmit"
         app:layout_constraintTop_toBottomOf="@+id/nameSubmit" />
 </androidx.constraintlayout.widget.ConstraintLayout>
