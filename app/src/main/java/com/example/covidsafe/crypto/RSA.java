@@ -1,5 +1,7 @@
 package com.example.covidsafe.crypto;
 
+import android.os.Build;
+
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -7,6 +9,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
+import java.security.Signature;
 import java.util.Base64;
 
 import javax.crypto.BadPaddingException;
@@ -35,14 +38,18 @@ public final class RSA {
     }
 
     public static String sign(String plainText, PrivateKey privateKey) throws Exception {
-        java.security.Signature privateSignature =
-                java.security.Signature.getInstance("SHA256withRSA");
+        Signature privateSignature =
+                Signature.getInstance("SHA256withRSA");
         privateSignature.initSign(privateKey);
         privateSignature.update(plainText.getBytes(UTF_8));
 
         byte[] signature = privateSignature.sign();
 
-        return Base64.getEncoder().encodeToString(signature);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return Base64.getEncoder().encodeToString(signature);
+        } else {
+            return org.apache.commons.codec.binary.Base64.encodeBase64String(signature);
+        }
     }
 
     public static byte[] signAsBytes(String plainText, PrivateKey privateKey) throws Exception {
@@ -62,7 +69,12 @@ public final class RSA {
         publicSignature.initVerify(publicKey);
         publicSignature.update(plainText.getBytes(UTF_8));
 
-        byte[] signatureBytes = Base64.getDecoder().decode(signature);
+        byte[] signatureBytes = new byte[0];
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            signatureBytes = Base64.getDecoder().decode(signature);
+        } else {
+            signatureBytes = org.apache.commons.codec.binary.Base64.decodeBase64(signature);
+        }
 
         return publicSignature.verify(signatureBytes);
     }
