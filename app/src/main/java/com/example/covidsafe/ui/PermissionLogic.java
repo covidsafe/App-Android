@@ -38,7 +38,7 @@ public class PermissionLogic {
             shouldAsk = ActivityCompat.shouldShowRequestPermissionRationale(av, Manifest.permission.ACCESS_BACKGROUND_LOCATION);
 
             Log.e("logme","does not have permissions for tracking "+shouldAsk);
-            if (requestCode == 1 && shouldAsk) {
+            if ((requestCode == 1 || requestCode == 2) && shouldAsk) {
                 AlertDialog dialog = new MaterialAlertDialogBuilder(av)
                         .setTitle("Permission denied")
                         .setMessage(av.getString(R.string.perm_ble_rationale))
