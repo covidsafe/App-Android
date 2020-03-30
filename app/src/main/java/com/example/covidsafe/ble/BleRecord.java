@@ -9,6 +9,9 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.JsonObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Entity(tableName = "ble_record_table")
 public class BleRecord {
 
@@ -56,7 +59,9 @@ public class BleRecord {
     public boolean getInfected() { return this.infected; }
 
     public String toString() {
-        return this.id+","+this.ts+","+this.uploaded+","+this.infected;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date d = new Date(this.ts);
+        return this.id+","+sdf.format(d)+","+this.uploaded+","+this.infected;
     }
 
     public JsonObject toJson() {

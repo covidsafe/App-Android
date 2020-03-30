@@ -54,6 +54,7 @@ public class Constants {
     public static int BluetoothScanIntervalInMinutes = 5;
     public static int BluetoothScanPeriodInSeconds = 10;
     public static int PullFromServerIntervalInMinutes = 60;
+    public static int LogPurgerIntervalInDays = 60;
     public static int UUIDGenerationIntervalInMinutes = 5;
     public static int TimestampDeviationInMilliseconds = 10*1000;
     public static UUID serviceUUID = UUID.fromString("0000D028-0000-1000-8000-00805F9B34FB");
@@ -73,6 +74,7 @@ public class Constants {
     public static ScheduledFuture uuidGeneartionTask;
     public static ScheduledFuture bluetoothTask;
     public static ScheduledFuture pullFromServerTask;
+    public static ScheduledFuture logPurgerTask;
     public static boolean startingToTrack = false;
     public static String SHARED_PREFENCE_NAME = "preferences";
     public static String NOTIFICATION_CHANNEL = "channel";
@@ -97,6 +99,7 @@ public class Constants {
     public static int MaxBlacklistSize = 3;
     public static int NumFilesToDisplay = 14;
     public static int SubmitThresh = 0;
+    public static int DaysOfLogsToKeep= 14;
     public static float DistanceThresholdInMeters = 1609.34f;
     public static ArrayList<BlacklistRecord> blacklist;
     public static LocationManager mLocationManager = null;
