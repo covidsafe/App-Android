@@ -2,6 +2,8 @@ package com.example.covidsafe.ble;
 
 import android.content.Context;
 
+import com.example.covidsafe.uuid.UUIDRecord;
+
 import java.util.List;
 
 public class BleDbRecordRepository {
@@ -25,9 +27,17 @@ public class BleDbRecordRepository {
 
     // You must call this on a non-UI thread or your app will throw an exception. Room ensures
     // that you're not doing any long running operations on the main thread, blocking the UI.
-    void insert(BleRecord record) {
+    public void insert(BleRecord record) {
         BleDbRecordRoomDatabase.databaseWriteExecutor.execute(() -> {
         mRecordDao.insert(record);
         });
+    }
+
+    public void deleteAll() {
+        mRecordDao.deleteAll();
+    }
+
+    public void deleteEarlierThan(long ts_thresh) {
+        mRecordDao.deleteEarlierThan(ts_thresh);
     }
 }

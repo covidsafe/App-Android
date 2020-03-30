@@ -22,6 +22,9 @@ public interface BleDbRecordDao {
     @Query("DELETE FROM ble_record_table")
     void deleteAll();
 
+    @Query("DELETE FROM ble_record_table WHERE ts <= :ts_thresh")
+    void deleteEarlierThan(long ts_thresh);
+
     @Query("SELECT * FROM ble_record_table ORDER BY ts DESC")
     List<BleRecord> getSortedRecordsByTimestamp();
 

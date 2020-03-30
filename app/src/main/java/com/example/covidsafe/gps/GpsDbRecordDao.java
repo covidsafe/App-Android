@@ -23,6 +23,9 @@ public interface GpsDbRecordDao {
     @Query("DELETE FROM gps_record_table")
     void deleteAll();
 
+    @Query("DELETE FROM gps_record_table WHERE ts <= :ts_thresh")
+    void deleteEarlierThan(long ts_thresh);
+
     @Query("SELECT * from gps_record_table ORDER BY ts")
     List<GpsRecord> getSortedRecords();
 }

@@ -126,6 +126,7 @@ public class BackgroundService extends IntentService {
         }
 
         Constants.pullFromServerTask = exec.scheduleWithFixedDelay(new PullFromServerTask(messenger,getApplicationContext()), 0, Constants.PullFromServerIntervalInMinutes, TimeUnit.MINUTES);
+        Constants.logPurgerTask = exec.scheduleWithFixedDelay(new LogPurgerTask(messenger,getApplicationContext()), 0, Constants.LogPurgerIntervalInDays, TimeUnit.DAYS);
 
         Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL)
                 .setContentTitle(getString(R.string.app_name))
