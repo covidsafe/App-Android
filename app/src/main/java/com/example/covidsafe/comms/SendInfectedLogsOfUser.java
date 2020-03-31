@@ -25,12 +25,14 @@ public class SendInfectedLogsOfUser extends AsyncTask<Void, Void, Void> {
     List<BleRecord> bleRecords;
     List<GpsRecord> gpsRecords;
     Context context;
-    String name;
+    String fname;
+    String lname;
     long dob;
 
-    public SendInfectedLogsOfUser(Context context, String name, long dob) {
+    public SendInfectedLogsOfUser(Context context, String fname, String lname, long dob) {
         this.context = context;
-        this.name = name;
+        this.fname = fname;
+        this.lname = lname;
         this.dob = dob;
     }
 
@@ -40,7 +42,7 @@ public class SendInfectedLogsOfUser extends AsyncTask<Void, Void, Void> {
         CommunicationConfig config = new CommunicationConfig(NetworkConstant.HOSTNAME, NetworkConstant.PORT, "TestServer");
         QueryBuilder queryBuilder = new QueryBuilder(config);
         queryBuilder.sendInfectedLogsOfUser(this.bleRecords, this.gpsRecords);
-        queryBuilder.sendInfectedUserData(this.name, this.dob);
+//        queryBuilder.sendInfectedUserData(this.fname, this.lname, this.dob);
     }
 
     @Override

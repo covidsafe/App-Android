@@ -16,6 +16,7 @@ import com.example.covidsafe.utils.ByteUtils;
 import com.example.covidsafe.utils.Constants;
 import com.example.covidsafe.utils.Utils;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -66,7 +67,8 @@ public class BluetoothUtils {
         Constants.blueAdapter.getBluetoothLeScanner().stopScan(BluetoothHelper.mLeScanCallback);
         for (String uuids : Constants.scannedUUIDs) {
             String[] elts = uuids.split("-");
-            Utils.bleLogToDatabase(cxt, uuids);
+            int rssi = Constants.scannedUUIDsRSSIs.get(uuids);
+            Utils.bleLogToDatabase(cxt, uuids, rssi);
         }
     }
 
@@ -85,6 +87,7 @@ public class BluetoothUtils {
                     .build();
             Log.e("ble","MKBEACON");
             Constants.scannedUUIDs = new HashSet<String>();
+            Constants.scannedUUIDsRSSIs = new HashMap<String,Integer>();
             BluetoothLeAdvertiser bluetoothLeAdvertiser = Constants.blueAdapter.getBluetoothLeAdvertiser();
             bluetoothLeAdvertiser.startAdvertising(settings, advertiseData, BluetoothHelper.advertiseCallback);
         }

@@ -8,6 +8,7 @@ import com.example.covidsafe.ble.BleDbRecordRepository;
 import com.example.covidsafe.ble.BleRecord;
 import com.example.covidsafe.gps.GpsDbRecordRepository;
 import com.example.covidsafe.gps.GpsRecord;
+import com.example.covidsafe.symptoms.SymptomsDbRecordRepository;
 import com.example.covidsafe.utils.Constants;
 
 import java.text.SimpleDateFormat;
@@ -39,9 +40,11 @@ public class LogPurgerTask implements Runnable {
 
             BleDbRecordRepository bleRepo = new BleDbRecordRepository(context);
             GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
+            SymptomsDbRecordRepository symptomsRepo = new SymptomsDbRecordRepository(context);
 
             bleRepo.deleteEarlierThan(thresh);
             gpsRepo.deleteEarlierThan(thresh);
+            symptomsRepo.deleteEarlierThan(thresh);
         }
         catch(Exception e) {
             Log.e("ble",e.getMessage());
@@ -57,7 +60,7 @@ public class LogPurgerTask implements Runnable {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             for (int i = 14; i <= 29; i++) {
                 Date d1 = sdf.parse("2020-03-" + i);
-                bleRepo.insert(new BleRecord(UUID.randomUUID().toString(), d1.getTime(), false, false));
+                bleRepo.insert(new BleRecord(UUID.randomUUID().toString(), d1.getTime(), 1));
             }
 
             Thread.sleep(1000);

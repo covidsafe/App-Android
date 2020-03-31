@@ -24,8 +24,6 @@
         android:theme="@style/AppTheme"
         android:networkSecurityConfig="@xml/network_security_config">
 
-
-
         <activity
             android:name="com.example.covidsafe.ui.Splash"
             >
@@ -35,12 +33,13 @@
         </intent-filter>
         </activity>
 
-
         <activity
             android:name="com.example.covidsafe.ui.MainActivity">
         </activity>
-
-
+        <activity
+            android:name="com.example.covidsafe.ui.onboarding.OnboardingActivity"
+            android:noHistory="true" >
+        </activity>
 
         <service android:name="com.example.covidsafe.BackgroundService"></service>
         <service android:name="com.example.covidsafe.GrpcServiceListener" android:permission="android.permission.BIND_JOB_SERVICE"></service>

@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Messenger;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.covidsafe.ui.onboarding.HealthFragment;
 import com.example.covidsafe.utils.Constants;
 import com.example.covidsafe.utils.CryptoUtils;
 import com.example.covidsafe.BackgroundService;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e("state","main activity oncreate");
         this.activity = this;
         setContentView(R.layout.activity_main);
         mContext = this;
@@ -59,13 +62,17 @@ public class MainActivity extends AppCompatActivity {
             bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_release);
 //        }
 
+        SharedPreferences.Editor editor = getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
+        editor.putBoolean(getString(R.string.onboard_enabled_pkey), false);
+        editor.commit();
+
         ServiceUtils.scheduleLookupJob(mContext);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        PermissionLogic.permissionLogic(requestCode, permissions, grantResults, this);
+        PermissionLogic.permissionLogicOnboard(requestCode, permissions, grantResults, this);
     }
 
     @Override
@@ -88,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.e("state","main activity onresume");
 
         Constants.init(this);
         initView();
@@ -101,8 +109,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void initView() {
-        if (Constants.CurrentFragment != null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.CurrentFragment).commit();
+        if (Constants.CurrentFragment != null &&
+            !Constants.CurrentFragment.toString().toLowerCase().contains("permission")) {
+            Log.e("state","mainactivity - initview "+Constants.CurrentFragment.toString());
+            if (Constants.CurrentFragment.toString().toLowerCase().contains("symptom") ||
+                Constants.CurrentFragment.toString().toLowerCase().contains("diagnosis")) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.HealthFragment).commit();
+            }
+            else {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.CurrentFragment).commit();
+            }
         } else {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.MainFragment).commit();
         }
@@ -122,18 +138,10 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.action_track:
                         selectedFragment = Constants.MainFragment;
                         break;
-                    case R.id.action_history:
-                        selectedFragment = Constants.HistoryFragment;
-                        break;
                     case R.id.action_report:
-                        selectedFragment = Constants.ReportFragment;
-                        break;
-                    case R.id.action_warning:
-//                        Log.e("logme","WARNING-nav");
-                        selectedFragment = Constants.WarningFragment;
+                        selectedFragment = Constants.HealthFragment;
                         break;
                     case R.id.action_help:
-//                        Log.e("logme","HELP-nav");
                         selectedFragment = Constants.HelpFragment;
                         break;
                     case R.id.action_settings:

@@ -4,11 +4,11 @@
     <string name="app_name_one_line">CovidSafe</string>
     <string name="help_header_text">Help</string>
     <string name="history_header_text">History</string>
-    <string name="report_header_text">Daily Symptom Report</string>
+    <string name="health_header_text">Health Reports</string>
     <string name="settings_header_text">Settings</string>
     <string name="warning_header_text">Diagnosis Report</string>
     <string name="symptom_help_text">Use this form to provide a daily report of any symptoms you have. You may submit this form once a day.</string>
-    <string name="warning_help_text">Use this form to report if you have been tested positive for COVID-19.</string>
+    <string name="warning_help_text">You\'ve received a positive diagnosis from your healthcare provider. To confirm your diagnosis, please provider your credentials below.</string>
     <string name="settings_help_text">You can use this panel to create a 1 mile radius around locations you don\'t want to be tracked. You can add up to %1$d locations.</string>
     <string name="notif_message">We are currently logging your location.</string>
 
@@ -21,6 +21,8 @@
 
     <string name="gps_enabled_pkey">gpsEnabled</string>
     <string name="ble_enabled_pkey">bleEnabled</string>
+    <string name="onboard_enabled_pkey">prefs_onboard</string>
+    <string name="notifs_enabled_pkey">prefs_notifs</string>
 
     <string name="perm_ble_rationale">Without this permission, we will be unable to capture Bluetooth information of users around you. Are you sure you want to deny this permission?</string>
     <string name="perm_ble_ask">We require access to Bluetooth information when the app is closed. Would you like to open app settings to enable this?</string>
@@ -39,6 +41,12 @@
     <string name="no">No</string>
     <string name="retry">Retry</string>
     <string name="sure">I\'m sure</string>
+
+    <string name="privacy_link"><![CDATA[<a href="http://www.uw.edu"><b>Privacy<b/></a>]]></string>
+    <string name="terms_link"><![CDATA[<a href="http://www.uw.edu"><b>Terms and Conditions<b/></a>]]></string>
+
+    <string name="lipsum">Egestas tellus rutrum tellus pellentesque eu tincidun. Odio tempor orci dapibus ultrices in iaculis nunc sed augue suspendisse.</string>
+    <string name="lipsum2">Egestas tellus rutrum tellus pellentesque eu tincidunt. Odio tempor orci dapibus ultrices in iaculis nunc sed augue.</string>
 
     <string name="symptom1">Fever</string>
     <string name="symptom2">Cough</string>

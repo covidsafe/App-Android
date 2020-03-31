@@ -1,4 +1,4 @@
-package unused;
+package com.example.covidsafe.ui;
 
 import android.os.Bundle;
 import android.util.Log;

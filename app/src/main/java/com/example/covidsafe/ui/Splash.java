@@ -7,11 +7,11 @@ import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.covidsafe.R;
+import com.example.covidsafe.ui.onboarding.OnboardingActivity;
 import com.example.covidsafe.utils.Constants;
 
 public class Splash extends AppCompatActivity {
 
-    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -20,13 +20,10 @@ public class Splash extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
-        /* New Handler to start the Menu-Activity
-         * and close this com.edushealth.earapp.Splash-Screen after some seconds.*/
         new Handler().postDelayed(new Runnable(){
             @Override
             public void run() {
-                /* Create an Intent that will start the Menu-Activity. */
-                Intent mainIntent = new Intent(Splash.this, MainActivity.class);
+                Intent mainIntent = new Intent(Splash.this, OnboardingActivity.class);
                 Splash.this.startActivity(mainIntent);
                 Splash.this.finish();
             }

@@ -1,4 +1,4 @@
-package com.example.covidsafe.ui;
+package com.example.covidsafe.ui.health;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
@@ -20,43 +20,48 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.example.covidsafe.comms.NetworkHelper;
 import com.example.covidsafe.comms.SendInfectedLogsOfUser;
+import com.example.covidsafe.ui.MainActivity;
 import com.example.covidsafe.utils.Constants;
 import com.example.covidsafe.utils.FileOperations;
 import com.example.covidsafe.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class WarningFragment extends Fragment {
+public class DiagnosisFragment extends Fragment {
 
     Button submitButton;
-    EditText nameSubmit;
+    TextInputEditText firstNameSubmit;
+    TextInputEditText lastNameSubmit;
     EditText dobSubmit;
     CheckBox certBox;
-    DatePickerDialog.OnDateSetListener mDateSetListener;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 //        Log.e("logme","WARNING");
-        View view = inflater.inflate(R.layout.fragment_warning, container, false);
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(getActivity().getString(R.string.warning_header_text));
+        View view = inflater.inflate(R.layout.health_diagnosis, container, false);
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(getActivity().getString(R.string.health_header_text));
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-//        Log.e("logme","WARNING");
-        Constants.WarningFragment = this;
+        Log.e("state","diagnosis fragment onresume");
+        Constants.DiagnosisFragment = this;
         Constants.CurrentFragment = this;
 
         submitButton = (Button)getActivity().findViewById(R.id.submitDiagnosisButton);
-        nameSubmit = (EditText) getActivity().findViewById(R.id.nameSubmit);
+        firstNameSubmit = (TextInputEditText) getActivity().findViewById(R.id.firstNameSubmit);
+        lastNameSubmit = (TextInputEditText) getActivity().findViewById(R.id.lastNameSubmit);
         dobSubmit = (EditText) getActivity().findViewById(R.id.dobSubmit);
         certBox = (CheckBox) getActivity().findViewById(R.id.certBoxWarning);
         updateUI();
@@ -68,7 +73,8 @@ public class WarningFragment extends Fragment {
             }
         });
 
-        nameSubmit.addTextChangedListener(textWatcher);
+        firstNameSubmit.addTextChangedListener(textWatcher);
+        lastNameSubmit.addTextChangedListener(textWatcher);
         dobSubmit.addTextChangedListener(textWatcher);
 
         submitButton.setOnClickListener(new Button.OnClickListener() {
@@ -142,10 +148,11 @@ public class WarningFragment extends Fragment {
     };
 
     public void validateForm() {
-        String name = nameSubmit.getText().toString().trim();
+        String fname = firstNameSubmit.getText().toString().trim();
+        String lname = lastNameSubmit.getText().toString().trim();
         String dob = dobSubmit.getText().toString().trim();
 
-        if (!name.isEmpty()&&!dob.isEmpty() && certBox.isChecked()) {
+        if (!fname.isEmpty()&&!lname.isEmpty()&&!dob.isEmpty() && certBox.isChecked()) {
             submitButton.setEnabled(true);
         }
         else {
@@ -167,7 +174,7 @@ public class WarningFragment extends Fragment {
             Log.e("ble",e.getMessage());
         }
 
-        new SendInfectedLogsOfUser(getContext(), nameSubmit.getText().toString(), dob).execute();
+        new SendInfectedLogsOfUser(getContext(), firstNameSubmit.getText().toString(), lastNameSubmit.getText().toString(), dob).execute();
 
         AlertDialog dialog = new MaterialAlertDialogBuilder(getActivity())
                 .setTitle("Thank you")
@@ -197,7 +204,7 @@ public class WarningFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Constants.WarningFragment = this;
+        Constants.DiagnosisFragment = this;
         Constants.CurrentFragment = this;
     }
 }

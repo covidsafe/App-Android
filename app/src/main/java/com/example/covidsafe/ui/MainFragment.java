@@ -1,21 +1,12 @@
 package com.example.covidsafe.ui;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
-import android.bluetooth.le.AdvertiseData;
-import android.bluetooth.le.AdvertiseSettings;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.ParcelUuid;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,7 +43,7 @@ public class MainFragment extends Fragment {
 //            view = inflater.inflate(R.layout.fragment_main_debug, container, false);
 //        }
 //        else {
-            view = inflater.inflate(R.layout.fragment_main_release, container, false);
+            view = inflater.inflate(R.layout.fragment_main, container, false);
 //        }
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(getActivity().getString(R.string.main_header_text));
@@ -62,7 +53,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.e("logme","fragment onresume");
+        Log.e("logme","main fragment onresume");
         Switch bleSwitch = (Switch)getActivity().findViewById(R.id.bleSwitch);
         bleSwitch.setChecked(Constants.BLUETOOTH_ENABLED);
         bleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
