@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Covid\nSafe</string>
     <string name="main_header_text">Covid\nSafe</string>
+    <string name="app_name_one_line">CovidSafe</string>
     <string name="help_header_text">Help</string>
     <string name="history_header_text">History</string>
     <string name="report_header_text">Daily Symptom Report</string>

@@ -50,6 +50,7 @@ public class Constants {
         Insert,ViewAll
     }
 
+    public static int SPLASH_DISPLAY_LENGTH = 2000;
     public static String AnalyticsSecret = "4cd15ae0-9294-40ba-a8b5-a8d77b76783b";
     public static int BluetoothScanIntervalInMinutes = 5;
     public static int BluetoothScanPeriodInSeconds = 10;
