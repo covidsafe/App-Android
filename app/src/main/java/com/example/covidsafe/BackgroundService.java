@@ -1,6 +1,9 @@
 package com.example.covidsafe;
 import android.app.IntentService;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.AdvertiseData;
 import android.bluetooth.le.AdvertiseSettings;
@@ -11,6 +14,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Messenger;
@@ -19,12 +26,14 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.example.covidsafe.ble.BluetoothHelper;
 import com.example.covidsafe.ble.BluetoothUtils;
 import com.example.covidsafe.ble.UUIDGeneratorTask;
 import com.example.covidsafe.comms.PullFromServerTask;
 import com.example.covidsafe.event.RegistrationEvent;
+import com.example.covidsafe.ui.MainActivity;
 import com.example.covidsafe.utils.ByteUtils;
 import com.example.covidsafe.utils.Constants;
 import com.example.covidsafe.utils.Utils;
@@ -136,7 +145,53 @@ public class BackgroundService extends IntentService {
                 .build();
         startForeground(1,notification);
 
+        //////////////////////////////////////////////////////////////////////////////////////////
+//        try {
+//            Thread.sleep(5000);
+//            createNotificationChannel();
+//            Intent fullScreenIntent = new Intent(this, MainActivity.class);
+//            PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
+//                    fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "123")
+//                    .setSmallIcon(R.drawable.ic_launcher_background)
+//                    .setContentTitle("CovidSafe Alert")
+//                    .setContentText("fullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntent")
+//                    .setPriority(NotificationCompat.PRIORITY_MAX)
+//                    .setCategory(NotificationCompat.CATEGORY_CALL)
+//                    .setFullScreenIntent(fullScreenPendingIntent, true)
+//                    .setAutoCancel(false);
+//            // Add the action button
+////                .addAction(R.drawable.ic_launcher_foreground, ctx.getString(R.string.snooze),
+////                        snoozePendingIntent);
+//
+//            Uri notification2 = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//            Ringtone r = RingtoneManager.getRingtone(this, notification2);
+//            r.play();
+//            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+//
+//            // notificationId is a unique int for each notification that you must define
+//            notificationManager.notify(13, builder.build());
+//        }
+//        catch(Exception e) {
+//            Log.e("ble",e.getMessage());
+//        }
         return START_NOT_STICKY;
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = ("name");
+            String description = ("desc");
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("123", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     //this call is not guaranteed by android system

@@ -25,27 +25,20 @@ public class BleRecord {
     private long ts;
 
     @NonNull
-    @ColumnInfo(name = "uploaded")
-    private boolean uploaded;
-
-    // may not be needed
-    @NonNull
-    @ColumnInfo(name = "infected")
-    private boolean infected;
+    @ColumnInfo(name = "rssi")
+    private int rssi;
 
     public BleRecord(@NonNull String ss) {
         String[] elts = ss.split(",");
         this.id = elts[0];
         this.ts = Long.parseLong(elts[1]);
-        this.uploaded = Boolean.parseBoolean(elts[2]);
-        this.infected = Boolean.parseBoolean(elts[3]);
+        this.rssi = Integer.parseInt(elts[2]);
     }
 
-    public BleRecord(@NonNull String id, long ts, boolean uploaded, boolean infected) {
+    public BleRecord(@NonNull String id, long ts, int rssi) {
         this.id = id;
         this.ts = ts;
-        this.uploaded = uploaded;
-        this.infected = infected;
+        this.rssi = rssi;
     }
 
     public String getId() { return this.id; }
@@ -54,14 +47,12 @@ public class BleRecord {
         return this.ts;
     }
 
-    public boolean getUploaded() { return this.uploaded; }
-
-    public boolean getInfected() { return this.infected; }
+    public int getRssi() { return this.rssi; }
 
     public String toString() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date d = new Date(this.ts);
-        return this.id+","+sdf.format(d)+","+this.uploaded+","+this.infected;
+        return this.id+","+sdf.format(d)+","+this.rssi;
     }
 
     public JsonObject toJson() {

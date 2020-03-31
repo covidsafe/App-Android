@@ -86,6 +86,7 @@ public class BluetoothHelper implements Runnable {
                             String[] elts = contactUuid.split("-");
                             Utils.sendDataToUI(messenger, "ble", elts[elts.length - 1]);
                             Constants.scannedUUIDs.add(contactUuid);
+                            Constants.scannedUUIDsRSSIs.put(contactUuid, result.getRssi());
                         }
                     }
                 }

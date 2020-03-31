@@ -18,6 +18,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.URLSpan;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +37,7 @@ import com.example.covidsafe.ble.BleOpsAsyncTask;
 import com.example.covidsafe.ble.BleRecord;
 import com.example.covidsafe.gps.GpsOpsAsyncTask;
 import com.example.covidsafe.gps.GpsRecord;
+import com.example.covidsafe.symptoms.SymptomsRecord;
 import com.example.covidsafe.uuid.UUIDOpsAsyncTask;
 import com.example.covidsafe.uuid.UUIDRecord;
 import com.google.android.material.snackbar.Snackbar;
@@ -125,8 +132,13 @@ public class Utils {
                 cxt, Constants.bleDirName, Utils.getBleLogName());
     }
 
-    public static void bleLogToDatabase(Context cxt, String id) {
-        new BleOpsAsyncTask(cxt, id).execute();
+    public static void symptomsLogToFile(Context cxt, SymptomsRecord rec) {
+        FileOperations.append(rec.toString(),
+                cxt, Constants.symptomsDirName, Utils.getSymptomsLogName());
+    }
+
+    public static void bleLogToDatabase(Context cxt, String id, int rssi) {
+        new BleOpsAsyncTask(cxt, id, rssi).execute();
     }
 
     public static void uuidLogToDatabase(Context cxt) {
@@ -326,6 +338,21 @@ public class Utils {
         return true;
     }
 
+    public static void linkify(TextView tv, String str) {
+
+        Spannable s = (Spannable) Html.fromHtml(str);
+        for (URLSpan u : s.getSpans(0, s.length(), URLSpan.class)) {
+            s.setSpan(new UnderlineSpan() {
+                public void updateDrawState(TextPaint tp) {
+                    tp.setUnderlineText(false);
+                }
+            }, s.getSpanStart(u), s.getSpanEnd(u), 0);
+        }
+        tv.setText(s);
+        tv.setMovementMethod(LinkMovementMethod.getInstance());
+
+    }
+
     public static String time() {
         DateFormat dateFormat = new SimpleDateFormat("hh:mm.ss aa");
         Date date = new Date();
@@ -352,6 +379,12 @@ public class Utils {
     }
 
     public static String getBleLogName() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        return dateFormat.format(date)+".txt";
+    }
+
+    public static String getSymptomsLogName() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         return dateFormat.format(date)+".txt";
@@ -386,7 +419,7 @@ public class Utils {
         return null;
     }
 
-    public static boolean compareDates(Date d1) {
+    public static boolean compareDates(Date d1, int submitThresh) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         try {
             Date d2 = new Date();
@@ -394,7 +427,7 @@ public class Utils {
             int diff = Utils.daysBetween(d2, d1);
             Log.e("logme", "days betweeen " + diff);
 
-            return diff >= Constants.SubmitThresh;
+            return diff >= submitThresh;
         }
         catch(Exception e) {
             Log.e("logme",e.getMessage());

@@ -12,6 +12,8 @@ import com.example.corona.comms.BLTResult;
 import com.example.corona.comms.GPSCoordinate;
 import com.example.corona.comms.InfectedUserData;
 import com.example.corona.comms.Key;
+import com.example.corona.comms.Location;
+import com.example.corona.comms.LocationTime;
 import com.example.corona.comms.Log;
 import com.example.corona.comms.Registered;
 import com.example.corona.comms.RegistrationInfo;
@@ -84,36 +86,36 @@ public class QueryBuilder {
     /*
     Public RPC Methods which can be used from the application.
      */
-    public void registerUser() {
-        // TEST Entries delete for later
-        String phone = "1234567890";
-        String key = "thisisalongkeyvalue";
-        // END TEST Entries section
-        RegistrationInfo registration_request = createRegistrationInfoRequest(key, phone);
-
-        query.getAsyncStub().registerUser(registration_request, new StreamObserver<Registered>() {
-            @Override
-            public void onNext(Registered value) {
-                RegistrationEvent event = new RegistrationEvent();
-                event.setRequestStatus(true);
-                event.setResponse(value);
-                EventBus.getDefault().post(event);
-            }
-
-            @Override
-            public void onError(Throwable t) {
-                RegistrationEvent event = new RegistrationEvent();
-                event.setRequestStatus(false);
-                event.setResponse(null);
-                EventBus.getDefault().post(event);
-            }
-
-            @Override
-            public void onCompleted() {
-
-            }
-        });
-    }
+//    public void registerUser() {
+//        // TEST Entries delete for later
+//        String phone = "1234567890";
+//        String key = "thisisalongkeyvalue";
+//        // END TEST Entries section
+//        RegistrationInfo registration_request = createRegistrationInfoRequest(key, phone);
+//
+//        query.getAsyncStub().registerUser(registration_request, new StreamObserver<Registered>() {
+//            @Override
+//            public void onNext(Registered value) {
+//                RegistrationEvent event = new RegistrationEvent();
+//                event.setRequestStatus(true);
+//                event.setResponse(value);
+//                EventBus.getDefault().post(event);
+//            }
+//
+//            @Override
+//            public void onError(Throwable t) {
+//                RegistrationEvent event = new RegistrationEvent();
+//                event.setRequestStatus(false);
+//                event.setResponse(null);
+//                EventBus.getDefault().post(event);
+//            }
+//
+//            @Override
+//            public void onCompleted() {
+//
+//            }
+//        });
+//    }
 
     public void sendInfectedLogsOfUser(List<BleRecord> bleRecords, List<GpsRecord> gpsRecords) {
         // Take the corresponding log files and process them accordingly before sending it
@@ -160,9 +162,9 @@ public class QueryBuilder {
 
             for (GpsRecord gpsRecord : gpsRecords) {
                 android.util.Log.e("ble","log gps "+gpsRecord);
-                GPSCoordinate gpsCoordinate = GPSCoordinate.newBuilder()
-                        .setLatitude(gpsRecord.getLat())
-                        .setLongitude(gpsRecord.getLongi())
+                Location gpsCoordinate = Location.newBuilder()
+                        .setLattitude((float)gpsRecord.getLat())
+                        .setLongitude((float)gpsRecord.getLongi())
                         .build();
 
                 Log log = Log.newBuilder()
@@ -182,9 +184,10 @@ public class QueryBuilder {
         android.util.Log.e("ble", "completed rpc");
     }
 
-    public void getBLTContactLogs() {
+    public void getBLTContactLogs(double latitude, double longitude, double radius, long ts) {
         AtomicBoolean receivedValidResponse = new AtomicBoolean(false);
         List<BLTContactLog> contactLogs = Collections.synchronizedList(new ArrayList<>());
+
         StreamObserver<BLTContactLog> responseObserver = new StreamObserver<BLTContactLog>() {
             @Override
             public void onNext(BLTContactLog value) {
@@ -212,24 +215,31 @@ public class QueryBuilder {
             }
         };
 
-        StreamObserver<Key> requestObserver = query.getAsyncStub().getBLTContactLogs(responseObserver);
+        LocationTime loc = LocationTime.newBuilder()
+                .setLocation(Location.newBuilder()
+                    .setLattitude((float)latitude)
+                    .setLongitude((float)longitude)
+                    .setRadiusMeters((float)radius))
+                .setTime(ts)
+                .build();
 
-        try {
-            for (int i = 0; i < 10; i++) {
-                byte[] key = SHA256.hash(Integer.toString(i));
-                Key.Builder keyBuilder = Key.newBuilder();
-                keyBuilder.setKey(ByteString.copyFrom(key));
-                Key k = keyBuilder.build();
-                android.util.Log.d("[SENDING]", ByteHelper.convertBytesToHex(key));
-                requestObserver.onNext(k);
-            }
-        } catch (RuntimeException e) {
-            requestObserver.onError(e);
-            throw e;
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        requestObserver.onCompleted();
+        query.getAsyncStub().getBLTContactLogs(loc, responseObserver);
+//        try {
+//            for (int i = 0; i < 10; i++) {
+//                byte[] key = SHA256.hash(Integer.toString(i));
+//                Key.Builder keyBuilder = Key.newBuilder();
+//                keyBuilder.setKey(ByteString.copyFrom(key));
+//                Key k = keyBuilder.build();
+//                android.util.Log.d("[SENDING]", ByteHelper.convertBytesToHex(key));
+//                requestObserver.onNext(k);
+//            }
+//        } catch (RuntimeException e) {
+//            requestObserver.onError(e);
+//            throw e;
+//        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+//        }
+//        requestObserver.onCompleted();
     }
 
 

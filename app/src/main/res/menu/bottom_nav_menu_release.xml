@@ -17,10 +17,16 @@
         app:showAsAction="always|withText" />
 
     <item
-        android:id="@+id/action_warning"
+        android:id="@+id/action_help"
         android:enabled="true"
-        android:icon="@drawable/ic_warning_black_24dp"
-        android:title="Report"
+        android:icon="@drawable/ic_help"
+        android:title="Help"
         app:showAsAction="always|withText" />
 
+    <item
+        android:id="@+id/action_settings"
+        android:enabled="true"
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:title="Settings"
+        app:showAsAction="always|withText" />
 </menu>

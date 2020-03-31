@@ -1,6 +1,7 @@
 package com.example.covidsafe.comms;
 
 public class NetworkConstant {
-    public static String HOSTNAME = "104.42.146.76";
-    public static Integer PORT = 50051;
+    //    public static String HOSTNAME = "https://covidsafe.azure-api.net/api/Trace/Query/";
+    public static String HOSTNAME = "127.0.0.1";
+    public static Integer PORT = 80;
 }
