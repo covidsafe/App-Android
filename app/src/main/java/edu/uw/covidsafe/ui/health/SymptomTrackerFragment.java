@@ -11,16 +11,18 @@ import android.widget.CheckBox;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import edu.uw.covidsafe.comms.NetworkHelper;
 import edu.uw.covidsafe.symptoms.SymptomsOpsAsyncTask;
 import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.MainActivity;
-import com.example.covidsafe.R;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import com.example.covidsafe.R;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -49,6 +51,11 @@ public class SymptomTrackerFragment extends Fragment {
 
         Constants.CurrentFragment = this;
         Constants.SymptomTrackerFragment = this;
+
+        RecyclerView view = getActivity().findViewById(R.id.recyclerView);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getActivity());
+        view.setAdapter(adapter);
+        view.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 //        TextView lastSubmitted = (TextView) getActivity().findViewById(R.id.lastSubmittedTv);
 

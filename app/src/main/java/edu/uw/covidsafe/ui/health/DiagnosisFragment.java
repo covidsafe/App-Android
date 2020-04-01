@@ -1,7 +1,9 @@
 package edu.uw.covidsafe.ui.health;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,6 +26,8 @@ import edu.uw.covidsafe.comms.SendInfectedLogsOfUser;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.utils.Constants;
 import com.example.covidsafe.R;
+
+import edu.uw.covidsafe.utils.CryptoUtils;
 import edu.uw.covidsafe.utils.Utils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
@@ -32,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 public class DiagnosisFragment extends Fragment {
 
@@ -182,6 +187,12 @@ public class DiagnosisFragment extends Fragment {
         submitButton.setEnabled(false);
 
         updateUI();
+
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        UUID seed = CryptoUtils.generateSeed();
+        editor.putString(getString(R.string.seed_pkey_zero), seed.toString());
+        editor.commit();
     }
 
     public void updateUI() {
