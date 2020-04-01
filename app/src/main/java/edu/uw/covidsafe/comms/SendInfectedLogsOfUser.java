@@ -31,7 +31,7 @@ public class SendInfectedLogsOfUser extends AsyncTask<Void, Void, Void> {
         super.onPostExecute(aVoid);
         CommunicationConfig config = new CommunicationConfig(NetworkConstant.HOSTNAME, NetworkConstant.PORT, "TestServer");
         QueryBuilder queryBuilder = new QueryBuilder(config);
-        queryBuilder.sendInfectedLogsOfUser(this.bleRecords, this.gpsRecords);
+//        queryBuilder.sendInfectedLogsOfUser(this.bleRecords, this.gpsRecords);
 //        queryBuilder.sendInfectedUserData(this.fname, this.lname, this.dob);
     }
 
