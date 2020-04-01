@@ -1,4 +1,4 @@
-package edu.example.covidsafe.crypto;
+package edu.uw.covidsafe.crypto;
 
 import org.junit.Test;
 

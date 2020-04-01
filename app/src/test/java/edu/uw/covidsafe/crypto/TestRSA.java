@@ -1,4 +1,4 @@
-package edu.example.covidsafe.crypto;
+package edu.uw.covidsafe.crypto;
 
 import edu.uw.covidsafe.crypto.RSA;
 import edu.uw.covidsafe.crypto.SHA256;
