@@ -55,8 +55,13 @@ public class MainFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.e("logme","main fragment onresume");
+
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+
+
         Switch bleSwitch = (Switch)getActivity().findViewById(R.id.bleSwitch);
-        bleSwitch.setChecked(Constants.BLUETOOTH_ENABLED);
+        bleSwitch.setChecked(prefs.getBoolean("bleEnabled", Constants.BLUETOOTH_ENABLED));
+
         bleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Constants.BLUETOOTH_ENABLED = isChecked;
@@ -67,7 +72,8 @@ public class MainFragment extends Fragment {
         });
 
         Switch gpsSwitch = (Switch)getActivity().findViewById(R.id.gpsSwitch);
-        gpsSwitch.setChecked(Constants.GPS_ENABLED);
+        gpsSwitch.setChecked(prefs.getBoolean("gpsEnabled", Constants.GPS_ENABLED));
+
         gpsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Constants.GPS_ENABLED = isChecked;
@@ -123,12 +129,15 @@ public class MainFragment extends Fragment {
                             getActivity().startActivityForResult(enableBtIntent, 0);
                         }
 
-                        if ((Constants.GPS_ENABLED || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) && !Utils.hasGpsPermissions(getActivity())) {
+                        if (Constants.GPS_ENABLED && !Utils.hasGpsPermissions(getActivity())) {
+//                            if ((Constants.GPS_ENABLED || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) && !Utils.hasGpsPermissions(getActivity())) {
                             Log.e("aa","PERMS");
                             ActivityCompat.requestPermissions(getActivity(), Constants.gpsPermissions, 2);
                         }
 
-                        if ((Constants.GPS_ENABLED || Constants.BLUETOOTH_ENABLED) && Utils.permCheck(getActivity())) {
+//                        if ((Constants.GPS_ENABLED || Constants.BLUETOOTH_ENABLED) && Utils.permCheck(getActivity())) {
+                        if ((Constants.GPS_ENABLED && Utils.gpsCheck(getActivity())) ||
+                            (Constants.BLUETOOTH_ENABLED && Utils.bleCheck(getActivity()))) {
                             Utils.startBackgroundService(getActivity());
                         }
 

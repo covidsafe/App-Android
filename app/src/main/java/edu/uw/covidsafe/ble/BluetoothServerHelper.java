@@ -36,14 +36,13 @@ public class BluetoothServerHelper {
         if (Constants.gattServer != null) {
             BluetoothGattService service = new BluetoothGattService(Constants.GATT_SERVICE_UUID, BluetoothGattService.SERVICE_TYPE_PRIMARY);
 
-            BluetoothGattCharacteristic charac1 = new BluetoothGattCharacteristic(Constants.BROADCAST_CHARACTERISTIC_UUID,
-                    BluetoothGattCharacteristic.PROPERTY_READ, BluetoothGattCharacteristic.PERMISSION_READ);
+            int permission = BluetoothGattCharacteristic.PERMISSION_WRITE | BluetoothGattCharacteristic.PERMISSION_READ;
+            int property = BluetoothGattCharacteristic.PROPERTY_WRITE|BluetoothGattCharacteristic.PROPERTY_READ;
 
-            BluetoothGattCharacteristic charac2 = new BluetoothGattCharacteristic(Constants.RECEIVER_CHARACTERISTIC_UUID,
-                    BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE, BluetoothGattCharacteristic.PERMISSION_WRITE);
+            BluetoothGattCharacteristic charac1 = new BluetoothGattCharacteristic(Constants.CHARACTERISTIC_UUID,
+                    property,permission);
 
             service.addCharacteristic(charac1);
-            service.addCharacteristic(charac2);
             Constants.gattServer.addService(service);
         }
     }
@@ -60,7 +59,7 @@ public class BluetoothServerHelper {
             public void onCharacteristicReadRequest(BluetoothDevice device, int requestId, int offset, BluetoothGattCharacteristic characteristic) {
                 super.onCharacteristicReadRequest(device, requestId, offset, characteristic);
                 Log.e("bleserver","read request "+characteristic.getUuid().toString());
-                if (characteristic.getUuid().equals(Constants.BROADCAST_CHARACTERISTIC_UUID)) {
+                if (characteristic.getUuid().equals(Constants.CHARACTERISTIC_UUID)) {
                     Log.e("bleserver","going to send "+Constants.contactUUID);
                     Constants.gattServer.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, 0,
                             ByteUtils.uuid2bytes(Constants.contactUUID));
