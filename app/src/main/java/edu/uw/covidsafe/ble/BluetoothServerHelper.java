@@ -76,7 +76,7 @@ public class BluetoothServerHelper {
                     Log.e("bleserver","data len "+value.length);
                     if (value.length == 16 || value.length == 17) {
                         byte[] uuidByte = Arrays.copyOfRange(value,0,16);
-                        String contactUuid = ByteUtils.byte2string(uuidByte);
+                        String contactUuid = ByteUtils.byte2UUIDstring(uuidByte);
                         Log.e("bleserver","contactuuid "+contactUuid);
                         int rssi = 0;
                         String[] elts = contactUuid.split("-");

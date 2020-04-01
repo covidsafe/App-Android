@@ -18,8 +18,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import edu.uw.covidsafe.comms.NetworkHelper;
@@ -107,7 +105,7 @@ public class SymptomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     }
                     else {
                         ((ButtonHolder)holder).submitButton.setEnabled(false);
-                        submitForm();
+                        submitSymptomForm();
                     }
                 }
             });
@@ -134,7 +132,7 @@ public class SymptomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         return false;
     }
 
-    public void submitForm() {
+    public void submitSymptomForm() {
         Utils.updateSymptomSubmitTime(av);
         AlertDialog dialog = new MaterialAlertDialogBuilder(av)
                 .setTitle("Thank you")

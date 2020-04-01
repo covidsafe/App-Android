@@ -3,37 +3,119 @@ import android.content.Context;
 import android.os.Messenger;
 import android.util.Log;
 
-import edu.uw.covidsafe.uuid.UUIDDbRecordRepository;
-import edu.uw.covidsafe.uuid.UUIDRecord;
+import edu.uw.covidsafe.ble.BleDbRecordRepository;
+import edu.uw.covidsafe.ble.BleRecord;
+import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
+import edu.uw.covidsafe.utils.Constants;
+import edu.uw.covidsafe.utils.CryptoUtils;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class PullFromServerTask implements Runnable {
 
     Messenger messenger;
     Context context;
+    List<BleRecord> scannedBleRecords;
+    HashSet<String> scannedBleMap;
 
     public PullFromServerTask(Messenger messenger, Context context) {
         this.messenger = messenger;
         this.context = context;
+        this.scannedBleMap = new HashSet<>();
+        this.scannedBleRecords = new ArrayList<>();
     }
 
     @Override
     public void run() {
         Log.e("uuid", "PULL FROM SERVER");
-        UUIDDbRecordRepository repo = new UUIDDbRecordRepository(context);
-        List<UUIDRecord> records = repo.getAllRecords();
-        for (UUIDRecord record : records) {
-            Log.e("uuid",record.toString());
-        }
 
-        computeConvexHull();
+//        computeConvexHull();
 
-        CommunicationConfig config = new CommunicationConfig(NetworkConstant.HOSTNAME, NetworkConstant.PORT, "TestServer");
-        QueryBuilder queryBuilder = new QueryBuilder(config);
+//        CommunicationConfig config = new CommunicationConfig(NetworkConstant.HOSTNAME, NetworkConstant.PORT, "TestServer");
+//        QueryBuilder queryBuilder = new QueryBuilder(config);
 //        queryBuilder.getBLTContactLogs(latitude, longitude, radius);
 
-        notifyUserOfExposure();
+//        notifyUserOfExposure();
+    }
+
+    public boolean isExposed(String seed, long ts) {
+        BleDbRecordRepository repo = new BleDbRecordRepository(context);
+        List<BleRecord> records = repo.getAllRecords();
+        for (BleRecord record : records) {
+            Log.e("ble",record.toString());
+            scannedBleMap.add(record.getUuid());
+            scannedBleRecords.add(record);
+        }
+
+        int diffBetweenNowAndTsInMinutes = (int)((System.currentTimeMillis() - ts)/1000/60);
+        int numSeedsToGenerate = diffBetweenNowAndTsInMinutes / Constants.UUIDGenerationIntervalInMinutes;
+
+        int uuidGenerationIntervalInMillliseconds = Constants.UUIDGenerationIntervalInMinutes*60000;
+
+        // chronologically increasing order
+        List<String> receivedUUIDs = CryptoUtils.generateUUIDFromSeed(context, seed, numSeedsToGenerate);
+
+        List<Long> matches = new ArrayList<>();
+        //record ID matches within some deviation
+        for (String receivedUUID : receivedUUIDs) {
+            if (scannedBleMap.contains(receivedUUID)) {
+                BleRecord scannedRecord = findUUIDRecord(receivedUUID);
+                if (scannedRecord != null &&
+                    Math.abs(scannedRecord.getTs() - ts) < Constants.TimestampDeviationInMilliseconds) {
+                    matches.add(ts);
+                }
+            }
+            ts += uuidGenerationIntervalInMillliseconds;
+        }
+
+        //check that we have at least two consecutive matches
+        int numConsecutiveMatchesNeeded = Constants.CDCExposureTimeInMinutes/Constants.UUIDGenerationIntervalInMinutes;
+        if (matches.size() < numConsecutiveMatchesNeeded) {
+            return false;
+        }
+
+        // take derivative
+        List<Integer> diff = new ArrayList<Integer>();
+        for (int i = 0; i < matches.size()-1; i++) {
+            diff.add((int)(matches.get(i+1)-matches.get(i)));
+        }
+
+        // counter tracks how many occurrences of
+        // uuidGenerationIntervalInMillliseconds we have in a row
+        // maxcounter is the 'max streak'
+        int streak = 0;
+        int maxStreak = 0;
+
+        //check that we have at least numConsecutiveMatchesNeeded
+        //matches of uuidGenerationIntervalInMillliseconds
+        for (int i = 0; i < diff.size(); i++) {
+            if (Math.abs(diff.get(i)-uuidGenerationIntervalInMillliseconds)
+                < Constants.TimestampDeviationInMilliseconds) {
+                streak += 1;
+                if (streak > maxStreak) {
+                    maxStreak = streak;
+                }
+            }
+            else {
+                streak -= 1;
+            }
+        }
+
+        if (maxStreak >= (numConsecutiveMatchesNeeded-1)) {
+            return true;
+        }
+        return false;
+    }
+
+    public BleRecord findUUIDRecord(String str) {
+        for (BleRecord record : this.scannedBleRecords) {
+            if (record.getUuid().equals(str)) {
+                return record;
+            }
+        }
+        return null;
     }
 
     public void computeConvexHull() {

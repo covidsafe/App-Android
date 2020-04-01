@@ -8,15 +8,20 @@ import android.security.keystore.KeyProperties;
 import android.util.Base64;
 import android.util.Log;
 
+import com.example.covidsafe.R;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
+import java.security.DigestException;
 import java.security.Key;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 
 import javax.crypto.Cipher;
@@ -25,11 +30,70 @@ import javax.crypto.CipherOutputStream;
 import javax.crypto.spec.SecretKeySpec;
 import javax.security.auth.x500.X500Principal;
 
+import edu.uw.covidsafe.crypto.SHA256;
+import edu.uw.covidsafe.seed_uuid.SeedUUIDOpsAsyncTask;
+import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
+
 public class CryptoUtils {
 
-    public static UUID generateSeed() {
+    public static void generateInitSeed(Context context, boolean refresh) {
         //TODO
-        return UUID.randomUUID();
+        String initSeed = UUID.randomUUID().toString();
+
+        SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        if (refresh) {
+            editor.putString(context.getString(R.string.seed_pkey_zero), initSeed);
+            editor.putString(context.getString(R.string.most_recent_seed_pkey), initSeed);
+        }
+        else if (!refresh && prefs.getString(context.getString(R.string.seed_pkey_zero),"").isEmpty()) {
+            editor.putString(context.getString(R.string.seed_pkey_zero), initSeed);
+            editor.putString(context.getString(R.string.most_recent_seed_pkey), initSeed);
+        }
+        editor.commit();
+    }
+
+    public static SeedUUIDRecord generateSeed(Context context, byte[] seed, boolean store) {
+        //TODO
+        try {
+            byte[] out = new byte[32];
+            SHA256.hash(seed, out);
+
+            byte[] generatedSeedBytes = Arrays.copyOfRange(out,0,16);
+            byte[] generatedIDBytes = Arrays.copyOfRange(out,16,32);
+
+            String generatedSeed = ByteUtils.byte2UUIDstring(generatedSeedBytes);
+            String generatedID = ByteUtils.byte2UUIDstring(generatedIDBytes);
+
+            SeedUUIDRecord record = new SeedUUIDRecord(System.currentTimeMillis(),
+                    generatedSeed, generatedID);
+
+            if (store) {
+                new SeedUUIDOpsAsyncTask(context, record).execute();
+
+                SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString(context.getString(R.string.most_recent_seed_pkey), generatedSeed);
+                editor.commit();
+            }
+
+            return record;
+        }
+        catch(DigestException e) {
+            Log.e("error",e.getMessage());
+        }
+        return null;
+    }
+
+    public static List<String> generateUUIDFromSeed(Context context, String s, int numSeedsToGenerate) {
+        byte[] seed = ByteUtils.string2byteArray(s);
+        ArrayList<String> uuids = new ArrayList<>();
+        for (int i = 0; i < numSeedsToGenerate; i++) {
+            SeedUUIDRecord rec = generateSeed(context, seed, false);
+            uuids.add(rec.uuid);
+        }
+        return uuids;
     }
 
     public static String encryptTimestamp(Context cxt, long ts) {

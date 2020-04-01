@@ -2,11 +2,8 @@ package edu.uw.covidsafe.comms;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import edu.uw.covidsafe.utils.ByteUtils;
-import edu.uw.covidsafe.utils.Constants;
-import edu.uw.covidsafe.uuid.UUIDDbRecordRepository;
-import edu.uw.covidsafe.uuid.UUIDRecord;
-import com.google.protobuf.ByteString;
+
+import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
 
 import java.util.HashSet;
 import java.util.List;
@@ -14,7 +11,7 @@ import java.util.List;
 public class GetBLTContactLogsAsyncTask extends AsyncTask<Void, Void, Void> {
 
     Context context;
-    List<UUIDRecord> uuidRecords;
+    List<SeedUUIDRecord> seedUuidRecords;
     HashSet<String> uuidMap;
 //    List<BLTContactLog> logs;
 

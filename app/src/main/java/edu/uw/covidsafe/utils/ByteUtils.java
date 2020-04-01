@@ -27,7 +27,7 @@ public class ByteUtils {
         return bb.array();
     }
 
-    public static String byte2string(byte[] b) {
+    public static String byte2UUIDstring(byte[] b) {
         ByteBuffer bb = ByteBuffer.wrap(b);
         UUID id = new UUID(bb.getLong(),bb.getLong());
         return id.toString();
@@ -36,6 +36,10 @@ public class ByteUtils {
     public static UUID byte2uuid(byte[] b) {
         ByteBuffer bb = ByteBuffer.wrap(b);
         return new UUID(bb.getLong(),bb.getLong());
+    }
+
+    public static byte[] string2byteArray(String s) {
+        return uuid2bytes(UUID.fromString(s));
     }
 
     public static ByteString string2bytestring(String s) {

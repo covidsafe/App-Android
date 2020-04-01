@@ -1,4 +1,4 @@
-package edu.uw.covidsafe.uuid;
+package edu.uw.covidsafe.seed_uuid;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -9,18 +9,24 @@ import edu.uw.covidsafe.utils.Utils;
 
 import java.util.UUID;
 
-public class UUIDOpsAsyncTask extends AsyncTask<Void, Void, Void> {
+public class SeedUUIDOpsAsyncTask extends AsyncTask<Void, Void, Void> {
     private Context context;
-    private UUIDRecord record;
+    private SeedUUIDRecord record;
     private Constants.UUIDDatabaseOps op;
 
-    public UUIDOpsAsyncTask(Context context, UUID uuid) {
+    public SeedUUIDOpsAsyncTask(Context context, String seed, UUID uuid) {
         this.context = context;
-        this.record = new UUIDRecord(System.currentTimeMillis(), uuid.toString());
+        this.record = new SeedUUIDRecord(System.currentTimeMillis(), seed, uuid.toString());
         this.op = Constants.UUIDDatabaseOps.Insert;
     }
 
-    public UUIDOpsAsyncTask(Context context) {
+    public SeedUUIDOpsAsyncTask(Context context, SeedUUIDRecord record) {
+        this.context = context;
+        this.record = record;
+        this.op = Constants.UUIDDatabaseOps.Insert;
+    }
+
+    public SeedUUIDOpsAsyncTask(Context context) {
         this.context = context;
         this.op = Constants.UUIDDatabaseOps.ViewAll;
     }
@@ -28,7 +34,7 @@ public class UUIDOpsAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... params) {
         Log.e("ble","doinbackground uuid "+this.op);
-        UUIDDbRecordRepository repo = new UUIDDbRecordRepository(context);
+        SeedUUIDDbRecordRepository repo = new SeedUUIDDbRecordRepository(context);
         if (this.op == Constants.UUIDDatabaseOps.Insert) {
             repo.insert(this.record);
             if (Constants.WRITE_TO_DISK) {

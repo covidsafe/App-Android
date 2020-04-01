@@ -60,6 +60,7 @@ public class Constants {
         Insert,ViewAll
     }
 
+    public static int InfectionWindowInDays = 14;
     public static int SPLASH_DISPLAY_LENGTH = 1000;
     public static String AnalyticsSecret = "4cd15ae0-9294-40ba-a8b5-a8d77b76783b";
     public static int BluetoothScanIntervalInMinutes = 5;
@@ -67,7 +68,8 @@ public class Constants {
     public static int PullFromServerIntervalInMinutes = 60;
     public static int LogPurgerIntervalInDays = 60;
     public static int UUIDGenerationIntervalInMinutes = 5;
-    public static int TimestampDeviationInMilliseconds = 10*1000;
+    public static int CDCExposureTimeInMinutes = 10;
+    public static int TimestampDeviationInMilliseconds = 1000;
     public static UUID GATT_SERVICE_UUID = UUID.fromString("8cf0282e-d80f-4eb7-a197-e3e0f965848d");
     public static UUID BROADCAST_CHARACTERISTIC_UUID = UUID.fromString("d945590b-5b09-4144-ace7-4063f95bd0bb");
     public static UUID RECEIVER_CHARACTERISTIC_UUID = UUID.fromString("bf112090-9a76-4714-9706-d56444e3fac5");

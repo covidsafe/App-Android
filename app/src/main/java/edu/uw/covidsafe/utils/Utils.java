@@ -37,8 +37,8 @@ import edu.uw.covidsafe.ble.BleRecord;
 import edu.uw.covidsafe.gps.GpsOpsAsyncTask;
 import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.symptoms.SymptomsRecord;
-import edu.uw.covidsafe.uuid.UUIDOpsAsyncTask;
-import edu.uw.covidsafe.uuid.UUIDRecord;
+import edu.uw.covidsafe.seed_uuid.SeedUUIDOpsAsyncTask;
+import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -154,11 +154,11 @@ public class Utils {
         new BleOpsAsyncTask(cxt, id, rssi).execute();
     }
 
-    public static void uuidLogToDatabase(Context cxt) {
-        new UUIDOpsAsyncTask(cxt, Constants.contactUUID).execute();
+    public static void uuidLogToDatabase(Context cxt, String seed, UUID uuid) {
+        new SeedUUIDOpsAsyncTask(cxt, seed, uuid).execute();
     }
 
-    public static void uuidLogToFile(Context cxt, UUIDRecord rec) {
+    public static void uuidLogToFile(Context cxt, SeedUUIDRecord rec) {
         FileOperations.append(rec.toString(),
                 cxt, Constants.uuidDirName, Utils.getUuidLogName());
     }
