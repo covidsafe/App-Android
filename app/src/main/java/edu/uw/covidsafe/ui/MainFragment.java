@@ -21,7 +21,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
-import edu.uw.covidsafe.ble.BluetoothHelper;
+import edu.uw.covidsafe.ble.BluetoothScanHelper;
+import edu.uw.covidsafe.ble.BluetoothServerHelper;
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.BackgroundService;
@@ -154,7 +155,7 @@ public class MainFragment extends Fragment {
                         }
                     }
 
-                    Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothHelper.advertiseCallback);
+                    Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothScanHelper.advertiseCallback);
                     BluetoothUtils.finishScan(getContext());
                     if (Constants.uploadTask!=null) {
                         Constants.uploadTask.cancel(true);
@@ -162,6 +163,7 @@ public class MainFragment extends Fragment {
                     if (Constants.uuidGeneartionTask!=null) {
                         Constants.uuidGeneartionTask.cancel(true);
                     }
+                    BluetoothServerHelper.stopServer();
                     try {
                         getContext().unregisterReceiver(BluetoothUtils.mReceiver);
                     }
