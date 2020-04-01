@@ -12,13 +12,10 @@ import android.widget.Spinner;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.covidsafe.utils.Constants;
-import com.example.covidsafe.utils.FileOperations;
-import com.example.covidsafe.ui.MainActivity;
+import edu.uw.covidsafe.utils.Constants;
+import edu.uw.covidsafe.utils.FileOperations;
+import edu.uw.covidsafe.ui.MainActivity;
 import com.example.covidsafe.R;
-import com.example.covidsafe.utils.Utils;
-
-import java.util.ArrayList;
 
 public class HistoryFragment extends Fragment {
 
