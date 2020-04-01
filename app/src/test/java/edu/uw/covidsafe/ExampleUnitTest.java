@@ -1,4 +1,4 @@
-package edu.example.covidsafe;
+package edu.uw.covidsafe;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package edu.example.covidsafe.performance;
+package edu.uw.covidsafe.performance;
 
 import org.junit.Test;
 

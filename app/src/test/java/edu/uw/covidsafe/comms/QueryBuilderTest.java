@@ -1,4 +1,4 @@
-package edu.example.covidsafe.comms;
+package edu.uw.covidsafe.comms;
 
 import edu.uw.covidsafe.comms.CommunicationConfig;
 import edu.uw.covidsafe.comms.QueryBuilder;
@@ -10,6 +10,6 @@ public class QueryBuilderTest {
     public void testUserRegistration() {
         CommunicationConfig config = new CommunicationConfig("localhost", 50051, "Localhost server");
         QueryBuilder queryBuilder = new QueryBuilder(config);
-        queryBuilder.registerUser();
+//        queryBuilder.registerUser();
     }
 }
