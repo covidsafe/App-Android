@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean(getString(R.string.onboard_enabled_pkey), false);
+        editor.commit();
 
         //seed doesn't yet exist
         //generate seed
