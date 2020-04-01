@@ -1,18 +1,16 @@
 package edu.uw.covidsafe.event;
 
-import edu.example.corona.comms.AddedLogs;
-
 public class SendInfectedLogEvent {
     private boolean requestStatus;
-    private AddedLogs response;
+//    private AddedLogs response;
 
-    public AddedLogs getResponse() {
-        return response;
-    }
+//    public AddedLogs getResponse() {
+//        return response;
+//    }
 
-    public void setResponse(AddedLogs response) {
-        this.response = response;
-    }
+//    public void setResponse(AddedLogs response) {
+//        this.response = response;
+//    }
 
     public boolean isRequestStatus() {
         return requestStatus;

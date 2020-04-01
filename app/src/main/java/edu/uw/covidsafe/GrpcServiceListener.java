@@ -4,9 +4,6 @@ import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.util.Log;
 
-import edu.example.corona.comms.AddedLogs;
-import edu.example.corona.comms.BLTContactLog;
-import edu.example.corona.comms.Registered;
 import edu.uw.covidsafe.comms.CommunicationConfig;
 import edu.uw.covidsafe.comms.GetBLTContactLogsAsyncTask;
 import edu.uw.covidsafe.comms.NetworkConstant;
@@ -40,46 +37,46 @@ public class GrpcServiceListener extends JobService {
         return true;
     }
 
-    @Subscribe(threadMode = ThreadMode.ASYNC)
-    public void onReceivedRegisterUserResponse(RegistrationEvent registrationEvent) {
-        if (registrationEvent.isRequestStatus()) {
-            Log.d("[RegisterUserResponse] ", "Successfully received a response from server");
-            Registered response = registrationEvent.getResponse();
-            boolean isSuccess = response.getSuccess();
-            if (isSuccess) {
-                Log.d("[RegisterUserResponse] ", "Successfully registered the user");
-            } else {
-                Log.e("[RegisterUserResponse] ", "Unsuccessful in user registration");
-            }
-        } else {
-            Log.e("[RegisterUserResponse] ", "Failed to reach the server. Bad Internet connection or server downtime.");
-        }
-    }
-
-    @Subscribe(threadMode = ThreadMode.ASYNC)
-    public void onReceivedSendInfectedLogEvent(SendInfectedLogEvent sendInfectedLogEvent) {
-        if (sendInfectedLogEvent.isRequestStatus()) {
-            Log.d("[SendInfectedLog]", "Successfully received a response from server");
-            AddedLogs response = sendInfectedLogEvent.getResponse();
-            boolean isSuccess = response.getSuccess();
-            if (isSuccess) {
-                Log.d("[SendInfectedLog] ", "Successfully registered the user");
-            } else {
-                Log.e("[SendInfectedLog] ", "Unsuccessful in sending infected log");
-            }
-        } else {
-            Log.e("[SendInfectedLog] ", "Failed to reach the server. Bad Internet connection or server downtime.");
-        }
-    }
-
-    @Subscribe(threadMode = ThreadMode.ASYNC)
-    public void onReceivedBLTContactLogs(ContactLogEvent contactLogEvent) {
-        if (contactLogEvent.isRequestStatus()) {
-            Log.d("[BLTContactLog] ", "Successfully received a response from server");
-            List<BLTContactLog> logs = contactLogEvent.getContactLogs();
-            new GetBLTContactLogsAsyncTask(getApplicationContext(), logs).execute();
-        } else {
-            Log.e("[BLTContactLog] ", "Failed to reach the server. Bad Internet connection or server downtime.");
-        }
-    }
+//    @Subscribe(threadMode = ThreadMode.ASYNC)
+//    public void onReceivedRegisterUserResponse(RegistrationEvent registrationEvent) {
+//        if (registrationEvent.isRequestStatus()) {
+//            Log.d("[RegisterUserResponse] ", "Successfully received a response from server");
+//            Registered response = registrationEvent.getResponse();
+//            boolean isSuccess = response.getSuccess();
+//            if (isSuccess) {
+//                Log.d("[RegisterUserResponse] ", "Successfully registered the user");
+//            } else {
+//                Log.e("[RegisterUserResponse] ", "Unsuccessful in user registration");
+//            }
+//        } else {
+//            Log.e("[RegisterUserResponse] ", "Failed to reach the server. Bad Internet connection or server downtime.");
+//        }
+//    }
+//
+//    @Subscribe(threadMode = ThreadMode.ASYNC)
+//    public void onReceivedSendInfectedLogEvent(SendInfectedLogEvent sendInfectedLogEvent) {
+//        if (sendInfectedLogEvent.isRequestStatus()) {
+//            Log.d("[SendInfectedLog]", "Successfully received a response from server");
+//            AddedLogs response = sendInfectedLogEvent.getResponse();
+//            boolean isSuccess = response.getSuccess();
+//            if (isSuccess) {
+//                Log.d("[SendInfectedLog] ", "Successfully registered the user");
+//            } else {
+//                Log.e("[SendInfectedLog] ", "Unsuccessful in sending infected log");
+//            }
+//        } else {
+//            Log.e("[SendInfectedLog] ", "Failed to reach the server. Bad Internet connection or server downtime.");
+//        }
+//    }
+//
+//    @Subscribe(threadMode = ThreadMode.ASYNC)
+//    public void onReceivedBLTContactLogs(ContactLogEvent contactLogEvent) {
+//        if (contactLogEvent.isRequestStatus()) {
+//            Log.d("[BLTContactLog] ", "Successfully received a response from server");
+//            List<BLTContactLog> logs = contactLogEvent.getContactLogs();
+//            new GetBLTContactLogsAsyncTask(getApplicationContext(), logs).execute();
+//        } else {
+//            Log.e("[BLTContactLog] ", "Failed to reach the server. Bad Internet connection or server downtime.");
+//        }
+//    }
 }

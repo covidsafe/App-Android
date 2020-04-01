@@ -1,18 +1,16 @@
 package edu.uw.covidsafe.event;
 
-import edu.example.corona.comms.UserDataSent;
-
 public class SendInfectedUserDataEvent {
     private boolean requestStatus;
-    private UserDataSent response;
+//    private UserDataSent response;
 
-    public UserDataSent getResponse() {
-        return response;
-    }
+//    public UserDataSent getResponse() {
+//        return response;
+//    }
 
-    public void setResponse(UserDataSent response) {
-        this.response = response;
-    }
+//    public void setResponse(UserDataSent response) {
+//        this.response = response;
+//    }
 
     public boolean isRequestStatus() {
         return requestStatus;
