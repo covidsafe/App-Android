@@ -12,6 +12,7 @@ import android.os.Messenger;
 import android.util.Log;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import edu.uw.covidsafe.utils.ByteUtils;
@@ -26,6 +27,7 @@ public class BluetoothServerHelper {
     public static void createServer(Context cxt, Messenger messenger) {
         BluetoothServerHelper.cxt = cxt;
         BluetoothServerHelper.messenger = messenger;
+        Constants.writtenUUIDs = new HashSet<>();
         Log.e("bleserver","createserver");
         BluetoothManager bluetoothManager =
                 (BluetoothManager) cxt.getSystemService(Context.BLUETOOTH_SERVICE);
@@ -38,7 +40,7 @@ public class BluetoothServerHelper {
                     BluetoothGattCharacteristic.PROPERTY_READ, BluetoothGattCharacteristic.PERMISSION_READ);
 
             BluetoothGattCharacteristic charac2 = new BluetoothGattCharacteristic(Constants.RECEIVER_CHARACTERISTIC_UUID,
-                    BluetoothGattCharacteristic.PROPERTY_WRITE, BluetoothGattCharacteristic.PERMISSION_WRITE);
+                    BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE, BluetoothGattCharacteristic.PERMISSION_WRITE);
 
             service.addCharacteristic(charac1);
             service.addCharacteristic(charac2);
@@ -59,6 +61,7 @@ public class BluetoothServerHelper {
                 super.onCharacteristicReadRequest(device, requestId, offset, characteristic);
                 Log.e("bleserver","read request "+characteristic.getUuid().toString());
                 if (characteristic.getUuid().equals(Constants.BROADCAST_CHARACTERISTIC_UUID)) {
+                    Log.e("bleserver","going to send "+Constants.contactUUID);
                     Constants.gattServer.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, 0,
                             ByteUtils.uuid2bytes(Constants.contactUUID));
                 }
@@ -70,17 +73,19 @@ public class BluetoothServerHelper {
                 Log.e("bleserver","write request "+characteristic.getUuid().toString());
 
                 if (value != null) {
+                    Log.e("bleserver","data len "+value.length);
                     if (value.length == 16 || value.length == 17) {
                         byte[] uuidByte = Arrays.copyOfRange(value,0,16);
                         String contactUuid = ByteUtils.byte2string(uuidByte);
-
+                        Log.e("bleserver","contactuuid "+contactUuid);
                         int rssi = 0;
                         String[] elts = contactUuid.split("-");
                         Utils.sendDataToUI(messenger, "ble", elts[elts.length - 1]);
 
                         if (value.length == 17) {
-                            rssi = -value[17];
+                            rssi = -value[16];
                         }
+                        Log.e("bleserver","rssi "+rssi);
 
                         if (!Constants.writtenUUIDs.contains(contactUuid)) {
                             Constants.writtenUUIDs.add(contactUuid);
@@ -92,6 +97,9 @@ public class BluetoothServerHelper {
                             Log.e("bleserver",b+"");
                         }
                     }
+                }
+                else {
+                    Log.e("bleserver","write data is null");
                 }
             }
 

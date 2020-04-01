@@ -56,8 +56,6 @@ public class BluetoothScanHelper implements Runnable {
 
         Log.e("ble","INIT SCAN "+(messenger==null));
         Constants.blueAdapter.getBluetoothLeScanner().startScan(filters, builder.build(), mLeScanCallback);
-
-        Log.e("bleserver","startserver");
     }
 
     public static ScanCallback mLeScanCallback =
