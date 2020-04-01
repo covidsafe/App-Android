@@ -432,11 +432,24 @@ public class Utils {
 //        return null;
 //    }
 
-    public static boolean canSubmitSymptoms(Activity av, int submitThresh) {
+    public static boolean canSubmitSymptoms(Context av, int submitThresh) {
         SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         long subDate = prefs.getLong(av.getString(R.string.symptom_submission_date_pkey), 0L);
+        if (subDate == 0) {
+            return true;
+        }
         Date dd = new Date(subDate);
         return compareDates(dd, submitThresh);
+    }
+
+    public static String getLastSymptomReportDate(Context av) {
+        DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy hh:mm aa");
+        SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        long subDate = prefs.getLong(av.getString(R.string.symptom_submission_date_pkey), 0L);
+        if (subDate == 0) {
+            return "";
+        }
+        return "Last submitted: "+dateFormat.format(subDate);
     }
 
     public static void updateSymptomSubmitTime(Activity av) {

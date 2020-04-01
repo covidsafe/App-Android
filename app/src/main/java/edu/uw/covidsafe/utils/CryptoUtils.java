@@ -29,7 +29,7 @@ public class CryptoUtils {
 
     public static UUID generateSeed() {
         //TODO
-        return null;
+        return UUID.randomUUID();
     }
 
     public static String encryptTimestamp(Context cxt, long ts) {

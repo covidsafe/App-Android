@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/parent_layout2"
+    android:paddingBottom="15dp"
+    android:paddingTop="15dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <CheckBox
+        android:id="@+id/certBoxReport"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/certText"
+        app:layout_constraintBottom_toTopOf="@+id/submitForm"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/guidelineV5" />
 
     <Button
         android:id="@+id/submitClear"
@@ -25,7 +39,7 @@
         android:text="Submit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/guidelineV52" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -59,5 +73,16 @@
         android:orientation="vertical"
         app:layout_constraintGuide_begin="20dp"
         app:layout_constraintGuide_percent="0.95" />
+
+    <TextView
+        android:id="@+id/lastSubmittedDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="Last submitted: "
+        app:layout_constraintBottom_toTopOf="@+id/certBoxReport"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
+        app:layout_constraintStart_toStartOf="@+id/guidelineV5"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
