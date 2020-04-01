@@ -21,10 +21,10 @@ import java.util.List;
 public class GrpcServiceListener extends JobService {
     @Override
     public boolean onStartJob(JobParameters params) {
-        EventBus.getDefault().register(this);
-        Log.d("[GrpcServiceListener]", "Starting request for the listener");
-        CommunicationConfig config = new CommunicationConfig(NetworkConstant.HOSTNAME, NetworkConstant.PORT, "TestServer");
-        QueryBuilder queryBuilder = new QueryBuilder(config);
+//        EventBus.getDefault().register(this);
+//        Log.d("[GrpcServiceListener]", "Starting request for the listener");
+//        CommunicationConfig config = new CommunicationConfig(NetworkConstant.HOSTNAME, NetworkConstant.PORT, "TestServer");
+//        QueryBuilder queryBuilder = new QueryBuilder(config);
 //        queryBuilder.registerUser();
 //        queryBuilder.sendInfectedLogsOfUser();
 //        queryBuilder.getBLTContactLogs();
