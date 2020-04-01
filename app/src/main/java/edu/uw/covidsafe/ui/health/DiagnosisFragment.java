@@ -1,9 +1,7 @@
 package edu.uw.covidsafe.ui.health;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,7 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import edu.uw.covidsafe.comms.SendInfectedLogsOfUser;
+import edu.uw.covidsafe.comms.SendInfectedUserData;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.utils.Constants;
 import com.example.covidsafe.R;
@@ -36,7 +34,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.UUID;
 
 public class DiagnosisFragment extends Fragment {
 
@@ -83,7 +80,7 @@ public class DiagnosisFragment extends Fragment {
         submitButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submitForm();
+                submitDiagnosisForm();
             }
         });
 
@@ -162,7 +159,7 @@ public class DiagnosisFragment extends Fragment {
         }
     }
 
-    public void submitForm() {
+    public void submitDiagnosisForm() {
         Utils.markDiagnosisSubmitted(getActivity());
         String rawdob = dobSubmit.getText().toString();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -176,7 +173,9 @@ public class DiagnosisFragment extends Fragment {
             Log.e("ble",e.getMessage());
         }
 
-        new SendInfectedLogsOfUser(getContext(), firstNameSubmit.getText().toString(), lastNameSubmit.getText().toString(), dob).execute();
+        new SendInfectedUserData(getContext(),
+                firstNameSubmit.getText().toString(),
+                lastNameSubmit.getText().toString(), dob).execute();
 
         AlertDialog dialog = new MaterialAlertDialogBuilder(getActivity())
                 .setTitle("Thank you")
@@ -188,11 +187,7 @@ public class DiagnosisFragment extends Fragment {
 
         updateUI();
 
-        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        UUID seed = CryptoUtils.generateSeed();
-        editor.putString(getString(R.string.seed_pkey_zero), seed.toString());
-        editor.commit();
+        CryptoUtils.generateInitSeed(getContext(), true);
     }
 
     public void updateUI() {

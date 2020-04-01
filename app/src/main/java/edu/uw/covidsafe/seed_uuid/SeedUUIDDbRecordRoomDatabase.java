@@ -1,4 +1,4 @@
-package edu.uw.covidsafe.uuid;
+package edu.uw.covidsafe.seed_uuid;
 
 import android.content.Context;
 
@@ -11,13 +11,13 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {UUIDRecord.class}, version = 1, exportSchema = false)
-public abstract class UUIDDbRecordRoomDatabase extends RoomDatabase {
+@Database(entities = {SeedUUIDRecord.class}, version = 1, exportSchema = false)
+public abstract class SeedUUIDDbRecordRoomDatabase extends RoomDatabase {
 
     private static final int NUMBER_OF_THREADS = 4;
     static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
-    private static volatile UUIDDbRecordRoomDatabase INSTANCE;
+    private static volatile SeedUUIDDbRecordRoomDatabase INSTANCE;
     private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
@@ -37,12 +37,12 @@ public abstract class UUIDDbRecordRoomDatabase extends RoomDatabase {
         }
     };
 
-    static UUIDDbRecordRoomDatabase getDatabase(final Context context) {
+    static SeedUUIDDbRecordRoomDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
-            synchronized (UUIDDbRecordRoomDatabase.class) {
+            synchronized (SeedUUIDDbRecordRoomDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context,
-                            UUIDDbRecordRoomDatabase.class, "uuid_record_database")
+                            SeedUUIDDbRecordRoomDatabase.class, "seed_uuid_record_table")
                             .build();
                 }
             }
@@ -51,5 +51,5 @@ public abstract class UUIDDbRecordRoomDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    public abstract UUIDDbRecordDao recordDao();
+    public abstract SeedUUIDDbRecordDao recordDao();
 }

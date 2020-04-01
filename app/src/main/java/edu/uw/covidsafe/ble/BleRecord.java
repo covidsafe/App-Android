@@ -1,7 +1,5 @@
 package edu.uw.covidsafe.ble;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -17,8 +15,8 @@ public class BleRecord {
 
     @PrimaryKey
     @NonNull
-    @ColumnInfo(name = "id")
-    private String id;
+    @ColumnInfo(name = "uuid")
+    private String uuid;
 
     @NonNull
     @ColumnInfo(name = "ts")
@@ -30,18 +28,18 @@ public class BleRecord {
 
     public BleRecord(@NonNull String ss) {
         String[] elts = ss.split(",");
-        this.id = elts[0];
+        this.uuid = elts[0];
         this.ts = Long.parseLong(elts[1]);
         this.rssi = Integer.parseInt(elts[2]);
     }
 
-    public BleRecord(@NonNull String id, long ts, int rssi) {
-        this.id = id;
+    public BleRecord(@NonNull String uuid, long ts, int rssi) {
+        this.uuid = uuid;
         this.ts = ts;
         this.rssi = rssi;
     }
 
-    public String getId() { return this.id; }
+    public String getUuid() { return this.uuid; }
 
     public long getTs() {
         return this.ts;
@@ -52,12 +50,12 @@ public class BleRecord {
     public String toString() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date d = new Date(this.ts);
-        return this.id+","+sdf.format(d)+","+this.rssi;
+        return this.uuid +","+sdf.format(d)+","+this.rssi;
     }
 
     public JsonObject toJson() {
         JsonObject obj = new JsonObject();
-        obj.addProperty("id",id);
+        obj.addProperty("id", uuid);
         obj.addProperty("ts",ts);
         return obj;
     }

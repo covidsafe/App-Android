@@ -24,6 +24,7 @@
     <string name="ble_enabled_pkey">bleEnabled</string>
     <string name="onboard_enabled_pkey">prefs_onboard</string>
     <string name="notifs_enabled_pkey">prefs_notifs</string>
+    <string name="most_recent_seed_pkey">most_recent_seed_pkey</string>
     <string name="diagnosis_pkey">prefs_diagnosis_date</string>
     <string name="symptom_submission_date_pkey">symptom_submission_date_pkey</string>
     <string name="seed_pkey_zero">seed_pkey_zero</string>

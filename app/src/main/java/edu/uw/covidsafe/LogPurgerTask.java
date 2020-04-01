@@ -8,6 +8,7 @@ import edu.uw.covidsafe.ble.BleDbRecordRepository;
 import edu.uw.covidsafe.ble.BleRecord;
 import edu.uw.covidsafe.gps.GpsDbRecordRepository;
 import edu.uw.covidsafe.gps.GpsRecord;
+import edu.uw.covidsafe.seed_uuid.SeedUUIDDbRecordRepository;
 import edu.uw.covidsafe.symptoms.SymptomsDbRecordRepository;
 import edu.uw.covidsafe.utils.Constants;
 
@@ -41,10 +42,12 @@ public class LogPurgerTask implements Runnable {
             BleDbRecordRepository bleRepo = new BleDbRecordRepository(context);
             GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
             SymptomsDbRecordRepository symptomsRepo = new SymptomsDbRecordRepository(context);
+            SeedUUIDDbRecordRepository seedUUIDRepo = new SeedUUIDDbRecordRepository(context);
 
             bleRepo.deleteEarlierThan(thresh);
             gpsRepo.deleteEarlierThan(thresh);
             symptomsRepo.deleteEarlierThan(thresh);
+            seedUUIDRepo.deleteEarlierThan(thresh);
         }
         catch(Exception e) {
             Log.e("ble",e.getMessage());

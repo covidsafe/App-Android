@@ -63,11 +63,8 @@ public class MainActivity extends AppCompatActivity {
         editor.putBoolean(getString(R.string.onboard_enabled_pkey), false);
 
         //seed doesn't yet exist
-        if (prefs.getString(getString(R.string.seed_pkey_zero),"").isEmpty()) {
-            UUID seed = CryptoUtils.generateSeed();
-            editor.putString(getString(R.string.seed_pkey_zero), seed.toString());
-        }
-        editor.commit();
+        //generate seed
+        CryptoUtils.generateInitSeed(getApplicationContext(),false);
 
         ServiceUtils.scheduleLookupJob(mContext);
     }
