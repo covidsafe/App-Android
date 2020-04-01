@@ -25,6 +25,7 @@
     <string name="notifs_enabled_pkey">prefs_notifs</string>
     <string name="diagnosis_pkey">prefs_diagnosis_date</string>
     <string name="symptom_submission_date_pkey">symptom_submission_date_pkey</string>
+    <string name="seed_pkey_zero">seed_pkey_zero</string>
 
     <string name="perm_ble_rationale">Without this permission, we will be unable to capture Bluetooth information of users around you. Are you sure you want to deny this permission?</string>
     <string name="perm_ble_ask">We require access to Bluetooth information when the app is closed. Would you like to open app settings to enable this?</string>

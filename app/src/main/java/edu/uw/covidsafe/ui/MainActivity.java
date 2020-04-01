@@ -23,6 +23,8 @@ import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
 
+import java.util.UUID;
+
 
 public class MainActivity extends AppCompatActivity {
     private Context mContext;
@@ -56,8 +58,15 @@ public class MainActivity extends AppCompatActivity {
             bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_release);
 //        }
 
-        SharedPreferences.Editor editor = getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
+        SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean(getString(R.string.onboard_enabled_pkey), false);
+
+        //seed doesn't yet exist
+        if (prefs.getString(getString(R.string.seed_pkey_zero),"").isEmpty()) {
+            UUID seed = CryptoUtils.generateSeed();
+            editor.putString(getString(R.string.seed_pkey_zero), seed.toString());
+        }
         editor.commit();
 
         ServiceUtils.scheduleLookupJob(mContext);

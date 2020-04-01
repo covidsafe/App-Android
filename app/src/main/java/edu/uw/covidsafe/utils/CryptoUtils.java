@@ -17,6 +17,7 @@ import java.security.KeyStore;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.UUID;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
@@ -25,6 +26,11 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.security.auth.x500.X500Principal;
 
 public class CryptoUtils {
+
+    public static UUID generateSeed() {
+        //TODO
+        return null;
+    }
 
     public static String encryptTimestamp(Context cxt, long ts) {
         return encryptHelper(cxt, ByteUtils.longToBytes(ts));
