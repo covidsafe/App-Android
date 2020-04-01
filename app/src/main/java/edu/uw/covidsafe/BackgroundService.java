@@ -18,6 +18,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.example.covidsafe.R;
+
+import edu.uw.covidsafe.ble.BluetoothServerHelper;
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.ble.UUIDGeneratorTask;
 import edu.uw.covidsafe.comms.PullFromServerTask;
@@ -89,7 +91,10 @@ public class BackgroundService extends IntentService {
 
             Log.e("ble","spin out task "+(messenger==null));
             BluetoothUtils.startBluetoothScan(getApplicationContext(), messenger);
+            BluetoothServerHelper.createServer(getApplicationContext(), messenger);
             Log.e("ble","make beacon");
+
+            //initially start beacon
             BluetoothUtils.mkBeacon();
             Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(new UUIDGeneratorTask(messenger, getApplicationContext()), 0, Constants.UUIDGenerationIntervalInMinutes, TimeUnit.MINUTES);
         }

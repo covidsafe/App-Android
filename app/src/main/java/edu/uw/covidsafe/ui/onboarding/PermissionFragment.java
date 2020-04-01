@@ -14,10 +14,14 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.covidsafe.R;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
@@ -45,6 +49,15 @@ public class PermissionFragment extends Fragment {
         Log.e("state","permission fragment on resume");
         Constants.CurrentFragment = this;
         Constants.PermissionsFragment = this;
+
+        if (!BluetoothUtils.checkBluetoothSupport(getActivity())) {
+            AlertDialog dialog = new MaterialAlertDialogBuilder(getActivity())
+                    .setTitle("Unsupported device")
+                    .setMessage("Your device does not support Bluetooth.")
+                    .setPositiveButton(R.string.ok,null)
+                    .setCancelable(false).create();
+            dialog.show();
+        }
 
         finish = (Button) getActivity().findViewById(R.id.permissionsFinish);
         finish.setOnClickListener(new View.OnClickListener() {

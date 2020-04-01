@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattServer;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
@@ -67,7 +68,10 @@ public class Constants {
     public static int LogPurgerIntervalInDays = 60;
     public static int UUIDGenerationIntervalInMinutes = 5;
     public static int TimestampDeviationInMilliseconds = 10*1000;
-    public static UUID serviceUUID = UUID.fromString("0000D028-0000-1000-8000-00805F9B34FB");
+    public static UUID GATT_SERVICE_UUID = UUID.fromString("8cf0282e-d80f-4eb7-a197-e3e0f965848d");
+    public static UUID BROADCAST_CHARACTERISTIC_UUID = UUID.fromString("d945590b-5b09-4144-ace7-4063f95bd0bb");
+    public static UUID RECEIVER_CHARACTERISTIC_UUID = UUID.fromString("bf112090-9a76-4714-9706-d56444e3fac5");
+    public static UUID BEACON_SERVICE_UUID = UUID.fromString("0000E028-0000-1000-8000-00805F9B34FB");
     public static UUID contactUUID = null;
 
     public static String insertAsyncTaskRunning = "";
@@ -77,13 +81,15 @@ public class Constants {
     public static boolean BLUETOOTH_ENABLED = true;
     public static boolean LOG_TO_DISK = false;
 
+    public static BluetoothGattServer gattServer;
     public static BluetoothDevice device;
     public static BluetoothGatt gatt;
     public static BluetoothAdapter blueAdapter;
     public static int statusSubmitted = -1;
     public static ScheduledFuture uploadTask;
     public static ScheduledFuture uuidGeneartionTask;
-    public static ScheduledFuture bluetoothTask;
+    public static ScheduledFuture bluetoothScanTask;
+    public static ScheduledFuture bluetoothServerTask;
     public static ScheduledFuture pullFromServerTask;
     public static ScheduledFuture logPurgerTask;
     public static boolean startingToTrack = false;
@@ -121,6 +127,7 @@ public class Constants {
     public static BackgroundService.LocationListener[] locListeners = new BackgroundService.LocationListener[2];
     public static HashSet<String> scannedUUIDs;
     public static HashMap<String,Integer> scannedUUIDsRSSIs;
+    public static HashSet<String> writtenUUIDs;
 
     public static String[] gpsPermissions= {
             Manifest.permission.ACCESS_BACKGROUND_LOCATION,

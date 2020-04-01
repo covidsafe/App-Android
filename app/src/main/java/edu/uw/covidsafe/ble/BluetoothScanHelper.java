@@ -19,7 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class BluetoothHelper implements Runnable {
+public class BluetoothScanHelper implements Runnable {
 
     public static AdvertiseCallback advertiseCallback = new AdvertiseCallback() {
         @Override
@@ -36,7 +36,7 @@ public class BluetoothHelper implements Runnable {
     static Context cxt;
     static Messenger messenger;
 
-    public BluetoothHelper(Context cxt, Messenger messenger) {
+    public BluetoothScanHelper(Context cxt, Messenger messenger) {
         this.cxt = cxt;
         this.messenger = messenger;
     }
@@ -49,13 +49,15 @@ public class BluetoothHelper implements Runnable {
         builder.setScanMode(ScanSettings.SCAN_MODE_LOW_POWER);
 
         ScanFilter filter = new ScanFilter.Builder()
-                .setServiceUuid(new ParcelUuid(Constants.serviceUUID))
+                .setServiceUuid(new ParcelUuid(Constants.BEACON_SERVICE_UUID))
                 .build();
         List<ScanFilter> filters = new LinkedList<ScanFilter>();
         filters.add(filter);
 
         Log.e("ble","INIT SCAN "+(messenger==null));
         Constants.blueAdapter.getBluetoothLeScanner().startScan(filters, builder.build(), mLeScanCallback);
+
+        Log.e("bleserver","startserver");
     }
 
     public static ScanCallback mLeScanCallback =
@@ -64,7 +66,7 @@ public class BluetoothHelper implements Runnable {
                 public void onScanResult(int callbackType, final ScanResult result) {
                     super.onScanResult(callbackType, result);
                     Map<ParcelUuid, byte[]> map = result.getScanRecord().getServiceData();
-                    byte[] data = map.get(new ParcelUuid(Constants.serviceUUID));
+                    byte[] data = map.get(new ParcelUuid(Constants.BEACON_SERVICE_UUID));
                     Log.e("ble","onscanresult "+(data==null));
                     if (data != null && data.length == 16) {
                         String contactUuid = ByteUtils.byte2string(data);
