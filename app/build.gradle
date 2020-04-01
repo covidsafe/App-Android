@@ -90,7 +90,7 @@ dependencies {
     androidTestImplementation "androidx.room:room-testing:2.2.1"
 
     implementation 'org.greenrobot:eventbus:3.2.0'
-    compile group: 'commons-codec', name: 'commons-codec', version: '1.14'
+    implementation group: 'commons-codec', name: 'commons-codec', version: '1.14'
     implementation group: 'io.grpc', name: 'grpc-netty', version: '1.28.0'
 
     def appCenterSdkVersion = '3.1.0'
