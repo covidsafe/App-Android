@@ -11,6 +11,7 @@ import android.content.Context;
 import android.os.Messenger;
 import android.util.Log;
 
+import java.util.Arrays;
 import java.util.List;
 
 import edu.uw.covidsafe.utils.ByteUtils;
@@ -69,13 +70,20 @@ public class BluetoothServerHelper {
                 Log.e("bleserver","write request "+characteristic.getUuid().toString());
 
                 if (value != null) {
-                    if (value.length == 16) {
-                        String contactUuid = ByteUtils.byte2string(value);
+                    if (value.length == 16 || value.length == 17) {
+                        byte[] uuidByte = Arrays.copyOfRange(value,0,16);
+                        String contactUuid = ByteUtils.byte2string(uuidByte);
+
+                        int rssi = 0;
+                        String[] elts = contactUuid.split("-");
+                        Utils.sendDataToUI(messenger, "ble", elts[elts.length - 1]);
+
+                        if (value.length == 17) {
+                            rssi = -value[17];
+                        }
+
                         if (!Constants.writtenUUIDs.contains(contactUuid)) {
-                            String[] elts = contactUuid.split("-");
-                            Utils.sendDataToUI(messenger, "ble", elts[elts.length - 1]);
                             Constants.writtenUUIDs.add(contactUuid);
-                            int rssi = 0;
                             Utils.bleLogToDatabase(cxt, contactUuid, rssi);
                         }
                     }

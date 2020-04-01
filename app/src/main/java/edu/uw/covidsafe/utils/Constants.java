@@ -71,7 +71,7 @@ public class Constants {
     public static UUID GATT_SERVICE_UUID = UUID.fromString("8cf0282e-d80f-4eb7-a197-e3e0f965848d");
     public static UUID BROADCAST_CHARACTERISTIC_UUID = UUID.fromString("d945590b-5b09-4144-ace7-4063f95bd0bb");
     public static UUID RECEIVER_CHARACTERISTIC_UUID = UUID.fromString("bf112090-9a76-4714-9706-d56444e3fac5");
-    public static UUID BEACON_SERVICE_UUID = UUID.fromString("0000E028-0000-1000-8000-00805F9B34FB");
+    public static UUID BEACON_SERVICE_UUID = UUID.fromString("0000D028-0000-1000-8000-00805F9B34FB");
     public static UUID contactUUID = null;
 
     public static String insertAsyncTaskRunning = "";
