@@ -63,6 +63,7 @@ public class Constants {
         Insert,ViewAll
     }
 
+    public static int rssiCutoff = -82;
     public static int MaximumGpsPrecisionAllowed = 5;
     public static int DefaultGpsCoarsenessInDecimalPoints = 2;
     public static int InfectionWindowInDays = 14;
