@@ -43,6 +43,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import org.apache.commons.codec.binary.StringUtils;
+
 import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -51,6 +53,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import io.netty.util.internal.StringUtil;
 import unused.BlacklistRecord;
 
 public class Utils {
@@ -289,9 +292,8 @@ public class Utils {
 
     public static double getCoarseGpsCoord(double coord) {
         // TODO
-        DecimalFormat df = new DecimalFormat(".##");
-        df.setRoundingMode(RoundingMode.DOWN);
-        return Double.parseDouble(df.format(coord));
+//        GpsCoarsenessInDecimalPoints
+        return Double.parseDouble(Constants.gpsCoarsenessDecimalFormat.format(coord));
     }
 
     public static void sendDataToUI(Messenger messenger, String tag, String log) {

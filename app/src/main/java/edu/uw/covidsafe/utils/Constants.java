@@ -19,6 +19,9 @@ import edu.uw.covidsafe.ui.MainFragment;
 import edu.uw.covidsafe.ui.health.SymptomTrackerFragment;
 import edu.uw.covidsafe.ui.health.DiagnosisFragment;
 
+import java.math.RoundingMode;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -60,6 +63,8 @@ public class Constants {
         Insert,ViewAll
     }
 
+    public static DecimalFormat gpsCoarsenessDecimalFormat;
+    public static int GpsCoarsenessInDecimalPoints = 2;
     public static int InfectionWindowInDays = 14;
     public static int SPLASH_DISPLAY_LENGTH = 1000;
     public static String AnalyticsSecret = "4cd15ae0-9294-40ba-a8b5-a8d77b76783b";
@@ -166,5 +171,12 @@ public class Constants {
         Constants.BLUETOOTH_ENABLED = prefs.getBoolean(av.getString(R.string.ble_enabled_pkey), Constants.BLUETOOTH_ENABLED);
         Constants.GPS_ENABLED = prefs.getBoolean(av.getString(R.string.gps_enabled_pkey), Constants.GPS_ENABLED);
         Constants.NOTIFS_ENABLED = prefs.getBoolean(av.getString(R.string.notifs_enabled_pkey), Constants.NOTIFS_ENABLED);
+
+        String gpsCoarsenessFormat=".";
+        for (int i = 0; i < GpsCoarsenessInDecimalPoints; i++) {
+            gpsCoarsenessFormat += "#";
+        }
+        gpsCoarsenessDecimalFormat = new DecimalFormat(gpsCoarsenessFormat);
+        gpsCoarsenessDecimalFormat.setRoundingMode(RoundingMode.DOWN);
     }
 }
