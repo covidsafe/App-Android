@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import edu.uw.covidsafe.comms.SendInfectedUserData;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
 import com.example.covidsafe.R;
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         AppCenter.start(getApplication(), Constants.AnalyticsSecret, Analytics.class, Crashes.class);
         Crashes.setEnabled(true);
 
-        CryptoUtils.keyInit(this);
+//        CryptoUtils.keyInit(this);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 //        if (Constants.DEBUG) {
 //            bottomNavigationView.getMenu().clear();
@@ -67,7 +68,9 @@ public class MainActivity extends AppCompatActivity {
         //generate seed
         CryptoUtils.generateInitSeed(getApplicationContext(), false);
 
-        ServiceUtils.scheduleLookupJob(mContext);
+        new SendInfectedUserData(this, "fname","lanem", System.currentTimeMillis()).execute();
+
+//        ServiceUtils.scheduleLookupJob(mContext);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)

@@ -35,8 +35,8 @@ public class UUIDGeneratorTask implements Runnable {
         String mostRecentSeedStr = prefs.getString(context.getString(R.string.most_recent_seed_pkey), "");
         byte[] mostRecentSeed = ByteUtils.string2byteArray(mostRecentSeedStr);
 
-        UUID generatedUUID = CryptoUtils.generateSeed(context, mostRecentSeed, true);
-        Constants.contactUUID = generatedUUID;
+        SeedUUIDRecord generatedRecord = CryptoUtils.generateSeed(context, mostRecentSeed);
+        Constants.contactUUID = UUID.fromString(generatedRecord.uuid);
 
         Utils.sendDataToUI(messenger, "uuid",Constants.contactUUID.toString());
 

@@ -16,21 +16,19 @@ import edu.uw.covidsafe.utils.CryptoUtils;
 import edu.uw.covidsafe.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
 
 public class PullFromServerTask implements Runnable {
 
     Messenger messenger;
     Context context;
-    List<BleRecord> scannedBleRecords;
-    HashSet<String> scannedBleMap;
+    HashMap<String,Long> scannedBleMap;
 
     public PullFromServerTask(Messenger messenger, Context context) {
         this.messenger = messenger;
         this.context = context;
-        this.scannedBleMap = new HashSet<>();
-        this.scannedBleRecords = new ArrayList<>();
+        this.scannedBleMap = new HashMap<>();
     }
 
     @Override
@@ -69,9 +67,20 @@ public class PullFromServerTask implements Runnable {
         double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(), currentPrecision);
         double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(), currentPrecision);
 
-        List<SeedUUIDRecord> records = getMessages(preciseLat,preciseLong,lastQueryTime);
-        for (SeedUUIDRecord record : records) {
-            if (isExposed(record.seed, record.ts)) {
+        List<SeedUUIDRecord> seedUUIDRecords = getMessages(preciseLat,preciseLong,lastQueryTime);
+
+        // TODO: just do this once, don't do it for every person
+        // set intersection between ble IDs and received IDs, don't do a linear for loop
+        // check that the set intersection will work.
+        BleDbRecordRepository repo = new BleDbRecordRepository(context);
+        List<BleRecord> bleRecords = repo.getAllRecords();
+        for (BleRecord bleRecord : bleRecords) {
+            Log.e("ble",bleRecord.toString());
+            scannedBleMap.put(bleRecord.getUuid(), bleRecord.getTs());
+        }
+
+        for (SeedUUIDRecord seedUUIDRecord : seedUUIDRecords) {
+            if (isExposed(seedUUIDRecord.seed, seedUUIDRecord.ts)) {
                 notifyUserOfExposure();
                 break;
             }
@@ -79,37 +88,51 @@ public class PullFromServerTask implements Runnable {
 
         editor.putLong(context.getString(R.string.time_of_last_query_pkey), System.currentTimeMillis());
         editor.commit();
+
+        String announcement = announce(0,0,0,0,0);
+        if (!announcement.isEmpty()) {
+            makeAnnouncement(announcement);
+        }
     }
 
+    // sync blockig op
     public int howBig(double lat, double longi, long ts) {
         return 0;
     }
 
     public List<SeedUUIDRecord> getMessages(double lat, double longi, long ts) {
         // return list of seeds and timestamps
+        // check if the areas returned in these messages match our GPS timestamps
         return null;
+    }
+
+    public String announce(double lat, double longi, double radius, long startTs, long endTs) {
+        return "";
     }
 
     // we get a seed and timestamp from the server for each infected person
     // check if we intersect with the infected person
     public boolean isExposed(String seed, long ts) {
+        // if timestamp is in the future, something is wrong, return
+        if (ts > System.currentTimeMillis()) {
+            return false;
+        }
         // convert our BLE DB records into convenient data structures
         // place the UUIDs into a map for easy lookup and checking
-        BleDbRecordRepository repo = new BleDbRecordRepository(context);
-        List<BleRecord> records = repo.getAllRecords();
-        for (BleRecord record : records) {
-            Log.e("ble",record.toString());
-            scannedBleMap.add(record.getUuid());
-            scannedBleRecords.add(record);
-        }
 
         // determine how many UUIDs to generate from the seed
         // based on time when the seed was generated and now.
         int diffBetweenNowAndTsInMinutes = (int)((System.currentTimeMillis() - ts)/1000/60);
         int numSeedsToGenerate = diffBetweenNowAndTsInMinutes / Constants.UUIDGenerationIntervalInMinutes;
 
+        // if we need to generate too many timestamps, something is wrong, return.
+        int infectionWindowInMinutes = (Constants.InfectionWindowInDays*24*60);
+        int maxSeedsToGenerate = infectionWindowInMinutes / Constants.UUIDGenerationIntervalInMinutes;
+        if (numSeedsToGenerate > maxSeedsToGenerate) {
+            return false;
+        }
         // generate all the seeds
-        List<String> receivedUUIDs = CryptoUtils.generateUUIDFromSeed(context, seed, numSeedsToGenerate);
+        List<String> receivedUUIDs = CryptoUtils.chainGenerateUUIDFromSeed(seed, numSeedsToGenerate);
 
         // iterate through received IDs and see if they are in list of IDs which we have scanned
         // if so, check if those IDs had timestamps within some interval...
@@ -121,10 +144,8 @@ public class PullFromServerTask implements Runnable {
         int uuidGenerationIntervalInMillliseconds = Constants.UUIDGenerationIntervalInMinutes*60000;
 
         for (String receivedUUID : receivedUUIDs) {
-            if (scannedBleMap.contains(receivedUUID)) {
-                BleRecord scannedRecord = findUUIDRecord(receivedUUID);
-                if (scannedRecord != null &&
-                    Math.abs(scannedRecord.getTs() - ts) < bluetoothScanIntervalInMilliseconds) {
+            if (scannedBleMap.keySet().contains(receivedUUID)) {
+                if (Math.abs(scannedBleMap.get(receivedUUID) - ts) < bluetoothScanIntervalInMilliseconds) {
                     matches.add(ts);
                 }
             }
@@ -171,18 +192,13 @@ public class PullFromServerTask implements Runnable {
         return false;
     }
 
-    public BleRecord findUUIDRecord(String str) {
-        for (BleRecord record : this.scannedBleRecords) {
-            if (record.getUuid().equals(str)) {
-                return record;
-            }
-        }
-        return null;
-    }
-
     public void notifyUserOfExposure() {
 //        King County COVID-19 call center: 206-477-3977. Open daily from 8 a.m. to 7 p.m
 //        Washington State COVID-19 call center: 800-525-0127
 //        https://scanpublichealth.org/faq
+    }
+
+    public void makeAnnouncement(String announcement) {
+        // PSA
     }
 }
