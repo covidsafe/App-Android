@@ -27,6 +27,7 @@
     <string name="most_recent_seed_pkey">most_recent_seed_pkey</string>
     <string name="diagnosis_pkey">prefs_diagnosis_date</string>
     <string name="symptom_submission_date_pkey">symptom_submission_date_pkey</string>
+    <string name="time_of_last_query_pkey">time_of_last_query_pkey</string>
 
     <string name="perm_ble_rationale">Without this permission, we will be unable to capture Bluetooth information of users around you. Are you sure you want to deny this permission?</string>
     <string name="perm_ble_ask">We require access to Bluetooth information when the app is closed. Would you like to open app settings to enable this?</string>

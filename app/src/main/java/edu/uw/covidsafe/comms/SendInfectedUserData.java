@@ -62,8 +62,8 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         GpsRecord gpsRecord = gpsRepo.getSortedRecords().get(0);
 
         sendRequest(recordToSend.seed, recordToSend.ts,
-                Utils.getCoarseGpsCoord(gpsRecord.getLat()),
-                Utils.getCoarseGpsCoord(gpsRecord.getLongi()));
+                Utils.getCoarseGpsCoord(gpsRecord.getLat(), Constants.DefaultGpsCoarsenessInDecimalPoints),
+                Utils.getCoarseGpsCoord(gpsRecord.getLongi(), Constants.DefaultGpsCoarsenessInDecimalPoints));
 
         return null;
     }
