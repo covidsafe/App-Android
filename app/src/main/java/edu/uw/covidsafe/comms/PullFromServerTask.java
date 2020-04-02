@@ -1,15 +1,21 @@
 package edu.uw.covidsafe.comms;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Messenger;
 import android.util.Log;
 
 import com.example.covidsafe.R;
+import com.google.gson.JsonObject;
 
+import org.json.JSONObject;
+
+import edu.uw.covidsafe.Area;
 import edu.uw.covidsafe.ble.BleDbRecordRepository;
 import edu.uw.covidsafe.ble.BleRecord;
 import edu.uw.covidsafe.gps.GpsDbRecordRepository;
 import edu.uw.covidsafe.gps.GpsRecord;
+import edu.uw.covidsafe.seed_uuid.SeedUUIDDbRecordRepository;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
@@ -73,8 +79,7 @@ public class PullFromServerTask implements Runnable {
 
         List<SeedUUIDRecord> seedUUIDRecords = getMessages(preciseLat,preciseLong,lastQueryTime);
 
-        // TODO: just do this once, don't do it for every person
-        // set intersection between ble IDs and received IDs, don't do a linear for loop
+        // TODO: set intersection between ble IDs and received IDs, don't do a linear for loop
         // check that the set intersection will work.
         BleDbRecordRepository repo = new BleDbRecordRepository(context);
         List<BleRecord> bleRecords = repo.getAllRecords();
@@ -90,28 +95,96 @@ public class PullFromServerTask implements Runnable {
             }
         }
 
+        List<String> announcements = announce(preciseLat,preciseLong,lastQueryTime);
+        if (announcements.size() > 0) {
+            makeAnnouncement(announcements);
+        }
+
         editor.putLong(context.getString(R.string.time_of_last_query_pkey), System.currentTimeMillis());
         editor.commit();
-
-        String announcement = announce(0,0,0,0,0);
-        if (!announcement.isEmpty()) {
-            makeAnnouncement(announcement);
-        }
     }
 
     // sync blockig op
     public int howBig(double lat, double longi, long ts) {
-        return 0;
+        JsonObject obj = new JsonObject();
+        obj.addProperty("lat",lat);
+        obj.addProperty("longi",longi);
+        obj.addProperty("ts",ts);
+
+        int bigness = 0;
+
+        return bigness;
     }
 
     public List<SeedUUIDRecord> getMessages(double lat, double longi, long ts) {
         // return list of seeds and timestamps
         // check if the areas returned in these messages match our GPS timestamps
-        return null;
+        JsonObject obj = new JsonObject();
+        obj.addProperty("lat",lat);
+        obj.addProperty("longi",longi);
+        obj.addProperty("ts",ts);
+
+        //send request
+
+        /////////////////////////////////////////////////////////////////////////
+        //get response
+        List<Area> areas = new ArrayList<Area>();
+        List<SeedUUIDRecord> receivedRecords = new ArrayList<SeedUUIDRecord>();
+        /////////////////////////////////////////////////////////////////////////
+
+        List<SeedUUIDRecord> filteredRecords = new ArrayList<SeedUUIDRecord>();
+
+        int counter = 0;
+        for (Area area : areas) {
+            GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
+            List<GpsRecord> gpsRecords = gpsRepo.getRecordsBetweenTimestamps(area.tstart, area.tend);
+
+            for (GpsRecord record : gpsRecords) {
+                float[] result = new float[3];
+                Location.distanceBetween(record.getLat(), record.getLongi(), area.latitude, area.longitude, result);
+
+                if ((result.length == 1 && result[0] < area.radius) ||
+                    (result.length == 2 && result[1] < area.radius) ||
+                    (result.length >= 3 && result[2] < area.radius)) {
+                    filteredRecords.add(receivedRecords.get(counter));
+                }
+            }
+            counter += 1;
+        }
+
+        return filteredRecords;
     }
 
-    public String announce(double lat, double longi, double radius, long startTs, long endTs) {
-        return "";
+    public List<String> announce(double lat, double longi, long ts) {
+        JsonObject obj = new JsonObject();
+        obj.addProperty("lat",lat);
+        obj.addProperty("longi",longi);
+        obj.addProperty("ts",ts);
+
+        ///////////////////////////////////////////////////
+        List<Area> areas = new ArrayList<Area>();
+        List<String> messages = new ArrayList<String>();
+        ///////////////////////////////////////////////////
+
+        int counter = 0;
+        List<String> filteredMessages = new ArrayList<String>();
+        for (Area area : areas) {
+            GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
+            List<GpsRecord> gpsRecords = gpsRepo.getRecordsBetweenTimestamps(area.tstart, area.tend);
+
+            for (GpsRecord record : gpsRecords) {
+                float[] result = new float[3];
+                Location.distanceBetween(record.getLat(), record.getLongi(), area.latitude, area.longitude, result);
+
+                if ((result.length == 1 && result[0] < area.radius) ||
+                    (result.length == 2 && result[1] < area.radius) ||
+                    (result.length >= 3 && result[2] < area.radius)) {
+                    filteredMessages.add(messages.get(counter));
+                }
+            }
+            counter += 1;
+        }
+        return filteredMessages;
     }
 
     // we get a seed and timestamp from the server for each infected person
@@ -202,7 +275,7 @@ public class PullFromServerTask implements Runnable {
 //        https://scanpublichealth.org/faq
     }
 
-    public void makeAnnouncement(String announcement) {
+    public void makeAnnouncement(List<String> announcements) {
         // PSA
     }
 }
