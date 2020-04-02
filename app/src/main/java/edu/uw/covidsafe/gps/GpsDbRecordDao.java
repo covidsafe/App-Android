@@ -26,4 +26,7 @@ public interface GpsDbRecordDao {
 
     @Query("SELECT * from gps_record_table ORDER BY ts DESC")
     List<GpsRecord> getSortedRecords();
+
+    @Query("SELECT * from gps_record_table WHERE ts BETWEEN :ts1 AND :ts2")
+    List<GpsRecord> getRecordsBetweenTimestamp(long ts1, long ts2);
 }

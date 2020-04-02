@@ -28,6 +28,10 @@ public class GpsDbRecordRepository {
         return mRecordDao.getSortedRecords();
     }
 
+    public List<GpsRecord> getRecordsBetweenTimestamps(long ts1, long ts2) {
+        return mRecordDao.getRecordsBetweenTimestamp(ts1, ts2);
+    }
+
     // You must call this on a non-UI thread or your app will throw an exception. Room ensures
     // that you're not doing any long running operations on the main thread, blocking the UI.
     public void insert(GpsRecord record) {

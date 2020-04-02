@@ -55,8 +55,6 @@ GpsOpsAsyncTask extends AsyncTask<Void, Void, Void> {
             for (GpsRecord record : records) {
                 Log.e("gps",record.toString());
             }
-
-            //TODO: package up GPS records and send to cloud
         }
         return null;
     }

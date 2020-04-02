@@ -9,7 +9,7 @@ public class RPCQuery {
 //    private CovidSafeServerGrpc.CovidSafeServerStub asyncStub;
 
     public RPCQuery(ManagedChannel channel) {
-        // TODO: Return back here and update to include `MaxInboundMessageSize()` if needed.
+        // Return back here and update to include `MaxInboundMessageSize()` if needed.
 //        stub = CovidSafeServerGrpc.newBlockingStub(channel).withCompression("gzip");
 //        asyncStub = CovidSafeServerGrpc.newStub(channel).withCompression("gzip");
     }
