@@ -63,8 +63,8 @@ public class Constants {
         Insert,ViewAll
     }
 
-    public static DecimalFormat gpsCoarsenessDecimalFormat;
-    public static int GpsCoarsenessInDecimalPoints = 2;
+    public static int MaximumGpsPrecisionAllowed = 5;
+    public static int DefaultGpsCoarsenessInDecimalPoints = 2;
     public static int InfectionWindowInDays = 14;
     public static int SPLASH_DISPLAY_LENGTH = 1000;
     public static String AnalyticsSecret = "4cd15ae0-9294-40ba-a8b5-a8d77b76783b";
@@ -172,11 +172,5 @@ public class Constants {
         Constants.GPS_ENABLED = prefs.getBoolean(av.getString(R.string.gps_enabled_pkey), Constants.GPS_ENABLED);
         Constants.NOTIFS_ENABLED = prefs.getBoolean(av.getString(R.string.notifs_enabled_pkey), Constants.NOTIFS_ENABLED);
 
-        String gpsCoarsenessFormat=".";
-        for (int i = 0; i < GpsCoarsenessInDecimalPoints; i++) {
-            gpsCoarsenessFormat += "#";
-        }
-        gpsCoarsenessDecimalFormat = new DecimalFormat(gpsCoarsenessFormat);
-        gpsCoarsenessDecimalFormat.setRoundingMode(RoundingMode.DOWN);
     }
 }

@@ -290,10 +290,19 @@ public class Utils {
         return false;
     }
 
-    public static double getCoarseGpsCoord(double coord) {
+    public static double getCoarseGpsCoord(double coord, int precision) {
         // TODO
 //        GpsCoarsenessInDecimalPoints
-        return Double.parseDouble(Constants.gpsCoarsenessDecimalFormat.format(coord));
+        // coarsen the GPS using exponent mantissa?
+
+        String gpsCoarsenessFormat=".";
+        for (int i = 0; i < precision; i++) {
+            gpsCoarsenessFormat += "#";
+        }
+
+        DecimalFormat gpsCoarsenessDecimalFormat = new DecimalFormat(gpsCoarsenessFormat);
+        gpsCoarsenessDecimalFormat.setRoundingMode(RoundingMode.DOWN);
+        return Double.parseDouble(gpsCoarsenessDecimalFormat.format(coord));
     }
 
     public static void sendDataToUI(Messenger messenger, String tag, String log) {
