@@ -84,9 +84,10 @@ public class BluetoothServerHelper {
                         if (value.length == 17) {
                             rssi = -value[16];
                         }
-                        Log.e("bleserver","rssi "+rssi);
+                        Log.e("bleserver","rssi "+rssi+","+device.getAddress());
 
-                        if (!Constants.writtenUUIDs.contains(contactUuid)) {
+                        if (!Constants.writtenUUIDs.contains(contactUuid) &&
+                            rssi > Constants.rssiCutoff) {
                             Constants.writtenUUIDs.add(contactUuid);
                             Utils.bleLogToDatabase(cxt, contactUuid, rssi);
                         }
@@ -106,7 +107,7 @@ public class BluetoothServerHelper {
             public void onConnectionStateChange(BluetoothDevice device, int status, int newState) {
                 super.onConnectionStateChange(device, status, newState);
                 if (newState == BluetoothProfile.STATE_CONNECTED) {
-                    Log.e("bleserver","connected");
+                    Log.e("bleserver","connected "+device.getAddress());
                 } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                     Log.e("bleserver","disconnected");
                 }

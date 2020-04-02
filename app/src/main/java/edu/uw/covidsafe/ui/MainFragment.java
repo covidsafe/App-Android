@@ -143,8 +143,8 @@ public class MainFragment extends Fragment {
 
                         if (!Constants.GPS_ENABLED && !Constants.BLUETOOTH_ENABLED) {
                             Utils.mkSnack(getActivity(), view, getString(R.string.prompt_to_enable_error));
-                            gpsSwitch.setEnabled(false);
-                            bleSwitch.setEnabled(false);
+//                            gpsSwitch.setEnabled(false);
+//                            bleSwitch.setEnabled(false);
                         }
 
                     } catch (SecurityException e) {
