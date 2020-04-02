@@ -40,7 +40,11 @@ public class PullFromServerTask implements Runnable {
 //        notifyUserOfExposure();
     }
 
+    // we get a seed and timestamp from the server for each infected person
+    // check if we intersect with the infected person
     public boolean isExposed(String seed, long ts) {
+        // convert our BLE DB records into convenient data structures
+        // place the UUIDs into a map for easy lookup and checking
         BleDbRecordRepository repo = new BleDbRecordRepository(context);
         List<BleRecord> records = repo.getAllRecords();
         for (BleRecord record : records) {
@@ -49,34 +53,42 @@ public class PullFromServerTask implements Runnable {
             scannedBleRecords.add(record);
         }
 
+        // determine how many UUIDs to generate from the seed
+        // based on time when the seed was generated and now.
         int diffBetweenNowAndTsInMinutes = (int)((System.currentTimeMillis() - ts)/1000/60);
         int numSeedsToGenerate = diffBetweenNowAndTsInMinutes / Constants.UUIDGenerationIntervalInMinutes;
 
-        int uuidGenerationIntervalInMillliseconds = Constants.UUIDGenerationIntervalInMinutes*60000;
-
-        // chronologically increasing order
+        // generate all the seeds
         List<String> receivedUUIDs = CryptoUtils.generateUUIDFromSeed(context, seed, numSeedsToGenerate);
 
+        // iterate through received IDs and see if they are in list of IDs which we have scanned
+        // if so, check if those IDs had timestamps within some interval...
+        // this interval has to be BluetoothScanIntervalInMinutes
+        // user A can broadcast an ID at timestamp t
+        // user B may only wake up to scan the ID after BluetoothScanIntervalInMinutes
         List<Long> matches = new ArrayList<>();
-        //record ID matches within some deviation
+        int bluetoothScanIntervalInMilliseconds = Constants.BluetoothScanIntervalInMinutes*60000;
+        int uuidGenerationIntervalInMillliseconds = Constants.UUIDGenerationIntervalInMinutes*60000;
+
         for (String receivedUUID : receivedUUIDs) {
             if (scannedBleMap.contains(receivedUUID)) {
                 BleRecord scannedRecord = findUUIDRecord(receivedUUID);
                 if (scannedRecord != null &&
-                    Math.abs(scannedRecord.getTs() - ts) < Constants.TimestampDeviationInMilliseconds) {
+                    Math.abs(scannedRecord.getTs() - ts) < bluetoothScanIntervalInMilliseconds) {
                     matches.add(ts);
                 }
             }
             ts += uuidGenerationIntervalInMillliseconds;
         }
 
-        //check that we have at least two consecutive matches
-        int numConsecutiveMatchesNeeded = Constants.CDCExposureTimeInMinutes/Constants.UUIDGenerationIntervalInMinutes;
+        // calculate how many matches we need to say user is exposed for at least 10 minutes
+        // return false if there simply not enough matches to determine this.
+        int numConsecutiveMatchesNeeded = Constants.CDCExposureTimeInMinutes/Constants.BluetoothScanIntervalInMinutes;
         if (matches.size() < numConsecutiveMatchesNeeded) {
             return false;
         }
 
-        // take derivative
+        // take diff of timestamps when we had a UUID match
         List<Integer> diff = new ArrayList<Integer>();
         for (int i = 0; i < matches.size()-1; i++) {
             diff.add((int)(matches.get(i+1)-matches.get(i)));

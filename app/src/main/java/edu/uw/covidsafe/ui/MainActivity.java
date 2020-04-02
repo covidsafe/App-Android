@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
         //seed doesn't yet exist
         //generate seed
-        CryptoUtils.generateInitSeed(getApplicationContext(),false);
+        CryptoUtils.generateInitSeed(getApplicationContext(), false);
 
         ServiceUtils.scheduleLookupJob(mContext);
     }

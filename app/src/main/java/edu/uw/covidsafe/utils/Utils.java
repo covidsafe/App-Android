@@ -43,7 +43,9 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.math.RoundingMode;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -283,6 +285,13 @@ public class Utils {
             return true;
         }
         return false;
+    }
+
+    public static double getCoarseGpsCoord(double coord) {
+        // TODO
+        DecimalFormat df = new DecimalFormat(".##");
+        df.setRoundingMode(RoundingMode.DOWN);
+        return Double.parseDouble(df.format(coord));
     }
 
     public static void sendDataToUI(Messenger messenger, String tag, String log) {
