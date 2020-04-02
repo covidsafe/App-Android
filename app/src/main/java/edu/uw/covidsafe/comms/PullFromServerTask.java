@@ -103,7 +103,7 @@ public class PullFromServerTask implements Runnable {
         //check that we have at least numConsecutiveMatchesNeeded
         //matches of uuidGenerationIntervalInMillliseconds
         for (int i = 0; i < diff.size(); i++) {
-            if (Math.abs(diff.get(i)-uuidGenerationIntervalInMillliseconds)
+            if (Math.abs(diff.get(i)-bluetoothScanIntervalInMilliseconds)
                 < Constants.TimestampDeviationInMilliseconds) {
                 streak += 1;
                 if (streak > maxStreak) {
@@ -111,7 +111,7 @@ public class PullFromServerTask implements Runnable {
                 }
             }
             else {
-                streak -= 1;
+                streak = 0;
             }
         }
 
