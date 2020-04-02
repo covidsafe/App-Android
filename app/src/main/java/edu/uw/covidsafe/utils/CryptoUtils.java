@@ -31,30 +31,31 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.security.auth.x500.X500Principal;
 
 import edu.uw.covidsafe.crypto.SHA256;
+import edu.uw.covidsafe.seed_uuid.SeedUUIDDbRecordRepository;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDOpsAsyncTask;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
 
 public class CryptoUtils {
 
-    public static void generateInitSeed(Context context, boolean refresh) {
+    public static void generateInitSeed(Context context, boolean forceRefresh) {
         //TODO
         String initSeed = UUID.randomUUID().toString();
 
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
-        if (refresh) {
-            editor.putString(context.getString(R.string.seed_pkey_zero), initSeed);
+        if (prefs.getString(context.getString(R.string.most_recent_seed_pkey),"").isEmpty() || !forceRefresh) {
             editor.putString(context.getString(R.string.most_recent_seed_pkey), initSeed);
+            editor.commit();
+
+            // add record with timestamp and empty uuid
+            SeedUUIDRecord record = new SeedUUIDRecord(System.currentTimeMillis(),
+                    initSeed, "");
+            new SeedUUIDOpsAsyncTask(context, record).execute();
         }
-        else if (!refresh && prefs.getString(context.getString(R.string.seed_pkey_zero),"").isEmpty()) {
-            editor.putString(context.getString(R.string.seed_pkey_zero), initSeed);
-            editor.putString(context.getString(R.string.most_recent_seed_pkey), initSeed);
-        }
-        editor.commit();
     }
 
-    public static SeedUUIDRecord generateSeed(Context context, byte[] seed, boolean store) {
+    public static UUID generateSeed(Context context, byte[] seed, boolean store) {
         //TODO
         try {
             byte[] out = new byte[32];
@@ -63,14 +64,21 @@ public class CryptoUtils {
             byte[] generatedSeedBytes = Arrays.copyOfRange(out,0,16);
             byte[] generatedIDBytes = Arrays.copyOfRange(out,16,32);
 
-            String generatedSeed = ByteUtils.byte2UUIDstring(generatedSeedBytes);
-            String generatedID = ByteUtils.byte2UUIDstring(generatedIDBytes);
+            // get the most recent seed/uuid pair
+            // fill in the uuid, put back into DB
+            SeedUUIDDbRecordRepository seedUUIDRepo = new SeedUUIDDbRecordRepository(context);
+            SeedUUIDRecord mostRecentRecord = seedUUIDRepo.getAllSortedRecords().get(0);
+            mostRecentRecord.uuid =  ByteUtils.byte2UUIDstring(generatedIDBytes);
+            new SeedUUIDOpsAsyncTask(context, mostRecentRecord).execute();
 
-            SeedUUIDRecord record = new SeedUUIDRecord(System.currentTimeMillis(),
-                    generatedSeed, generatedID);
+            // create the next record with the generated seed
+            // return this and store in DB if necessary
+            String generatedSeed = ByteUtils.byte2UUIDstring(generatedSeedBytes);
+            SeedUUIDRecord nextRecord = new SeedUUIDRecord(System.currentTimeMillis(),
+                    generatedSeed, "");
 
             if (store) {
-                new SeedUUIDOpsAsyncTask(context, record).execute();
+                new SeedUUIDOpsAsyncTask(context, nextRecord).execute();
 
                 SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
@@ -78,7 +86,7 @@ public class CryptoUtils {
                 editor.commit();
             }
 
-            return record;
+            return UUID.fromString(mostRecentRecord.uuid);
         }
         catch(DigestException e) {
             Log.e("error",e.getMessage());
@@ -90,8 +98,8 @@ public class CryptoUtils {
         byte[] seed = ByteUtils.string2byteArray(s);
         ArrayList<String> uuids = new ArrayList<>();
         for (int i = 0; i < numSeedsToGenerate; i++) {
-            SeedUUIDRecord rec = generateSeed(context, seed, false);
-            uuids.add(rec.uuid);
+            UUID uuid = generateSeed(context, seed, false);
+            uuids.add(uuid.toString());
         }
         return uuids;
     }

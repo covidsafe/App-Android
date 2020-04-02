@@ -11,7 +11,7 @@ public class SeedUUIDRecord {
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "ts")
-    private long ts;
+    public long ts;
 
     @NonNull
     @ColumnInfo(name = "seed")

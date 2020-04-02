@@ -30,15 +30,15 @@ public class UUIDGeneratorTask implements Runnable {
     public void run() {
         Log.e("ble","generate uuid");
 
+        // get the most recently generated seed
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         String mostRecentSeedStr = prefs.getString(context.getString(R.string.most_recent_seed_pkey), "");
         byte[] mostRecentSeed = ByteUtils.string2byteArray(mostRecentSeedStr);
 
-        SeedUUIDRecord record = CryptoUtils.generateSeed(context, mostRecentSeed, true);
-        Constants.contactUUID = UUID.fromString(record.uuid);
+        UUID generatedUUID = CryptoUtils.generateSeed(context, mostRecentSeed, true);
+        Constants.contactUUID = generatedUUID;
 
         Utils.sendDataToUI(messenger, "uuid",Constants.contactUUID.toString());
-        Utils.uuidLogToDatabase(context, record.seed, Constants.contactUUID);
 
         if (Constants.blueAdapter != null && Constants.blueAdapter.getBluetoothLeAdvertiser() != null) {
             Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothScanHelper.advertiseCallback);
