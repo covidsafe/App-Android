@@ -26,9 +26,13 @@ public class SeedUUIDDbRecordRepository {
         return mRecordDao.getSortedRecordsByTimestamp();
     }
 
+    public SeedUUIDRecord getRecordBetween(long ts1, long ts2) {
+        return mRecordDao.getRecordBetween(ts1, ts2);
+    }
+
     // You must call this on a non-UI thread or your app will throw an exception. Room ensures
     // that you're not doing any long running operations on the main thread, blocking the UI.
-    void insert(SeedUUIDRecord record) {
+    public void insert(SeedUUIDRecord record) {
         SeedUUIDDbRecordRoomDatabase.databaseWriteExecutor.execute(() -> {
             mRecordDao.insert(record);
         });
@@ -36,5 +40,9 @@ public class SeedUUIDDbRecordRepository {
 
     public void deleteEarlierThan(long ts_thresh) {
         mRecordDao.deleteEarlierThan(ts_thresh);
+    }
+
+    public void deleteAll() {
+        mRecordDao.deleteAll();
     }
 }

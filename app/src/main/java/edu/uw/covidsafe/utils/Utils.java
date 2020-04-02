@@ -159,11 +159,12 @@ public class Utils {
         new BleOpsAsyncTask(cxt, id, rssi).execute();
     }
 
-    public static void uuidLogToDatabase(Context cxt, String seed, UUID uuid) {
-        new SeedUUIDOpsAsyncTask(cxt, seed, uuid).execute();
-    }
+//    public static void uuidLogToDatabase(Context cxt, String seed, UUID uuid) {
+//        new SeedUUIDOpsAsyncTask(cxt, seed, uuid).execute();
+//    }
 
     public static void uuidLogToFile(Context cxt, SeedUUIDRecord rec) {
+        Log.e("uuid","uuid log to file");
         FileOperations.append(rec.toString(),
                 cxt, Constants.uuidDirName, Utils.getUuidLogName());
     }

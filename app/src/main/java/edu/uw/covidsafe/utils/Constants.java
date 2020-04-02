@@ -75,6 +75,7 @@ public class Constants {
     public static int UUIDGenerationIntervalInMinutes = 5;
     public static int CDCExposureTimeInMinutes = 10;
     public static int TimestampDeviationInMilliseconds = 1000;
+    public static int InfectionWindowIntervalDeviationInMilliseconds = 60*1000;
     public static UUID GATT_SERVICE_UUID = UUID.fromString("8cf0282e-d80f-4eb7-a197-e3e0f965848d");
     public static UUID CHARACTERISTIC_UUID = UUID.fromString("d945590b-5b09-4144-ace7-4063f95bd0bb");
     public static UUID BEACON_SERVICE_UUID = UUID.fromString("0000D028-0000-1000-8000-00805F9B34FB");
