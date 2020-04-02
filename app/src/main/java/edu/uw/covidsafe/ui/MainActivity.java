@@ -68,8 +68,6 @@ public class MainActivity extends AppCompatActivity {
         //generate seed
         CryptoUtils.generateInitSeed(getApplicationContext(), false);
 
-        new SendInfectedUserData(this, "fname","lanem", System.currentTimeMillis()).execute();
-
 //        ServiceUtils.scheduleLookupJob(mContext);
     }
 

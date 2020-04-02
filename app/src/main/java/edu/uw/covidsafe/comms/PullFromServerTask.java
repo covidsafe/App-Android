@@ -40,7 +40,11 @@ public class PullFromServerTask implements Runnable {
 
         //get most recent GPS entry as coarse location and send it
         GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
-        GpsRecord gpsRecord = gpsRepo.getSortedRecords().get(0);
+        List<GpsRecord> gpsRecords = gpsRepo.getSortedRecords();
+        if (gpsRecords.size() == 0) {
+            return;
+        }
+        GpsRecord gpsRecord = gpsRecords.get(0);
 
         int currentPrecision = Constants.DefaultGpsCoarsenessInDecimalPoints;
         int maxPayloadSize = 0;
