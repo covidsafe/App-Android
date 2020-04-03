@@ -5,8 +5,6 @@ import android.os.AsyncTask;
 
 import com.google.gson.JsonObject;
 
-import org.json.JSONObject;
-
 import edu.uw.covidsafe.gps.GpsDbRecordRepository;
 import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDDbRecordRepository;
@@ -73,8 +71,8 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
             GpsRecord gpsRecord = sortedGpsRecords.get(0);
 
             sendRequest(recordToSend.seed, recordToSend.ts,
-                    Utils.getCoarseGpsCoord(gpsRecord.getLat(), Constants.MaximumGpsPrecisionAllowed),
-                    Utils.getCoarseGpsCoord(gpsRecord.getLongi(), Constants.MaximumGpsPrecisionAllowed));
+                    Utils.getCoarseGpsCoord(gpsRecord.getLat(), Constants.MaximumGpsResolution),
+                    Utils.getCoarseGpsCoord(gpsRecord.getLongi(), Constants.MaximumGpsResolution));
         }
 
         return null;

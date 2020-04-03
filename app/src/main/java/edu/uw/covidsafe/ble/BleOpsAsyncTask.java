@@ -55,44 +55,4 @@ public class BleOpsAsyncTask extends AsyncTask<Void, Void, Void> {
         }
         return null;
     }
-
-    public void sendRecords(final JsonObject obj) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    //TODO change url and also in network_security_config.xml
-                    InetSocketAddress addr = new InetSocketAddress("128.208.4.83",5000);
-                    URL url = new URL("http://"+addr.toString()+"/companies");
-
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("POST");
-                    conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-                    conn.setRequestProperty("Accept","application/json");
-                    conn.setDoOutput(true);
-                    conn.setDoInput(true);
-
-                    DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-//                    os.writeBytes(URLEncoder.encode(records.toJson().toString(), "UTF-8"));
-                    os.writeBytes(obj.toString());
-
-                    os.flush();
-                    os.close();
-
-                    int resp = conn.getResponseCode();
-                    if (resp != 200) {
-                        Toast.makeText(context,"Failed to send records. Please try again.", Toast.LENGTH_LONG);
-                    }
-                    Log.e("STATUS", String.valueOf(resp));
-                    Log.e("MSG" , conn.getResponseMessage());
-
-                    conn.disconnect();
-                } catch (Exception e) {
-                    Log.e("logme",e.getMessage());
-                }
-            }
-        });
-
-        thread.start();
-    }
 }
