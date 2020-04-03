@@ -20,6 +20,10 @@ import java.util.concurrent.ExecutionException;
 
 public class NetworkHelper {
 
+    public static JsonObject sendRequest(JsonObject obj) {
+        return null;
+    }
+
     public static void sendRecords(final JsonObject obj, Context context) {
         Thread thread = new Thread(new Runnable() {
             @Override

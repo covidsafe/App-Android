@@ -7,6 +7,8 @@ import com.google.gson.JsonObject;
 
 import edu.uw.covidsafe.gps.GpsDbRecordRepository;
 import edu.uw.covidsafe.gps.GpsRecord;
+import edu.uw.covidsafe.json.MatchMessage;
+import edu.uw.covidsafe.json.Region;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDDbRecordRepository;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
 import edu.uw.covidsafe.utils.Constants;
@@ -70,22 +72,28 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         if (sortedGpsRecords.size() > 0) {
             GpsRecord gpsRecord = sortedGpsRecords.get(0);
 
+            int gpsResolution = Constants.MaximumGpsResolution;
             sendRequest(recordToSend.seed, recordToSend.ts,
-                    Utils.getCoarseGpsCoord(gpsRecord.getLat(), Constants.MaximumGpsResolution),
-                    Utils.getCoarseGpsCoord(gpsRecord.getLongi(), Constants.MaximumGpsResolution));
+                    Utils.getCoarseGpsCoord(gpsRecord.getLat(), gpsResolution),
+                    Utils.getCoarseGpsCoord(gpsRecord.getLongi(), gpsResolution),
+                    Utils.getGpsPrecision(gpsResolution));
         }
 
         return null;
     }
 
-    public void sendRequest(String seed, long ts, double lat, double longi) {
+    public void sendRequest(String seed, long ts, double lat, double longi, int precision) {
         //TODO, send the seed and timestamp to the server
+        //send matchMessage
+        JsonObject matchMessage = MatchMessage.toJson(
+                new String[]{seed},
+                new long[]{ts});
+        JsonObject region = Region.toJson(lat, longi, precision);
         JsonObject obj = new JsonObject();
-        obj.addProperty("seed", seed);
-        obj.addProperty("ts",ts);
-        obj.addProperty("lat",lat);
-        obj.addProperty("longi",longi);
+        obj.add("match_message", matchMessage);
+        obj.add("region", region);
 
+        // send obj
     }
 
     public void testDatabase() {
