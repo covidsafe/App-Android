@@ -105,6 +105,10 @@ public class PullFromServerTask implements Runnable {
             }
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////
+        // narrowcasting
+        //////////////////////////////////////////////////////////////////////////////////////////
+
         List<String> announcements = announce(preciseLat,preciseLong,lastQueryTime);
         if (announcements.size() > 0) {
             makeAnnouncement(announcements);
