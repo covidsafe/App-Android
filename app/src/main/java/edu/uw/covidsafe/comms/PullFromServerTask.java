@@ -8,17 +8,27 @@ import android.util.Log;
 import com.example.covidsafe.R;
 import com.google.gson.JsonObject;
 
-import edu.uw.covidsafe.Area;
+import edu.uw.covidsafe.json.Area;
 import edu.uw.covidsafe.ble.BleDbRecordRepository;
 import edu.uw.covidsafe.ble.BleRecord;
 import edu.uw.covidsafe.gps.GpsDbRecordRepository;
 import edu.uw.covidsafe.gps.GpsRecord;
+import edu.uw.covidsafe.json.MatchMessage;
+import edu.uw.covidsafe.json.MessageInfo;
+import edu.uw.covidsafe.json.MessageListRequest;
+import edu.uw.covidsafe.json.MessageListResponse;
+import edu.uw.covidsafe.json.MessageRequest;
+import edu.uw.covidsafe.json.MessageSizeRequest;
+import edu.uw.covidsafe.json.MessageSizeResponse;
+import edu.uw.covidsafe.json.Region;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
 import edu.uw.covidsafe.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -39,9 +49,10 @@ public class PullFromServerTask implements Runnable {
         Log.e("uuid", "PULL FROM SERVER");
 
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
 
-        //get most recent GPS entry as coarse location and send it
+        //////////////////////////////////////////////////////////////////////////////////////////
+        // send coarse -> finer grained gps locations, find size of seeds on server
+        //////////////////////////////////////////////////////////////////////////////////////////
         GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
         List<GpsRecord> gpsRecords = gpsRepo.getSortedRecords();
         if (gpsRecords.size() == 0) {
@@ -52,17 +63,12 @@ public class PullFromServerTask implements Runnable {
         int currentGpsResolution = Constants.MinimumGpsResolution;
         int maxPayloadSize = 0;
 
-        long possibleLastQueryTime = prefs.getLong(context.getString(R.string.time_of_last_query_pkey), 0L);
-        long lastQueryTime = 0;
-        if (possibleLastQueryTime != 0) {
-            lastQueryTime = possibleLastQueryTime;
-        }
-
+        long lastQueryTime = prefs.getLong(context.getString(R.string.time_of_last_query_pkey), 0L);
         while (currentGpsResolution < Constants.MaximumGpsResolution) {
             double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(), currentGpsResolution);
             double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(), currentGpsResolution);
 
-            int sizeOfPayload = howBig(preciseLat,preciseLong,lastQueryTime);
+            int sizeOfPayload = howBig(preciseLat,preciseLong,Utils.getGpsPrecision(currentGpsResolution), lastQueryTime);
             if (sizeOfPayload > maxPayloadSize) {
                 currentGpsResolution += 1;
             }
@@ -71,10 +77,16 @@ public class PullFromServerTask implements Runnable {
             }
         }
 
+
+        //////////////////////////////////////////////////////////////////////////////////////////
+        // get list of UUIDs that intersect with our movements and what the server has sent us
+        //////////////////////////////////////////////////////////////////////////////////////////
+
         double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(), currentGpsResolution);
         double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(), currentGpsResolution);
 
-        List<SeedUUIDRecord> seedUUIDRecords = getMessages(preciseLat,preciseLong,lastQueryTime);
+        List<SeedUUIDRecord> seedUUIDRecords = getMessages(preciseLat,preciseLong,
+                Utils.getGpsPrecision(currentGpsResolution), lastQueryTime);
 
         // TODO: set intersection between ble IDs and received IDs, don't do a linear for loop
         // check that the set intersection will work.
@@ -97,53 +109,56 @@ public class PullFromServerTask implements Runnable {
         if (announcements.size() > 0) {
             makeAnnouncement(announcements);
         }
-
-        editor.putLong(context.getString(R.string.time_of_last_query_pkey), System.currentTimeMillis());
-        editor.commit();
     }
 
     // sync blockig op
-    public int howBig(double lat, double longi, long ts) {
-        JsonObject obj = new JsonObject();
-        obj.addProperty("lat",lat);
-        obj.addProperty("longi",longi);
-        obj.addProperty("ts",ts);
-//        NetworkHelper.sendRecords(obj);
-        int bigness = 0;
-
-        return bigness;
+    public int howBig(double lat, double longi, int precision, long ts) {
+        JsonObject messageSizeRequest = MessageSizeRequest.toJson(lat, longi, precision, ts);
+        return MessageSizeResponse.parse(NetworkHelper.sendRequest(messageSizeRequest)).size_of_query_response;
     }
 
-    public List<SeedUUIDRecord> getMessages(double lat, double longi, long ts) {
+    public List<SeedUUIDRecord> getMessages(double lat, double longi, int precision, long lastQueryTime) {
         // return list of seeds and timestamps
         // check if the areas returned in these messages match our GPS timestamps
-        JsonObject obj = new JsonObject();
-        obj.addProperty("lat",lat);
-        obj.addProperty("longi",longi);
-        obj.addProperty("ts",ts);
 
         //send request
+        JsonObject messageListRequest = MessageListRequest.toJson(lat, longi, precision, lastQueryTime);
+        MessageListResponse messageListResponse = MessageListResponse.parse(NetworkHelper.sendRequest(messageListRequest));
+
+        JsonObject messageRequest = MessageRequest.toJson(messageListResponse.messageInfos);
+        MatchMessage matchMessage = MatchMessage.parse(NetworkHelper.sendRequest(messageRequest));
+
+        // update last query time to server
+        ArrayList<Long> queryTimes = new ArrayList<Long>();
+        for (MessageInfo messageInfo : messageListResponse.messageInfos) {
+            queryTimes.add(messageInfo.message_timestamp.toLong());
+        }
+        Collections.sort(queryTimes, Collections.reverseOrder());
+
+        SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putLong(context.getString(R.string.time_of_last_query_pkey), queryTimes.get(0));
+        editor.commit();
 
         /////////////////////////////////////////////////////////////////////////
         //get response
-        List<Area> areas = new ArrayList<Area>();
+        Area[] areas = matchMessage.area_match.areas;
         List<SeedUUIDRecord> receivedRecords = new ArrayList<SeedUUIDRecord>();
         /////////////////////////////////////////////////////////////////////////
 
         List<SeedUUIDRecord> filteredRecords = new ArrayList<SeedUUIDRecord>();
-
         int counter = 0;
         for (Area area : areas) {
             GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
-            List<GpsRecord> gpsRecords = gpsRepo.getRecordsBetweenTimestamps(area.tstart, area.tend);
+            List<GpsRecord> gpsRecords = gpsRepo.getRecordsBetweenTimestamps(area.begin_time.toLong(), area.end_time.toLong());
 
             for (GpsRecord record : gpsRecords) {
                 float[] result = new float[3];
-                Location.distanceBetween(record.getLat(), record.getLongi(), area.latitude, area.longitude, result);
+                Location.distanceBetween(record.getLat(), record.getLongi(), area.location.latitude, area.location.longitude, result);
 
-                if ((result.length == 1 && result[0] < area.radius) ||
-                    (result.length == 2 && result[1] < area.radius) ||
-                    (result.length >= 3 && result[2] < area.radius)) {
+                if ((result.length == 1 && result[0] < area.radius_meters) ||
+                    (result.length == 2 && result[1] < area.radius_meters) ||
+                    (result.length >= 3 && result[2] < area.radius_meters)) {
                     filteredRecords.add(receivedRecords.get(counter));
                 }
             }
@@ -168,15 +183,15 @@ public class PullFromServerTask implements Runnable {
         List<String> filteredMessages = new ArrayList<String>();
         for (Area area : areas) {
             GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
-            List<GpsRecord> gpsRecords = gpsRepo.getRecordsBetweenTimestamps(area.tstart, area.tend);
+            List<GpsRecord> gpsRecords = gpsRepo.getRecordsBetweenTimestamps(area.begin_time.toLong(), area.end_time.toLong());
 
             for (GpsRecord record : gpsRecords) {
                 float[] result = new float[3];
-                Location.distanceBetween(record.getLat(), record.getLongi(), area.latitude, area.longitude, result);
+                Location.distanceBetween(record.getLat(), record.getLongi(), area.location.latitude, area.location.longitude, result);
 
-                if ((result.length == 1 && result[0] < area.radius) ||
-                    (result.length == 2 && result[1] < area.radius) ||
-                    (result.length >= 3 && result[2] < area.radius)) {
+                if ((result.length == 1 && result[0] < area.radius_meters) ||
+                    (result.length == 2 && result[1] < area.radius_meters) ||
+                    (result.length >= 3 && result[2] < area.radius_meters)) {
                     filteredMessages.add(messages.get(counter));
                 }
             }

@@ -52,6 +52,7 @@ import java.text.SimpleDateFormat;
 import java.util.BitSet;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import io.netty.util.internal.StringUtil;
@@ -293,13 +294,16 @@ public class Utils {
     }
 
     public static double getCoarseGpsCoord(double coord, int maskSize) {
-        // TODO
-//        GpsCoarsenessInDecimalPoints
         BitSet mask = new BitSet();
         mask.set(maskSize, 64);
         BitSet num = convert(Double.doubleToLongBits(coord));
         num.and(mask);
         return Double.longBitsToDouble(convert(num));
+    }
+
+    // number of bits of mantissa that should be *preserved*
+    public static int getGpsPrecision(int gpsResolution) {
+        return Constants.NumberOfBitsInMantissa-gpsResolution;
     }
 
     public static BitSet convert(long value) {

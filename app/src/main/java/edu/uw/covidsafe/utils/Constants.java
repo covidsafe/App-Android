@@ -64,6 +64,7 @@ public class Constants {
     }
 
     public static int rssiCutoff = -82;
+    public static int NumberOfBitsInMantissa = 40;
     public static int MaximumGpsResolution = 40;
     public static int MinimumGpsResolution = 45;
     public static int InfectionWindowInDays = 14;
