@@ -8,14 +8,11 @@ import android.util.Log;
 import com.example.covidsafe.R;
 import com.google.gson.JsonObject;
 
-import org.json.JSONObject;
-
 import edu.uw.covidsafe.Area;
 import edu.uw.covidsafe.ble.BleDbRecordRepository;
 import edu.uw.covidsafe.ble.BleRecord;
 import edu.uw.covidsafe.gps.GpsDbRecordRepository;
 import edu.uw.covidsafe.gps.GpsRecord;
-import edu.uw.covidsafe.seed_uuid.SeedUUIDDbRecordRepository;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
@@ -52,7 +49,7 @@ public class PullFromServerTask implements Runnable {
         }
         GpsRecord gpsRecord = gpsRecords.get(0);
 
-        int currentPrecision = Constants.DefaultGpsCoarsenessInDecimalPoints;
+        int currentGpsResolution = Constants.MinimumGpsResolution;
         int maxPayloadSize = 0;
 
         long possibleLastQueryTime = prefs.getLong(context.getString(R.string.time_of_last_query_pkey), 0L);
@@ -61,21 +58,21 @@ public class PullFromServerTask implements Runnable {
             lastQueryTime = possibleLastQueryTime;
         }
 
-        while (currentPrecision < Constants.MaximumGpsPrecisionAllowed) {
-            double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(), currentPrecision);
-            double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(), currentPrecision);
+        while (currentGpsResolution < Constants.MaximumGpsResolution) {
+            double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(), currentGpsResolution);
+            double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(), currentGpsResolution);
 
             int sizeOfPayload = howBig(preciseLat,preciseLong,lastQueryTime);
             if (sizeOfPayload > maxPayloadSize) {
-                currentPrecision += 1;
+                currentGpsResolution += 1;
             }
             else {
                 break;
             }
         }
 
-        double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(), currentPrecision);
-        double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(), currentPrecision);
+        double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(), currentGpsResolution);
+        double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(), currentGpsResolution);
 
         List<SeedUUIDRecord> seedUUIDRecords = getMessages(preciseLat,preciseLong,lastQueryTime);
 
@@ -89,7 +86,8 @@ public class PullFromServerTask implements Runnable {
         }
 
         for (SeedUUIDRecord seedUUIDRecord : seedUUIDRecords) {
-            if (isExposed(seedUUIDRecord.seed, seedUUIDRecord.ts)) {
+            boolean exposedStatus = isExposed(seedUUIDRecord.seed, seedUUIDRecord.ts);
+            if (exposedStatus) {
                 notifyUserOfExposure();
                 break;
             }
@@ -110,7 +108,7 @@ public class PullFromServerTask implements Runnable {
         obj.addProperty("lat",lat);
         obj.addProperty("longi",longi);
         obj.addProperty("ts",ts);
-
+//        NetworkHelper.sendRecords(obj);
         int bigness = 0;
 
         return bigness;

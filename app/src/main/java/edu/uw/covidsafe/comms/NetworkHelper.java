@@ -4,14 +4,22 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
 import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 public class NetworkHelper {
+
     public static void sendRecords(final JsonObject obj, Context context) {
         Thread thread = new Thread(new Runnable() {
             @Override

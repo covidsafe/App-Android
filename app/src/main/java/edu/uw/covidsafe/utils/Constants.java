@@ -64,8 +64,8 @@ public class Constants {
     }
 
     public static int rssiCutoff = -82;
-    public static int MaximumGpsPrecisionAllowed = 5;
-    public static int DefaultGpsCoarsenessInDecimalPoints = 2;
+    public static int MaximumGpsResolution = 40;
+    public static int MinimumGpsResolution = 45;
     public static int InfectionWindowInDays = 14;
     public static int SPLASH_DISPLAY_LENGTH = 1000;
     public static String AnalyticsSecret = "4cd15ae0-9294-40ba-a8b5-a8d77b76783b";

@@ -148,7 +148,7 @@ public class SymptomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 boxes.get(5).isChecked(),
                 boxes.get(6).isChecked());
         new SymptomsOpsAsyncTask(mContext, rec).execute();
-        NetworkHelper.sendRecords(rec.toJson(), mContext);
+//        NetworkHelper.sendRecords(rec.toJson(), mContext);
     }
 
     @Override

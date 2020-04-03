@@ -49,6 +49,7 @@ import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.BitSet;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -291,19 +292,35 @@ public class Utils {
         return false;
     }
 
-    public static double getCoarseGpsCoord(double coord, int precision) {
+    public static double getCoarseGpsCoord(double coord, int maskSize) {
         // TODO
 //        GpsCoarsenessInDecimalPoints
-        // coarsen the GPS using exponent mantissa?
+        BitSet mask = new BitSet();
+        mask.set(maskSize, 64);
+        BitSet num = convert(Double.doubleToLongBits(coord));
+        num.and(mask);
+        return Double.longBitsToDouble(convert(num));
+    }
 
-        String gpsCoarsenessFormat=".";
-        for (int i = 0; i < precision; i++) {
-            gpsCoarsenessFormat += "#";
+    public static BitSet convert(long value) {
+        BitSet bits = new BitSet();
+        int index = 0;
+        while (value != 0L) {
+            if (value % 2L != 0) {
+                bits.set(index);
+            }
+            ++index;
+            value = value >>> 1;
         }
+        return bits;
+    }
 
-        DecimalFormat gpsCoarsenessDecimalFormat = new DecimalFormat(gpsCoarsenessFormat);
-        gpsCoarsenessDecimalFormat.setRoundingMode(RoundingMode.DOWN);
-        return Double.parseDouble(gpsCoarsenessDecimalFormat.format(coord));
+    public static long convert(BitSet bits) {
+        long value = 0L;
+        for (int i = 0; i < bits.length(); ++i) {
+            value += bits.get(i) ? (1L << i) : 0L;
+        }
+        return value;
     }
 
     public static void sendDataToUI(Messenger messenger, String tag, String log) {
