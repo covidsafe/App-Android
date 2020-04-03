@@ -7,7 +7,10 @@ import com.google.gson.JsonObject;
 
 import edu.uw.covidsafe.gps.GpsDbRecordRepository;
 import edu.uw.covidsafe.gps.GpsRecord;
+import edu.uw.covidsafe.json.AnnounceRequest;
+import edu.uw.covidsafe.json.AnnounceResponse;
 import edu.uw.covidsafe.json.MatchMessage;
+import edu.uw.covidsafe.json.MessageListResponse;
 import edu.uw.covidsafe.json.Region;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDDbRecordRepository;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
@@ -85,13 +88,9 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
     public void sendRequest(String seed, long ts, double lat, double longi, int precision) {
         //TODO, send the seed and timestamp to the server
         //send matchMessage
-        JsonObject matchMessage = MatchMessage.toJson(
-                new String[]{seed},
-                new long[]{ts});
-        JsonObject region = Region.toJson(lat, longi, precision);
-        JsonObject obj = new JsonObject();
-        obj.add("match_message", matchMessage);
-        obj.add("region", region);
+        AnnounceResponse announceResponse = AnnounceResponse.parse(
+                NetworkHelper.sendRequest(AnnounceRequest.toJson(new String[]{seed},new long[]{ts},
+                lat, longi, precision)));
 
         // send obj
     }
