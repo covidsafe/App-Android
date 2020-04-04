@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 
 public class NetworkConstant {
     public static String BASE_URL = "https://covidsafe.azure-api.net/api/";
+    public static String API_KEY = "6755814d12ef46a2a7a206a8117abe45";
     public static int TIMEOUT = 10;
     static RequestQueue requestQueue;
     static Gson gson;
