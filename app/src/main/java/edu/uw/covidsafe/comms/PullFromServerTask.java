@@ -20,14 +20,12 @@ import edu.uw.covidsafe.json.MessageListResponse;
 import edu.uw.covidsafe.json.MessageRequest;
 import edu.uw.covidsafe.json.MessageSizeRequest;
 import edu.uw.covidsafe.json.MessageSizeResponse;
-import edu.uw.covidsafe.json.Region;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
 import edu.uw.covidsafe.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -60,33 +58,32 @@ public class PullFromServerTask implements Runnable {
         }
         GpsRecord gpsRecord = gpsRecords.get(0);
 
-        int currentGpsResolution = Constants.MinimumGpsResolution;
+        int currentGpsPrecision = Constants.MinimumGpsPrecision;
         int maxPayloadSize = 0;
 
         long lastQueryTime = prefs.getLong(context.getString(R.string.time_of_last_query_pkey), 0L);
-        while (currentGpsResolution < Constants.MaximumGpsResolution) {
-            double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(), currentGpsResolution);
-            double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(), currentGpsResolution);
+        while (currentGpsPrecision < Constants.MaximumGpsPrecision) {
+            double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(), currentGpsPrecision);
+            double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(), currentGpsPrecision);
 
-            int sizeOfPayload = howBig(preciseLat,preciseLong,Utils.getGpsPrecision(currentGpsResolution), lastQueryTime);
+            int sizeOfPayload = howBig(preciseLat,preciseLong,
+                    currentGpsPrecision, lastQueryTime);
             if (sizeOfPayload > maxPayloadSize) {
-                currentGpsResolution += 1;
+                currentGpsPrecision += 1;
             }
             else {
                 break;
             }
         }
 
-
         //////////////////////////////////////////////////////////////////////////////////////////
         // get list of UUIDs that intersect with our movements and what the server has sent us
         //////////////////////////////////////////////////////////////////////////////////////////
-
-        double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(), currentGpsResolution);
-        double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(), currentGpsResolution);
+        double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(), currentGpsPrecision);
+        double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(), currentGpsPrecision);
 
         List<SeedUUIDRecord> seedUUIDRecords = getMessages(preciseLat,preciseLong,
-                Utils.getGpsPrecision(currentGpsResolution), lastQueryTime);
+                currentGpsPrecision, lastQueryTime);
 
         // TODO: set intersection between ble IDs and received IDs, don't do a linear for loop
         // check that the set intersection will work.

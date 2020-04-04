@@ -293,17 +293,41 @@ public class Utils {
         return false;
     }
 
-    public static double getCoarseGpsCoord(double coord, int maskSize) {
-        BitSet mask = new BitSet();
-        mask.set(maskSize, 64);
-        BitSet num = convert(Double.doubleToLongBits(coord));
-        num.and(mask);
-        return Double.longBitsToDouble(convert(num));
+    public static double getCoarseGpsCoord(double d, int precision) {
+        long bits = Double.doubleToLongBits(d);
+
+        long negative = bits & (1L << 63);
+        int exponent = (int)((bits >> 52) & 0x7ffL);
+        long mantissa = bits & 0xfffffffffffffL;
+
+        int mantissaLog = 52;
+        if (exponent == 0) {
+            mantissaLog = (int)log(mantissa, 2);
+        }
+        else {
+            mantissa = mantissa | (1L<<52);
+        }
+
+        int precisionShift = mantissaLog + exponent - 1075;
+
+        int maskLength = Math.min(precision + precisionShift, 52);
+
+        mantissa = mantissa >> (52 - maskLength);
+        mantissa = mantissa << (52 - maskLength);
+
+        if (mantissa == 0)
+        {
+            exponent = 0;
+        }
+        long result = negative |
+                ((long)(exponent & 0x7ffL) << 52) |
+                (mantissa & 0xfffffffffffffL);
+
+        return Double.longBitsToDouble(result);
     }
 
-    // number of bits of mantissa that should be *preserved*
-    public static int getGpsPrecision(int gpsResolution) {
-        return Constants.NumberOfBitsInMantissa-gpsResolution;
+    public static int log(long x, int base) {
+        return (int) (Math.log(x) / Math.log(base));
     }
 
     public static BitSet convert(long value) {
