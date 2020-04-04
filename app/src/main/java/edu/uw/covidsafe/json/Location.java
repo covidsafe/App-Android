@@ -2,17 +2,20 @@ package edu.uw.covidsafe.json;
 
 import com.google.gson.JsonObject;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Location {
-    public double latitude;
+    public double lattitude;
     public double longitude;
 
-    public static Location parse(JsonObject obj) {
+    public static Location parse(JSONObject obj) throws JSONException {
         Location loc = new Location();
-        if (obj.has("latitude")) {
-            loc.latitude = obj.get("latitude").getAsDouble();
+        if (obj.has("lattitude")) {
+            loc.lattitude = obj.getDouble("lattitude");
         }
         if (obj.has("longitude")) {
-            loc.longitude = obj.get("longitude").getAsDouble();
+            loc.longitude = obj.getDouble("longitude");
         }
         return loc;
     }

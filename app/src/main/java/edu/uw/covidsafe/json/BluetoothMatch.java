@@ -3,28 +3,33 @@ package edu.uw.covidsafe.json;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-public class BluetoothMatch {
-    public BluetoothSeed[] seeds;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-    public static BluetoothMatch parse(JsonObject obj) {
+public class BluetoothMatch {
+    String user_message;
+    public BlueToothSeed[] seeds;
+
+    public static BluetoothMatch parse(JSONObject obj) throws JSONException {
         BluetoothMatch bluetoothMatch = new BluetoothMatch();
         if (obj.has("seeds")) {
-            JsonArray array = obj.get("seeds").getAsJsonArray();
-            bluetoothMatch.seeds = new BluetoothSeed[array.size()];
-            for (int i = 0; i < array.size(); i++) {
-                bluetoothMatch.seeds[i] = BluetoothSeed.parse(array.get(i).getAsJsonObject());
+            JSONArray array = obj.getJSONArray("seeds");
+            bluetoothMatch.seeds = new BlueToothSeed[array.length()];
+            for (int i = 0; i < array.length(); i++) {
+                bluetoothMatch.seeds[i] = BlueToothSeed.parse(array.getJSONObject(i));
             }
         }
         return bluetoothMatch;
     }
 
-    public JsonObject toJson() {
-        JsonObject bluetooth_match = new JsonObject();
-        JsonArray arr = new JsonArray();
-        for (BluetoothSeed seed : seeds) {
-            arr.add(seed.toJson());
+    public JSONObject toJson() throws JSONException {
+        JSONObject bluetooth_match = new JSONObject();
+        JSONArray arr = new JSONArray();
+        for (BlueToothSeed seed : seeds) {
+            arr.put(seed.toJson());
         }
-        bluetooth_match.add("seeds", arr);
+        bluetooth_match.put("seeds", arr);
         return bluetooth_match;
     }
 }

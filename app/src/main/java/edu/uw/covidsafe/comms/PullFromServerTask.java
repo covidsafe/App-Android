@@ -5,8 +5,12 @@ import android.location.Location;
 import android.os.Messenger;
 import android.util.Log;
 
+import com.android.volley.Request;
 import com.example.covidsafe.R;
 import com.google.gson.JsonObject;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import edu.uw.covidsafe.json.Area;
 import edu.uw.covidsafe.ble.BleDbRecordRepository;
@@ -61,19 +65,29 @@ public class PullFromServerTask implements Runnable {
         int currentGpsPrecision = Constants.MinimumGpsPrecision;
         int maxPayloadSize = 0;
 
+        int sizeOfPayload = 0;
         long lastQueryTime = prefs.getLong(context.getString(R.string.time_of_last_query_pkey), 0L);
         while (currentGpsPrecision < Constants.MaximumGpsPrecision) {
             double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(), currentGpsPrecision);
             double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(), currentGpsPrecision);
 
-            int sizeOfPayload = howBig(preciseLat,preciseLong,
-                    currentGpsPrecision, lastQueryTime);
+            try {
+                sizeOfPayload = howBig(preciseLat, preciseLong,
+                        currentGpsPrecision, lastQueryTime);
+            }
+            catch(Exception e) {
+                Log.e("err",e.getMessage());
+            }
             if (sizeOfPayload > maxPayloadSize) {
                 currentGpsPrecision += 1;
             }
             else {
                 break;
             }
+        }
+
+        if (sizeOfPayload == 0) {
+            return;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -84,6 +98,9 @@ public class PullFromServerTask implements Runnable {
 
         List<SeedUUIDRecord> seedUUIDRecords = getMessages(preciseLat,preciseLong,
                 currentGpsPrecision, lastQueryTime);
+        if (seedUUIDRecords == null) {
+            return;
+        }
 
         // TODO: set intersection between ble IDs and received IDs, don't do a linear for loop
         // check that the set intersection will work.
@@ -113,58 +130,107 @@ public class PullFromServerTask implements Runnable {
     }
 
     // sync blockig op
-    public int howBig(double lat, double longi, int precision, long ts) {
-        JsonObject messageSizeRequest = MessageSizeRequest.toJson(lat, longi, precision, ts);
-        return MessageSizeResponse.parse(NetworkHelper.sendRequest(messageSizeRequest)).size_of_query_response;
+    public int howBig(double lat, double longi, int precision, long ts) throws JSONException {
+        String messageSizeRequest = MessageSizeRequest.toHttpString(lat, longi, precision, ts);
+        return MessageSizeResponse.parse(NetworkHelper.sendRequest(messageSizeRequest,
+                Request.Method.GET, null)).size_of_query_response;
     }
 
     public List<SeedUUIDRecord> getMessages(double lat, double longi, int precision, long lastQueryTime) {
         // return list of seeds and timestamps
         // check if the areas returned in these messages match our GPS timestamps
 
-        //send request
-        JsonObject messageListRequest = MessageListRequest.toJson(lat, longi, precision, lastQueryTime);
-        MessageListResponse messageListResponse = MessageListResponse.parse(NetworkHelper.sendRequest(messageListRequest));
+        /////////////////////////////////////////////////////////////////////////
+        // (1) send MessageListRequest to get query IDs and timestamps
+        String messageListRequest = MessageListRequest.toHttpString(lat, longi, precision, lastQueryTime);
+        JSONObject response = NetworkHelper.sendRequest(messageListRequest, Request.Method.GET,null);
+        if (response == null) {
+            return null;
+        }
+        MessageListResponse messageListResponse = null;
+        try {
+            MessageListResponse.parse(response);
+        }
+        catch (Exception e) {
+            Log.e("err",e.getMessage());
+            return null;
+        }
+        /////////////////////////////////////////////////////////////////////////
 
-        JsonObject messageRequest = MessageRequest.toJson(messageListResponse.messageInfos);
-        MatchMessage matchMessage = MatchMessage.parse(NetworkHelper.sendRequest(messageRequest));
+        /////////////////////////////////////////////////////////////////////////
+        // (2) make a request for the queries using the IDs
+        JSONObject messageRequestObj = null;
+        try {
+            messageRequestObj = MessageRequest.toJson(messageListResponse.message_info);
+        }
+        catch(Exception e) {
+            Log.e("err",e.getMessage());
+            return null;
+        }
+        if (messageRequestObj == null) {
+            return null;
+        }
 
-        // update last query time to server
+        String messageRequest = MessageRequest.toHttpString();
+        response = NetworkHelper.sendRequest(messageRequest, Request.Method.POST, messageRequestObj);
+        if (response == null) {
+            return null;
+        }
+
+        MatchMessage matchMessage = null;
+        try {
+            matchMessage = MatchMessage.parse(response);
+        }
+        catch (Exception e) {
+            Log.e("err",e.getMessage());
+            return null;
+        }
+        if (matchMessage == null) {
+            return null;
+        }
+        /////////////////////////////////////////////////////////////////////////
+
+        /////////////////////////////////////////////////////////////////////////
+        // (3) update last query time to server
         ArrayList<Long> queryTimes = new ArrayList<Long>();
-        for (MessageInfo messageInfo : messageListResponse.messageInfos) {
+        for (MessageInfo messageInfo : messageListResponse.message_info) {
             queryTimes.add(messageInfo.message_timestamp.toLong());
         }
         Collections.sort(queryTimes, Collections.reverseOrder());
 
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putLong(context.getString(R.string.time_of_last_query_pkey), queryTimes.get(0));
-        editor.commit();
-
-        /////////////////////////////////////////////////////////////////////////
-        //get response
-        Area[] areas = matchMessage.area_match.areas;
-        List<SeedUUIDRecord> receivedRecords = new ArrayList<SeedUUIDRecord>();
-        /////////////////////////////////////////////////////////////////////////
-
-        List<SeedUUIDRecord> filteredRecords = new ArrayList<SeedUUIDRecord>();
-        int counter = 0;
-        for (Area area : areas) {
-            GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
-            List<GpsRecord> gpsRecords = gpsRepo.getRecordsBetweenTimestamps(area.begin_time.toLong(), area.end_time.toLong());
-
-            for (GpsRecord record : gpsRecords) {
-                float[] result = new float[3];
-                Location.distanceBetween(record.getLat(), record.getLongi(), area.location.latitude, area.location.longitude, result);
-
-                if ((result.length == 1 && result[0] < area.radius_meters) ||
-                    (result.length == 2 && result[1] < area.radius_meters) ||
-                    (result.length >= 3 && result[2] < area.radius_meters)) {
-                    filteredRecords.add(receivedRecords.get(counter));
-                }
-            }
-            counter += 1;
+        if (queryTimes.size() > 0) {
+            editor.putLong(context.getString(R.string.time_of_last_query_pkey), queryTimes.get(0));
+            editor.commit();
         }
+        /////////////////////////////////////////////////////////////////////////
+
+        /////////////////////////////////////////////////////////////////////////
+        // (4) check for area intersection
+        List<SeedUUIDRecord> filteredRecords = new ArrayList<SeedUUIDRecord>();
+        if (matchMessage.area_matches.length > 0) {
+            Area[] areas = matchMessage.area_matches[0].areas;
+            List<SeedUUIDRecord> receivedRecords = new ArrayList<SeedUUIDRecord>();
+            int counter = 0;
+            for (Area area : areas) {
+                GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
+                List<GpsRecord> gpsRecords = gpsRepo.getRecordsBetweenTimestamps(area.begin_time.toLong(), area.end_time.toLong());
+
+                for (GpsRecord record : gpsRecords) {
+                    float[] result = new float[3];
+                    Location.distanceBetween(record.getLat(), record.getLongi(), area.location.lattitude, area.location.longitude, result);
+
+                    if ((result.length == 1 && result[0] < area.radius_meters) ||
+                            (result.length == 2 && result[1] < area.radius_meters) ||
+                            (result.length >= 3 && result[2] < area.radius_meters)) {
+                        filteredRecords.add(receivedRecords.get(counter));
+                    }
+                }
+                counter += 1;
+            }
+        }
+        /////////////////////////////////////////////////////////////////////////
 
         return filteredRecords;
     }
@@ -188,7 +254,7 @@ public class PullFromServerTask implements Runnable {
 
             for (GpsRecord record : gpsRecords) {
                 float[] result = new float[3];
-                Location.distanceBetween(record.getLat(), record.getLongi(), area.location.latitude, area.location.longitude, result);
+                Location.distanceBetween(record.getLat(), record.getLongi(), area.location.lattitude, area.location.longitude, result);
 
                 if ((result.length == 1 && result[0] < area.radius_meters) ||
                     (result.length == 2 && result[1] < area.radius_meters) ||

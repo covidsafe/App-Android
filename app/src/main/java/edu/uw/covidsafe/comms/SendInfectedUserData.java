@@ -2,6 +2,11 @@ package edu.uw.covidsafe.comms;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
+
+import com.android.volley.Request;
+
+import org.json.JSONObject;
 
 import edu.uw.covidsafe.gps.GpsDbRecordRepository;
 import edu.uw.covidsafe.gps.GpsRecord;
@@ -83,9 +88,28 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
     public void sendRequest(String seed, long ts, double lat, double longi, int precision) {
         //TODO, send the seed and timestamp to the server
         //send matchMessage
-        AnnounceResponse announceResponse = AnnounceResponse.parse(
-                NetworkHelper.sendRequest(AnnounceRequest.toJson(new String[]{seed},new long[]{ts},
-                lat, longi, precision)));
+        JSONObject announceRequestObj = null;
+        try {
+             announceRequestObj =
+                    AnnounceRequest.toJson(new String[]{seed}, new long[]{ts}, lat, longi, precision);
+        }
+        catch(Exception e) {
+            Log.e("err",e.getMessage());
+        }
+        if (announceRequestObj == null) {
+            return;
+        }
+
+        String announceRequest = AnnounceRequest.toHttpString();
+        JSONObject resp = NetworkHelper.sendRequest(announceRequest, Request.Method.PUT, announceRequestObj);
+
+        AnnounceResponse announceResponse = null;
+        try {
+            announceResponse = AnnounceResponse.parse(resp);
+        }
+        catch(Exception e) {
+            Log.e("err",e.getMessage());
+        }
 
         // send obj
     }

@@ -3,25 +3,26 @@ package edu.uw.covidsafe.json;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class AreaMatch {
 
     public Area[] areas;
-    public float proximity_radius_meters;
-    public int duration_tolerance_secs;
+    public String user_message;
 
-    public static AreaMatch parse(JsonObject obj) {
+    public static AreaMatch parse(JSONObject obj) throws JSONException {
         AreaMatch areaMatch = new AreaMatch();
-        if (obj.has("proximity_radius_meters")) {
-            areaMatch.proximity_radius_meters = obj.get("proximity_radius_meters").getAsFloat();
-        }
-        if (obj.has("duration_tolerance_secs")) {
-            areaMatch.duration_tolerance_secs = obj.get("duration_tolerance_secs").getAsInt();
-        }
         if (obj.has("areas")) {
-            JsonArray array = obj.get("areas").getAsJsonArray();
-            for (int i = 0; i < array.size(); i++) {
-                areaMatch.areas[i] = Area.parse(array.get(i).getAsJsonObject());
+            JSONArray array = obj.getJSONArray("areas");
+            areaMatch.areas = new Area[array.length()];
+            for (int i = 0; i < array.length(); i++) {
+                areaMatch.areas[i] = Area.parse(array.getJSONObject(i));
             }
+        }
+        if (obj.has("user_message")) {
+            areaMatch.user_message = obj.getString("user_message");
         }
         return areaMatch;
     }
