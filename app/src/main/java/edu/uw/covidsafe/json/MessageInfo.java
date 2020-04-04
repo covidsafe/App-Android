@@ -7,27 +7,23 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MessageInfo {
-    public String message_id;
-    public UTCTime message_timestamp;
+    public String MessageId;
+    public UTCTime MessageTimestamp;
 
     public JSONObject toJson() throws JSONException {
         JSONObject obj = new JSONObject();
-        if (obj.has("message_id")) {
-            obj.put("message_id", message_id);
-        }
-        if (obj.has("message_timestamp")) {
-            obj.put("message_timestamp", message_timestamp.toJson());
-        }
+        obj.put("MessageId", MessageId);
+        obj.put("MessageTimestamp", MessageTimestamp.toJson());
         return obj;
     }
 
     public static MessageInfo parse(JSONObject obj) throws JSONException {
         MessageInfo messageInfo = new MessageInfo();
-        if (obj.has("message_id")) {
-            messageInfo.message_id = obj.getString("message_id");
+        if (obj.has("messageId")) {
+            messageInfo.MessageId = obj.getString("messageId");
         }
-        if (obj.has("message_timestamp")) {
-            messageInfo.message_timestamp = UTCTime.parse(obj.getJSONObject("message_timestamp"));
+        if (obj.has("messageTimestamp")) {
+            messageInfo.MessageTimestamp = UTCTime.parse(obj.getJSONObject("messageTimestamp"));
         }
         return messageInfo;
     }

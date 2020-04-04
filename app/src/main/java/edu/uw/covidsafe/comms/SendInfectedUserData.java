@@ -75,6 +75,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         if (sortedGpsRecords.size() > 0) {
             GpsRecord gpsRecord = sortedGpsRecords.get(0);
 
+            Log.e("ERR ",gpsRecord.getLat()+","+gpsRecord.getLongi());
             int gpsResolution = Constants.MaximumGpsPrecision;
             sendRequest(recordToSend.seed, recordToSend.ts,
                     Utils.getCoarseGpsCoord(gpsRecord.getLat(), gpsResolution),
