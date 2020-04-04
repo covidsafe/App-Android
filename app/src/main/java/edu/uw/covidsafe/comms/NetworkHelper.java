@@ -35,7 +35,7 @@ public class NetworkHelper {
                 if (obj != null) {
                     HashMap<String,String> headers = new HashMap<String, String>();
                     headers.put("Content-Type","application/json-patch+json");
-                    headers.put("Ocp-Apim-Subscription-Key","6755814d12ef46a2a7a206a8117abe45");
+                    headers.put("Ocp-Apim-Subscription-Key",NetworkConstant.API_KEY);
                     return headers;
                 }
                 else {
@@ -52,11 +52,11 @@ public class NetworkHelper {
             response = future.get(NetworkConstant.TIMEOUT, TimeUnit.SECONDS); // this will block
             Log.e("net",response.toString());
         } catch (InterruptedException e) {
-            Log.e("net",e.getMessage());
+            Log.e("net","11 "+e.getMessage());
         } catch (ExecutionException e) {
-            Log.e("net",e.getMessage());
+            Log.e("net","22 "+e.getMessage());
         } catch (TimeoutException e) {
-            Log.e("net",(e.toString())+"");
+            Log.e("net","33 "+(e.toString())+"");
         }
         Log.e("net","finished request");
         return response;
