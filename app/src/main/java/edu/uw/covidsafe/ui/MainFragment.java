@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import edu.uw.covidsafe.ble.BluetoothScanHelper;
 import edu.uw.covidsafe.ble.BluetoothServerHelper;
 import edu.uw.covidsafe.ble.BluetoothUtils;
+import edu.uw.covidsafe.comms.SendInfectedUserData;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.BackgroundService;
 import com.example.covidsafe.R;
@@ -54,10 +55,10 @@ public class MainFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+//        new SendInfectedUserData(getContext(),"","",0).execute();
         Log.e("logme","main fragment onresume");
 
         SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-
 
         Switch bleSwitch = (Switch)getActivity().findViewById(R.id.bleSwitch);
         bleSwitch.setChecked(prefs.getBoolean("bleEnabled", Constants.BLUETOOTH_ENABLED));

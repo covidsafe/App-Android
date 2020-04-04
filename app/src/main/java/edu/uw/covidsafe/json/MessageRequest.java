@@ -29,7 +29,8 @@ public class MessageRequest {
         JSONObject obj = new JSONObject();
         JSONArray array = new JSONArray();
         for (int i = 0; i < messageInfos.length; i++) {
-            array.put(i, messageInfos[i].toJson());
+            JSONObject obji = messageInfos[i].toJson();
+            array.put(i, obji);
         }
         obj.put("RequestedQueries", array);
         return obj;

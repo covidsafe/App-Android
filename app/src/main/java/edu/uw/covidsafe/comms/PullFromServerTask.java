@@ -63,7 +63,6 @@ public class PullFromServerTask implements Runnable {
         GpsRecord gpsRecord = gpsRecords.get(0);
 
         int currentGpsPrecision = Constants.MinimumGpsPrecision;
-        int maxPayloadSize = 0;
 
         int sizeOfPayload = 0;
         long lastQueryTime = prefs.getLong(context.getString(R.string.time_of_last_query_pkey), 0L);
@@ -78,7 +77,7 @@ public class PullFromServerTask implements Runnable {
             catch(Exception e) {
                 Log.e("err",e.getMessage());
             }
-            if (sizeOfPayload > maxPayloadSize) {
+            if (sizeOfPayload > Constants.MaxPayloadSize) {
                 currentGpsPrecision += 1;
             }
             else {
@@ -132,8 +131,9 @@ public class PullFromServerTask implements Runnable {
     // sync blockig op
     public int howBig(double lat, double longi, int precision, long ts) throws JSONException {
         String messageSizeRequest = MessageSizeRequest.toHttpString(lat, longi, precision, ts);
-        return MessageSizeResponse.parse(NetworkHelper.sendRequest(messageSizeRequest,
-                Request.Method.GET, null)).size_of_query_response;
+        JSONObject jsonResp = NetworkHelper.sendRequest(messageSizeRequest, Request.Method.GET, null);
+        MessageSizeResponse messageSizeResponse = MessageSizeResponse.parse(jsonResp);
+        return messageSizeResponse.sizeOfQueryResponse;
     }
 
     public List<SeedUUIDRecord> getMessages(double lat, double longi, int precision, long lastQueryTime) {
@@ -149,7 +149,7 @@ public class PullFromServerTask implements Runnable {
         }
         MessageListResponse messageListResponse = null;
         try {
-            MessageListResponse.parse(response);
+            messageListResponse = MessageListResponse.parse(response);
         }
         catch (Exception e) {
             Log.e("err",e.getMessage());
@@ -161,7 +161,7 @@ public class PullFromServerTask implements Runnable {
         // (2) make a request for the queries using the IDs
         JSONObject messageRequestObj = null;
         try {
-            messageRequestObj = MessageRequest.toJson(messageListResponse.message_info);
+            messageRequestObj = MessageRequest.toJson(messageListResponse.messageInfo);
         }
         catch(Exception e) {
             Log.e("err",e.getMessage());
@@ -193,8 +193,8 @@ public class PullFromServerTask implements Runnable {
         /////////////////////////////////////////////////////////////////////////
         // (3) update last query time to server
         ArrayList<Long> queryTimes = new ArrayList<Long>();
-        for (MessageInfo messageInfo : messageListResponse.message_info) {
-            queryTimes.add(messageInfo.message_timestamp.toLong());
+        for (MessageInfo messageInfo : messageListResponse.messageInfo) {
+            queryTimes.add(messageInfo.MessageTimestamp.toLong());
         }
         Collections.sort(queryTimes, Collections.reverseOrder());
 

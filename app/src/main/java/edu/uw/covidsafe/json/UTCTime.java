@@ -25,25 +25,25 @@ public class UTCTime {
     public static UTCTime parse(JSONObject obj) throws JSONException {
         UTCTime time = new UTCTime();
         if (obj.has("year")) {
-            obj.getInt("year");
+            time.year = obj.getInt("year");
         }
         if (obj.has("month")) {
-            obj.getInt("month");
+            time.month = obj.getInt("month");
         }
         if (obj.has("day")) {
-            obj.getInt("day");
+            time.day = obj.getInt("day");
         }
         if (obj.has("hour")) {
-            obj.getInt("hour");
+            time.hour = obj.getInt("hour");
         }
         if (obj.has("minute")) {
-            obj.getInt("minute");
+            time.minute = obj.getInt("minute");
         }
         if (obj.has("second")) {
-            obj.getInt("second");
+            time.second = obj.getInt("second");
         }
         if (obj.has("millisecond")) {
-            obj.getInt("millisecond");
+            time.millisecond = obj.getInt("millisecond");
         }
         return time;
     }
@@ -64,9 +64,9 @@ public class UTCTime {
 
     public JSONObject toJson() throws JSONException {
         JSONObject utcTime = new JSONObject();
-        utcTime.put("day",day);
-        utcTime.put("month",month);
         utcTime.put("year",year);
+        utcTime.put("month",month);
+        utcTime.put("day",day);
         utcTime.put("hour",hour);
         utcTime.put("minute",minute);
         utcTime.put("second",second);
