@@ -81,8 +81,9 @@ public class BluetoothServerHelper {
                         String[] elts = contactUuid.split("-");
                         Utils.sendDataToUI(messenger, "ble", elts[elts.length - 1]);
 
+                        // byte[-128,127] => int[0,255] => rssi[-255,0]
                         if (value.length == 17) {
-                            rssi = -value[16];
+                            rssi = -Utils.byteConvert(value[16]);
                         }
                         Log.e("bleserver","rssi "+rssi+","+device.getAddress());
 
