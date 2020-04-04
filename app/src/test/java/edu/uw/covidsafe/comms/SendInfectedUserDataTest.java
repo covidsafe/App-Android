@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import java.util.UUID;
 
+import edu.uw.covidsafe.json.Location;
 import edu.uw.covidsafe.json.MatchMessage;
 
 public class SendInfectedUserDataTest {
@@ -29,12 +30,17 @@ public class SendInfectedUserDataTest {
 //        String prettyJsonString = gson.toJson(je);
 //        System.out.println(prettyJsonString);
 
-        int[] aa=new int[]{1,2,3};
-        JsonObject obj = new JsonObject();
-        JsonArray array = new JsonArray();
-        array.add(1);
-        array.add(2);
-        array.add(3);
-        obj.add("adsf",array);
+//        Gson gson = new Gson();
+//        String json = "{'latitude' : '100','longitude':'200'}";
+//        Location loc = (Location)gson.fromJson(json, Location.class);
+//        System.out.println(loc.lattitude+","+loc.longitude);
+
+//        int[] aa=new int[]{1,2,3};
+//        JsonObject obj = new JsonObject();
+//        JsonArray array = new JsonArray();
+//        array.add(1);
+//        array.add(2);
+//        array.add(3);
+//        obj.add("adsf",array);
     }
 }

@@ -4,6 +4,9 @@ import android.util.Log;
 
 import com.google.gson.JsonObject;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,28 +22,28 @@ public class UTCTime {
     public int second;
     public int millisecond;
 
-    public static UTCTime parse(JsonObject obj) {
+    public static UTCTime parse(JSONObject obj) throws JSONException {
         UTCTime time = new UTCTime();
         if (obj.has("year")) {
-            obj.get("year").getAsInt();
+            obj.getInt("year");
         }
         if (obj.has("month")) {
-            obj.get("month").getAsInt();
+            obj.getInt("month");
         }
         if (obj.has("day")) {
-            obj.get("day").getAsInt();
+            obj.getInt("day");
         }
         if (obj.has("hour")) {
-            obj.get("hour").getAsInt();
+            obj.getInt("hour");
         }
         if (obj.has("minute")) {
-            obj.get("minute").getAsInt();
+            obj.getInt("minute");
         }
         if (obj.has("second")) {
-            obj.get("second").getAsInt();
+            obj.getInt("second");
         }
         if (obj.has("millisecond")) {
-            obj.get("millisecond").getAsInt();
+            obj.getInt("millisecond");
         }
         return time;
     }
@@ -59,15 +62,15 @@ public class UTCTime {
         return 0;
     }
 
-    public JsonObject toJson() {
-        JsonObject utcTime = new JsonObject();
-        utcTime.addProperty("day",day);
-        utcTime.addProperty("month",month);
-        utcTime.addProperty("year",year);
-        utcTime.addProperty("hour",hour);
-        utcTime.addProperty("minute",minute);
-        utcTime.addProperty("second",second);
-        utcTime.addProperty("millisecond",millisecond);
+    public JSONObject toJson() throws JSONException {
+        JSONObject utcTime = new JSONObject();
+        utcTime.put("day",day);
+        utcTime.put("month",month);
+        utcTime.put("year",year);
+        utcTime.put("hour",hour);
+        utcTime.put("minute",minute);
+        utcTime.put("second",second);
+        utcTime.put("millisecond",millisecond);
         return utcTime;
     }
 

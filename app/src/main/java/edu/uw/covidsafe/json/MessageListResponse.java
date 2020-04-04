@@ -3,20 +3,22 @@ package edu.uw.covidsafe.json;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class MessageListResponse {
-    public MessageInfo[] messageInfos;
+    public MessageInfo[] message_info;
 
-    public static MessageListResponse parse(JsonObject obj) {
-        MessageListResponse response = new MessageListResponse();
-
+    public static MessageListResponse parse(JSONObject obj) throws JSONException {
+        MessageListResponse messageListResponse = new MessageListResponse();
         if (obj.has("message_info")) {
-            JsonArray arr = obj.getAsJsonArray("message_info");
-            response.messageInfos = new MessageInfo[arr.size()];
-
-            for (int i = 0; i < arr.size(); i++) {
-                response.messageInfos[i] = MessageInfo.parse(arr.get(i).getAsJsonObject());
+            JSONArray arr = obj.getJSONArray("message_info");
+            messageListResponse.message_info = new MessageInfo[arr.length()];
+            for (int i = 0; i < arr.length(); i++) {
+                messageListResponse.message_info[i] = MessageInfo.parse(arr.getJSONObject(i));
             }
         }
-        return response;
+        return messageListResponse;
     }
 }

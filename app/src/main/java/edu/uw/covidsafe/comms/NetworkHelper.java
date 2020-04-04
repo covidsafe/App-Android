@@ -17,50 +17,30 @@ import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class NetworkHelper {
 
-    public static JsonObject sendRequest(JsonObject obj) {
+    public static JSONObject sendRequest(String url, int method, JSONObject obj) {
+        Log.e("net","start request");
+        RequestFuture<JSONObject> future = RequestFuture.newFuture();
+        JsonObjectRequest request = new JsonObjectRequest(method, url, obj, future, future);
+        NetworkConstant.requestQueue.add(request);
+
+        JSONObject response = null;
+        try {
+            response = future.get(NetworkConstant.TIMEOUT, TimeUnit.SECONDS); // this will block
+            Log.e("net",response.toString());
+        } catch (InterruptedException e) {
+            Log.e("net",e.getMessage());
+        } catch (ExecutionException e) {
+            Log.e("net",e.getMessage());
+        } catch (TimeoutException e) {
+            Log.e("net",(e.toString())+"");
+        }
+        Log.e("net","finished request");
         return null;
     }
 
-    public static void sendRecords(final JsonObject obj, Context context) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    //TODO change url and also in network_security_config.xml
-                    InetSocketAddress addr = new InetSocketAddress(NetworkConstant.HOSTNAME,NetworkConstant.PORT);
-                    URL url = new URL("http://"+addr.toString()+"/companies");
-
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("POST");
-                    conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-                    conn.setRequestProperty("Accept","application/json");
-                    conn.setDoOutput(true);
-                    conn.setDoInput(true);
-
-                    DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-//                    os.writeBytes(URLEncoder.encode(records.toJson().toString(), "UTF-8"));
-                    os.writeBytes(obj.toString());
-
-                    os.flush();
-                    os.close();
-
-                    int resp = conn.getResponseCode();
-                    if (resp != 200) {
-                        Toast.makeText(context,"Failed to send records. Please try again.", Toast.LENGTH_LONG);
-                    }
-                    Log.e("STATUS", String.valueOf(resp));
-                    Log.e("MSG" , conn.getResponseMessage());
-
-                    conn.disconnect();
-                } catch (Exception e) {
-                    Log.e("logme",e.getMessage());
-                }
-            }
-        });
-
-        thread.start();
-    }
 }

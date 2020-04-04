@@ -3,35 +3,47 @@ package edu.uw.covidsafe.json;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-public class MatchMessage {
-    public String match_protocol_version;
-    public AreaMatch area_match;
-    public BluetoothMatch bluetooth_match;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-    public static MatchMessage parse(JsonObject obj) {
+public class MatchMessage {
+    public String bool_expression;
+    public AreaMatch[] area_matches;
+    public BluetoothMatch[] bluetooth_matches;
+
+    public static MatchMessage parse(JSONObject obj) throws JSONException {
         MatchMessage matchMessage = new MatchMessage();
-        if (obj.has("match_protocol_version")) {
-            matchMessage.match_protocol_version = obj.get("match_protocol_version").getAsString();
+        if (obj.has("bool_expression")) {
+            matchMessage.bool_expression = obj.getString("bool_expression");
         }
-        if (obj.has("area_match")) {
-            matchMessage.area_match = AreaMatch.parse(obj.get("area_match").getAsJsonObject());
+        if (obj.has("area_matches")) {
+            JSONArray arr = obj.getJSONArray("area_match");
+            matchMessage.area_matches = new AreaMatch[arr.length()];
+            for (int i = 0; i < arr.length(); i++) {
+                matchMessage.area_matches[i] = AreaMatch.parse(arr.getJSONObject(i));
+            }
         }
-        if (obj.has("bluetooth_match")) {
-            matchMessage.bluetooth_match = BluetoothMatch.parse(obj.get("bluetooth_match").getAsJsonObject());
+        if (obj.has("bluetooth_matches")) {
+            JSONArray arr = obj.getJSONArray("bluetooth_matches");
+            matchMessage.bluetooth_matches = new BluetoothMatch[arr.length()];
+            for (int i = 0; i < arr.length(); i++) {
+                matchMessage.bluetooth_matches[i] = BluetoothMatch.parse(arr.getJSONObject(i));
+            }
         }
         return matchMessage;
     }
 
-    public static JsonObject toJson(String[] seed, long[] ts) {
-        JsonObject matchMessage = new JsonObject();
-        matchMessage.addProperty("match_protocol_version", 1);
+    public static JSONObject toJson(String[] seed, long[] ts) throws JSONException {
+        JSONObject matchMessage = new JSONObject();
+        matchMessage.put("match_protocol_version", 1);
 
-        JsonArray arr = new JsonArray();
+        JSONArray arr = new JSONArray();
         for (int i = 0; i < seed.length; i++) {
-            arr.add(BluetoothSeed.toJson(seed[i], ts[i]));
+            arr.put(BlueToothSeed.toJson(seed[i], ts[i]));
         }
 
-        matchMessage.add("bluetooth_match", arr);
+        matchMessage.put("bluetooth_match", arr);
         return matchMessage;
     }
 }

@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import edu.uw.covidsafe.comms.NetworkConstant;
 import edu.uw.covidsafe.comms.SendInfectedUserData;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         //generate seed
         CryptoUtils.generateInitSeed(getApplicationContext(), false);
 
+        NetworkConstant.init(this);
 //        ServiceUtils.scheduleLookupJob(mContext);
     }
 
