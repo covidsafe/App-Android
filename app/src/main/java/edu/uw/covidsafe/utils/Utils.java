@@ -565,6 +565,15 @@ public class Utils {
         sharedPref.commit();
     }
 
+    public static int byteConvert(byte i) {
+        if (i > 0) {
+            return i;
+        }
+        else {
+            return i&0xff;
+        }
+    }
+
     public static void writeLastSentLog(Context cxt, long ts) {
         SharedPreferences.Editor sharedPref = cxt.getSharedPreferences(
                 Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
