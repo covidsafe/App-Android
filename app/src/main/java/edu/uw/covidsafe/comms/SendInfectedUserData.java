@@ -3,15 +3,10 @@ package edu.uw.covidsafe.comms;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.google.gson.JsonObject;
-
 import edu.uw.covidsafe.gps.GpsDbRecordRepository;
 import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.json.AnnounceRequest;
 import edu.uw.covidsafe.json.AnnounceResponse;
-import edu.uw.covidsafe.json.MatchMessage;
-import edu.uw.covidsafe.json.MessageListResponse;
-import edu.uw.covidsafe.json.Region;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDDbRecordRepository;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
 import edu.uw.covidsafe.utils.Constants;
@@ -75,11 +70,11 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         if (sortedGpsRecords.size() > 0) {
             GpsRecord gpsRecord = sortedGpsRecords.get(0);
 
-            int gpsResolution = Constants.MaximumGpsResolution;
+            int gpsResolution = Constants.MaximumGpsPrecision;
             sendRequest(recordToSend.seed, recordToSend.ts,
                     Utils.getCoarseGpsCoord(gpsRecord.getLat(), gpsResolution),
                     Utils.getCoarseGpsCoord(gpsRecord.getLongi(), gpsResolution),
-                    Utils.getGpsPrecision(gpsResolution));
+                    gpsResolution);
         }
 
         return null;
