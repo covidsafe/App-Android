@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -16,6 +17,7 @@ import android.widget.Switch;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NavUtils;
 import androidx.fragment.app.Fragment;
 
 import com.example.covidsafe.R;
@@ -39,7 +41,9 @@ public class PermissionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.onboarding_permissions, container, false);
-        ((OnboardingActivity) getActivity()).getSupportActionBar().hide();
+        ((OnboardingActivity) getActivity()).getSupportActionBar().show();
+        ((OnboardingActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((OnboardingActivity) getActivity()).getSupportActionBar().setTitle("Select your preferences");
         return view;
     }
 
@@ -59,7 +63,7 @@ public class PermissionFragment extends Fragment {
             dialog.show();
         }
 
-        finish = (Button) getActivity().findViewById(R.id.permissionsFinish);
+        finish = (Button) getActivity().findViewById(R.id.skipButton);
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,11 +71,13 @@ public class PermissionFragment extends Fragment {
             }
         });
 
-        back = (Button) getActivity().findViewById(R.id.permissionsBack);
+        back = (Button) getActivity().findViewById(R.id.nextButton);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_onboarding, new StartFragment()).commit();
+                startActivity(new Intent(getActivity(), MainActivity.class));
+//                getActivity().getSupportFragmentManager().beginTransaction().replace(
+//                        R.id.fragment_container_onboarding, Constants.MainFragment).commit();
             }
         });
 

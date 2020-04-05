@@ -420,7 +420,6 @@ public class Utils {
     }
 
     public static void linkify(TextView tv, String str) {
-
         Spannable s = (Spannable) Html.fromHtml(str);
         for (URLSpan u : s.getSpans(0, s.length(), URLSpan.class)) {
             s.setSpan(new UnderlineSpan() {
@@ -431,7 +430,6 @@ public class Utils {
         }
         tv.setText(s);
         tv.setMovementMethod(LinkMovementMethod.getInstance());
-
     }
 
     public static String time() {

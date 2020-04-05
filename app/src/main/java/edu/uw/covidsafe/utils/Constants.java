@@ -15,20 +15,11 @@ import androidx.fragment.app.Fragment;
 
 import edu.uw.covidsafe.BackgroundService;
 
-import com.android.volley.Cache;
-import com.android.volley.Network;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
-import com.android.volley.toolbox.HurlStack;
 import com.example.covidsafe.R;
 import edu.uw.covidsafe.ui.MainFragment;
 import edu.uw.covidsafe.ui.health.SymptomTrackerFragment;
 import edu.uw.covidsafe.ui.health.DiagnosisFragment;
 
-import java.math.RoundingMode;
-import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,13 +27,13 @@ import java.util.UUID;
 import java.util.concurrent.ScheduledFuture;
 
 import edu.uw.covidsafe.ui.HelpFragment;
-import edu.uw.covidsafe.ui.onboarding.HealthFragment;
+import edu.uw.covidsafe.ui.health.HealthFragment;
 import edu.uw.covidsafe.ui.settings.SettingsFragment;
 import unused.BlacklistRecord;
 import unused.HistoryFragment;
 
 import edu.uw.covidsafe.ui.onboarding.PermissionFragment;
-import edu.uw.covidsafe.ui.onboarding.StartFragment;
+import edu.uw.covidsafe.ui.onboarding.PagerFragment;
 
 public class Constants {
 
@@ -120,7 +111,7 @@ public class Constants {
     public static Fragment SettingsFragment;
     public static Fragment CurrentFragment;
     public static Fragment PermissionsFragment;
-    public static Fragment StartFragment;
+    public static Fragment PagerFragment;
     public static String gpsDirName = "gps";
     public static String bleDirName = "ble";
     public static String symptomsDirName = "symptoms";
@@ -144,6 +135,7 @@ public class Constants {
     public static HashSet<String> scannedUUIDs;
     public static HashMap<String,Integer> scannedUUIDsRSSIs;
     public static HashSet<String> writtenUUIDs;
+    public static int pageNumber = -1;
 
     public static String[] gpsPermissions= {
             Manifest.permission.ACCESS_BACKGROUND_LOCATION,
@@ -169,7 +161,7 @@ public class Constants {
         DiagnosisFragment = new DiagnosisFragment();
         SettingsFragment = new SettingsFragment();
         PermissionsFragment = new PermissionFragment();
-        StartFragment = new StartFragment();
+        PagerFragment = new PagerFragment();
         if (!DEBUG) {
             LOG_TO_DISK = false;
         }

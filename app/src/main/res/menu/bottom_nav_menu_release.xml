@@ -5,28 +5,22 @@
     <item
         android:id="@+id/action_track"
         android:enabled="true"
-        android:icon="@drawable/ic_my_location_black_24dp"
-        android:title="Measure"
+        android:icon="@drawable/nav1"
+        android:title="Home"
         app:showAsAction="always|withText" />
 
     <item
         android:id="@+id/action_report"
         android:enabled="true"
-        android:icon="@drawable/ic_send_black_24dp"
-        android:title="Symptoms"
+        android:icon="@drawable/nav2"
+        android:title="Health report"
         app:showAsAction="always|withText" />
 
     <item
         android:id="@+id/action_help"
         android:enabled="true"
-        android:icon="@drawable/ic_help"
-        android:title="Help"
+        android:icon="@drawable/nav3"
+        android:title="Resources"
         app:showAsAction="always|withText" />
 
-    <item
-        android:id="@+id/action_settings"
-        android:enabled="true"
-        android:icon="@drawable/ic_settings_black_24dp"
-        android:title="Settings"
-        app:showAsAction="always|withText" />
 </menu>

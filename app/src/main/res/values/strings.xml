@@ -47,11 +47,45 @@
     <string name="retry">Retry</string>
     <string name="sure">I\'m sure</string>
 
-    <string name="privacy_link"><![CDATA[<a href="http://www.uw.edu"><b>Privacy<b/></a>]]></string>
-    <string name="terms_link"><![CDATA[<a href="http://www.uw.edu"><b>Terms and Conditions<b/></a>]]></string>
+    <string name="privacy_link"><![CDATA[<font color=#FFFFFF><a href="http://www.uw.edu">Privacy  |  </a></font>]]></string>
+    <string name="terms_link"><![CDATA[<font color=#FFFFFF><a href="http://www.uw.edu">Terms and Conditions</a></font>]]></string>
 
     <string name="lipsum">Egestas tellus rutrum tellus pellentesque eu tincidun. Odio tempor orci dapibus ultrices in iaculis nunc sed augue suspendisse.</string>
     <string name="lipsum2">Egestas tellus rutrum tellus pellentesque eu tincidunt. Odio tempor orci dapibus ultrices in iaculis nunc sed augue.</string>
+
+    <string name="privacyText">
+        Learn more about how we protect your privacy.
+    </string>
+
+    <string name="perm1">Notifications</string>
+    <string name="perm2">Location Sharing</string>
+    <string name="perm3">Bluetooth Tracing</string>
+
+    <string name="perm1desc">
+        Receive push notifications for exposure risks in your area.
+    </string>
+    <string name="perm2desc">
+        Share your location information with Healthcare Providers.
+    </string>
+    <string name="perm3desc">
+        Enables the detection of exposure risks within a close distance to you, anonymously.
+    </string>
+
+    <string name="story1">
+        CovidSafe notifies you if you may have been exposed to coronavirus and helps you monitor any symptoms you\'re having.
+    </string>
+    <string name="story2">
+        Learn if you might have been exposed. If you\'ve recently visited a location with a risk of COVID-19 exposure, you\'ll get a notification letting you know.
+    </string>
+    <string name="story3">
+        Take care of yourself and others. Get self-care tips, connect with a healthcare professional if your symptoms worsen, and report locations you recently visited to protect others.
+    </string>
+    <string name="story4">
+        Any information you contribute is protected. Learn more about how your information is used and protected on the Privacy page in Settings.
+    </string>
+    <string name="startText">
+        Let\s slow the spread of COVID-19 together.
+    </string>
 
     <string name="symptom1">Fever</string>
     <string name="symptom2">Cough</string>

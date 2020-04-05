@@ -1,4 +1,4 @@
-package edu.uw.covidsafe.ui.onboarding;
+package edu.uw.covidsafe.ui.health;
 
 import android.os.Bundle;
 import android.util.Log;
