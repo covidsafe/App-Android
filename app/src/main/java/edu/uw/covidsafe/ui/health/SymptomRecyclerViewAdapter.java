@@ -26,7 +26,7 @@ import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
 
-public class SymptomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class SymptomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<String> symptoms = new ArrayList<>();
     private ArrayList<String> desc = new ArrayList<>();
     private ArrayList<CheckBox> boxes = new ArrayList<>();

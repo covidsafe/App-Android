@@ -1,4 +1,4 @@
-package edu.uw.covidsafe;
+package edu.uw.covidsafe.comms;
 
 import android.app.job.JobParameters;
 import android.app.job.JobService;

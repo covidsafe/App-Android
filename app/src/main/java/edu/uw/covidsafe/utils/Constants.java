@@ -26,7 +26,7 @@ import java.util.HashSet;
 import java.util.UUID;
 import java.util.concurrent.ScheduledFuture;
 
-import edu.uw.covidsafe.ui.HelpFragment;
+import edu.uw.covidsafe.ui.resources.ResourcesFragment;
 import edu.uw.covidsafe.ui.health.HealthFragment;
 import edu.uw.covidsafe.ui.settings.SettingsFragment;
 import unused.BlacklistRecord;
@@ -61,6 +61,7 @@ public class Constants {
         Insert,ViewAll
     }
 
+    public static int QuarantineLengthInDays = 14;
     public static int MaxPayloadSize = 10000;
     public static int rssiCutoff = -82;
     public static int MaximumGpsPrecision = 4;
@@ -104,6 +105,7 @@ public class Constants {
     public static String NOTIFICATION_CHANNEL = "channel";
     public static Fragment MainFragment;
     public static Fragment HealthFragment;
+    public static Fragment SubmitFragment;
     public static Fragment HelpFragment;
     public static Fragment HistoryFragment;
     public static Fragment SymptomTrackerFragment;
@@ -154,8 +156,9 @@ public class Constants {
     public static void init(Activity av) {
         Log.e("logme","constants init");
         MainFragment = new MainFragment();
-        HelpFragment = new HelpFragment();
+        HelpFragment = new ResourcesFragment();
         HealthFragment = new HealthFragment();
+        SubmitFragment = new DiagnosisFragment();
         HistoryFragment = new HistoryFragment();
         SymptomTrackerFragment = new SymptomTrackerFragment();
         DiagnosisFragment = new DiagnosisFragment();

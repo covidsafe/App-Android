@@ -8,11 +8,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import edu.uw.covidsafe.ui.onboarding.OnboardingActivity;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.ui.MainActivity;
 import com.example.covidsafe.R;
@@ -30,7 +32,18 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.e("logme","HELP");
         view = inflater.inflate(R.layout.fragment_settings, container, false);
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(getActivity().getString(R.string.settings_header_text));
+        ((MainActivity) getActivity()).getSupportActionBar().show();
+        ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Settings");
+
+        TextView tv = view.findViewById(R.id.share);
+        tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(),tv.getText().toString(),Toast.LENGTH_LONG).show();
+            }
+        });
+
         return view;
     }
 

@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -294,9 +295,9 @@ public class Utils {
     }
 
     public static double getCoarseGpsCoord(double d, int precision) {
-        Log.e("ERR ",d+","+precision);
+//        Log.e("ERR ",d+","+precision);
         long bits = Double.doubleToLongBits(d);
-        Log.e("ERR ",d+","+precision);
+//        Log.e("ERR ",d+","+precision);
 
         long negative = bits & (1L << 63);
         int exponent = (int)((bits >> 52) & 0x7ffL);
@@ -417,6 +418,12 @@ public class Utils {
             hasMiscPermissions(context);
         }
         return true;
+    }
+
+    public static void goToUrl (Activity av, String url) {
+        Uri uriUrl = Uri.parse(url);
+        Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+        av.startActivity(launchBrowser);
     }
 
     public static void linkify(TextView tv, String str) {

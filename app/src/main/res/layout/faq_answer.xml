@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="45dp"
+    android:paddingTop="15dp"
+    android:paddingBottom="15dp"
+    android:background="@color/gray"
+    android:paddingStart="45dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/purpleLight"
+        android:text="A: "/>
+
+    <TextView
+        android:id="@+id/faqitem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/darkGray"
+        android:layout_marginLeft="10dp"
+        android:text="@string/lipsum4"/>
+
+</LinearLayout>

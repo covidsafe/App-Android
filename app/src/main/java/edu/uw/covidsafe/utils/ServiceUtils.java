@@ -5,7 +5,7 @@ import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
 
-import edu.uw.covidsafe.GrpcServiceListener;
+import edu.uw.covidsafe.comms.GrpcServiceListener;
 
 public class ServiceUtils {
     public static void scheduleLookupJob(Context context) {
