@@ -42,7 +42,7 @@
         </activity>
 
         <service android:name="edu.uw.covidsafe.BackgroundService"></service>
-        <service android:name="edu.uw.covidsafe.GrpcServiceListener" android:permission="android.permission.BIND_JOB_SERVICE"></service>
+        <service android:name="edu.uw.covidsafe.comms.GrpcServiceListener" android:permission="android.permission.BIND_JOB_SERVICE"></service>
     </application>
 
 </manifest>

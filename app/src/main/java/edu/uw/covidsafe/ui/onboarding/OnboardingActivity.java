@@ -29,7 +29,7 @@ public class OnboardingActivity extends AppCompatActivity {
         Constants.init(this);
         SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         boolean b = prefs.getBoolean(getString(R.string.onboard_enabled_pkey),true);
-        b=true;
+        b=false;
         Log.e("onboarding","should start onboarding? "+b);
         if (b) {
             setContentView(R.layout.activity_onboarding);
