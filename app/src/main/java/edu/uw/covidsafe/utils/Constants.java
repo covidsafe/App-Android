@@ -21,6 +21,7 @@ import com.example.covidsafe.R;
 
 import edu.uw.covidsafe.gps.GpsUtils;
 import edu.uw.covidsafe.ui.MainFragment;
+import edu.uw.covidsafe.ui.notif.HistoryRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
 import unused.SymptomTrackerFragment;
 import edu.uw.covidsafe.ui.health.DiagnosisFragment;
@@ -46,11 +47,19 @@ public class Constants {
         Disk, Db
     }
 
+    public enum MessageType {
+        Exposure,NarrowCast
+    }
+
     public static boolean WRITE_TO_DISK = true;
     public static boolean DEBUG = true;
     public static UploadSources UploadSource = UploadSources.Disk;
 
     public enum BleDatabaseOps {
+        Insert,ViewAll
+    }
+
+    public enum NotifDatabaseOps {
         Insert,ViewAll
     }
 
@@ -67,6 +76,7 @@ public class Constants {
     }
 
     public static NotifRecyclerViewAdapter NotificationAdapter;
+    public static HistoryRecyclerViewAdapter HistoryAdapter;
     public static boolean PullServiceRunning = false;
     public static boolean LoggingServiceRunning = false;
     public static boolean SuppressSwitchStateCheck = false;
@@ -130,6 +140,7 @@ public class Constants {
     public static Fragment CurrentFragment;
     public static Fragment PermissionsFragment;
     public static Fragment PagerFragment;
+    public static String notifDirName = "notif";
     public static String gpsDirName = "gps";
     public static String bleDirName = "ble";
     public static String symptomsDirName = "symptoms";

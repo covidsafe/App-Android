@@ -28,6 +28,8 @@ import edu.uw.covidsafe.json.MessageRequest;
 import edu.uw.covidsafe.json.MessageSizeRequest;
 import edu.uw.covidsafe.json.MessageSizeResponse;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
+import edu.uw.covidsafe.ui.notif.NotifOpsAsyncTask;
+import edu.uw.covidsafe.ui.notif.NotifRecord;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
 import edu.uw.covidsafe.utils.Utils;
@@ -105,6 +107,9 @@ public class PullFromServerTask implements Runnable {
             return;
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////
+        // cache our own scanned bluetooth IDs
+        //////////////////////////////////////////////////////////////////////////////////////////
         // TODO: set intersection between ble IDs and received IDs, don't do a linear for loop
         // check that the set intersection will work.
         BleDbRecordRepository repo = new BleDbRecordRepository(context);
@@ -114,31 +119,28 @@ public class PullFromServerTask implements Runnable {
             scannedBleMap.put(bleRecord.getUuid(), bleRecord.getTs());
         }
 
-        List<String> exposedMessages = new ArrayList<String>();
+        //////////////////////////////////////////////////////////////////////////////////////////
+        // go through receivedbluetooth matches
+        //////////////////////////////////////////////////////////////////////////////////////////
+        List<String> exposedMessages = new ArrayList<>();
+        List<Long> contactStartTimes = new ArrayList<>();
+        List<Long> contactEndTimes = new ArrayList<>();
         for (BluetoothMatch bluetoothMatch : bluetoothMatches) {
             for (BlueToothSeed seed : bluetoothMatch.seeds) {
-//                receivedRecords.add(new SeedUUIDRecord(
-//                        seed.sequence_start_time.toLong(),
-//                        seed.seed,
-//                        ""
-//                ));
-                boolean exposedStatus = isExposed(seed.seed,
+
+                List<Long> contactTimesStart = new ArrayList<>();
+                List<Long> contactTimesEnd = new ArrayList<>();
+
+                long[] exposedStatus = isExposed(seed.seed,
                         seed.sequence_start_time.toLong());
-                if (exposedStatus) {
+                if (exposedStatus != null) {
                     exposedMessages.add(bluetoothMatch.user_message);
+                    contactStartTimes.add(exposedStatus[0]);
+                    contactEndTimes.add(exposedStatus[1]);
                 }
             }
         }
-        notifyBulk(exposedMessages);
-
-        //////////////////////////////////////////////////////////////////////////////////////////
-        // narrowcasting
-        //////////////////////////////////////////////////////////////////////////////////////////
-//
-//        List<String> announcements = announce(preciseLat,preciseLong,lastQueryTime);
-//        if (announcements.size() > 0) {
-//            makeAnnouncement(announcements);
-//        }
+        notifyBulk(Constants.MessageType.Exposure, exposedMessages, contactStartTimes, contactEndTimes);
     }
 
     // sync blockig op
@@ -223,25 +225,11 @@ public class PullFromServerTask implements Runnable {
         /////////////////////////////////////////////////////////////////////////
 
         /////////////////////////////////////////////////////////////////////////
-        // (4) check for bluetooth
-        /////////////////////////////////////////////////////////////////////////
-//        List<SeedUUIDRecord> receivedRecords = new ArrayList<SeedUUIDRecord>();
-//        if (matchMessage.bluetooth_matches != null) {
-//            for (BluetoothMatch bluetoothMatch : matchMessage.bluetooth_matches) {
-//                for (BlueToothSeed seed : bluetoothMatch.seeds) {
-//                    receivedRecords.add(new SeedUUIDRecord(
-//                            seed.sequence_start_time.toLong(),
-//                            seed.seed,
-//                            ""
-//                    ));
-//                }
-//            }
-//        }
-
-        /////////////////////////////////////////////////////////////////////////
-        // (5) check for area intersection for area matches. narrowcast messages
+        // (4) narrowcast messages: check for area intersection and record matched messages
         /////////////////////////////////////////////////////////////////////////
         List<String> narrowCastMessages = new ArrayList<String>();
+        List<Long> narrowCastMessageStartTimes = new ArrayList<>();
+        List<Long> narrowCastMessageEndTimes = new ArrayList<>();
         if (matchMessage.area_matches != null) {
             for (AreaMatch areaMatch : matchMessage.area_matches) {
                 Area[] areas = areaMatch.areas;
@@ -249,11 +237,14 @@ public class PullFromServerTask implements Runnable {
                     if (intersect(area)) {
                         Log.e("msg", "NARROWCAST USER MESSAGE "+areaMatch.user_message);
                         narrowCastMessages.add(areaMatch.user_message);
+                        narrowCastMessageStartTimes.add(area.begin_time.toLong());
+                        narrowCastMessageEndTimes.add(area.end_time.toLong());
+                        break;
                     }
                 }
             }
         }
-        notifyBulk(narrowCastMessages);
+        notifyBulk(Constants.MessageType.NarrowCast, narrowCastMessages,narrowCastMessageStartTimes,narrowCastMessageEndTimes);
         /////////////////////////////////////////////////////////////////////////
 
         return matchMessage.bluetooth_matches;
@@ -276,44 +267,12 @@ public class PullFromServerTask implements Runnable {
         return false;
     }
 
-//    public List<String> announce(double lat, double longi, long ts) {
-//        JsonObject obj = new JsonObject();
-//        obj.addProperty("lat",lat);
-//        obj.addProperty("longi",longi);
-//        obj.addProperty("ts",ts);
-//
-//        ///////////////////////////////////////////////////
-//        List<Area> areas = new ArrayList<Area>();
-//        List<String> messages = new ArrayList<String>();
-//        ///////////////////////////////////////////////////
-//
-//        int counter = 0;
-//        List<String> filteredMessages = new ArrayList<String>();
-//        for (Area area : areas) {
-//            GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
-//            List<GpsRecord> gpsRecords = gpsRepo.getRecordsBetweenTimestamps(area.begin_time.toLong(), area.end_time.toLong());
-//
-//            for (GpsRecord record : gpsRecords) {
-//                float[] result = new float[3];
-//                Location.distanceBetween(record.getLat(), record.getLongi(), area.location.lattitude, area.location.longitude, result);
-//
-//                if ((result.length == 1 && result[0] < area.radius_meters) ||
-//                    (result.length == 2 && result[1] < area.radius_meters) ||
-//                    (result.length >= 3 && result[2] < area.radius_meters)) {
-//                    filteredMessages.add(messages.get(counter));
-//                }
-//            }
-//            counter += 1;
-//        }
-//        return filteredMessages;
-//    }
-
     // we get a seed and timestamp from the server for each infected person
     // check if we intersect with the infected person
-    public boolean isExposed(String seed, long ts) {
+    public long[] isExposed(String seed, long ts) {
         // if timestamp is in the future, something is wrong, return
         if (ts > System.currentTimeMillis()) {
-            return false;
+            return null;
         }
         // convert our BLE DB records into convenient data structures
         // place the UUIDs into a map for easy lookup and checking
@@ -327,7 +286,7 @@ public class PullFromServerTask implements Runnable {
         int infectionWindowInMinutes = (Constants.InfectionWindowInDays*24*60);
         int maxSeedsToGenerate = infectionWindowInMinutes / Constants.UUIDGenerationIntervalInMinutes;
         if (numSeedsToGenerate > maxSeedsToGenerate) {
-            return false;
+            return null;
         }
         // generate all the seeds
         List<String> receivedUUIDs = CryptoUtils.chainGenerateUUIDFromSeed(seed, numSeedsToGenerate);
@@ -352,9 +311,10 @@ public class PullFromServerTask implements Runnable {
 
         // calculate how many matches we need to say user is exposed for at least 10 minutes
         // return false if there simply not enough matches to determine this.
+        // this is 2
         int numConsecutiveMatchesNeeded = Constants.CDCExposureTimeInMinutes/Constants.BluetoothScanIntervalInMinutes;
         if (matches.size() < numConsecutiveMatchesNeeded) {
-            return false;
+            return null;
         }
 
         // take diff of timestamps when we had a UUID match
@@ -365,43 +325,73 @@ public class PullFromServerTask implements Runnable {
 
         // counter tracks how many occurrences of
         // uuidGenerationIntervalInMillliseconds we have in a row
-        // maxcounter is the 'max streak'
         int streak = 0;
-        int maxStreak = 0;
 
         //check that we have at least numConsecutiveMatchesNeeded
         //matches of uuidGenerationIntervalInMillliseconds
+        List<Long> contactTimesStart = new ArrayList<>();
+        List<Long> contactTimesEnd = new ArrayList<>();
         for (int i = 0; i < diff.size(); i++) {
             if (Math.abs(diff.get(i)-bluetoothScanIntervalInMilliseconds)
                 < Constants.TimestampDeviationInMilliseconds) {
                 streak += 1;
-                if (streak > maxStreak) {
-                    maxStreak = streak;
+                // add contact time once for the streak
+                if (streak == numConsecutiveMatchesNeeded) {
+                    int idx = i-(streak-1);
+                    contactTimesStart.add(matches.get(idx));
                 }
             }
             else {
+                // a streak just ended
+                if (contactTimesEnd.size() != contactTimesStart.size()) {
+                    contactTimesEnd.add(matches.get(streak));
+                }
                 streak = 0;
             }
         }
 
-        if (maxStreak >= (numConsecutiveMatchesNeeded-1)) {
-            return true;
+        if (contactTimesStart.size() == 0) {
+            return null;
         }
-        return false;
+
+        long maxContactTime = 0;
+        int maxContactTimeIdx = -1;
+        for (int i = 0; i < contactTimesStart.size(); i++) {
+            if (contactTimesEnd.get(i)-contactTimesStart.get(i) > maxContactTime) {
+                maxContactTime = contactTimesEnd.get(i)-contactTimesStart.get(i);
+                maxContactTimeIdx = i;
+            }
+        }
+
+        if (maxContactTimeIdx == -1) {
+            return null;
+        }
+
+        return new long[]{contactTimesStart.get(maxContactTimeIdx),
+                        contactTimesEnd.get(maxContactTimeIdx)};
     }
 
-    public void notifyUserOfExposure(String msg) {
+//    public void notifyUserOfExposure(String msg) {
 //        King County COVID-19 call center: 206-477-3977. Open daily from 8 a.m. to 7 p.m
 //        Washington State COVID-19 call center: 800-525-0127
 //        https://scanpublichealth.org/faq
-        Log.e("msg", "BLUETOOTH USER MESSAGE "+msg);
-        Constants.NotificationAdapter.notifyUser(msg);
-    }
+//        Log.e("msg", "BLUETOOTH USER MESSAGE "+msg);
+//        Constants.NotificationAdapter.notifyUser(msg);
+//    }
 
-    public void notifyBulk(List<String> msgs) {
+    public void notifyBulk(Constants.MessageType messageType,
+                           List<String> msgs,
+                           List<Long> contactTimesStart,
+                           List<Long> contactTimesEnd) {
         // PSA
-        for (String msg : msgs) {
-            Constants.NotificationAdapter.notifyUser(msg);
+        for (int i = 0; i < msgs.size(); i++) {
+            // add notification to DB
+            new NotifOpsAsyncTask(context, new NotifRecord(
+                    contactTimesStart.get(i),
+                    contactTimesEnd.get(i),
+                    msgs.get(i),
+                    messageType.ordinal()));
+            Constants.NotificationAdapter.notifyUser(msgs.get(i));
         }
     }
 }

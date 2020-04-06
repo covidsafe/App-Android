@@ -2,6 +2,7 @@ package edu.uw.covidsafe.comms;
 
 import android.app.Activity;
 import android.content.Context;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
@@ -17,6 +18,7 @@ import org.json.JSONObject;
 
 import edu.uw.covidsafe.gps.GpsDbRecordRepository;
 import edu.uw.covidsafe.gps.GpsRecord;
+import edu.uw.covidsafe.gps.GpsUtils;
 import edu.uw.covidsafe.json.AnnounceRequest;
 import edu.uw.covidsafe.json.AnnounceResponse;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDDbRecordRepository;
@@ -74,20 +76,34 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         //get most recent GPS entry as coarse location and send it
         GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
         List<GpsRecord> sortedGpsRecords = gpsRepo.getSortedRecords();
-        if (sortedGpsRecords.size() > 0) {
-            GpsRecord gpsRecord = sortedGpsRecords.get(0);
 
-            Log.e("ERR ",gpsRecord.getLat()+","+gpsRecord.getLongi());
-            int gpsResolution = Constants.MaximumGpsPrecision;
-            try {
-                sendRequest(recordToSend.seed, recordToSend.ts,
-                        getCoarseGpsCoord(gpsRecord.getLat(), gpsResolution),
-                        getCoarseGpsCoord(gpsRecord.getLongi(), gpsResolution),
-                        gpsResolution);
+        double lat = 0;
+        double longi = 0;
+
+        if (sortedGpsRecords.size() == 0) {
+//            Location loc = GpsUtils.getLastLocation();
+//            lat = loc.getLatitude();
+//            longi = loc.getLongitude();
+            if (Utils.hasGpsPermissions(context)) {
+                mkSnack(av, view, "We need location services enabled to send your traces. Please enable location services permission.");
             }
-            catch(Exception e) {
-                Log.e("err",e.getMessage());
-            }
+        }
+        else {
+            GpsRecord gpsRecord = sortedGpsRecords.get(0);
+            lat = gpsRecord.getLat();
+            longi = gpsRecord.getLongi();
+            Log.e("ERR ", gpsRecord.getLat() + "," + gpsRecord.getLongi());
+        }
+
+        int gpsResolution = Constants.MaximumGpsPrecision;
+        try {
+            sendRequest(recordToSend.seed, recordToSend.ts,
+                    getCoarseGpsCoord(lat, gpsResolution),
+                    getCoarseGpsCoord(longi, gpsResolution),
+                    gpsResolution);
+        }
+        catch(Exception e) {
+            Log.e("err",e.getMessage());
         }
 
         return null;
@@ -160,8 +176,6 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
     }
 
     public void sendRequest(String seed, long ts, double lat, double longi, int precision) {
-        //TODO, send the seed and timestamp to the server
-        //send matchMessage
         JSONObject announceRequestObj = null;
         try {
              announceRequestObj =
@@ -191,7 +205,6 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         else {
             mkSnack(av, view, "There was an error with submitting your traces. Please try again later.");
         }
-        // send obj
     }
 
     public void testDatabase() {

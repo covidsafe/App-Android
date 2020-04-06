@@ -60,6 +60,8 @@
                 android:id="@+id/permSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minHeight="44dp"
+                android:minWidth="44dp"
                 app:layout_constraintBottom_toTopOf="@+id/view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline2V80"
