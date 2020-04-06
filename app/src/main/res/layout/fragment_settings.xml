@@ -20,14 +20,27 @@
         app:layout_constraintStart_toStartOf="@+id/guidelineV5"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <include
-        android:id="@+id/permCard"
-        layout="@layout/card_permission"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+    <View
+        android:id="@+id/view"
         android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/traceTitle" />
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/gray"
+        app:layout_constraintTop_toBottomOf="@+id/traceTitle"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <RelativeLayout
+        android:id="@+id/perms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/view">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewPerms"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/moreTitle"
@@ -38,24 +51,43 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
         app:layout_constraintStart_toStartOf="@+id/guidelineV5"
-        app:layout_constraintTop_toBottomOf="@id/permCard" />
+        app:layout_constraintTop_toBottomOf="@id/perms" />
 
-    <include
-        android:id="@+id/moreCard"
-        layout="@layout/card_more"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="parent"
+    <View
+        android:id="@+id/view2"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintTop_toBottomOf="@+id/moreTitle" />
 
-    <include
-        android:id="@+id/miscCard"
-        layout="@layout/card_misc"
-        android:layout_width="fill_parent"
+    <RelativeLayout
+        android:id="@+id/moreCard"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/moreCard" />
+        app:layout_constraintTop_toBottomOf="@+id/view2">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewMore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/miscCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/moreCard">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewMisc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    </RelativeLayout>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineV5"

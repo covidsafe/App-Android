@@ -12,8 +12,10 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.onboarding.OnboardingActivity;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.ui.MainActivity;
@@ -36,13 +38,28 @@ public class SettingsFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Settings");
 
-        TextView tv = view.findViewById(R.id.share);
-        tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(),tv.getText().toString(),Toast.LENGTH_LONG).show();
-            }
-        });
+//        TextView tv = view.findViewById(R.id.share);
+//        tv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getContext(),tv.getText().toString(),Toast.LENGTH_LONG).show();
+//            }
+//        });
+
+        RecyclerView rview3 = view.findViewById(R.id.recyclerViewPerms);
+        PermissionsRecyclerViewAdapter adapter3 = new PermissionsRecyclerViewAdapter(getContext(),getActivity());
+        rview3.setAdapter(adapter3);
+        rview3.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        RecyclerView rview4 = view.findViewById(R.id.recyclerViewMore);
+        MoreRecyclerViewAdapter adapter4 = new MoreRecyclerViewAdapter(getContext(),getActivity());
+        rview4.setAdapter(adapter4);
+        rview4.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        RecyclerView rview5 = view.findViewById(R.id.recyclerViewMisc);
+        MiscRecyclerViewAdapter adapter5 = new MiscRecyclerViewAdapter(getContext(),getActivity());
+        rview5.setAdapter(adapter5);
+        rview5.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         return view;
     }

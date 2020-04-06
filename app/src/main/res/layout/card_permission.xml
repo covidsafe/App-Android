@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -8,7 +9,6 @@
         android:id="@+id/materialCardView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:foregroundTint="@color/white"
         app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/privacyText"
         app:strokeColor="@color/gray"
-        app:strokeWidth="1dp">
+        app:strokeWidth="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -26,7 +26,7 @@
                 android:id="@+id/perm1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/perm1"
                 android:textColor="@color/black"
                 android:textSize="16sp"
@@ -46,6 +46,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/perm1" />
 
             <ImageView
+                android:id="@+id/icon"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:adjustViewBounds="true"
@@ -74,113 +75,6 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guideline2V5"
                 app:layout_constraintTop_toBottomOf="@+id/perm1desc" />
-
-            <!--            ///////////////////////////////////////////////////////////////////-->
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:adjustViewBounds="true"
-                android:src="@drawable/perm2"
-                app:layout_constraintBottom_toBottomOf="@+id/gpsSwitch"
-                app:layout_constraintEnd_toStartOf="@+id/guideline2V5"
-                app:layout_constraintHorizontal_bias="0.509"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/gpsSwitch" />
-
-            <TextView
-                android:id="@+id/perm2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="@string/perm2"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="@+id/guideline2V5"
-                app:layout_constraintTop_toBottomOf="@+id/view" />
-
-            <TextView
-                android:id="@+id/perm2desc"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="@string/perm2desc"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toStartOf="@+id/guideline2V80"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@+id/guideline2V5"
-                app:layout_constraintTop_toBottomOf="@+id/perm2" />
-
-            <View
-                android:id="@+id/view2"
-                android:layout_width="0dp"
-                android:layout_height="2dp"
-                android:layout_marginTop="15dp"
-                android:background="@color/gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/guideline2V5"
-                app:layout_constraintTop_toBottomOf="@+id/perm2desc" />
-
-            <Switch
-                android:id="@+id/gpsSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@+id/view2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guideline2V80"
-                app:layout_constraintTop_toBottomOf="@+id/view" />
-
-            <!--            ///////////////////////////////////////////////////////////////////-->
-
-            <!--            ///////////////////////////////////////////////////////////////////-->
-
-            <TextView
-                android:id="@+id/perm3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="@string/perm3"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="@+id/guideline2V5"
-                app:layout_constraintTop_toBottomOf="@+id/view2" />
-
-            <TextView
-                android:id="@+id/perm3desc"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="30dp"
-                android:text="@string/perm3desc"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/guideline2V80"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/guideline2V5"
-                app:layout_constraintTop_toBottomOf="@+id/perm3"
-                app:layout_constraintVertical_bias="0.0" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:adjustViewBounds="true"
-                android:src="@drawable/perm3"
-                app:layout_constraintBottom_toBottomOf="@+id/bleSwitch"
-                app:layout_constraintEnd_toStartOf="@+id/guideline2V5"
-                app:layout_constraintHorizontal_bias="0.444"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/bleSwitch" />
-
-            <Switch
-                android:id="@+id/bleSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.485"
-                app:layout_constraintStart_toStartOf="@+id/guideline2V80"
-                app:layout_constraintTop_toBottomOf="@+id/view2" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline2V5"
