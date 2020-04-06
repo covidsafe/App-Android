@@ -19,12 +19,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <include
+        <RelativeLayout
             android:id="@+id/notif"
-            layout="@layout/card_notification"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/broadcast" />
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/broadcast">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewNotifs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/sick"

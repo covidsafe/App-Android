@@ -1,25 +1,18 @@
-package edu.uw.covidsafe.ui.health;
+package unused;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import edu.uw.covidsafe.comms.NetworkHelper;
-import edu.uw.covidsafe.symptoms.SymptomsOpsAsyncTask;
-import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.utils.Constants;
-import edu.uw.covidsafe.utils.Utils;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import com.example.covidsafe.R;
 

@@ -1,4 +1,4 @@
-package edu.uw.covidsafe.ui.health;
+package unused;
 
 import android.app.Activity;
 import android.content.Context;

@@ -16,8 +16,11 @@ import android.widget.ListView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import edu.uw.covidsafe.ui.MainActivity;
+import edu.uw.covidsafe.ui.health.ResourceRecyclerViewAdapter;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
 
@@ -73,44 +76,10 @@ public class ResourcesFragment extends Fragment {
         FaqListAdapter adapter2 = new FaqListAdapter(questions2, answers2);
         lv2.setAdapter(adapter2);
 
-        MaterialCardView res1 = view.findViewById(R.id.cdcView);
-        if (res1 != null) {
-            res1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Utils.goToUrl(getActivity(), "https://www.cdc.gov/");
-                }
-            });
-        }
-        MaterialCardView res2 = view.findViewById(R.id.nycView);
-        if (res2 != null) {
-            res2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Utils.goToUrl(getActivity(), "https://www1.nyc.gov/site/doh/index.page");
-                }
-            });
-        }
-
-//        setListViewHeight(lv1);
-//        lv1.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-//            @Override
-//            public boolean onGroupClick(ExpandableListView parent, View v,
-//                                        int position, long id) {
-//                setListViewHeight(parent, position);
-//                return false;
-//            }
-//        });
-//
-//        setListViewHeight(lv2);
-//        lv2.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-//            @Override
-//            public boolean onGroupClick(ExpandableListView parent, View v,
-//                                        int position, long id) {
-//                setListViewHeight(parent, position);
-//                return false;
-//            }
-//        });
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerViewResources);
+        ResourceRecyclerViewAdapter resAdapter = new ResourceRecyclerViewAdapter(getContext(),getActivity());
+        recyclerView.setAdapter(resAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override

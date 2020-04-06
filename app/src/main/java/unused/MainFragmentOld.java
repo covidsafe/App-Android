@@ -1,4 +1,4 @@
-package edu.uw.covidsafe.ui;
+package unused;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import edu.uw.covidsafe.ble.BluetoothScanHelper;
 import edu.uw.covidsafe.ble.BluetoothServerHelper;
 import edu.uw.covidsafe.ble.BluetoothUtils;
+import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.ui.health.CardRecyclerViewAdapter;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.BackgroundService;
@@ -68,20 +69,20 @@ public class MainFragmentOld extends Fragment {
 
         SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
 
-        MaterialCardView res1 = getActivity().findViewById(R.id.cdcView);
-        res1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.goToUrl(getActivity(), "https://www.cdc.gov/");
-            }
-        });
-        MaterialCardView res2 = getActivity().findViewById(R.id.nycView);
-        res2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.goToUrl(getActivity(), "https://www1.nyc.gov/site/doh/index.page");
-            }
-        });
+//        MaterialCardView res1 = getActivity().findViewById(R.id.cdcView);
+//        res1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Utils.goToUrl(getActivity(), "https://www.cdc.gov/");
+//            }
+//        });
+//        MaterialCardView res2 = getActivity().findViewById(R.id.nycView);
+//        res2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Utils.goToUrl(getActivity(), "https://www1.nyc.gov/site/doh/index.page");
+//            }
+//        });
 
         Switch bleSwitch = (Switch)getActivity().findViewById(R.id.bleSwitch);
         bleSwitch.setChecked(prefs.getBoolean("bleEnabled", Constants.BLUETOOTH_ENABLED));
