@@ -82,7 +82,7 @@ public class Constants {
     public static int BluetoothScanPeriodInSeconds = 10;
     public static int PullFromServerIntervalInMinutes = 60;
     public static int LogPurgerIntervalInDays = 60;
-    public static int UUIDGenerationIntervalInMinutes = 5;
+    public static int UUIDGenerationIntervalInMinutes = 15;
     public static int CDCExposureTimeInMinutes = 10;
     public static int TimestampDeviationInMilliseconds = 1000;
     public static int InfectionWindowIntervalDeviationInMilliseconds = 60*1000;
