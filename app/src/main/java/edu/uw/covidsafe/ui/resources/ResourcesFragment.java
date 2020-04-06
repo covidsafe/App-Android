@@ -43,6 +43,7 @@ public class ResourcesFragment extends Fragment {
         Log.e("logme","HELP");
         View view = inflater.inflate(R.layout.fragment_resources, container, false);
         ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
+        ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().show();
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(getActivity().getString(R.string.help_header_text));
 

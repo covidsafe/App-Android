@@ -30,6 +30,7 @@ public class StoryFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view;
         ((OnboardingActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
+        ((OnboardingActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         ((OnboardingActivity) getActivity()).getSupportActionBar().hide();
 
         if (getArguments().keySet().size() > 1) {

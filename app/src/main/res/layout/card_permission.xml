@@ -51,13 +51,13 @@
                 android:layout_height="0dp"
                 android:adjustViewBounds="true"
                 android:src="@drawable/perm1"
-                app:layout_constraintBottom_toBottomOf="@+id/notifSwitch"
+                app:layout_constraintBottom_toBottomOf="@+id/permSwitch"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2V5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/notifSwitch" />
+                app:layout_constraintTop_toTopOf="@+id/permSwitch" />
 
             <Switch
-                android:id="@+id/notifSwitch"
+                android:id="@+id/permSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toTopOf="@+id/view"

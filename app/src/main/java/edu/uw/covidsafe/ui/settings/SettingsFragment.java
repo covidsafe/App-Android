@@ -1,5 +1,6 @@
 package edu.uw.covidsafe.ui.settings;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,22 +30,16 @@ public class SettingsFragment extends Fragment {
     View view;
     RecyclerView rv;
 
+    @SuppressLint("RestrictedApi")
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.e("logme","HELP");
         view = inflater.inflate(R.layout.fragment_settings, container, false);
+        ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().show();
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Settings");
-
-//        TextView tv = view.findViewById(R.id.share);
-//        tv.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(getContext(),tv.getText().toString(),Toast.LENGTH_LONG).show();
-//            }
-//        });
 
         RecyclerView rview3 = view.findViewById(R.id.recyclerViewPerms);
         PermissionsRecyclerViewAdapter adapter3 = new PermissionsRecyclerViewAdapter(getContext(),getActivity());
