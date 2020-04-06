@@ -3,6 +3,10 @@ package edu.uw.covidsafe.ui.health;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +25,12 @@ import java.util.Calendar;
 import java.util.Date;
 
 import edu.uw.covidsafe.utils.Constants;
+import edu.uw.covidsafe.utils.Utils;
 
 public class CardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
 
     private ArrayList<String> titles = new ArrayList<>();
-    private ArrayList<String> desc = new ArrayList<>();
+    private ArrayList<Object> desc = new ArrayList<>();
     private ArrayList<Drawable> icons = new ArrayList<>();
 
     private Context mContext;
@@ -34,9 +39,9 @@ public class CardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     public CardRecyclerViewAdapter(Context mContext, Activity av) {
         this.mContext = mContext;
         this.av = av;
+        titles.add("");
         titles.add("Self-quarantine for 14 days");
         titles.add("Monitor Your Symptoms");
-        titles.add("");
         titles.add("Request a test");
         titles.add("Contact your healthcare professional");
         titles.add("Isolate from those around you");
@@ -49,16 +54,21 @@ public class CardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         SimpleDateFormat format = new SimpleDateFormat("MMMM d");
         String ss = format.format(new Date(thresh));
 
-        desc.add("If you start your self quarantine today, your 14 days will end "+ss+". Please check with your local Health Authorities for more guidance.");
-        desc.add("Egestas tellus rutrum tellus pellentesque eu tincidunt. Odio tempor orci dapibus ultrices in iaculis nunc sed augue suspendisse.");
         desc.add("Call 911 immediately if you are having a medical emergency.");
+
+        Spannable s = (Spannable) Html.fromHtml(
+        "If you start your self quarantine today, your 14 days will end <b>"+ss+"</b>. Please check with your local Health Authorities for more guidance."
+        );
+
+        desc.add(s);
+        desc.add("Egestas tellus rutrum tellus pellentesque eu tincidunt. Odio tempor orci dapibus ultrices in iaculis nunc sed augue suspendisse.");
         desc.add("Egestas tellus rutrum tellus pellentesque eu tincidunt. Odio tempor orci dapibus ultrices in iaculis nunc sed augue suspendisse.");
         desc.add("Please contact your healthcare professional for next steps.");
         desc.add("Egestas tellus rutrum tellus pellentesque eu tincidunt. Odio tempor orci dapibus ultrices in iaculis nunc sed augue suspendisse.");
 
+        icons.add(mContext.getDrawable(R.drawable.icon_phone));
         icons.add(mContext.getDrawable(R.drawable.icon_quarantine));
         icons.add(mContext.getDrawable(R.drawable.icon_symptoms));
-        icons.add(mContext.getDrawable(R.drawable.icon_phone));
         icons.add(mContext.getDrawable(R.drawable.icon_test));
         icons.add(mContext.getDrawable(R.drawable.icon_phone2));
         icons.add(mContext.getDrawable(R.drawable.icon_quarantine));
@@ -70,29 +80,39 @@ public class CardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         View view ;
         if (viewType == 0) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_action, parent, false);
-            return new CardRecyclerViewAdapter.ActionCard(view);
+            RecyclerView.ViewHolder volder = new CardRecyclerViewAdapter.ActionCard(view);
+//            Log.e("state","volder height "+volder.itemView.getMeasuredHeight());
+            return volder;
         }
         else {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_call, parent, false);
-            return new CardRecyclerViewAdapter.CallCard(view);
+            RecyclerView.ViewHolder volder = new CardRecyclerViewAdapter.CallCard(view);
+//            Log.e("state","volder height "+volder.itemView.getMeasuredHeight());
+            return volder;
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (titles.get(position).isEmpty()) {
-            ((CallCard)holder).desc.setText(desc.get(position));
+            ((CallCard) holder).desc.setText((String)desc.get(position));
             ((CallCard)holder).icon.setImageDrawable(icons.get(position));
         }
         else {
             ((ActionCard)holder).title.setText(titles.get(position));
-            ((ActionCard)holder).desc.setText(desc.get(position));
+            if (titles.get(position).equals("Self-quarantine for 14 days")) {
+                ((ActionCard) holder).desc.setText((Spannable) desc.get(position));
+            }
+            else {
+                ((ActionCard) holder).desc.setText((String) desc.get(position));
+            }
             ((ActionCard)holder).icon.setImageDrawable(icons.get(position));
         }
     }
 
     @Override
     public int getItemCount() {
+//        Log.e("state","getItemCount "+titles.size());
         return titles.size();
     }
 
@@ -115,6 +135,7 @@ public class CardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
             super(itemView);
             this.icon = itemView.findViewById(R.id.icon);
             this.title = itemView.findViewById(R.id.textView7);
+            this.title.setMovementMethod(LinkMovementMethod.getInstance());
             this.desc = itemView.findViewById(R.id.textView5);
             this.parentLayout = itemView.findViewById(R.id.parent_layout2);
         }
@@ -127,7 +148,7 @@ public class CardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         CallCard(@NonNull View itemView) {
             super(itemView);
-            this.icon = itemView.findViewById(R.id.imageView7);
+            this.icon = itemView.findViewById(R.id.icon);
             this.desc = itemView.findViewById(R.id.textView7);
             this.parentLayout = itemView.findViewById(R.id.parent_layout);
         }

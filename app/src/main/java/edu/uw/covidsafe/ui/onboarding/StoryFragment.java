@@ -1,5 +1,6 @@
 package edu.uw.covidsafe.ui.onboarding;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.covidsafe.R;
 
+import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
 
@@ -22,10 +24,13 @@ public class StoryFragment extends Fragment {
     ImageView imageView;
     TextView tview;
 
+    @SuppressLint("RestrictedApi")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view;
+        ((OnboardingActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
+        ((OnboardingActivity) getActivity()).getSupportActionBar().hide();
 
         if (getArguments().keySet().size() > 1) {
             view = inflater.inflate(R.layout.onboarding_story_fragment, container, false);

@@ -48,14 +48,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/share" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:id="@+id/imageView11"
+                android:layout_width="18dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="42dp"
                 android:adjustViewBounds="true"
                 android:src="@drawable/icon_share"
-                app:layout_constraintBottom_toTopOf="@+id/perm1desc"
-                app:layout_constraintEnd_toStartOf="@+id/guideline2V5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/share" />
+                app:layout_constraintTop_toTopOf="parent" />
+
+
 
             <View
                 android:id="@+id/view"
@@ -71,15 +74,15 @@
             <!--            ///////////////////////////////////////////////////////////////////-->
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="35dp"
                 android:adjustViewBounds="true"
                 android:src="@drawable/logo2"
                 app:layout_constraintBottom_toTopOf="@+id/perm2desc"
-                app:layout_constraintEnd_toStartOf="@+id/guideline2V5"
-                app:layout_constraintHorizontal_bias="0.509"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/perm2" />
+                app:layout_constraintTop_toBottomOf="@+id/view" />
 
             <TextView
                 android:id="@+id/perm2"
@@ -145,22 +148,21 @@
                 app:layout_constraintTop_toBottomOf="@+id/perm3" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_width="20dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="30dp"
                 android:adjustViewBounds="true"
                 android:src="@drawable/icon_faq"
-                app:layout_constraintBottom_toTopOf="@+id/perm3desc"
-                app:layout_constraintEnd_toStartOf="@+id/guideline2V5"
-                app:layout_constraintHorizontal_bias="0.444"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/perm3" />
+                app:layout_constraintTop_toBottomOf="@+id/view2" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline2V5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.20194647" />
+                app:layout_constraintGuide_percent="0.17" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline2V80"

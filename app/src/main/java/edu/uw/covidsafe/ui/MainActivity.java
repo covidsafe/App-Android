@@ -127,17 +127,20 @@ public class MainActivity extends AppCompatActivity {
     public void initView() {
         if (Constants.CurrentFragment != null &&
             !Constants.CurrentFragment.toString().toLowerCase().contains("permission")) {
-            Log.e("state","mainactivity - initview "+Constants.CurrentFragment.toString());
-            if (Constants.CurrentFragment.toString().toLowerCase().contains("symptom") ||
-                Constants.CurrentFragment.toString().toLowerCase().contains("diagnosis")) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.HealthFragment).commit();
-            }
-            else {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.CurrentFragment).commit();
-            }
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.CurrentFragment).commit();
         } else {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.MainFragment).commit();
         }
+//        if (Constants.CurrentFragment != null &&
+//            !Constants.CurrentFragment.toString().toLowerCase().contains("permission")) {
+//            Log.e("state","mainactivity - initview "+Constants.CurrentFragment.toString());
+//            if (Constants.CurrentFragment.toString().toLowerCase().contains("symptom") ||
+//                Constants.CurrentFragment.toString().toLowerCase().contains("diagnosis")) {
+//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.HealthFragment).commit();
+//            }
+//            else {
+//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.CurrentFragment).commit();
+//            }
     }
 
     public void reset(View v) {
@@ -155,7 +158,13 @@ public class MainActivity extends AppCompatActivity {
                         selectedFragment = Constants.MainFragment;
                         break;
                     case R.id.action_report:
-                        selectedFragment = Constants.HealthFragment;
+                        Log.e("STate", "cur fragment "+Constants.CurrentFragment.toString());
+                        if (Constants.ReportFragmentState.toString().toLowerCase().contains("diagnosis")) {
+                            selectedFragment = Constants.DiagnosisFragment;
+                        }
+                        else {
+                            selectedFragment = Constants.HealthFragment;
+                        }
                         break;
                     case R.id.action_help:
                         selectedFragment = Constants.HelpFragment;

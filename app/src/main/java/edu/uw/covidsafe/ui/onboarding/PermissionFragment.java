@@ -1,5 +1,6 @@
 package edu.uw.covidsafe.ui.onboarding;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
@@ -37,10 +38,12 @@ public class PermissionFragment extends Fragment {
     Switch gpsSwitch;
     Switch bleSwitch;
 
+    @SuppressLint("RestrictedApi")
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.onboarding_permissions, container, false);
+        ((OnboardingActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
         ((OnboardingActivity) getActivity()).getSupportActionBar().show();
         ((OnboardingActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((OnboardingActivity) getActivity()).getSupportActionBar().setTitle("Select your preferences");

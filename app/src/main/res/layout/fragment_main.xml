@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint"
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="wrap_content">
 
         <include
             android:id="@+id/broadcast"
@@ -26,18 +26,45 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/broadcast" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewDiagnosis"
+        <TextView
+            android:id="@+id/sick"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="What to Do If You Are Sick"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/rel"
+            app:layout_constraintStart_toStartOf="@+id/guidelineV10"
+            app:layout_constraintTop_toBottomOf="@+id/notif" />
+
+        <RelativeLayout
+            android:id="@+id/rel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/notif" />
+            app:layout_constraintTop_toBottomOf="@+id/sick"
+            >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewDiagnosis"
+            android:nestedScrollingEnabled="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+             />
+        </RelativeLayout>
 
         <include
             android:id="@+id/container_header_lyt"
             layout="@layout/resource_links"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerViewDiagnosis" />
+            app:layout_constraintTop_toBottomOf="@+id/rel" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineV10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="20dp"
+            app:layout_constraintGuide_percent=".05" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,5 +1,6 @@
 package edu.uw.covidsafe.ui.health;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,10 +18,12 @@ import com.google.android.material.tabs.TabLayout;
 
 public class HealthFragment extends Fragment {
 
+    @SuppressLint("RestrictedApi")
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.health_main, container, false);
+        ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().show();
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(getActivity().getString(R.string.health_header_text));
         Button reportButton = (Button)view.findViewById(R.id.button3);
@@ -36,5 +39,8 @@ public class HealthFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        Constants.CurrentFragment = this;
+        Constants.HealthFragment = this;
+        Constants.ReportFragmentState = this;
     }
 }

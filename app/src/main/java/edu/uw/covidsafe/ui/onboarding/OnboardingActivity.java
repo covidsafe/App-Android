@@ -16,6 +16,7 @@ import android.widget.Switch;
 import com.example.covidsafe.R;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.ui.PermissionLogic;
+import edu.uw.covidsafe.ui.health.HealthFragment;
 import edu.uw.covidsafe.utils.Constants;
 
 
@@ -43,15 +44,15 @@ public class OnboardingActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.e("state","MAIN ON OPTIONS "+Constants.pageNumber);
         switch (item.getItemId()) {
             case android.R.id.home:
                 Constants.pageNumber = 4;
                 getSupportFragmentManager().beginTransaction().replace(
                         R.id.fragment_container_onboarding, Constants.PagerFragment).commit();
                 return true;
-            default:
-                return super.onOptionsItemSelected(item);
         }
+        return false;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
