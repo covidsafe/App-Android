@@ -432,8 +432,25 @@ public class Utils {
         }
     }
 
+    public static String[] getBlePermissions() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            String[] out = new String[Constants.blePermissions.length+Constants.gpsPermissions.length];
+            int counter = 0;
+            for (int i = 0 ; i < Constants.blePermissions.length; i++) {
+                out[counter++] = Constants.blePermissions[i];
+            }
+            for (int i = 0 ; i < Constants.gpsPermissions.length; i++) {
+                out[counter++] = Constants.gpsPermissions[i];
+            }
+            return out;
+        }
+        else {
+            return Constants.blePermissions;
+        }
+    }
+
     public static boolean hasBlePermissions(Context context) {
-        Log.e("results", "check for permission");
+        Log.e("results", "check for ble permission");
         if (context != null && Constants.blePermissions != null) {
             for (String permission : Constants.blePermissions) {
                 if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
@@ -444,20 +461,35 @@ public class Utils {
         }
         // for the lower APIs, you need location permissions to do bluetooth scanning
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            Log.e("results","lower api, check for gps also");
             return hasGpsPermissions(context);
         }
         return true;
     }
 
     public static boolean hasGpsPermissions(Context context) {
-        Log.e("results", "check for permission");
-        if (context != null && Constants.gpsPermissions != null) {
-            for (String permission : Constants.gpsPermissions) {
-                int result = ActivityCompat.checkSelfPermission(context, permission);
-                Log.e("logme","perm "+result);
-                if (result != PackageManager.PERMISSION_GRANTED) {
-                    Log.e("results", "return false on " + permission);
-                    return false;
+        Log.e("results", "check for gps permission");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (context != null && Constants.gpsPermissions != null) {
+                for (String permission : Constants.gpsPermissions) {
+                    int result = ActivityCompat.checkSelfPermission(context, permission);
+                    Log.e("logme", "perm " + result);
+                    if (result != PackageManager.PERMISSION_GRANTED) {
+                        Log.e("results", "return false on " + permission);
+                        return false;
+                    }
+                }
+            }
+        }
+        else {
+            if (context != null && Constants.gpsPermissionsLite != null) {
+                for (String permission : Constants.gpsPermissionsLite) {
+                    int result = ActivityCompat.checkSelfPermission(context, permission);
+                    Log.e("logme", "perm " + result);
+                    if (result != PackageManager.PERMISSION_GRANTED) {
+                        Log.e("results", "return false on " + permission);
+                        return false;
+                    }
                 }
             }
         }

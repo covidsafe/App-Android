@@ -117,13 +117,21 @@ public class BluetoothServerHelper {
             @Override
             public void onServiceAdded(int status, BluetoothGattService service) {
                 super.onServiceAdded(status, service);
-                Log.e("bleserver","service added "+service.getUuid());
-                List<BluetoothGattCharacteristic> characs=service.getCharacteristics();
-                for (BluetoothGattCharacteristic charac:characs){
-                    Log.e("bleserver","charac "+charac.getUuid());
-                    byte[] bb = charac.getValue();
-                    for(Byte b : bb) {
-                        Log.e("bleserver",b+"");
+                if (service != null) {
+                    Log.e("bleserver", "service added " + service.getUuid());
+                    List<BluetoothGattCharacteristic> characs = service.getCharacteristics();
+                    if (characs != null) {
+                        for (BluetoothGattCharacteristic charac : characs) {
+                            Log.e("bleserver", "charac " + charac.getUuid());
+                            if (charac != null) {
+                                byte[] bb = charac.getValue();
+                                if (bb != null) {
+                                    for (Byte b : bb) {
+                                        Log.e("bleserver", b + "");
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

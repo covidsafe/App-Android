@@ -2,6 +2,7 @@ package edu.uw.covidsafe.ui.notif;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,9 +37,11 @@ public class NotifRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     public void notifyUser(String msg) {
-        this.messages.add(msg);
-        notifyItemInserted(count);
-        count += 1;
+        if (count == 0) {
+            this.messages.add(msg);
+            notifyItemInserted(count);
+            count += 1;
+        }
     }
 
     @Override
@@ -46,9 +49,12 @@ public class NotifRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         ((NotifCard)holder).button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                notifyItemRemoved(position);
-                messages.remove(position);
-                count -= 1;
+                Log.e("RECYCLER","RECYCLER POS "+position);
+                if (position < messages.size()) {
+                    notifyItemRemoved(position);
+                    messages.remove(position);
+                    count -= 1;
+                }
             }
         });
     }
