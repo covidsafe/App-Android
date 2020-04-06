@@ -30,7 +30,7 @@ public class OnboardingActivity extends AppCompatActivity {
         Constants.init(this);
         SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         boolean b = prefs.getBoolean(getString(R.string.onboard_enabled_pkey),true);
-        b=false;
+//        b=false;
         Log.e("onboarding","should start onboarding? "+b);
         if (b) {
             setContentView(R.layout.activity_onboarding);
@@ -83,6 +83,12 @@ public class OnboardingActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.e("state","onboarding onresume");
+
+        SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        boolean b = prefs.getBoolean(getString(R.string.onboard_enabled_pkey),true);
+        if (!b) {
+            finish();
+        }
 
 //        if (Constants.CurrentFragment != null) {
 //            Log.e("state","mainactivity - initview "+Constants.CurrentFragment.toString());
