@@ -1,10 +1,15 @@
 package edu.uw.covidsafe.gps;
 
+import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -67,6 +72,20 @@ public class GpsUtils {
             Constants.mLocationManager = (LocationManager) cxt.getSystemService(Context.LOCATION_SERVICE);
         }
     }
+
+//    public static Location getLastLocation(Context cxt) {
+//        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(cxt);
+//        fusedLocationClient.getLastLocation()
+//                .addOnSuccessListener((Activity) cxt, new OnSuccessListener<Location>() {
+//                    @Override
+//                    public void onSuccess(Location location) {
+//                        // Got last known location. In some rare situations this can be null.
+//                        if (location != null) {
+//                            // Logic to handle location object
+//                        }
+//                    }
+//                });
+//    }
 
     public static void startGps(Context cxt) {
         initializeLocationManager(cxt);

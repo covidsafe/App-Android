@@ -73,6 +73,7 @@
                 android:text="Self-quarantine For 14 Days"
                 android:textColor="@color/black"
                 android:textSize="16sp"
+                android:minHeight="44dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/textView5"
                 app:layout_constraintEnd_toStartOf="@+id/guidelineV85"

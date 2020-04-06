@@ -51,7 +51,7 @@
                 android:id="@+id/warning"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/warningRed"
+                android:background="@color/white"
                 android:paddingBottom="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -69,20 +69,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:adjustViewBounds="true"
-                    android:src="@drawable/warning2"
+                    android:src="@drawable/warning3"
                     app:layout_constraintBottom_toBottomOf="@+id/textView11"
                     app:layout_constraintStart_toStartOf="@+id/guidelineV15"
                     app:layout_constraintTop_toTopOf="@+id/textView11" />
 
                 <TextView
                     android:id="@+id/textView11"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
                     android:gravity="center_vertical"
                     android:text="You might have been exposed"
-                    android:textColor="@color/white"
+                    android:textColor="@color/warningViolet"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toStartOf="@+id/guidelineV80"
                     app:layout_constraintStart_toEndOf="@+id/imageView10"
@@ -94,7 +94,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     app:layout_constraintGuide_begin="20dp"
-                    app:layout_constraintGuide_percent=".85" />
+                    app:layout_constraintGuide_percent=".9" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -142,7 +142,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:text="Dismiss"
-                android:textColor="@color/warningRed"
+                android:textColor="@color/purpleLight"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/warning2"
                 app:rippleColor="@color/warningRed" />

@@ -56,6 +56,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import edu.uw.covidsafe.ui.notif.NotifRecord;
 import unused.BlacklistRecord;
 
 public class Utils {
@@ -201,6 +202,11 @@ public class Utils {
     public static void gpsLogToFile(Context cxt, GpsRecord rec) {
         FileOperations.append(rec.toString(),
                 cxt, Constants.gpsDirName, Utils.getGpsLogName());
+    }
+
+    public static void notifLogToFile(Context cxt, NotifRecord rec) {
+        FileOperations.append(rec.toString(),
+                cxt, Constants.notifDirName, Utils.getNotifLogName());
     }
 
     public static void gpsLogToDatabase(Context cxt, Location loc) {
@@ -535,6 +541,12 @@ public class Utils {
     }
 
     public static String getGpsLogName() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        return dateFormat.format(date)+".txt";
+    }
+
+    public static String getNotifLogName() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         return dateFormat.format(date)+".txt";

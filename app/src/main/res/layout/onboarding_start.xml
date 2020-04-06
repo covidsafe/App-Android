@@ -41,6 +41,7 @@
         android:gravity="center"
         android:text="Privacy  |  "
         android:textColor="@color/white"
+        android:minHeight="44dp"
         android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/guidelineStartH95"
         app:layout_constraintStart_toStartOf="@+id/guidelineStartV40" />
@@ -51,6 +52,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Terms and Conditions"
+        android:minHeight="44dp"
         android:textColor="@color/white"
         android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/guidelineStartH95"
@@ -89,7 +91,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent=".95"
+        app:layout_constraintGuide_percent=".97"
         app:layout_constraintGuide_begin="0dp" />
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineStartV40"

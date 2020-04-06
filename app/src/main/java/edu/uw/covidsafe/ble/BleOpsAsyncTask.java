@@ -26,17 +26,6 @@ public class BleOpsAsyncTask extends AsyncTask<Void, Void, Void> {
         this.op = Constants.BleDatabaseOps.Insert;
     }
 
-    public BleOpsAsyncTask(Context context, BleRecord result) {
-        this.context = context;
-        this.result = result;
-        this.op = Constants.BleDatabaseOps.Insert;
-    }
-
-    public BleOpsAsyncTask(Context context) {
-        this.context = context;
-        this.op = Constants.BleDatabaseOps.ViewAll;
-    }
-
     @Override
     protected Void doInBackground(Void... params) {
         Log.e("ble","doinbackground ble "+this.op);

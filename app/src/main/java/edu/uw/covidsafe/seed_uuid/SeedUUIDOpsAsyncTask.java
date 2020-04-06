@@ -14,21 +14,10 @@ public class SeedUUIDOpsAsyncTask extends AsyncTask<Void, Void, Void> {
     private SeedUUIDRecord record;
     private Constants.UUIDDatabaseOps op;
 
-    public SeedUUIDOpsAsyncTask(Context context, String seed, UUID uuid) {
-        this.context = context;
-        this.record = new SeedUUIDRecord(System.currentTimeMillis(), seed, uuid.toString());
-        this.op = Constants.UUIDDatabaseOps.Insert;
-    }
-
     public SeedUUIDOpsAsyncTask(Context context, SeedUUIDRecord record) {
         this.context = context;
         this.record = record;
         this.op = Constants.UUIDDatabaseOps.Insert;
-    }
-
-    public SeedUUIDOpsAsyncTask(Context context) {
-        this.context = context;
-        this.op = Constants.UUIDDatabaseOps.ViewAll;
     }
 
     @Override

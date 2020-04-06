@@ -27,6 +27,7 @@ import edu.uw.covidsafe.ble.BluetoothServerHelper;
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.ui.health.CardRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.health.ResourceRecyclerViewAdapter;
+import edu.uw.covidsafe.ui.notif.HistoryRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
@@ -59,15 +60,20 @@ public class MainFragment extends Fragment {
             }
         });
 
-        RecyclerView rview2 = view.findViewById(R.id.recyclerViewResources);
-        ResourceRecyclerViewAdapter adapter2 = new ResourceRecyclerViewAdapter(getContext(),getActivity());
-        rview2.setAdapter(adapter2);
-        rview2.setLayoutManager(new LinearLayoutManager(getActivity()));
+        RecyclerView resourceView = view.findViewById(R.id.recyclerViewResources);
+        ResourceRecyclerViewAdapter resourceAdapter = new ResourceRecyclerViewAdapter(getContext(),getActivity());
+        resourceView.setAdapter(resourceAdapter);
+        resourceView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        RecyclerView rview3 = view.findViewById(R.id.recyclerViewNotifs);
+        RecyclerView notifView = view.findViewById(R.id.recyclerViewNotifs);
         Constants.NotificationAdapter = new NotifRecyclerViewAdapter(getContext(),getActivity());
-        rview3.setAdapter(Constants.NotificationAdapter);
-        rview3.setLayoutManager(new LinearLayoutManager(getActivity()));
+        notifView.setAdapter(Constants.NotificationAdapter);
+        notifView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        RecyclerView historyView = view.findViewById(R.id.recyclerViewHistory);
+        Constants.HistoryAdapter = new HistoryRecyclerViewAdapter(getContext(),getActivity());
+        historyView.setAdapter(Constants.HistoryAdapter);
+        historyView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         broadcastProp = view.findViewById(R.id.broadcastProp);
 
