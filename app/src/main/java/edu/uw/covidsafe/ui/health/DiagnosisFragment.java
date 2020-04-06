@@ -60,25 +60,10 @@ public class DiagnosisFragment extends Fragment {
             });
         }
 
-        MaterialCardView res1 = view.findViewById(R.id.cdcView);
-        if (res1 != null) {
-            res1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Utils.goToUrl(getActivity(), "https://www.cdc.gov/");
-                }
-            });
-        }
-
-        MaterialCardView res2 = view.findViewById(R.id.nycView);
-        if (res2 != null) {
-            res2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Utils.goToUrl(getActivity(), "https://www1.nyc.gov/site/doh/index.page");
-                }
-            });
-        }
+        RecyclerView rview2 = view.findViewById(R.id.recyclerViewResources);
+        ResourceRecyclerViewAdapter adapter2 = new ResourceRecyclerViewAdapter(getContext(),getActivity());
+        rview2.setAdapter(adapter2);
+        rview2.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         return view;
     }

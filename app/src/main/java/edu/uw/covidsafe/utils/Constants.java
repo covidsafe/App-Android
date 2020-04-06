@@ -17,7 +17,7 @@ import edu.uw.covidsafe.BackgroundService;
 
 import com.example.covidsafe.R;
 import edu.uw.covidsafe.ui.MainFragment;
-import edu.uw.covidsafe.ui.health.SymptomTrackerFragment;
+import unused.SymptomTrackerFragment;
 import edu.uw.covidsafe.ui.health.DiagnosisFragment;
 
 import java.util.ArrayList;

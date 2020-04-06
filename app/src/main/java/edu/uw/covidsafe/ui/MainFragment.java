@@ -7,8 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.Switch;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -19,6 +22,8 @@ import com.example.covidsafe.R;
 import com.google.android.material.card.MaterialCardView;
 
 import edu.uw.covidsafe.ui.health.CardRecyclerViewAdapter;
+import edu.uw.covidsafe.ui.health.ResourceRecyclerViewAdapter;
+import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
 
@@ -47,24 +52,24 @@ public class MainFragment extends Fragment {
             }
         });
 
-        MaterialCardView res1 = view.findViewById(R.id.cdcView);
-        if (res1 != null) {
-            res1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Utils.goToUrl(getActivity(), "https://www.cdc.gov/");
+        RecyclerView rview2 = view.findViewById(R.id.recyclerViewResources);
+        ResourceRecyclerViewAdapter adapter2 = new ResourceRecyclerViewAdapter(getContext(),getActivity());
+        rview2.setAdapter(adapter2);
+        rview2.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        RecyclerView rview3 = view.findViewById(R.id.recyclerViewNotifs);
+        NotifRecyclerViewAdapter adapter3 = new NotifRecyclerViewAdapter(getContext(),getActivity());
+        rview3.setAdapter(adapter3);
+        rview3.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        Switch bb = view.findViewById(R.id.switch1);
+        bb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    adapter3.notifyUser();
                 }
-            });
-        }
-        MaterialCardView res2 = view.findViewById(R.id.nycView);
-        if (res2 != null) {
-            res2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Utils.goToUrl(getActivity(), "https://www1.nyc.gov/site/doh/index.page");
-                }
-            });
-        }
+            }
+        });
 
         return view;
     }
