@@ -114,7 +114,7 @@ public class PullFromServerTask implements Runnable {
             scannedBleMap.put(bleRecord.getUuid(), bleRecord.getTs());
         }
 
-
+        List<String> exposedMessages = new ArrayList<String>();
         for (BluetoothMatch bluetoothMatch : bluetoothMatches) {
             for (BlueToothSeed seed : bluetoothMatch.seeds) {
 //                receivedRecords.add(new SeedUUIDRecord(
@@ -125,10 +125,11 @@ public class PullFromServerTask implements Runnable {
                 boolean exposedStatus = isExposed(seed.seed,
                         seed.sequence_start_time.toLong());
                 if (exposedStatus) {
-                    notifyUserOfExposure(bluetoothMatch.user_message);
+                    exposedMessages.add(bluetoothMatch.user_message);
                 }
             }
         }
+        notifyBulk(exposedMessages);
 
         //////////////////////////////////////////////////////////////////////////////////////////
         // narrowcasting
@@ -154,6 +155,7 @@ public class PullFromServerTask implements Runnable {
 
         /////////////////////////////////////////////////////////////////////////
         // (1) send MessageListRequest to get query IDs and timestamps
+        /////////////////////////////////////////////////////////////////////////
         String messageListRequest = MessageListRequest.toHttpString(lat, longi, precision, lastQueryTime);
         Log.e("NET ","SEND MESSAGE LIST REQUEST ");
         JSONObject response = NetworkHelper.sendRequest(messageListRequest, Request.Method.GET,null);
@@ -168,10 +170,10 @@ public class PullFromServerTask implements Runnable {
             Log.e("err",e.getMessage());
             return null;
         }
-        /////////////////////////////////////////////////////////////////////////
 
         /////////////////////////////////////////////////////////////////////////
         // (2) make a request for the queries using the IDs
+        /////////////////////////////////////////////////////////////////////////
         JSONObject messageRequestObj = null;
         try {
             messageRequestObj = MessageRequest.toJson(messageListResponse.messageInfo);
@@ -202,10 +204,10 @@ public class PullFromServerTask implements Runnable {
         if (matchMessage == null) {
             return null;
         }
-        /////////////////////////////////////////////////////////////////////////
 
         /////////////////////////////////////////////////////////////////////////
         // (3) update last query time to server
+        /////////////////////////////////////////////////////////////////////////
         ArrayList<Long> queryTimes = new ArrayList<Long>();
         for (MessageInfo messageInfo : messageListResponse.messageInfo) {
             queryTimes.add(messageInfo.MessageTimestamp.toLong());
@@ -239,17 +241,19 @@ public class PullFromServerTask implements Runnable {
         /////////////////////////////////////////////////////////////////////////
         // (5) check for area intersection for area matches. narrowcast messages
         /////////////////////////////////////////////////////////////////////////
+        List<String> narrowCastMessages = new ArrayList<String>();
         if (matchMessage.area_matches != null) {
             for (AreaMatch areaMatch : matchMessage.area_matches) {
                 Area[] areas = areaMatch.areas;
                 for (Area area : areas) {
                     if (intersect(area)) {
                         Log.e("msg", "NARROWCAST USER MESSAGE "+areaMatch.user_message);
-                        Constants.NotificationAdapter.notifyUser(areaMatch.user_message);
+                        narrowCastMessages.add(areaMatch.user_message);
                     }
                 }
             }
         }
+        notifyBulk(narrowCastMessages);
         /////////////////////////////////////////////////////////////////////////
 
         return matchMessage.bluetooth_matches;
@@ -394,7 +398,10 @@ public class PullFromServerTask implements Runnable {
         Constants.NotificationAdapter.notifyUser(msg);
     }
 
-    public void makeAnnouncement(List<String> announcements) {
+    public void notifyBulk(List<String> msgs) {
         // PSA
+        for (String msg : msgs) {
+            Constants.NotificationAdapter.notifyUser(msg);
+        }
     }
 }
