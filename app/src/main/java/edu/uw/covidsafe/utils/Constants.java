@@ -104,6 +104,7 @@ public class Constants {
     public static String SHARED_PREFENCE_NAME = "preferences";
     public static String NOTIFICATION_CHANNEL = "channel";
     public static Fragment MainFragment;
+    public static Fragment ReportFragmentState;
     public static Fragment HealthFragment;
     public static Fragment SubmitFragment;
     public static Fragment HelpFragment;
@@ -165,6 +166,7 @@ public class Constants {
         SettingsFragment = new SettingsFragment();
         PermissionsFragment = new PermissionFragment();
         PagerFragment = new PagerFragment();
+        ReportFragmentState = HealthFragment;
         if (!DEBUG) {
             LOG_TO_DISK = false;
         }

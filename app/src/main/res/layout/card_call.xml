@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/parent_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/parent_layout2"
     android:background="@color/gray"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -27,13 +27,13 @@
         android:id="@+id/materialCardView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:foregroundTint="@color/orange"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="1dp"
         android:backgroundTint="@color/orange"
-        app:cardBackgroundColor="@color/orange"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
         app:layout_constraintStart_toStartOf="@+id/guidelineV05"
+        app:layout_constraintTop_toTopOf="parent"
         app:strokeColor="@color/gray"
         app:strokeWidth="1dp">
 
@@ -43,18 +43,20 @@
 
             <ImageView
                 android:id="@+id/imageView7"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="13dp"
+                android:layout_marginBottom="12dp"
                 android:adjustViewBounds="true"
                 android:src="@drawable/rect2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guidelineV10"
-                app:layout_constraintStart_toStartOf="@+id/guidelineV15"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:id="@+id/icon"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:adjustViewBounds="true"
@@ -69,12 +71,13 @@
                 android:id="@+id/textView7"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="23dp"
+                android:layout_marginEnd="48dp"
                 android:text="Call 911 immediately if you are having a medical emergency."
                 android:textColor="@color/black"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/guidelineV85"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/imageView7"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -91,7 +94,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_end="315dp" />
+                app:layout_constraintGuide_begin="20dp"
+                app:layout_constraintGuide_percent=".15" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guidelineV85"

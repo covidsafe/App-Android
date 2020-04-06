@@ -1,9 +1,13 @@
 package edu.uw.covidsafe.ui;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.ExpandableListAdapter;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
@@ -22,9 +26,11 @@ public class MainFragment extends Fragment {
 
     View view;
 
+    @SuppressLint("RestrictedApi")
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().hide();
         view = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -42,19 +48,31 @@ public class MainFragment extends Fragment {
         });
 
         MaterialCardView res1 = view.findViewById(R.id.cdcView);
-        res1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.goToUrl(getActivity(), "https://www.cdc.gov/");
-            }
-        });
+        if (res1 != null) {
+            res1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Utils.goToUrl(getActivity(), "https://www.cdc.gov/");
+                }
+            });
+        }
         MaterialCardView res2 = view.findViewById(R.id.nycView);
-        res2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.goToUrl(getActivity(), "https://www1.nyc.gov/site/doh/index.page");
-            }
-        });
+        if (res2 != null) {
+            res2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Utils.goToUrl(getActivity(), "https://www1.nyc.gov/site/doh/index.page");
+                }
+            });
+        }
+
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Constants.CurrentFragment = this;
+        Constants.MainFragment = this;
     }
 }

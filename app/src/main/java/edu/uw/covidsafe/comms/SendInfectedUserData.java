@@ -109,13 +109,13 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
 //        builder.append(" next message");
 //        Snackbar.make(parent view, builder, Snackbar.LENGTH_LONG).show();]
 
-//        View snackbarView = snackBar.getView();
+        View snackbarView = snackBar.getView();
 //        TextView textView = (TextView)snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
 //        textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.check, 0, 0, 0);
 //        textView.setCompoundDrawablePadding(av.getResources().getDimensionPixelOffset(R.dimen.ic));
 
-//        TextView textView = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
-//        textView.setMaxLines(5);
+        TextView textView = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
+        textView.setMaxLines(5);
 
         snackBar.show();
     }

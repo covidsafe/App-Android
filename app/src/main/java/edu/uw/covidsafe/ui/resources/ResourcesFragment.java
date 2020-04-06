@@ -1,12 +1,18 @@
 package edu.uw.covidsafe.ui.resources;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -24,15 +30,20 @@ import java.util.List;
 
 public class ResourcesFragment extends Fragment {
 
+    ExpandableListView lv1;
+    ExpandableListView lv2;
+
+    @SuppressLint("RestrictedApi")
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.e("logme","HELP");
         View view = inflater.inflate(R.layout.fragment_resources, container, false);
+        ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().show();
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(getActivity().getString(R.string.help_header_text));
 
-        ExpandableListView lv = view.findViewById(R.id.faq);
+         lv1 = view.findViewById(R.id.faq);
 
         List<String> questions = new ArrayList<>();
         List<String> answers = new ArrayList<>();
@@ -40,15 +51,15 @@ public class ResourcesFragment extends Fragment {
         answers.add(getString(R.string.lipsum4));
         questions.add(getString(R.string.lipsum5));
         answers.add(getString(R.string.lipsum4));
-        questions.add(getString(R.string.lipsum5));
+        questions.add(getString(R.string.lipsum6));
         answers.add(getString(R.string.lipsum4));
 
         FaqListAdapter adapter = new FaqListAdapter(questions, answers);
-        lv.setAdapter(adapter);
+        lv1.setAdapter(adapter);
 
         //////////////////////////////////////////////////////////////////
 
-        ExpandableListView lv2 = view.findViewById(R.id.faq2);
+        lv2 = view.findViewById(R.id.faq2);
 
         List<String> questions2 = new ArrayList<>();
         List<String> answers2 = new ArrayList<>();
@@ -56,28 +67,178 @@ public class ResourcesFragment extends Fragment {
         answers2.add(getString(R.string.lipsum4));
         questions2.add(getString(R.string.lipsum5));
         answers2.add(getString(R.string.lipsum4));
-        questions2.add(getString(R.string.lipsum5));
+        questions2.add(getString(R.string.lipsum6));
         answers2.add(getString(R.string.lipsum4));
 
         FaqListAdapter adapter2 = new FaqListAdapter(questions2, answers2);
         lv2.setAdapter(adapter2);
 
         MaterialCardView res1 = view.findViewById(R.id.cdcView);
-        res1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.goToUrl(getActivity(), "https://www.cdc.gov/");
-            }
-        });
+        if (res1 != null) {
+            res1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Utils.goToUrl(getActivity(), "https://www.cdc.gov/");
+                }
+            });
+        }
         MaterialCardView res2 = view.findViewById(R.id.nycView);
-        res2.setOnClickListener(new View.OnClickListener() {
+        if (res2 != null) {
+            res2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Utils.goToUrl(getActivity(), "https://www1.nyc.gov/site/doh/index.page");
+                }
+            });
+        }
+
+//        setListViewHeight(lv1);
+//        lv1.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+//            @Override
+//            public boolean onGroupClick(ExpandableListView parent, View v,
+//                                        int position, long id) {
+//                setListViewHeight(parent, position);
+//                return false;
+//            }
+//        });
+//
+//        setListViewHeight(lv2);
+//        lv2.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+//            @Override
+//            public boolean onGroupClick(ExpandableListView parent, View v,
+//                                        int position, long id) {
+//                setListViewHeight(parent, position);
+//                return false;
+//            }
+//        });
+
+        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
-            public void onClick(View v) {
-                Utils.goToUrl(getActivity(), "https://www1.nyc.gov/site/doh/index.page");
+            public void onGlobalLayout() {
+                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                view.getHeight(); //height is ready
+
+                setExpandableListViewHeight(lv1, -1);
+                lv1.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+                    @Override
+                    public boolean onGroupClick(ExpandableListView parent, View v, int position, long id) {
+                        setExpandableListViewHeight(parent, position);
+                        return false;
+                    }
+                });
+                setExpandableListViewHeight(lv2, -1);
+                lv2.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+                    @Override
+                    public boolean onGroupClick(ExpandableListView parent, View v, int position, long id) {
+                        setExpandableListViewHeight(parent, position);
+                        return false;
+                    }
+                });
+                lv1.setIndicatorBoundsRelative(lv1.getWidth() - GetDipsFromPixel(50),
+                        lv1.getWidth() - GetDipsFromPixel(10));
+                lv2.setIndicatorBoundsRelative(lv2.getWidth() - GetDipsFromPixel(50),
+                        lv2.getWidth() - GetDipsFromPixel(10));
             }
         });
 
         return view;
+    }
+
+    public int GetDipsFromPixel(float pixels) {
+        // Get the screen's density scale
+        final float scale = getResources().getDisplayMetrics().density;
+        // Convert the dps to pixels, based on density scale
+        return (int) (pixels * scale + 0.5f);
+    }
+
+    private void setExpandableListViewHeight(ExpandableListView listView,
+                                             int group) {
+        ExpandableListAdapter listAdapter = (ExpandableListAdapter) listView.getExpandableListAdapter();
+        int totalHeight = 0;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),
+                View.MeasureSpec.EXACTLY);
+        Log.e("state","desired width"+desiredWidth+","+listView.getWidth());
+        for (int i = 0; i < listAdapter.getGroupCount(); i++) {
+            View groupItem = listAdapter.getGroupView(i, false, null, listView);
+            groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+
+            totalHeight += groupItem.getMeasuredHeight();
+            Log.e("state","group height "+groupItem.getMeasuredHeight()+","+totalHeight);
+            if (((listView.isGroupExpanded(i)) && (i != group))
+                    || ((!listView.isGroupExpanded(i)) && (i == group))) {
+                for (int j = 0; j < listAdapter.getChildrenCount(i); j++) {
+                    View listItem = listAdapter.getChildView(i, j, false, null,
+                            listView);
+                    listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+
+                    totalHeight += listItem.getMeasuredHeight();
+                    Log.e("state","list height "+listItem.getMeasuredHeight()+","+totalHeight);
+                }
+            }
+        }
+        Log.e("state","----------------------");
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        int height = totalHeight
+                + (listView.getDividerHeight() * (listAdapter.getGroupCount() - 1));
+        if (height < 10)
+            height = 200;
+        params.height = height;
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+    }
+
+    private void setListViewHeight(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        int totalHeight = 0;
+        Log.e("STATE","count "+listAdapter.getCount());
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+            Log.e("STATE","height "+i+","+listItem.getMeasuredHeight());
+        }
+//        totalHeight=800;
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight
+                + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+    }
+
+
+    private void setListViewHeight(ExpandableListView listView,
+                                   int group) {
+        ExpandableListAdapter listAdapter = listView.getExpandableListAdapter();
+        int totalHeight = 0;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),
+                View.MeasureSpec.AT_MOST);
+        for (int i = 0; i < listAdapter.getGroupCount(); i++) {
+            View groupItem = listAdapter.getGroupView(i, false, null, listView);
+            groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += groupItem.getMeasuredHeight();
+
+            if (((listView.isGroupExpanded(i)) && (i != group))
+                    || ((!listView.isGroupExpanded(i)) && (i == group))) {
+                for (int j = 0; j < listAdapter.getChildrenCount(i); j++) {
+                    View listItem = listAdapter.getChildView(i, j, false, null,
+                            listView);
+                    listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+
+                    totalHeight += listItem.getMeasuredHeight();
+                }
+            }
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        int height = totalHeight
+                + (listView.getDividerHeight() * (listAdapter.getGroupCount() - 1));
+        if (height < 10) {
+            height = 200;
+        }
+        params.height = height;
+        listView.setLayoutParams(params);
+        listView.requestLayout();
     }
 
     @Override
@@ -86,6 +247,7 @@ public class ResourcesFragment extends Fragment {
         Log.e("logme","HELP");
         Constants.HelpFragment = this;
         Constants.CurrentFragment = this;
+
     }
 
     @Override

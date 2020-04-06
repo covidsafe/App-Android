@@ -1,6 +1,7 @@
 package edu.uw.covidsafe.ui.onboarding;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -8,6 +9,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.covidsafe.R;
+
+import edu.uw.covidsafe.utils.Constants;
 
 public class OnboardingStateAdapter extends FragmentPagerAdapter {
 
@@ -20,6 +23,8 @@ public class OnboardingStateAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         StoryFragment frag = new StoryFragment();
         Bundle bundle = new Bundle();
+        Log.e("STATE","page number "+position);
+        Constants.pageNumber = position;
         if (position==0) {
             bundle.putInt("image", R.drawable.onboard1);
             bundle.putInt("message", R.string.story1);

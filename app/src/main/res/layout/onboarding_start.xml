@@ -14,12 +14,12 @@
         android:gravity="center"
         android:text="@string/startText"
         android:textColor="@color/white"
-        android:textSize="25sp"
+        android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineStartV95"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineStartV80"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/guidelineStartV5"
-        app:layout_constraintTop_toTopOf="@+id/guidelineStartH60" />
+        app:layout_constraintStart_toStartOf="@+id/guidelineStartV20"
+        app:layout_constraintTop_toTopOf="@+id/guidelineStartH70" />
 
     <Button
         android:id="@+id/onboardingGetStartedButton"
@@ -41,7 +41,7 @@
         android:gravity="center"
         android:text="Privacy  |  "
         android:textColor="@color/white"
-        android:textSize="10sp"
+        android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/guidelineStartH95"
         app:layout_constraintStart_toStartOf="@+id/guidelineStartV40" />
 
@@ -52,7 +52,7 @@
         android:gravity="center"
         android:text="Terms and Conditions"
         android:textColor="@color/white"
-        android:textSize="10sp"
+        android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/guidelineStartH95"
         app:layout_constraintStart_toEndOf="@+id/privacyTextView" />
 
@@ -111,5 +111,19 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent=".95"
+        app:layout_constraintGuide_begin="0dp" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineStartV20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".2"
+        app:layout_constraintGuide_begin="0dp" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineStartV80"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".8"
         app:layout_constraintGuide_begin="0dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

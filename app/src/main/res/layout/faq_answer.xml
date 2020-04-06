@@ -1,26 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="45dp"
-    android:paddingTop="15dp"
-    android:paddingBottom="15dp"
-    android:background="@color/gray"
-    android:paddingStart="45dp">
+    android:background="@color/gray">
 
-    <TextView
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineV05"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent=".05" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="A: "
         android:textColor="@color/purpleLight"
-        android:text="A: "/>
+        app:layout_constraintStart_toStartOf="@+id/guidelineV05"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/faqitem"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="15dp"
+        android:text="@string/lipsum4"
         android:textColor="@color/darkGray"
-        android:layout_marginLeft="10dp"
-        android:text="@string/lipsum4"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView12"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

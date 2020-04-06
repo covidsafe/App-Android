@@ -1,5 +1,6 @@
 package edu.uw.covidsafe.ui.resources;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,22 +57,24 @@ public class FaqListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-
-        if (convertView == null) {
+//        if (convertView == null) {
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.faq_question, parent, false);
             TextView tv = convertView.findViewById(R.id.faqgroup);
+//            Log.e("state","get group "+groupPosition);
             tv.setText(String.valueOf(getGroup(groupPosition)));
-        }
+//        }
         return convertView;
     }
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        if (convertView == null) {
+//        Log.e("state","get child view" + groupPosition+","+childPosition);
+//        if (convertView == null) {
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.faq_answer, parent, false);
             TextView tv = convertView.findViewById(R.id.faqitem);
+//            Log.e("state","get child "+groupPosition+","+childPosition);
             tv.setText(String.valueOf(getChild(groupPosition,childPosition)));
-        }
+//        }
         return convertView;
     }
 
