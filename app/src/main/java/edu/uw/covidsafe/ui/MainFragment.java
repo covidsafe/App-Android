@@ -71,7 +71,6 @@ public class MainFragment extends Fragment {
         Switch bb = view.findViewById(R.id.switch1);
         bb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
                 if (isChecked) {
                     if (!Utils.canStartTracking()) {
                         Utils.mkSnack(getActivity(), view, getString(R.string.prompt_to_enable_error));
@@ -123,5 +122,6 @@ public class MainFragment extends Fragment {
         super.onResume();
         Constants.CurrentFragment = this;
         Constants.MainFragment = this;
+        Constants.MainFragmentState = this;
     }
 }

@@ -127,13 +127,13 @@ public class ResourcesFragment extends Fragment {
         int totalHeight = 0;
         int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),
                 View.MeasureSpec.EXACTLY);
-        Log.e("state","desired width"+desiredWidth+","+listView.getWidth());
+//        Log.e("state","desired width"+desiredWidth+","+listView.getWidth());
         for (int i = 0; i < listAdapter.getGroupCount(); i++) {
             View groupItem = listAdapter.getGroupView(i, false, null, listView);
             groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
 
             totalHeight += groupItem.getMeasuredHeight();
-            Log.e("state","group height "+groupItem.getMeasuredHeight()+","+totalHeight);
+//            Log.e("state","group height "+groupItem.getMeasuredHeight()+","+totalHeight);
             if (((listView.isGroupExpanded(i)) && (i != group))
                     || ((!listView.isGroupExpanded(i)) && (i == group))) {
                 for (int j = 0; j < listAdapter.getChildrenCount(i); j++) {
@@ -142,11 +142,11 @@ public class ResourcesFragment extends Fragment {
                     listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
 
                     totalHeight += listItem.getMeasuredHeight();
-                    Log.e("state","list height "+listItem.getMeasuredHeight()+","+totalHeight);
+//                    Log.e("state","list height "+listItem.getMeasuredHeight()+","+totalHeight);
                 }
             }
         }
-        Log.e("state","----------------------");
+//        Log.e("state","----------------------");
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         int height = totalHeight
