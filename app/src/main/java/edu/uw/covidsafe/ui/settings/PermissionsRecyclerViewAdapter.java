@@ -34,6 +34,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.ArrayList;
 
 import edu.uw.covidsafe.ble.BluetoothUtils;
+import edu.uw.covidsafe.gps.GpsUtils;
 import edu.uw.covidsafe.ui.PermUtil;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
@@ -45,10 +46,12 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
     private ArrayList<Drawable> icons = new ArrayList<>();
     static Context cxt;
     static Activity av;
+    static View view;
 
-    public PermissionsRecyclerViewAdapter(Context cxt, Activity av) {
+    public PermissionsRecyclerViewAdapter(Context cxt, Activity av, View view) {
         this.cxt = cxt;
         this.av = av;
+        this.view = view;
         titles.add("Notifications");
         titles.add("Location Sharing");
         titles.add("Bluetooth Tracing");
@@ -73,10 +76,12 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
         ((PermissionCard)holder).desc.setText(desc.get(position));
         ((PermissionCard)holder).icon.setImageDrawable(icons.get(position));
 
-        // update switch states
         SharedPreferences prefs = cxt.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = cxt.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
 
+        /////////////////////////////////////////////
+        // update switch states
+        /////////////////////////////////////////////
         if (titles.get(position).toLowerCase().contains("notification")) {
             Constants.notifSwitch = ((PermissionCard)holder).sw;
             boolean hasNotifPerms = NotificationManagerCompat.from(cxt).areNotificationsEnabled();
@@ -135,6 +140,9 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             }
         }
 
+        /////////////////////////////////////////////
+        // switch listener
+        /////////////////////////////////////////////
         ((PermissionCard)holder).sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = cxt.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
@@ -147,6 +155,7 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                     }
                     else {
                         if (isChecked) {
+                            // need to open settings for this
                             // preemptively add the permission
                             editor.putBoolean(cxt.getString(R.string.notifs_enabled_pkey), isChecked);
                             Log.e("perm", "notif set " + isChecked);
@@ -163,6 +172,9 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                         if (hasGps) {
                             editor.putBoolean(cxt.getString(R.string.gps_enabled_pkey), true);
                             editor.commit();
+                            if (Constants.LoggingServiceRunning) {
+                                GpsUtils.startGps(cxt);
+                            }
                         }
                         else {
                             ActivityCompat.requestPermissions(av, Constants.gpsPermissions, 2);
@@ -171,6 +183,11 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                     else {
                         editor.putBoolean(cxt.getString(R.string.gps_enabled_pkey), false);
                         editor.commit();
+                        GpsUtils.haltGps();
+                        // ble and gps are turned off, halt
+                        if (!Constants.bleSwitch.isChecked()) {
+                            Utils.haltLoggingService(av, view);
+                        }
                     }
                 }
                 else if (titles.get(position).toLowerCase().contains("bluetooth")) {
@@ -182,10 +199,12 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                         boolean hasBle = Utils.hasBlePermissions(av);
 
                         Log.e("perm","ble set "+isChecked+","+hasBle+","+Constants.blueAdapter.isEnabled());
-                        if (hasBle && Constants.blueAdapter != null &&
-                                Constants.blueAdapter.isEnabled()) {
+                        if (hasBle && BluetoothUtils.isBluetoothOn(av)) {
                             editor.putBoolean(cxt.getString(R.string.ble_enabled_pkey), true);
                             editor.commit();
+                            if (Constants.LoggingServiceRunning) {
+                                BluetoothUtils.startBle(cxt);
+                            }
                         }
                         else {
                             if (Constants.blueAdapter != null && !Constants.blueAdapter.isEnabled()) {
@@ -200,6 +219,11 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                     else {
                         editor.putBoolean(cxt.getString(R.string.ble_enabled_pkey), false);
                         editor.commit();
+                        BluetoothUtils.haltBle(av);
+                        // ble and gps are turned off, halt
+                        if (!Constants.gpsSwitch.isChecked()) {
+                            Utils.haltLoggingService(av, view);
+                        }
                     }
                 }
             }});

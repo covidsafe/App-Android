@@ -181,8 +181,8 @@ public class MainFragmentOld extends Fragment {
 
                     if (Constants.mLocationManager != null) {
                         try {
-                            Constants.mLocationManager.removeUpdates(Constants.locListeners[0]);
-                            Constants.mLocationManager.removeUpdates(Constants.locListeners[1]);
+//                            Constants.mLocationManager.removeUpdates(Constants.locListeners[0]);
+//                            Constants.mLocationManager.removeUpdates(Constants.locListeners[1]);
                         } catch (Exception ex) {
                             Log.e("logme", "fail to remove location listners, ignore", ex);
                         }
@@ -190,19 +190,13 @@ public class MainFragmentOld extends Fragment {
 
                     Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothScanHelper.advertiseCallback);
                     BluetoothUtils.finishScan(getContext());
-                    if (Constants.uploadTask!=null) {
-                        Constants.uploadTask.cancel(true);
-                    }
+//                    if (Constants.uploadTask!=null) {
+//                        Constants.uploadTask.cancel(true);
+//                    }
                     if (Constants.uuidGeneartionTask!=null) {
                         Constants.uuidGeneartionTask.cancel(true);
                     }
                     BluetoothServerHelper.stopServer();
-                    try {
-                        getContext().unregisterReceiver(BluetoothUtils.bluetoothReceiver);
-                    }
-                    catch(Exception e) {
-                        Log.e("frag","unregister fail");
-                    }
                     Constants.tracking = false;
                     gpsSwitch.setEnabled(true);
                     bleSwitch.setEnabled(true);

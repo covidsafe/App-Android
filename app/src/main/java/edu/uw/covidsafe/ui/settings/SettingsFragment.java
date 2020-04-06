@@ -44,7 +44,7 @@ public class SettingsFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Settings");
 
         RecyclerView rview3 = view.findViewById(R.id.recyclerViewPerms);
-        PermissionsRecyclerViewAdapter adapter3 = new PermissionsRecyclerViewAdapter(getContext(),getActivity());
+        PermissionsRecyclerViewAdapter adapter3 = new PermissionsRecyclerViewAdapter(getContext(),getActivity(), view);
         rview3.setAdapter(adapter3);
         rview3.setLayoutManager(new LinearLayoutManager(getActivity()));
 
