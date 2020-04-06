@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -84,8 +85,12 @@ public class BackgroundService extends IntentService {
             messenger = (Messenger) bundle.get("messenger");
         }
 
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        boolean bleEnabled = prefs.getBoolean(getApplicationContext().getString(R.string.ble_enabled_pkey), Constants.BLUETOOTH_ENABLED);
+        boolean gpsEnabled = prefs.getBoolean(getApplicationContext().getString(R.string.gps_enabled_pkey), Constants.GPS_ENABLED);
+
         ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
-        if (Constants.BLUETOOTH_ENABLED) {
+        if (bleEnabled) {
             BluetoothUtils.messenger = messenger;
             this.registerReceiver(BluetoothUtils.mReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
 
@@ -99,7 +104,7 @@ public class BackgroundService extends IntentService {
             Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(new UUIDGeneratorTask(messenger, getApplicationContext()), 0, Constants.UUIDGenerationIntervalInMinutes, TimeUnit.MINUTES);
         }
 
-        if (Constants.GPS_ENABLED) {
+        if (gpsEnabled) {
             initializeLocationManager();
             try {
                 Log.e("logme", "request");

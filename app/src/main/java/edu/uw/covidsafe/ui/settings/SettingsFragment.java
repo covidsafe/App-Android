@@ -64,13 +64,6 @@ public class SettingsFragment extends Fragment {
         super.onResume();
         Constants.SettingsFragment = this;
         Constants.CurrentFragment = this;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        Constants.SettingsFragment = this;
-        Constants.CurrentFragment = this;
+        Constants.MainFragmentState = this;
     }
 }

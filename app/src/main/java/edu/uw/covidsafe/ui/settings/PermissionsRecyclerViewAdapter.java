@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -65,11 +66,12 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
         ((PermissionCard)holder).icon.setImageDrawable(icons.get(position));
         ((PermissionCard)holder).sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = cxt.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
                 if (titles.get(position).toLowerCase().contains("notification")) {
-
+                    editor.putBoolean(cxt.getString(R.string.notifs_enabled_pkey), isChecked);
+                    editor.commit();
                 }
                 else if (titles.get(position).toLowerCase().contains("location")) {
-
                     if (Constants.GPS_ENABLED && !Utils.hasGpsPermissions(av)) {
 //                            if ((Constants.GPS_ENABLED || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) && !Utils.hasGpsPermissions(getActivity())) {
                         Log.e("aa","PERMS");

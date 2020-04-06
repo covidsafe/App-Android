@@ -151,10 +151,15 @@ public class MainActivity extends AppCompatActivity {
                 Fragment selectedFragment = null;
                 switch (item.getItemId()) {
                     case R.id.action_track:
-                        selectedFragment = Constants.MainFragment;
+                        if (Constants.MainFragmentState.toString().toLowerCase().contains("main")) {
+                            selectedFragment = Constants.MainFragment;
+                        }
+                        else if (Constants.MainFragmentState.toString().toLowerCase().contains("settings")) {
+                            selectedFragment = Constants.SettingsFragment;
+                        }
                         break;
                     case R.id.action_report:
-                        Log.e("STate", "cur fragment "+Constants.CurrentFragment.toString());
+//                        Log.e("STate", "cur fragment "+Constants.CurrentFragment.toString());
                         if (Constants.ReportFragmentState.toString().toLowerCase().contains("diagnosis")) {
                             selectedFragment = Constants.DiagnosisFragment;
                         }

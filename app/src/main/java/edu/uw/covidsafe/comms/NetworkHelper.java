@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.google.gson.JsonObject;
@@ -44,6 +45,18 @@ public class NetworkHelper {
                 else {
                     return new HashMap<String, String>();
                 }
+            }
+            @Override
+            protected VolleyError parseNetworkError(VolleyError volleyError) {
+                if (volleyError != null && volleyError.networkResponse != null) {
+                    int statusCode = volleyError.networkResponse.statusCode;
+                    switch (statusCode) {
+                        case 500:
+                            Log.e("err","err is 500");
+                            break;
+                    }
+                }
+                return volleyError;
             }
         }
         ;

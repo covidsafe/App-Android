@@ -105,6 +105,7 @@ public class Constants {
     public static String NOTIFICATION_CHANNEL = "channel";
     public static Fragment MainFragment;
     public static Fragment ReportFragmentState;
+    public static Fragment MainFragmentState;
     public static Fragment HealthFragment;
     public static Fragment SubmitFragment;
     public static Fragment HelpFragment;
