@@ -11,7 +11,7 @@
     <string name="warning_help_text">You\'ve received a positive diagnosis from your healthcare provider. To confirm your diagnosis, please provider your credentials below.</string>
     <string name="settings_help_text">You can use this panel to create a 1 mile radius around locations you don\'t want to be tracked. You can add up to %1$d locations.</string>
     <string name="notif_message">We are currently logging your location.</string>
-    <string name="exposed_notif">Based on your location history, we believe you might have been in the same place as people infected with COVID-19.</string>
+    <string name="default_exposed_notif">Based on your location history, we believe you might have been in the same place as people infected with COVID-19.</string>
     <string name="exposed_notif2">Please contact your healthcare professional.</string>
 
     <string name="certError">Please check the box to certify that all the information in this form is correct.</string>

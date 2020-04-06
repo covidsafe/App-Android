@@ -2,12 +2,10 @@ package edu.uw.covidsafe.comms;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
-import android.os.Messenger;
 import android.util.Log;
 
 import com.android.volley.Request;
 import com.example.covidsafe.R;
-import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,7 +25,6 @@ import edu.uw.covidsafe.json.MessageListResponse;
 import edu.uw.covidsafe.json.MessageRequest;
 import edu.uw.covidsafe.json.MessageSizeRequest;
 import edu.uw.covidsafe.json.MessageSizeResponse;
-import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
 import edu.uw.covidsafe.ui.notif.NotifOpsAsyncTask;
 import edu.uw.covidsafe.ui.notif.NotifRecord;
 import edu.uw.covidsafe.utils.Constants;
@@ -132,7 +129,7 @@ public class PullFromServerTask implements Runnable {
                 List<Long> contactTimesEnd = new ArrayList<>();
 
                 long[] exposedStatus = isExposed(seed.seed,
-                        seed.sequence_start_time.toLong());
+                        seed.sequence_start_time);
                 if (exposedStatus != null) {
                     exposedMessages.add(bluetoothMatch.user_message);
                     contactStartTimes.add(exposedStatus[0]);
@@ -212,7 +209,7 @@ public class PullFromServerTask implements Runnable {
         /////////////////////////////////////////////////////////////////////////
         ArrayList<Long> queryTimes = new ArrayList<Long>();
         for (MessageInfo messageInfo : messageListResponse.messageInfo) {
-            queryTimes.add(messageInfo.MessageTimestamp.toLong());
+            queryTimes.add(messageInfo.MessageTimestamp);
         }
         Collections.sort(queryTimes, Collections.reverseOrder());
 
@@ -237,8 +234,8 @@ public class PullFromServerTask implements Runnable {
                     if (intersect(area)) {
                         Log.e("msg", "NARROWCAST USER MESSAGE "+areaMatch.user_message);
                         narrowCastMessages.add(areaMatch.user_message);
-                        narrowCastMessageStartTimes.add(area.begin_time.toLong());
-                        narrowCastMessageEndTimes.add(area.end_time.toLong());
+                        narrowCastMessageStartTimes.add(area.begin_time);
+                        narrowCastMessageEndTimes.add(area.end_time);
                         break;
                     }
                 }
@@ -252,11 +249,11 @@ public class PullFromServerTask implements Runnable {
 
     public boolean intersect(Area area) {
         GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
-        List<GpsRecord> gpsRecords = gpsRepo.getRecordsBetweenTimestamps(area.begin_time.toLong(), area.end_time.toLong());
+        List<GpsRecord> gpsRecords = gpsRepo.getRecordsBetweenTimestamps(area.begin_time, area.end_time);
 
         for (GpsRecord record : gpsRecords) {
             float[] result = new float[3];
-            Location.distanceBetween(record.getLat(), record.getLongi(), area.location.lattitude, area.location.longitude, result);
+            Location.distanceBetween(record.getLat(), record.getLongi(), area.location.latitude, area.location.longitude, result);
 
             if ((result.length == 1 && result[0] < area.radius_meters) ||
                 (result.length == 2 && result[1] < area.radius_meters) ||
@@ -386,12 +383,28 @@ public class PullFromServerTask implements Runnable {
         // PSA
         for (int i = 0; i < msgs.size(); i++) {
             // add notification to DB
-            new NotifOpsAsyncTask(context, new NotifRecord(
-                    contactTimesStart.get(i),
-                    contactTimesEnd.get(i),
-                    msgs.get(i),
-                    messageType.ordinal()));
-            Constants.NotificationAdapter.notifyUser(msgs.get(i));
+            if (messageType == Constants.MessageType.Exposure) {
+                String msg = msgs.get(i);
+                if (msg.isEmpty()) {
+                    msg = context.getString(R.string.default_exposed_notif);
+                }
+                new NotifOpsAsyncTask(context, new NotifRecord(
+                        contactTimesStart.get(i),
+                        contactTimesEnd.get(i),
+                        msg,
+                        messageType.ordinal()));
+                Constants.NotificationAdapter.notifyUser(msg);
+            }
+            else {
+                if (!msgs.isEmpty()) {
+                    new NotifOpsAsyncTask(context, new NotifRecord(
+                            contactTimesStart.get(i),
+                            contactTimesEnd.get(i),
+                            msgs.get(i),
+                            messageType.ordinal()));
+                    Constants.NotificationAdapter.notifyUser(msgs.get(i));
+                }
+            }
         }
     }
 }

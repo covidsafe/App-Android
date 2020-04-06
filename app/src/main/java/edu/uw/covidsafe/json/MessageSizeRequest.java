@@ -10,7 +10,7 @@ import edu.uw.covidsafe.comms.NetworkConstant;
 public class MessageSizeRequest {
 
     Region region;
-    UTCTime last_query_time;
+    long last_query_time;
 
     public static MessageSizeRequest parse(JSONObject obj) throws JSONException {
         MessageSizeRequest messageSizeRequest = new MessageSizeRequest();
@@ -18,7 +18,7 @@ public class MessageSizeRequest {
             messageSizeRequest.region = Region.parse(obj.getJSONObject("region"));
         }
         if (obj.has("last_query_time")) {
-            messageSizeRequest.last_query_time = UTCTime.parse(obj.getJSONObject("last_query_time"));
+            messageSizeRequest.last_query_time = obj.getLong("last_query_time");
         }
         return messageSizeRequest;
     }
@@ -26,7 +26,7 @@ public class MessageSizeRequest {
     public static JSONObject toJson(double lat, double longi, int precision, long ts) throws JSONException {
         JSONObject messageSizeRequest = new JSONObject();
         messageSizeRequest.put("region", Region.toJson(lat, longi, precision));
-        messageSizeRequest.put("last_query_time", UTCTime.toJson(ts));
+        messageSizeRequest.put("last_query_time", ts);
         return messageSizeRequest;
     }
 
