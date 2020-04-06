@@ -36,12 +36,10 @@ import java.util.List;
 
 public class PullFromServerTask implements Runnable {
 
-    Messenger messenger;
     Context context;
     HashMap<String,Long> scannedBleMap;
 
-    public PullFromServerTask(Messenger messenger, Context context) {
-        this.messenger = messenger;
+    public PullFromServerTask(Context context) {
         this.context = context;
         this.scannedBleMap = new HashMap<>();
     }
@@ -71,8 +69,10 @@ public class PullFromServerTask implements Runnable {
             double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(), currentGpsPrecision);
 
             try {
+                Log.e("NET ","HOW BIG "+currentGpsPrecision);
                 sizeOfPayload = howBig(preciseLat, preciseLong,
                         currentGpsPrecision, lastQueryTime);
+                Log.e("NET ","size of payload "+sizeOfPayload);
             }
             catch(Exception e) {
                 Log.e("err",e.getMessage());
@@ -95,6 +95,7 @@ public class PullFromServerTask implements Runnable {
         double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(), currentGpsPrecision);
         double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(), currentGpsPrecision);
 
+        Log.e("NET ","GET MESSAGES "+sizeOfPayload);
         List<SeedUUIDRecord> seedUUIDRecords = getMessages(preciseLat,preciseLong,
                 currentGpsPrecision, lastQueryTime);
         if (seedUUIDRecords == null) {
@@ -143,6 +144,7 @@ public class PullFromServerTask implements Runnable {
         /////////////////////////////////////////////////////////////////////////
         // (1) send MessageListRequest to get query IDs and timestamps
         String messageListRequest = MessageListRequest.toHttpString(lat, longi, precision, lastQueryTime);
+        Log.e("NET ","SEND MESSAGE LIST REQUEST ");
         JSONObject response = NetworkHelper.sendRequest(messageListRequest, Request.Method.GET,null);
         if (response == null) {
             return null;
@@ -172,6 +174,7 @@ public class PullFromServerTask implements Runnable {
         }
 
         String messageRequest = MessageRequest.toHttpString();
+        Log.e("NET ","MESSAGE REQUEST num of messages: "+messageListResponse.messageInfo.length);
         response = NetworkHelper.sendRequest(messageRequest, Request.Method.POST, messageRequestObj);
         if (response == null) {
             return null;

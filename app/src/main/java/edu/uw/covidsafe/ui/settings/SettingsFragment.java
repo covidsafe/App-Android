@@ -20,6 +20,8 @@ import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.onboarding.OnboardingActivity;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.ui.MainActivity;
+import edu.uw.covidsafe.utils.Utils;
+
 import com.example.covidsafe.R;
 
 public class SettingsFragment extends Fragment {
@@ -65,5 +67,13 @@ public class SettingsFragment extends Fragment {
         Constants.SettingsFragment = this;
         Constants.CurrentFragment = this;
         Constants.MainFragmentState = this;
+
+        Log.e("perms","should update switch states? "+Constants.SuppressSwitchStateCheck);
+        if (Constants.SuppressSwitchStateCheck) {
+            Constants.SuppressSwitchStateCheck = false;
+        }
+        else {
+            Utils.updateSwitchStates(getActivity());
+        }
     }
 }

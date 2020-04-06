@@ -20,7 +20,8 @@
     <string name="maxBlacklistSizeError">Maximum blacklist size reached.</string>
     <string name="perm_error">Location access must be enabled at all times for tracking to take place. Please try again.</string>
 
-    <string name="prompt_to_enable_error">Enable Bluetooth or GPS to start logging.</string>
+    <string name="prompt_to_enable_error">Enable Bluetooth and GPS in settings to start logging.</string>
+    <string name="bluetooth_is_off">Bluetooth is currently turned off.</string>
 
     <string name="gps_enabled_pkey">gpsEnabled</string>
     <string name="ble_enabled_pkey">bleEnabled</string>
@@ -31,8 +32,14 @@
     <string name="symptom_submission_date_pkey">symptom_submission_date_pkey</string>
     <string name="time_of_last_query_pkey">time_of_last_query_pkey</string>
 
+    <string name="perm_gps_rationale">Without this permission, we will be unable to capture location information. Are you sure you want to deny this permission?</string>
+    <string name="perm_gps_ask">We require access to location information when the app is closed. Would you like to open app settings to enable this?</string>
+
     <string name="perm_ble_rationale">Without this permission, we will be unable to capture Bluetooth information of users around you. Are you sure you want to deny this permission?</string>
     <string name="perm_ble_ask">We require access to Bluetooth information when the app is closed. Would you like to open app settings to enable this?</string>
+
+    <string name="perm_notifs_rationale">Without this permission, we will be unable to send you notifications. Are you sure you want to deny this permission?</string>
+    <string name="perm_notifs_ask">We require push notifications to be enabled. Would you like to open app settings to enable this?</string>
 
     <string name="perm_loc_rationale">Without this permission, we will be unable to track your location when the app is closed. Are you sure you want to deny this permission?</string>
     <string name="perm_loc_ask">We require access to location information when the app is closed. Would you like to open app settings to enable this?</string>

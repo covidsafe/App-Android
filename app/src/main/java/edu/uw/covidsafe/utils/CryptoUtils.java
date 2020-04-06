@@ -37,6 +37,7 @@ import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
 
 public class CryptoUtils {
 
+    // make very first seed
     public static void generateInitSeed(Context context, boolean forceRefresh) {
         String initSeed = UUID.randomUUID().toString();
 
@@ -56,6 +57,7 @@ public class CryptoUtils {
         }
     }
 
+    // chain generation for potentially exposed users
     public static SeedUUIDRecord generateSeedHelper(byte[] seed) throws DigestException{
         byte[] out = new byte[32];
         SHA256.hash(seed, out);
@@ -67,6 +69,7 @@ public class CryptoUtils {
         return dummyRecord;
     }
 
+    // generation ith seed
     public static SeedUUIDRecord generateSeed(Context context, byte[] seed) {
         try {
             SeedUUIDRecord dummyRecord = generateSeedHelper(seed);

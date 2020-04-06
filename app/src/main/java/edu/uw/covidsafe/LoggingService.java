@@ -33,7 +33,7 @@ import java.util.Date;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class BackgroundService extends IntentService {
+public class LoggingService extends IntentService {
 
     private static final int LOCATION_INTERVAL = 1000;
     private static final float LOCATION_DISTANCE = 1f;
@@ -68,7 +68,7 @@ public class BackgroundService extends IntentService {
         public void onStatusChanged(String provider, int status, Bundle extras) { }
     }
 
-    public BackgroundService() {
+    public LoggingService() {
         super("LocationService");
     }
 
@@ -79,6 +79,7 @@ public class BackgroundService extends IntentService {
 
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
+
         Bundle bundle = intent.getExtras();
         Log.e("ex","bundle status "+(bundle==null));
         if (bundle != null) {
@@ -92,16 +93,14 @@ public class BackgroundService extends IntentService {
         ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
         if (bleEnabled) {
             BluetoothUtils.messenger = messenger;
-            this.registerReceiver(BluetoothUtils.mReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
 
             Log.e("ble","spin out task "+(messenger==null));
             BluetoothUtils.startBluetoothScan(getApplicationContext(), messenger);
             BluetoothServerHelper.createServer(getApplicationContext(), messenger);
             Log.e("ble","make beacon");
 
-            //initially start beacon
-            BluetoothUtils.mkBeacon();
-            Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(new UUIDGeneratorTask(messenger, getApplicationContext()), 0, Constants.UUIDGenerationIntervalInMinutes, TimeUnit.MINUTES);
+            // run this once to get a seed and broadcast it
+            Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(new UUIDGeneratorTask(messenger, getApplicationContext(), true), 0, Constants.UUIDGenerationIntervalInMinutes, TimeUnit.MINUTES);
         }
 
         if (gpsEnabled) {
@@ -126,9 +125,6 @@ public class BackgroundService extends IntentService {
                 Log.e("logme", e.getMessage());
             }
         }
-
-        Constants.pullFromServerTask = exec.scheduleWithFixedDelay(new PullFromServerTask(messenger,getApplicationContext()), 0, Constants.PullFromServerIntervalInMinutes, TimeUnit.MINUTES);
-        Constants.logPurgerTask = exec.scheduleWithFixedDelay(new LogPurgerTask(messenger,getApplicationContext()), 0, Constants.LogPurgerIntervalInDays, TimeUnit.DAYS);
 
         Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL)
                 .setContentTitle(getString(R.string.app_name))
@@ -192,7 +188,7 @@ public class BackgroundService extends IntentService {
     public void onDestroy() {
         super.onDestroy();
         try {
-            unregisterReceiver(BluetoothUtils.mReceiver);
+            unregisterReceiver(BluetoothUtils.bluetoothReceiver);
         }
         catch(Exception e) {
             Log.e("ble","unregister fail");

@@ -20,11 +20,9 @@ import java.util.UUID;
 
 public class LogPurgerTask implements Runnable {
 
-    Messenger messenger;
     Context context;
 
-    public LogPurgerTask(Messenger messenger, Context context) {
-        this.messenger = messenger;
+    public LogPurgerTask(Context context) {
         this.context = context;
     }
 

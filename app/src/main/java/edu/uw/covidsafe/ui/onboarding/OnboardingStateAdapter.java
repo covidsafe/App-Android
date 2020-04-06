@@ -23,7 +23,7 @@ public class OnboardingStateAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         StoryFragment frag = new StoryFragment();
         Bundle bundle = new Bundle();
-        Log.e("STATE","page number "+position);
+//        Log.e("STATE","page number "+position);
         Constants.pageNumber = position;
         if (position==0) {
             bundle.putInt("image", R.drawable.onboard1);
