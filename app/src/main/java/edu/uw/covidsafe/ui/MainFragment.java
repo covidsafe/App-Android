@@ -2,7 +2,6 @@ package edu.uw.covidsafe.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,10 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.covidsafe.R;
 
-import edu.uw.covidsafe.LoggingService;
-import edu.uw.covidsafe.ble.BluetoothScanHelper;
-import edu.uw.covidsafe.ble.BluetoothServerHelper;
-import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.ui.health.CardRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.health.ResourceRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.HistoryRecyclerViewAdapter;
@@ -93,7 +88,7 @@ public class MainFragment extends Fragment {
                     }
                     else {
                         // dummy code
-                        Constants.NotificationAdapter.notifyUser(getString(R.string.exposed_notif));
+                        Constants.NotificationAdapter.notifyUser(getString(R.string.default_exposed_notif));
                         Utils.startLoggingService(getActivity());
                     }
                 }

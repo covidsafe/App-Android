@@ -8,12 +8,12 @@ import org.json.JSONObject;
 
 public class MessageInfo {
     public String MessageId;
-    public UTCTime MessageTimestamp;
+    public long MessageTimestamp;
 
     public JSONObject toJson() throws JSONException {
         JSONObject obj = new JSONObject();
         obj.put("MessageId", MessageId);
-        obj.put("MessageTimestamp", MessageTimestamp.toJson());
+        obj.put("MessageTimestamp", MessageTimestamp);
         return obj;
     }
 
@@ -23,7 +23,7 @@ public class MessageInfo {
             messageInfo.MessageId = obj.getString("messageId");
         }
         if (obj.has("messageTimestamp")) {
-            messageInfo.MessageTimestamp = UTCTime.parse(obj.getJSONObject("messageTimestamp"));
+            messageInfo.MessageTimestamp = obj.getLong("messageTimestamp");
         }
         return messageInfo;
     }

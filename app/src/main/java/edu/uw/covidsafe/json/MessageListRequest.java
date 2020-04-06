@@ -10,7 +10,7 @@ import edu.uw.covidsafe.comms.NetworkConstant;
 public class MessageListRequest {
 
     Region region;
-    UTCTime last_query_time;
+    long last_query_time;
 
     public static MessageListRequest parse(JSONObject obj) throws JSONException {
         MessageListRequest messageListRequest = new MessageListRequest();
@@ -18,7 +18,7 @@ public class MessageListRequest {
             messageListRequest.region = Region.parse(obj.getJSONObject("region"));
         }
         if (obj.has("last_query_time")) {
-            messageListRequest.last_query_time = UTCTime.parse(obj.getJSONObject("last_query_time"));
+            messageListRequest.last_query_time = obj.getLong("last_query_time");
         }
         return messageListRequest;
     }

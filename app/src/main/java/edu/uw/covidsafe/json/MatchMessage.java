@@ -34,13 +34,13 @@ public class MatchMessage {
         return matchMessage;
     }
 
-    public static JSONObject toJson(String[] seed, long[] ts) throws JSONException {
+    public static JSONObject toJson(String[] seed, long[] ts_start, long[] ts_end) throws JSONException {
         JSONObject matchMessage = new JSONObject();
         matchMessage.put("match_protocol_version", 1);
 
         JSONArray arr = new JSONArray();
         for (int i = 0; i < seed.length; i++) {
-            arr.put(BlueToothSeed.toJson(seed[i], ts[i]));
+            arr.put(BlueToothSeed.toJson(seed[i], ts_start[i], ts_end[i]));
         }
 
         matchMessage.put("bluetooth_match", arr);

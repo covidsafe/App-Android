@@ -2,28 +2,21 @@ package edu.uw.covidsafe.comms;
 
 import android.app.Activity;
 import android.content.Context;
-import android.location.Location;
 import android.os.AsyncTask;
-import android.text.SpannableStringBuilder;
-import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.android.volley.Request;
-import com.example.covidsafe.R;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONObject;
 
 import edu.uw.covidsafe.gps.GpsDbRecordRepository;
 import edu.uw.covidsafe.gps.GpsRecord;
-import edu.uw.covidsafe.gps.GpsUtils;
-import edu.uw.covidsafe.json.AnnounceRequest;
-import edu.uw.covidsafe.json.AnnounceResponse;
+import edu.uw.covidsafe.json.SelfReportRequest;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDDbRecordRepository;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
-import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
 
@@ -97,7 +90,11 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
 
         int gpsResolution = Constants.MaximumGpsPrecision;
         try {
-            sendRequest(recordToSend.seed, recordToSend.ts,
+            // ask healthies to generate from ts_start till now (when infected publishes data)
+            long ts_start = recordToSend.ts;
+            long ts_end = System.currentTimeMillis();
+            sendRequest(recordToSend.seed,
+                    ts_start, ts_end,
                     getCoarseGpsCoord(lat, gpsResolution),
                     getCoarseGpsCoord(longi, gpsResolution),
                     gpsResolution);
@@ -175,11 +172,12 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         return Double.longBitsToDouble(result);
     }
 
-    public void sendRequest(String seed, long ts, double lat, double longi, int precision) {
+    public void sendRequest(String seed, long ts_start, long ts_end, double lat, double longi, int precision) {
         JSONObject announceRequestObj = null;
         try {
              announceRequestObj =
-                    AnnounceRequest.toJson(new String[]{seed}, new long[]{ts}, lat, longi, precision);
+                     SelfReportRequest.toJson(new String[]{seed},
+                             new long[]{ts_start}, new long[]{ts_end}, lat, longi, precision);
         }
         catch(Exception e) {
             Log.e("err",e.getMessage());
@@ -188,12 +186,12 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
             return;
         }
 
-        String announceRequest = AnnounceRequest.toHttpString();
+        String announceRequest = SelfReportRequest.toHttpString();
         JSONObject resp = NetworkHelper.sendRequest(announceRequest, Request.Method.PUT, announceRequestObj);
 
-        AnnounceResponse announceResponse = null;
+        edu.uw.covidsafe.json.Status status = null;
         try {
-            announceResponse = AnnounceResponse.parse(resp);
+            status = edu.uw.covidsafe.json.Status.parse(resp);
         }
         catch(Exception e) {
             Log.e("err",e.getMessage());
