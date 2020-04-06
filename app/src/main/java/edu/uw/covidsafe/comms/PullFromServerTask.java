@@ -17,6 +17,9 @@ import edu.uw.covidsafe.ble.BleDbRecordRepository;
 import edu.uw.covidsafe.ble.BleRecord;
 import edu.uw.covidsafe.gps.GpsDbRecordRepository;
 import edu.uw.covidsafe.gps.GpsRecord;
+import edu.uw.covidsafe.json.AreaMatch;
+import edu.uw.covidsafe.json.BlueToothSeed;
+import edu.uw.covidsafe.json.BluetoothMatch;
 import edu.uw.covidsafe.json.MatchMessage;
 import edu.uw.covidsafe.json.MessageInfo;
 import edu.uw.covidsafe.json.MessageListRequest;
@@ -96,9 +99,9 @@ public class PullFromServerTask implements Runnable {
         double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(), currentGpsPrecision);
 
         Log.e("NET ","GET MESSAGES "+sizeOfPayload);
-        List<SeedUUIDRecord> seedUUIDRecords = getMessages(preciseLat,preciseLong,
+        BluetoothMatch[] bluetoothMatches = getMessages(preciseLat,preciseLong,
                 currentGpsPrecision, lastQueryTime);
-        if (seedUUIDRecords == null) {
+        if (bluetoothMatches == null) {
             return;
         }
 
@@ -111,22 +114,30 @@ public class PullFromServerTask implements Runnable {
             scannedBleMap.put(bleRecord.getUuid(), bleRecord.getTs());
         }
 
-        for (SeedUUIDRecord seedUUIDRecord : seedUUIDRecords) {
-            boolean exposedStatus = isExposed(seedUUIDRecord.seed, seedUUIDRecord.ts);
-            if (exposedStatus) {
-                notifyUserOfExposure();
-                break;
+
+        for (BluetoothMatch bluetoothMatch : bluetoothMatches) {
+            for (BlueToothSeed seed : bluetoothMatch.seeds) {
+//                receivedRecords.add(new SeedUUIDRecord(
+//                        seed.sequence_start_time.toLong(),
+//                        seed.seed,
+//                        ""
+//                ));
+                boolean exposedStatus = isExposed(seed.seed,
+                        seed.sequence_start_time.toLong());
+                if (exposedStatus) {
+                    notifyUserOfExposure(bluetoothMatch.user_message);
+                }
             }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////
         // narrowcasting
         //////////////////////////////////////////////////////////////////////////////////////////
-
-        List<String> announcements = announce(preciseLat,preciseLong,lastQueryTime);
-        if (announcements.size() > 0) {
-            makeAnnouncement(announcements);
-        }
+//
+//        List<String> announcements = announce(preciseLat,preciseLong,lastQueryTime);
+//        if (announcements.size() > 0) {
+//            makeAnnouncement(announcements);
+//        }
     }
 
     // sync blockig op
@@ -137,7 +148,7 @@ public class PullFromServerTask implements Runnable {
         return messageSizeResponse.sizeOfQueryResponse;
     }
 
-    public List<SeedUUIDRecord> getMessages(double lat, double longi, int precision, long lastQueryTime) {
+    public BluetoothMatch[] getMessages(double lat, double longi, int precision, long lastQueryTime) {
         // return list of seeds and timestamps
         // check if the areas returned in these messages match our GPS timestamps
 
@@ -210,65 +221,88 @@ public class PullFromServerTask implements Runnable {
         /////////////////////////////////////////////////////////////////////////
 
         /////////////////////////////////////////////////////////////////////////
-        // (4) check for area intersection
-        List<SeedUUIDRecord> filteredRecords = new ArrayList<SeedUUIDRecord>();
-        if (matchMessage.area_matches.length > 0) {
-            Area[] areas = matchMessage.area_matches[0].areas;
-            List<SeedUUIDRecord> receivedRecords = new ArrayList<SeedUUIDRecord>();
-            int counter = 0;
-            for (Area area : areas) {
-                GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
-                List<GpsRecord> gpsRecords = gpsRepo.getRecordsBetweenTimestamps(area.begin_time.toLong(), area.end_time.toLong());
+        // (4) check for bluetooth
+        /////////////////////////////////////////////////////////////////////////
+//        List<SeedUUIDRecord> receivedRecords = new ArrayList<SeedUUIDRecord>();
+//        if (matchMessage.bluetooth_matches != null) {
+//            for (BluetoothMatch bluetoothMatch : matchMessage.bluetooth_matches) {
+//                for (BlueToothSeed seed : bluetoothMatch.seeds) {
+//                    receivedRecords.add(new SeedUUIDRecord(
+//                            seed.sequence_start_time.toLong(),
+//                            seed.seed,
+//                            ""
+//                    ));
+//                }
+//            }
+//        }
 
-                for (GpsRecord record : gpsRecords) {
-                    float[] result = new float[3];
-                    Location.distanceBetween(record.getLat(), record.getLongi(), area.location.lattitude, area.location.longitude, result);
-
-                    if ((result.length == 1 && result[0] < area.radius_meters) ||
-                            (result.length == 2 && result[1] < area.radius_meters) ||
-                            (result.length >= 3 && result[2] < area.radius_meters)) {
-                        filteredRecords.add(receivedRecords.get(counter));
+        /////////////////////////////////////////////////////////////////////////
+        // (5) check for area intersection for area matches. narrowcast messages
+        /////////////////////////////////////////////////////////////////////////
+        if (matchMessage.area_matches != null) {
+            for (AreaMatch areaMatch : matchMessage.area_matches) {
+                Area[] areas = areaMatch.areas;
+                for (Area area : areas) {
+                    if (intersect(area)) {
+                        Log.e("msg", "NARROWCAST USER MESSAGE "+areaMatch.user_message);
+                        Constants.NotificationAdapter.notifyUser(areaMatch.user_message);
                     }
                 }
-                counter += 1;
             }
         }
         /////////////////////////////////////////////////////////////////////////
 
-        return filteredRecords;
+        return matchMessage.bluetooth_matches;
     }
 
-    public List<String> announce(double lat, double longi, long ts) {
-        JsonObject obj = new JsonObject();
-        obj.addProperty("lat",lat);
-        obj.addProperty("longi",longi);
-        obj.addProperty("ts",ts);
+    public boolean intersect(Area area) {
+        GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
+        List<GpsRecord> gpsRecords = gpsRepo.getRecordsBetweenTimestamps(area.begin_time.toLong(), area.end_time.toLong());
 
-        ///////////////////////////////////////////////////
-        List<Area> areas = new ArrayList<Area>();
-        List<String> messages = new ArrayList<String>();
-        ///////////////////////////////////////////////////
+        for (GpsRecord record : gpsRecords) {
+            float[] result = new float[3];
+            Location.distanceBetween(record.getLat(), record.getLongi(), area.location.lattitude, area.location.longitude, result);
 
-        int counter = 0;
-        List<String> filteredMessages = new ArrayList<String>();
-        for (Area area : areas) {
-            GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
-            List<GpsRecord> gpsRecords = gpsRepo.getRecordsBetweenTimestamps(area.begin_time.toLong(), area.end_time.toLong());
-
-            for (GpsRecord record : gpsRecords) {
-                float[] result = new float[3];
-                Location.distanceBetween(record.getLat(), record.getLongi(), area.location.lattitude, area.location.longitude, result);
-
-                if ((result.length == 1 && result[0] < area.radius_meters) ||
-                    (result.length == 2 && result[1] < area.radius_meters) ||
-                    (result.length >= 3 && result[2] < area.radius_meters)) {
-                    filteredMessages.add(messages.get(counter));
-                }
+            if ((result.length == 1 && result[0] < area.radius_meters) ||
+                (result.length == 2 && result[1] < area.radius_meters) ||
+                (result.length >= 3 && result[2] < area.radius_meters)) {
+                return true;
             }
-            counter += 1;
         }
-        return filteredMessages;
+        return false;
     }
+
+//    public List<String> announce(double lat, double longi, long ts) {
+//        JsonObject obj = new JsonObject();
+//        obj.addProperty("lat",lat);
+//        obj.addProperty("longi",longi);
+//        obj.addProperty("ts",ts);
+//
+//        ///////////////////////////////////////////////////
+//        List<Area> areas = new ArrayList<Area>();
+//        List<String> messages = new ArrayList<String>();
+//        ///////////////////////////////////////////////////
+//
+//        int counter = 0;
+//        List<String> filteredMessages = new ArrayList<String>();
+//        for (Area area : areas) {
+//            GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
+//            List<GpsRecord> gpsRecords = gpsRepo.getRecordsBetweenTimestamps(area.begin_time.toLong(), area.end_time.toLong());
+//
+//            for (GpsRecord record : gpsRecords) {
+//                float[] result = new float[3];
+//                Location.distanceBetween(record.getLat(), record.getLongi(), area.location.lattitude, area.location.longitude, result);
+//
+//                if ((result.length == 1 && result[0] < area.radius_meters) ||
+//                    (result.length == 2 && result[1] < area.radius_meters) ||
+//                    (result.length >= 3 && result[2] < area.radius_meters)) {
+//                    filteredMessages.add(messages.get(counter));
+//                }
+//            }
+//            counter += 1;
+//        }
+//        return filteredMessages;
+//    }
 
     // we get a seed and timestamp from the server for each infected person
     // check if we intersect with the infected person
@@ -352,10 +386,12 @@ public class PullFromServerTask implements Runnable {
         return false;
     }
 
-    public void notifyUserOfExposure() {
+    public void notifyUserOfExposure(String msg) {
 //        King County COVID-19 call center: 206-477-3977. Open daily from 8 a.m. to 7 p.m
 //        Washington State COVID-19 call center: 800-525-0127
 //        https://scanpublichealth.org/faq
+        Log.e("msg", "BLUETOOTH USER MESSAGE "+msg);
+        Constants.NotificationAdapter.notifyUser(msg);
     }
 
     public void makeAnnouncement(List<String> announcements) {

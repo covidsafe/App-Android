@@ -21,6 +21,7 @@ import com.example.covidsafe.R;
 
 import edu.uw.covidsafe.gps.GpsUtils;
 import edu.uw.covidsafe.ui.MainFragment;
+import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
 import unused.SymptomTrackerFragment;
 import edu.uw.covidsafe.ui.health.DiagnosisFragment;
 
@@ -65,6 +66,7 @@ public class Constants {
         Insert,ViewAll
     }
 
+    public static NotifRecyclerViewAdapter NotificationAdapter;
     public static boolean PullServiceRunning = false;
     public static boolean LoggingServiceRunning = false;
     public static boolean SuppressSwitchStateCheck = false;

@@ -6,11 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.covidsafe.R;
+
+import java.util.ArrayList;
 
 
 public class NotifRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -18,6 +21,7 @@ public class NotifRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     Context cxt;
     Activity av;
     int count = 0;
+    ArrayList<String> messages = new ArrayList<String>();
 
     public NotifRecyclerViewAdapter(Context cxt, Activity av) {
         this.cxt = cxt;
@@ -31,11 +35,10 @@ public class NotifRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         return new NotifCard(view);
     }
 
-    public void notifyUser() {
-        if (count != 1) {
-            count = 1;
-            notifyItemInserted(0);
-        }
+    public void notifyUser(String msg) {
+        this.messages.add(msg);
+        notifyItemInserted(count);
+        count += 1;
     }
 
     @Override
@@ -43,8 +46,9 @@ public class NotifRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         ((NotifCard)holder).button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                count = 0;
-                notifyItemRemoved(0);
+                notifyItemRemoved(position);
+                messages.remove(position);
+                count -= 1;
             }
         });
     }
@@ -56,10 +60,13 @@ public class NotifRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
     public class NotifCard extends RecyclerView.ViewHolder {
         Button button;
-
+        TextView header;
+        TextView message;
         NotifCard(@NonNull View itemView) {
             super(itemView);
             this.button = itemView.findViewById(R.id.dismiss);
+            this.header = itemView.findViewById(R.id.textView11);
+            this.message = itemView.findViewById(R.id.textView12);
         }
     }
 }
