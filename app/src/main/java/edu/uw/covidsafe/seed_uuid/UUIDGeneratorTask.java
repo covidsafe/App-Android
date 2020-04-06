@@ -18,14 +18,10 @@ import java.util.UUID;
 
 public class UUIDGeneratorTask implements Runnable {
 
-    Messenger messenger;
     Context context;
-    boolean broadcast;
 
-    public UUIDGeneratorTask(Messenger messenger, Context context, boolean broadcast) {
-        this.messenger = messenger;
+    public UUIDGeneratorTask(Context context) {
         this.context = context;
-        this.broadcast = broadcast;
     }
 
     @Override
@@ -40,9 +36,7 @@ public class UUIDGeneratorTask implements Runnable {
         SeedUUIDRecord generatedRecord = CryptoUtils.generateSeed(context, mostRecentSeed);
         Constants.contactUUID = UUID.fromString(generatedRecord.uuid);
 
-//        Utils.sendDataToUI(messenger, "uuid",Constants.contactUUID.toString());
-
-        if (broadcast && Constants.blueAdapter != null && Constants.blueAdapter.getBluetoothLeAdvertiser() != null) {
+        if (Constants.blueAdapter != null && Constants.blueAdapter.getBluetoothLeAdvertiser() != null) {
             Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothScanHelper.advertiseCallback);
 
             //restart beacon after UUID generation

@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,8 +37,12 @@ import com.example.covidsafe.R;
 import edu.uw.covidsafe.PullService;
 import edu.uw.covidsafe.ble.BleOpsAsyncTask;
 import edu.uw.covidsafe.ble.BleRecord;
+import edu.uw.covidsafe.ble.BluetoothScanHelper;
+import edu.uw.covidsafe.ble.BluetoothServerHelper;
+import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.gps.GpsOpsAsyncTask;
 import edu.uw.covidsafe.gps.GpsRecord;
+import edu.uw.covidsafe.gps.GpsUtils;
 import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
 import com.google.android.material.snackbar.Snackbar;
@@ -97,6 +102,20 @@ public class Utils {
 //            }
         }
     };
+
+    public static void haltLoggingService(Activity av, View view) {
+        if (Constants.LoggingServiceRunning) {
+            Utils.mkSnack(av, view, "Logging is now turned off.");
+        }
+
+        Constants.LoggingServiceRunning = false;
+        Log.e("logme", "stop service");
+        av.stopService(new Intent(av, LoggingService.class));
+
+        GpsUtils.haltGps();
+
+        BluetoothUtils.haltBle(av);
+    }
 
     public static void updateSwitchStates(Activity av) {
         Log.e("state","update switch states");

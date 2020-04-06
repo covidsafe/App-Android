@@ -78,6 +78,7 @@ public class MainFragment extends Fragment {
                 boolean gpsEnabled = prefs.getBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
                 boolean bleEnabled = prefs.getBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
 
+                updateBroadcastUI();
                 if (isChecked) {
                     // dummy code
                     adapter3.notifyUser();
@@ -91,35 +92,7 @@ public class MainFragment extends Fragment {
                     }
                 }
                 else {
-                    Constants.LoggingServiceRunning = false;
-                    Log.e("logme", "stop service");
-                    getActivity().stopService(new Intent(getActivity(), LoggingService.class));
-
-                    if (Constants.mLocationManager != null) {
-                        try {
-                            Constants.mLocationManager.removeUpdates(Constants.locListeners[0]);
-                            Constants.mLocationManager.removeUpdates(Constants.locListeners[1]);
-                        } catch (Exception ex) {
-                            Log.e("logme", "fail to remove location listners, ignore", ex);
-                        }
-                    }
-
-                    if (Constants.blueAdapter != null && Constants.blueAdapter.getBluetoothLeAdvertiser() != null) {
-                        Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothScanHelper.advertiseCallback);
-                    }
-                    BluetoothUtils.finishScan(getContext());
-                    if (Constants.uploadTask != null) {
-                        Constants.uploadTask.cancel(true);
-                    }
-                    if (Constants.uuidGeneartionTask != null) {
-                        Constants.uuidGeneartionTask.cancel(true);
-                    }
-                    BluetoothServerHelper.stopServer();
-                    try {
-                        getContext().unregisterReceiver(BluetoothUtils.bluetoothReceiver);
-                    } catch (Exception e) {
-                        Log.e("frag", "unregister fail");
-                    }
+                    Utils.haltLoggingService(getActivity(), view);
                 }
             }
         });
@@ -139,10 +112,10 @@ public class MainFragment extends Fragment {
             Utils.startPullService(getActivity());
         }
 
-        setBroadcastDesc();
+        updateBroadcastUI();
     }
 
-    public void setBroadcastDesc() {
+    public void updateBroadcastUI() {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         boolean gpsEnabled = prefs.getBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
         boolean bleEnabled = prefs.getBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);

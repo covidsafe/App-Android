@@ -52,7 +52,7 @@ public class PermissionFragment extends Fragment {
         ((OnboardingActivity) getActivity()).getSupportActionBar().setTitle("Select your preferences");
 
         RecyclerView rview3 = view.findViewById(R.id.recyclerViewPerms);
-        PermissionsRecyclerViewAdapter adapter3 = new PermissionsRecyclerViewAdapter(getContext(),getActivity());
+        PermissionsRecyclerViewAdapter adapter3 = new PermissionsRecyclerViewAdapter(getContext(),getActivity(), view);
         rview3.setAdapter(adapter3);
         rview3.setLayoutManager(new LinearLayoutManager(getActivity()));
 

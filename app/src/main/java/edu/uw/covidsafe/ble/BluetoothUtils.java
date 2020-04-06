@@ -18,6 +18,7 @@ import android.util.Log;
 
 import com.example.covidsafe.R;
 
+import edu.uw.covidsafe.seed_uuid.UUIDGeneratorTask;
 import edu.uw.covidsafe.utils.ByteUtils;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
@@ -51,12 +52,7 @@ public class BluetoothUtils {
             if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
                 if (Constants.blueAdapter.getState() == BluetoothAdapter.STATE_OFF) {
                     if (Constants.LoggingServiceRunning) {
-                        Log.e("ble", "BLE TURNED OFF");
-                        if (Constants.blueAdapter != null && Constants.blueAdapter.getBluetoothLeAdvertiser() != null) {
-                            Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothScanHelper.advertiseCallback);
-                            BluetoothUtils.finishScan(context);
-                            BluetoothServerHelper.stopServer();
-                        }
+                        BluetoothUtils.haltBle(context);
                     }
                     editor.putBoolean(context.getString(R.string.ble_enabled_pkey), false);
                     editor.commit();
@@ -120,6 +116,29 @@ public class BluetoothUtils {
                 Utils.bleLogToDatabase(cxt, uuids, rssi);
             }
         }
+    }
+
+    public static void haltBle(Context av) {
+        if (Constants.blueAdapter != null && Constants.blueAdapter.getBluetoothLeAdvertiser() != null) {
+            Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothScanHelper.advertiseCallback);
+        }
+        BluetoothUtils.finishScan(av);
+        BluetoothServerHelper.stopServer();
+
+        if (Constants.uuidGeneartionTask != null) {
+            Constants.uuidGeneartionTask.cancel(true);
+        }
+    }
+
+    public static void startBle(Context cxt) {
+        Log.e("ble","spin out task "+(messenger==null));
+        BluetoothUtils.startBluetoothScan(cxt, messenger);
+        BluetoothServerHelper.createServer(cxt, messenger);
+        Log.e("ble","make beacon");
+        ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
+        // run this once to get a seed and broadcast it
+        Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(
+                new UUIDGeneratorTask(cxt), 0, Constants.UUIDGenerationIntervalInMinutes, TimeUnit.MINUTES);
     }
 
     public static void mkBeacon() {

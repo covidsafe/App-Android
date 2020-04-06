@@ -18,6 +18,8 @@ import androidx.fragment.app.Fragment;
 import edu.uw.covidsafe.LoggingService;
 
 import com.example.covidsafe.R;
+
+import edu.uw.covidsafe.gps.GpsUtils;
 import edu.uw.covidsafe.ui.MainFragment;
 import unused.SymptomTrackerFragment;
 import edu.uw.covidsafe.ui.health.DiagnosisFragment;
@@ -87,6 +89,9 @@ public class Constants {
     public static UUID BEACON_SERVICE_UUID = UUID.fromString("0000D028-0000-1000-8000-00805F9B34FB");
     public static UUID contactUUID = null;
 
+    public static final int LOCATION_INTERVAL = 1000;
+    public static final float LOCATION_DISTANCE = 1f;
+
     public static boolean NOTIFS_ENABLED = false;
     public static boolean GPS_ENABLED = false;
     public static boolean BLUETOOTH_ENABLED = false;
@@ -102,7 +107,6 @@ public class Constants {
     public static BluetoothGatt gatt;
     public static BluetoothAdapter blueAdapter;
     public static int statusSubmitted = -1;
-    public static ScheduledFuture uploadTask;
     public static ScheduledFuture uuidGeneartionTask;
     public static ScheduledFuture bluetoothScanTask;
     public static ScheduledFuture bluetoothServerTask;
@@ -143,7 +147,6 @@ public class Constants {
     public static float DistanceThresholdInMeters = 1609.34f;
     public static ArrayList<BlacklistRecord> blacklist;
     public static LocationManager mLocationManager = null;
-    public static LoggingService.LocationListener[] locListeners = new LoggingService.LocationListener[2];
     public static HashSet<String> scannedUUIDs;
     public static HashMap<String,Integer> scannedUUIDsRSSIs;
     public static HashSet<String> writtenUUIDs;

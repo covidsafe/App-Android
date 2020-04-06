@@ -22,6 +22,7 @@ import com.example.covidsafe.R;
 
 import edu.uw.covidsafe.ble.BluetoothServerHelper;
 import edu.uw.covidsafe.ble.BluetoothUtils;
+import edu.uw.covidsafe.gps.GpsUtils;
 import edu.uw.covidsafe.seed_uuid.UUIDGeneratorTask;
 import edu.uw.covidsafe.comms.PullFromServerTask;
 import edu.uw.covidsafe.utils.Constants;
@@ -35,38 +36,8 @@ import java.util.concurrent.TimeUnit;
 
 public class LoggingService extends IntentService {
 
-    private static final int LOCATION_INTERVAL = 1000;
-    private static final float LOCATION_DISTANCE = 1f;
     Messenger messenger;
 
-    public class LocationListener implements android.location.LocationListener {
-
-        String provider;
-
-        public LocationListener(String provider) {
-            this.provider = provider;
-        }
-
-        @Override
-        public void onLocationChanged(Location location) {
-            DateFormat dateFormat = new SimpleDateFormat("hh:mm.ss aa");
-            Date dd = new Date();
-            Log.e("gps", location.getLatitude()+","+location.getLongitude());
-
-            Utils.sendDataToUI(messenger, "gps",location.getLatitude()+","+location.getLongitude());
-
-            Utils.gpsLogToDatabase(getApplicationContext(), location);
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) { }
-
-        @Override
-        public void onProviderEnabled(String provider) { }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) { }
-    }
 
     public LoggingService() {
         super("LocationService");
@@ -90,40 +61,12 @@ public class LoggingService extends IntentService {
         boolean bleEnabled = prefs.getBoolean(getApplicationContext().getString(R.string.ble_enabled_pkey), Constants.BLUETOOTH_ENABLED);
         boolean gpsEnabled = prefs.getBoolean(getApplicationContext().getString(R.string.gps_enabled_pkey), Constants.GPS_ENABLED);
 
-        ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
         if (bleEnabled) {
-            BluetoothUtils.messenger = messenger;
-
-            Log.e("ble","spin out task "+(messenger==null));
-            BluetoothUtils.startBluetoothScan(getApplicationContext(), messenger);
-            BluetoothServerHelper.createServer(getApplicationContext(), messenger);
-            Log.e("ble","make beacon");
-
-            // run this once to get a seed and broadcast it
-            Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(new UUIDGeneratorTask(messenger, getApplicationContext(), true), 0, Constants.UUIDGenerationIntervalInMinutes, TimeUnit.MINUTES);
+            BluetoothUtils.startBle(getApplicationContext());
         }
 
         if (gpsEnabled) {
-            initializeLocationManager();
-            try {
-                Log.e("logme", "request");
-
-                Constants.locListeners[0] = new LocationListener(LocationManager.NETWORK_PROVIDER);
-                Constants.mLocationManager.requestLocationUpdates(
-                        LocationManager.NETWORK_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
-                        Constants.locListeners[0]);
-                Constants.locListeners[1] = new LocationListener(LocationManager.GPS_PROVIDER);
-                Constants.mLocationManager.requestLocationUpdates(
-                        LocationManager.GPS_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
-                        Constants.locListeners[1]);
-
-            } catch (java.lang.SecurityException ex) {
-                Log.e("logme", "fail to request location update, ignore", ex);
-            } catch (IllegalArgumentException ex) {
-                Log.e("logme", "gps provider does not exist " + ex.getMessage());
-            } catch (Exception e) {
-                Log.e("logme", e.getMessage());
-            }
+            GpsUtils.startGps(getApplicationContext());
         }
 
         Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL)
@@ -187,20 +130,7 @@ public class LoggingService extends IntentService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        try {
-            unregisterReceiver(BluetoothUtils.bluetoothReceiver);
-        }
-        catch(Exception e) {
-            Log.e("ble","unregister fail");
-        }
         Log.e("logme", "service destroyed");
     }
 
-    private void initializeLocationManager() {
-        Log.e("logme", "initializeLocationManager");
-        if (Constants.mLocationManager == null) {
-            Log.e("logme", "initializeLocationManager2");
-            Constants.mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-        }
-    }
 }
