@@ -2,6 +2,7 @@ package edu.uw.covidsafe.ui.onboarding;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,5 +83,11 @@ public class StoryFragment extends Fragment {
             });
         }
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+//        Log.e("state", "story on resume");
     }
 }

@@ -9,11 +9,14 @@ import android.bluetooth.le.BluetoothLeAdvertiser;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Messenger;
 import android.os.ParcelUuid;
 import android.util.Log;
+
+import com.example.covidsafe.R;
 
 import edu.uw.covidsafe.utils.ByteUtils;
 import edu.uw.covidsafe.utils.Constants;
@@ -31,27 +34,59 @@ public class BluetoothUtils {
 
     // react appropriately if user turns of bluetooth off/on in middle of logging
     // this broadcast receiver is only registered when the logging is in process
-    public static final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    public static final BroadcastReceiver bluetoothReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
+            SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
+
+            if (Constants.blueAdapter == null) {
+                BluetoothManager bluetoothManager =
+                        (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
+                Constants.blueAdapter = bluetoothManager.getAdapter();
+            }
+
             // It means the user has changed his bluetooth state.
             if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
                 if (Constants.blueAdapter.getState() == BluetoothAdapter.STATE_OFF) {
-                    Log.e("ble","BLE TURNED OFF");
-                    if (Constants.blueAdapter != null && Constants.blueAdapter.getBluetoothLeAdvertiser() != null) {
-                        Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothScanHelper.advertiseCallback);
-                        BluetoothUtils.finishScan(context);
-                        BluetoothServerHelper.stopServer();
+                    if (Constants.LoggingServiceRunning) {
+                        Log.e("ble", "BLE TURNED OFF");
+                        if (Constants.blueAdapter != null && Constants.blueAdapter.getBluetoothLeAdvertiser() != null) {
+                            Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothScanHelper.advertiseCallback);
+                            BluetoothUtils.finishScan(context);
+                            BluetoothServerHelper.stopServer();
+                        }
+                    }
+                    editor.putBoolean(context.getString(R.string.ble_enabled_pkey), false);
+                    editor.commit();
+                    if (Constants.bleSwitch != null) {
+                        Constants.bleSwitch.setChecked(false);
+                    }
+                    if (Constants.bleDesc != null) {
+                        Constants.bleDesc.setText(context.getString(R.string.bluetooth_is_off));
                     }
                     return;
                 }
                 if (Constants.blueAdapter.getState() == BluetoothAdapter.STATE_ON) {
                     Log.e("ble","BLE TURNED ON");
-                    // the bluetooth sensor is turned on
-                    BluetoothUtils.startBluetoothScan(context, messenger);
-                    BluetoothServerHelper.createServer(context, messenger);
-                    mkBeacon();
+                    if (Constants.LoggingServiceRunning) {
+                        // the bluetooth sensor is turned on
+                        BluetoothUtils.startBluetoothScan(context, messenger);
+                        BluetoothServerHelper.createServer(context, messenger);
+                        mkBeacon();
+                    }
+
+                    if (Utils.hasBlePermissions(context)){
+                        editor.putBoolean(context.getString(R.string.ble_enabled_pkey), true);
+                        editor.commit();
+                        if (Constants.bleSwitch != null) {
+                            Constants.bleSwitch.setChecked(true);
+                        }
+                        if (Constants.bleDesc != null) {
+                            Constants.bleDesc.setText(context.getString(R.string.perm3desc));
+                        }
+                    }
                     return;
                 }
             }
@@ -120,5 +155,22 @@ public class BluetoothUtils {
         }
 
         return true;
+    }
+
+    public static boolean isBluetoothOn(Activity av) {
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter != null) {
+            if (!mBluetoothAdapter.isEnabled()) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void turnOnBluetooth(Activity av) {
+        Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        av.startActivityForResult(enableBtIntent, 0);
     }
 }

@@ -1,6 +1,5 @@
 package edu.uw.covidsafe.utils;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -26,37 +25,32 @@ import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationManagerCompat;
 
-import edu.uw.covidsafe.BackgroundService;
+import edu.uw.covidsafe.LoggingService;
 import com.example.covidsafe.R;
+
+import edu.uw.covidsafe.PullService;
 import edu.uw.covidsafe.ble.BleOpsAsyncTask;
 import edu.uw.covidsafe.ble.BleRecord;
 import edu.uw.covidsafe.gps.GpsOpsAsyncTask;
 import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.symptoms.SymptomsRecord;
-import edu.uw.covidsafe.seed_uuid.SeedUUIDOpsAsyncTask;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import org.apache.commons.codec.binary.StringUtils;
-
-import java.math.RoundingMode;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.BitSet;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.UUID;
 
-import io.netty.util.internal.StringUtil;
 import unused.BlacklistRecord;
 
 public class Utils {
@@ -70,39 +64,85 @@ public class Utils {
     public static Handler serviceHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            Bundle reply = msg.getData();
-            String out1 = reply.getString("gps");
-            String out2 = reply.getString("ble");
-            String out3 = reply.getString("uuid");
-            if (out1!=null) {
-                if (gpsLines > 20) {
-                    String ss = gpsResults.getText().toString();
-                    int ii = ss.indexOf("\n");
-                    String oo = ss.substring(ii+1,ss.length()) + out1+"\n";
-                    gpsResults.setText(oo);
-                }
-                else {
-                    gpsResults.append(out1 + "\n");
-                }
-                gpsLines+=1;
-            }
-            if (out2!=null) {
-                if (bleLines > 20) {
-                    String ss = bleResults.getText().toString();
-                    int ii = ss.indexOf("\n");
-                    String oo = ss.substring(ii+1,ss.length()) + out2+"\n";
-                    bleResults.setText(oo);
-                }
-                else {
-                    bleResults.append(out2 + "\n");
-                }
-                bleLines+=1;
-            }
-            if (out3 != null) {
-                bleBeaconId.setText(out3);
-            }
+//            Bundle reply = msg.getData();
+//            String out1 = reply.getString("gps");
+//            String out2 = reply.getString("ble");
+//            String out3 = reply.getString("uuid");
+//            if (out1!=null) {
+//                if (gpsLines > 20) {
+//                    String ss = gpsResults.getText().toString();
+//                    int ii = ss.indexOf("\n");
+//                    String oo = ss.substring(ii+1,ss.length()) + out1+"\n";
+//                    gpsResults.setText(oo);
+//                }
+//                else {
+//                    gpsResults.append(out1 + "\n");
+//                }
+//                gpsLines+=1;
+//            }
+//            if (out2!=null) {
+//                if (bleLines > 20) {
+//                    String ss = bleResults.getText().toString();
+//                    int ii = ss.indexOf("\n");
+//                    String oo = ss.substring(ii+1,ss.length()) + out2+"\n";
+//                    bleResults.setText(oo);
+//                }
+//                else {
+//                    bleResults.append(out2 + "\n");
+//                }
+//                bleLines+=1;
+//            }
+//            if (out3 != null) {
+//                bleBeaconId.setText(out3);
+//            }
         }
     };
+
+    public static void updateSwitchStates(Activity av) {
+        Log.e("state","update switch states");
+        SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        if (Constants.notifSwitch != null) {
+            boolean hasNotifPerms = NotificationManagerCompat.from(av).areNotificationsEnabled();
+//            boolean perm = prefs.getBoolean(av.getString(R.string.notifs_enabled_pkey), Constants.NOTIFS_ENABLED);
+//            Log.e("perm","notif get is "+perm);
+//            Constants.notifSwitch.setChecked(perm);
+            if (!hasNotifPerms) {
+//                Constants.notifSwitch.setOnCheckedChangeListener (null);
+                Constants.notifSwitch.setChecked (false);
+//                Constants.notifSwitch.setOnCheckedChangeListener (PermUtil.listener);
+
+                editor.putBoolean(av.getString(R.string.notifs_enabled_pkey), false);
+                editor.commit();
+            }
+        }
+        if (Constants.gpsSwitch != null) {
+            boolean hasGpsPerms = Utils.hasGpsPermissions(av);
+            Log.e("perm","gps get "+hasGpsPerms);
+//            editor.putBoolean(av.getString(R.string.gps_enabled_pkey),hasGpsPerms);
+            if (!hasGpsPerms) {
+//                Constants.gpsSwitch.setOnCheckedChangeListener (null);
+                Constants.gpsSwitch.setChecked (false);
+//                Constants.gpsSwitch.setOnCheckedChangeListener (PermUtil.listener);
+
+                editor.putBoolean(av.getString(R.string.gps_enabled_pkey), false);
+                editor.commit();
+            }
+        }
+        if (Constants.bleSwitch != null) {
+            boolean hasBlePerms = Utils.hasBlePermissions(av);
+            Log.e("perm","ble get "+hasBlePerms);
+//            editor.putBoolean(av.getString(R.string.ble_enabled_pkey),hasBlePerms);
+            if (!hasBlePerms) {
+//                Constants.bleSwitch.setOnCheckedChangeListener (null);
+                Constants.bleSwitch.setChecked (false);
+//                Constants.bleSwitch.setOnCheckedChangeListener (PermUtil.listener);
+
+                editor.putBoolean(av.getString(R.string.ble_enabled_pkey), false);
+                editor.commit();
+            }
+        }
+    }
 
     public static void markDiagnosisSubmitted(Activity av) {
         SharedPreferences.Editor editor = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
@@ -253,46 +293,53 @@ public class Utils {
         return "";
     }
 
-    public static void startBackgroundService(Activity av) {
-        Utils.bleResults.setText("");
-        Utils.gpsResults.setText("");
-
+    public static void startLoggingService(Activity av) {
+//        Utils.bleResults.setText("");
+//        Utils.gpsResults.setText("");
+        Constants.LoggingServiceRunning = true;
         Utils.createNotificationChannel(av);
 
-        Intent intent = new Intent(av, BackgroundService.class);
+        Intent intent = new Intent(av, LoggingService.class);
         intent.putExtra("messenger", new Messenger(Utils.serviceHandler));
         av.startService(intent);
 
-        Constants.tracking = true;
-        Constants.startingToTrack = false;
+//        Constants.tracking = true;
+//        Constants.startingToTrack = false;
 
-        Button trackButton = (Button)av.findViewById(R.id.trackButton);
-        trackButton.setText("Stop tracking");
-        trackButton.setBackgroundResource(R.drawable.stopbutton);
+//        Button trackButton = (Button)av.findViewById(R.id.trackButton);
+//        trackButton.setText("Stop tracking");
+//        trackButton.setBackgroundResource(R.drawable.stopbutton);
     }
 
-    public static boolean permCheck(Activity av) {
-        return gpsCheck(av) && bleCheck(av);
+    public static void startPullService(Activity av) {
+        Constants.PullServiceRunning = true;
+        Utils.createNotificationChannel(av);
+        Intent intent = new Intent(av, PullService.class);
+        av.startService(intent);
     }
 
-    public static boolean gpsCheck(Activity av) {
-        boolean hasPerms = Utils.hasGpsPermissions(av);
-        if ((hasPerms && Constants.GPS_ENABLED) ||
-            (!Constants.GPS_ENABLED && (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || hasPerms))) {
-            return true;
-        }
-        return false;
-    }
+//    public static boolean permCheck(Activity av) {
+//        return gpsCheck(av) && bleCheck(av);
+//    }
 
-    public static boolean bleCheck(Activity av) {
-        boolean hasPerms = Utils.hasBlePermissions(av);
-        if (hasPerms &&
-                (Constants.BLUETOOTH_ENABLED && Constants.blueAdapter != null && Constants.blueAdapter.isEnabled()) ||
-                (!Constants.BLUETOOTH_ENABLED)) {
-            return true;
-        }
-        return false;
-    }
+//    public static boolean gpsCheck(Activity av) {
+//        boolean hasPerms = Utils.hasGpsPermissions(av);
+//        if ((hasPerms && Constants.GPS_ENABLED) ||
+//            (!Constants.GPS_ENABLED && (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || hasPerms))) {
+//            return true;
+//        }
+//        return false;
+//    }
+//
+//    public static boolean bleCheck(Activity av) {
+//        boolean hasPerms = Utils.hasBlePermissions(av);
+//        if (hasPerms &&
+//                (Constants.BLUETOOTH_ENABLED && Constants.blueAdapter != null && Constants.blueAdapter.isEnabled()) ||
+//                (!Constants.BLUETOOTH_ENABLED)) {
+//            return true;
+//        }
+//        return false;
+//    }
 
     public static double getCoarseGpsCoord(double d, int precision) {
 //        Log.e("ERR ",d+","+precision);
@@ -366,62 +413,36 @@ public class Utils {
         }
     }
 
-    public static boolean hasMiscPermissions(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            if (Constants.miscPermissions != null) {
-                for (String permission : Constants.miscPermissions) {
-                    if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                        Log.e("results", "return false on " + permission);
-                        return false;
-                    }
-                }
-            }
-        }
-        else {
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
-                Log.e("results", "return false on " + Manifest.permission.INTERNET);
-                return false;
-            }
-        }
-        return true;
-    }
-
     public static boolean hasBlePermissions(Context context) {
         Log.e("results", "check for permission");
-        if (context != null) {
-            if (Constants.BLUETOOTH_ENABLED && Constants.blePermissions != null) {
-                for (String permission : Constants.blePermissions) {
-                    if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                        Log.e("results", "return false on " + permission);
-                        return false;
-                    }
+        if (context != null && Constants.blePermissions != null) {
+            for (String permission : Constants.blePermissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    Log.e("results", "return false on " + permission);
+                    return false;
                 }
             }
-            hasMiscPermissions(context);
+        }
+        // for the lower APIs, you need location permissions to do bluetooth scanning
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return hasGpsPermissions(context);
         }
         return true;
     }
 
     public static boolean hasGpsPermissions(Context context) {
         Log.e("results", "check for permission");
-        if (context != null) {
-            if ((Constants.GPS_ENABLED  || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) && Constants.gpsPermissions != null) {
-                for (String permission : Constants.gpsPermissions) {
-                    int result = ActivityCompat.checkSelfPermission(context, permission);
-                    Log.e("logme","perm "+result);
-                    if (result != PackageManager.PERMISSION_GRANTED) {
-                        Log.e("results", "return false on " + permission);
-                        return false;
-                    }
+        if (context != null && Constants.gpsPermissions != null) {
+            for (String permission : Constants.gpsPermissions) {
+                int result = ActivityCompat.checkSelfPermission(context, permission);
+                Log.e("logme","perm "+result);
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    Log.e("results", "return false on " + permission);
+                    return false;
                 }
             }
-            hasMiscPermissions(context);
         }
         return true;
-    }
-
-    public static boolean canStartTracking() {
-        return false;
     }
 
     public static void goToUrl (Activity av, String url) {

@@ -45,4 +45,10 @@ public class PagerFragment extends Fragment {
         }
         return view;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e("state", "pager on resume");
+    }
 }

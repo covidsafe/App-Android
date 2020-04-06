@@ -5,7 +5,9 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -20,12 +22,15 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NavUtils;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.covidsafe.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.ui.MainActivity;
+import edu.uw.covidsafe.ui.settings.PermissionsRecyclerViewAdapter;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
 
@@ -34,19 +39,62 @@ public class PermissionFragment extends Fragment {
     Button finish;
     Button back;
 
-    Switch notifSwitch;
-    Switch gpsSwitch;
-    Switch bleSwitch;
+    View view;
 
     @SuppressLint("RestrictedApi")
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.onboarding_permissions, container, false);
+        view = inflater.inflate(R.layout.onboarding_permissions, container, false);
         ((OnboardingActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
         ((OnboardingActivity) getActivity()).getSupportActionBar().show();
         ((OnboardingActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((OnboardingActivity) getActivity()).getSupportActionBar().setTitle("Select your preferences");
+
+        RecyclerView rview3 = view.findViewById(R.id.recyclerViewPerms);
+        PermissionsRecyclerViewAdapter adapter3 = new PermissionsRecyclerViewAdapter(getContext(),getActivity());
+        rview3.setAdapter(adapter3);
+        rview3.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        finish = (Button) view.findViewById(R.id.skipButton);
+        finish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), MainActivity.class));
+            }
+        });
+
+        back = (Button) view.findViewById(R.id.nextButton);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), MainActivity.class));
+            }
+        });
+
+        Button bb = (Button) view.findViewById(R.id.button4);
+        bb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+                boolean s1 = prefs.getBoolean(getString(R.string.notifs_enabled_pkey), false);
+                boolean s2 = prefs.getBoolean(getString(R.string.gps_enabled_pkey), false);
+                boolean s3 = prefs.getBoolean(getString(R.string.ble_enabled_pkey), false);
+                Log.e("perms","PERM STATE "+s1+","+s2+","+s3);
+            }
+        });
+
+        Button bb2 = (Button) view.findViewById(R.id.button5);
+        bb2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
+                intent.setData(uri);
+                getActivity().startActivity(intent);
+            }
+        });
+
         return view;
     }
 
@@ -57,80 +105,12 @@ public class PermissionFragment extends Fragment {
         Constants.CurrentFragment = this;
         Constants.PermissionsFragment = this;
 
-        if (!BluetoothUtils.checkBluetoothSupport(getActivity())) {
-            AlertDialog dialog = new MaterialAlertDialogBuilder(getActivity())
-                    .setTitle("Unsupported device")
-                    .setMessage("Your device does not support Bluetooth.")
-                    .setPositiveButton(R.string.ok,null)
-                    .setCancelable(false).create();
-            dialog.show();
+        Log.e("perms","should update switch states? "+Constants.SuppressSwitchStateCheck);
+        if (Constants.SuppressSwitchStateCheck) {
+            Constants.SuppressSwitchStateCheck = false;
         }
-
-        finish = (Button) getActivity().findViewById(R.id.skipButton);
-        finish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), MainActivity.class));
-            }
-        });
-
-        back = (Button) getActivity().findViewById(R.id.nextButton);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), MainActivity.class));
-//                getActivity().getSupportFragmentManager().beginTransaction().replace(
-//                        R.id.fragment_container_onboarding, Constants.MainFragment).commit();
-            }
-        });
-//
-//        notifSwitch = (Switch) getActivity().findViewById(R.id.notifSwitch);
-//        gpsSwitch = (Switch) getActivity().findViewById(R.id.gpsSwitch);
-//        bleSwitch = (Switch) getActivity().findViewById(R.id.bleSwitch);
-//
-//        notifSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                SharedPreferences.Editor editor = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
-//                editor.putBoolean(getString(R.string.notif_message), isChecked);
-//                editor.commit();
-//                Constants.NOTIFS_ENABLED = isChecked;
-//            }
-//        });
-//        bleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                SharedPreferences.Editor editor = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
-//                editor.putBoolean(getString(R.string.ble_enabled_pkey), isChecked);
-//                editor.commit();
-//                Constants.BLUETOOTH_ENABLED = isChecked;
-//
-//                if (Constants.BLUETOOTH_ENABLED && !Utils.hasBlePermissions(getActivity())) {
-//                    Log.e("aa","NO BLE PERMS");
-//                    ActivityCompat.requestPermissions(getActivity(), Constants.blePermissions, 1);
-//                }
-//
-//                if (Utils.hasBlePermissions(getActivity()) &&
-//                    Constants.BLUETOOTH_ENABLED && (Constants.blueAdapter == null || !Constants.blueAdapter.isEnabled())) {
-//                    Log.e("aa","BLE");
-//                    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//                    getActivity().startActivityForResult(enableBtIntent, 0);
-//                }
-//            }
-//        });
-//        gpsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                SharedPreferences.Editor editor = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
-//                editor.putBoolean(getString(R.string.gps_enabled_pkey), isChecked);
-//                editor.commit();
-//                Constants.GPS_ENABLED = isChecked;
-////                if ((Constants.GPS_ENABLED || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) && !Utils.hasGpsPermissions(getActivity())) {
-//                if ((Constants.GPS_ENABLED) && !Utils.hasGpsPermissions(getActivity())) {
-//                    Log.e("aa","PERMS");
-//                    ActivityCompat.requestPermissions(getActivity(), Constants.gpsPermissions, 2);
-//                }
-//            }
-//        });
+        else {
+            Utils.updateSwitchStates(getActivity());
+        }
     }
 }

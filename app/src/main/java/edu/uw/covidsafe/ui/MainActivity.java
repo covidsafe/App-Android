@@ -4,8 +4,10 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,19 +15,17 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.comms.NetworkConstant;
-import edu.uw.covidsafe.comms.SendInfectedUserData;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
 import com.example.covidsafe.R;
-import edu.uw.covidsafe.utils.ServiceUtils;
+
 import edu.uw.covidsafe.utils.Utils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
-
-import java.util.UUID;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -51,14 +51,8 @@ public class MainActivity extends AppCompatActivity {
 
 //        CryptoUtils.keyInit(this);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-//        if (Constants.DEBUG) {
-//            bottomNavigationView.getMenu().clear();
-//            bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_debug);
-//        }
-//        else {
-            bottomNavigationView.getMenu().clear();
-            bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_release);
-//        }
+        bottomNavigationView.getMenu().clear();
+        bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_release);
 
         SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
@@ -70,13 +64,14 @@ public class MainActivity extends AppCompatActivity {
         CryptoUtils.generateInitSeed(getApplicationContext(), false);
 
         NetworkConstant.init(this);
+        this.registerReceiver(BluetoothUtils.bluetoothReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
 //        ServiceUtils.scheduleLookupJob(mContext);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        PermissionLogic.permissionLogicOnboard(requestCode, permissions, grantResults, this);
+        PermissionLogic.permissionLogic(requestCode, permissions, grantResults, this);
     }
 
     @Override
@@ -103,13 +98,22 @@ public class MainActivity extends AppCompatActivity {
 //        int result = data.getIntExtra(StartActivityForResult.this.getString(R.string.result), -1);
 //        String msg = "requestCode=" + requestCode + ", resultCode=" + resultCode + ", result=" + result;
 //        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-        Log.e("aa","onactivityresult "+requestCode+","+resultCode);
+//        Log.e("aa","onactivityresult "+requestCode+","+resultCode);
 
         //bluetooth is now turned on
+//        if (requestCode == 0 && resultCode == -1) {
+//            if (Constants.startingToTrack) {
+//                Log.e("logme","starting to track");
+//                Utils.startBackgroundService(this);
+//            }
+//        }
+        Log.e("perms","onactivityresult "+requestCode+","+resultCode);
+        boolean hasBlePerms = Utils.hasBlePermissions(getApplicationContext());
         if (requestCode == 0 && resultCode == -1) {
-            if (Constants.startingToTrack) {
-                Log.e("logme","starting to track");
-                Utils.startBackgroundService(this);
+            if (hasBlePerms) {
+                SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
+                editor.putBoolean(getApplicationContext().getString(R.string.ble_enabled_pkey), true);
+                editor.commit();
             }
         }
     }

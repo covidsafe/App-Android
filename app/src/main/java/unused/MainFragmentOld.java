@@ -28,9 +28,8 @@ import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.ui.health.CardRecyclerViewAdapter;
 import edu.uw.covidsafe.utils.Constants;
-import edu.uw.covidsafe.BackgroundService;
+import edu.uw.covidsafe.LoggingService;
 import com.example.covidsafe.R;
-import com.google.android.material.card.MaterialCardView;
 
 import edu.uw.covidsafe.utils.Utils;
 
@@ -161,10 +160,10 @@ public class MainFragmentOld extends Fragment {
                         }
 
 //                        if ((Constants.GPS_ENABLED || Constants.BLUETOOTH_ENABLED) && Utils.permCheck(getActivity())) {
-                        if ((Constants.GPS_ENABLED && Utils.gpsCheck(getActivity())) ||
-                            (Constants.BLUETOOTH_ENABLED && Utils.bleCheck(getActivity()))) {
-                            Utils.startBackgroundService(getActivity());
-                        }
+//                        if ((Constants.GPS_ENABLED && Utils.gpsCheck(getActivity())) ||
+//                            (Constants.BLUETOOTH_ENABLED && Utils.bleCheck(getActivity()))) {
+//                            Utils.startBackgroundService(getActivity());
+//                        }
 
                         if (!Constants.GPS_ENABLED && !Constants.BLUETOOTH_ENABLED) {
                             Utils.mkSnack(getActivity(), view, getString(R.string.prompt_to_enable_error));
@@ -178,7 +177,7 @@ public class MainFragmentOld extends Fragment {
                 }
                 else {
                     Log.e("logme","stop service");
-                    getActivity().stopService(new Intent(getActivity(), BackgroundService.class));
+                    getActivity().stopService(new Intent(getActivity(), LoggingService.class));
 
                     if (Constants.mLocationManager != null) {
                         try {
@@ -199,7 +198,7 @@ public class MainFragmentOld extends Fragment {
                     }
                     BluetoothServerHelper.stopServer();
                     try {
-                        getContext().unregisterReceiver(BluetoothUtils.mReceiver);
+                        getContext().unregisterReceiver(BluetoothUtils.bluetoothReceiver);
                     }
                     catch(Exception e) {
                         Log.e("frag","unregister fail");

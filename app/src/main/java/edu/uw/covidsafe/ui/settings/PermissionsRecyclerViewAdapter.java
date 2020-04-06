@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.provider.Settings;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,15 +21,20 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.covidsafe.R;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 
+import edu.uw.covidsafe.ble.BluetoothUtils;
+import edu.uw.covidsafe.ui.PermUtil;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
 
@@ -35,8 +43,8 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
     private ArrayList<String> titles = new ArrayList<>();
     private ArrayList<String> desc = new ArrayList<>();
     private ArrayList<Drawable> icons = new ArrayList<>();
-    Context cxt;
-    Activity av;
+    static Context cxt;
+    static Activity av;
 
     public PermissionsRecyclerViewAdapter(Context cxt, Activity av) {
         this.cxt = cxt;
@@ -64,46 +72,165 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
         ((PermissionCard)holder).title.setText(titles.get(position));
         ((PermissionCard)holder).desc.setText(desc.get(position));
         ((PermissionCard)holder).icon.setImageDrawable(icons.get(position));
+
+        // update switch states
+        SharedPreferences prefs = cxt.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = cxt.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
+
+        if (titles.get(position).toLowerCase().contains("notification")) {
+            Constants.notifSwitch = ((PermissionCard)holder).sw;
+            boolean hasNotifPerms = NotificationManagerCompat.from(cxt).areNotificationsEnabled();
+            boolean notifEnabled = prefs.getBoolean(cxt.getString(R.string.notifs_enabled_pkey), Constants.NOTIFS_ENABLED);
+            Log.e("perm","notif get "+hasNotifPerms+","+notifEnabled);
+            if (hasNotifPerms && notifEnabled) {
+                ((PermissionCard) holder).sw.setChecked(true);
+            }
+            else {
+                ((PermissionCard) holder).sw.setChecked(false);
+            }
+        } else if (titles.get(position).toLowerCase().contains("location")) {
+            Constants.gpsSwitch = ((PermissionCard)holder).sw;
+            boolean hasGpsPerms = Utils.hasGpsPermissions(cxt);
+            boolean gpsEnabled = prefs.getBoolean(cxt.getString(R.string.gps_enabled_pkey), Constants.GPS_ENABLED);
+            Log.e("perm","gps get "+hasGpsPerms+","+gpsEnabled);
+            if (hasGpsPerms && gpsEnabled) {
+//                ((PermissionCard)holder).sw.setOnCheckedChangeListener (null);
+                ((PermissionCard)holder).sw.setChecked (true);
+//                ((PermissionCard)holder).sw.setOnCheckedChangeListener (PermUtil.listener);
+            }
+            else {
+//                ((PermissionCard)holder).sw.setOnCheckedChangeListener (null);
+                ((PermissionCard)holder).sw.setChecked (false);
+//                ((PermissionCard)holder).sw.setOnCheckedChangeListener (PermUtil.listener);
+            }
+        } else if (titles.get(position).toLowerCase().contains("bluetooth")) {
+            Constants.bleSwitch = ((PermissionCard)holder).sw;
+            Constants.bleDesc = ((PermissionCard)holder).desc;
+
+            if (!BluetoothUtils.checkBluetoothSupport(av)) {
+                ((PermissionCard)holder).sw.setEnabled(false);
+                ((PermissionCard)holder).desc.setText("Bluetooth is disabled on this device");
+                editor.putBoolean(cxt.getString(R.string.ble_enabled_pkey), false);
+                editor.commit();
+            }
+            else if (!BluetoothUtils.isBluetoothOn(av)) {
+                ((PermissionCard)holder).desc.setText(cxt.getString(R.string.bluetooth_is_off));
+                editor.putBoolean(cxt.getString(R.string.ble_enabled_pkey), false);
+                editor.commit();
+            }
+            else {
+                ((PermissionCard)holder).sw.setEnabled(true);
+                boolean hasBlePerms = Utils.hasBlePermissions(cxt);
+                boolean bleEnabled = prefs.getBoolean(cxt.getString(R.string.ble_enabled_pkey), Constants.BLUETOOTH_ENABLED);
+                Log.e("perm", "ble get " + hasBlePerms + "," + bleEnabled);
+                if (hasBlePerms && bleEnabled) {
+//                ((PermissionCard)holder).sw.setOnCheckedChangeListener (null);
+                    ((PermissionCard) holder).sw.setChecked(true);
+//                ((PermissionCard)holder).sw.setOnCheckedChangeListener (PermUtil.listener);
+                } else {
+//                ((PermissionCard)holder).sw.setOnCheckedChangeListener (null);
+                    ((PermissionCard) holder).sw.setChecked(false);
+//                ((PermissionCard)holder).sw.setOnCheckedChangeListener (PermUtil.listener);
+                }
+            }
+        }
+
         ((PermissionCard)holder).sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = cxt.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
                 if (titles.get(position).toLowerCase().contains("notification")) {
-                    editor.putBoolean(cxt.getString(R.string.notifs_enabled_pkey), isChecked);
-                    editor.commit();
+                    boolean hasNotifPerms = NotificationManagerCompat.from(cxt).areNotificationsEnabled();
+                    if (hasNotifPerms) {
+                        editor.putBoolean(cxt.getString(R.string.notifs_enabled_pkey), isChecked);
+                        Log.e("perm", "notif set " + isChecked);
+                        editor.commit();
+                    }
+                    else {
+                        if (isChecked) {
+                            // preemptively add the permission
+                            editor.putBoolean(cxt.getString(R.string.notifs_enabled_pkey), isChecked);
+                            Log.e("perm", "notif set " + isChecked);
+                            editor.commit();
+
+                            makeOpenSettingsDialog();
+                        }
+                    }
                 }
                 else if (titles.get(position).toLowerCase().contains("location")) {
-                    if (Constants.GPS_ENABLED && !Utils.hasGpsPermissions(av)) {
-//                            if ((Constants.GPS_ENABLED || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) && !Utils.hasGpsPermissions(getActivity())) {
-                        Log.e("aa","PERMS");
-                        ActivityCompat.requestPermissions(av, Constants.gpsPermissions, 2);
+                    if (isChecked) {
+                        boolean hasGps = Utils.hasGpsPermissions(av);
+                        Log.e("perm","gps set "+isChecked+","+hasGps);
+                        if (hasGps) {
+                            editor.putBoolean(cxt.getString(R.string.gps_enabled_pkey), true);
+                            editor.commit();
+                        }
+                        else {
+                            ActivityCompat.requestPermissions(av, Constants.gpsPermissions, 2);
+                        }
                     }
-
-//                        if ((Constants.GPS_ENABLED || Constants.BLUETOOTH_ENABLED) && Utils.permCheck(getActivity())) {
-                    if ((Constants.GPS_ENABLED && Utils.gpsCheck(av)) ||
-                            (Constants.BLUETOOTH_ENABLED && Utils.bleCheck(av))) {
-                        Utils.startBackgroundService(av);
+                    else {
+                        editor.putBoolean(cxt.getString(R.string.gps_enabled_pkey), false);
+                        editor.commit();
                     }
                 }
                 else if (titles.get(position).toLowerCase().contains("bluetooth")) {
+                    if (isChecked) {
+                        BluetoothManager bluetoothManager =
+                                (BluetoothManager) av.getSystemService(Context.BLUETOOTH_SERVICE);
+                        Constants.blueAdapter = bluetoothManager.getAdapter();
 
-                    BluetoothManager bluetoothManager =
-                            (BluetoothManager) av.getSystemService(Context.BLUETOOTH_SERVICE);
-                    Constants.blueAdapter = bluetoothManager.getAdapter();
+                        boolean hasBle = Utils.hasBlePermissions(av);
 
-                    if (Constants.BLUETOOTH_ENABLED && !Utils.hasBlePermissions(av)) {
-                        Log.e("aa","NO BLE PERMS");
-                        ActivityCompat.requestPermissions(av, Constants.blePermissions, 1);
+                        Log.e("perm","ble set "+isChecked+","+hasBle+","+Constants.blueAdapter.isEnabled());
+                        if (hasBle && Constants.blueAdapter != null &&
+                                Constants.blueAdapter.isEnabled()) {
+                            editor.putBoolean(cxt.getString(R.string.ble_enabled_pkey), true);
+                            editor.commit();
+                        }
+                        else {
+                            if (Constants.blueAdapter != null && !Constants.blueAdapter.isEnabled()) {
+                                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                                av.startActivityForResult(enableBtIntent, 0);
+                            }
+                            if (!Utils.hasBlePermissions(av)) {
+                                ActivityCompat.requestPermissions(av, Constants.blePermissions, 1);
+                            }
+                        }
                     }
-
-                    if (Utils.hasBlePermissions(av) &&
-                            Constants.BLUETOOTH_ENABLED && (Constants.blueAdapter == null || !Constants.blueAdapter.isEnabled())) {
-                        Log.e("aa","BLE");
-                        Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                        av.startActivityForResult(enableBtIntent, 0);
+                    else {
+                        editor.putBoolean(cxt.getString(R.string.ble_enabled_pkey), false);
+                        editor.commit();
                     }
                 }
-            }
-        });
+            }});
+    }
+
+    public static void makeOpenSettingsDialog() {
+        AlertDialog dialog = new MaterialAlertDialogBuilder(av)
+                .setTitle("Permission denied")
+                .setMessage(av.getString(R.string.perm_notifs_ask))
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (Constants.notifSwitch != null) {
+//                                Constants.notifSwitch.setOnCheckedChangeListener (null);
+                            Constants.notifSwitch.setChecked (false);
+//                                Constants.notifSwitch.setOnCheckedChangeListener (PermUtil.listener);
+                            SharedPreferences.Editor editor = cxt.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
+                            editor.putBoolean(cxt.getString(R.string.notifs_enabled_pkey), false);
+                            editor.commit();
+                        }
+                    }})
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", av.getPackageName(), null);
+                        intent.setData(uri);
+                        av.startActivity(intent);
+                    }
+                })
+                .setCancelable(false).create();
+        dialog.show();
     }
 
     @Override

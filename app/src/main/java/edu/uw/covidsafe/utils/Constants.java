@@ -10,10 +10,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.util.Log;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-import edu.uw.covidsafe.BackgroundService;
+import edu.uw.covidsafe.LoggingService;
 
 import com.example.covidsafe.R;
 import edu.uw.covidsafe.ui.MainFragment;
@@ -61,6 +63,9 @@ public class Constants {
         Insert,ViewAll
     }
 
+    public static boolean PullServiceRunning = false;
+    public static boolean LoggingServiceRunning = false;
+    public static boolean SuppressSwitchStateCheck = false;
     public static int QuarantineLengthInDays = 14;
     public static int MaxPayloadSize = 10000;
     public static int rssiCutoff = -82;
@@ -82,12 +87,15 @@ public class Constants {
     public static UUID BEACON_SERVICE_UUID = UUID.fromString("0000D028-0000-1000-8000-00805F9B34FB");
     public static UUID contactUUID = null;
 
-    public static String insertAsyncTaskRunning = "";
-
-    public static boolean NOTIFS_ENABLED = true;
+    public static boolean NOTIFS_ENABLED = false;
     public static boolean GPS_ENABLED = false;
     public static boolean BLUETOOTH_ENABLED = false;
     public static boolean LOG_TO_DISK = false;
+
+    public static Switch gpsSwitch;
+    public static Switch bleSwitch;
+    public static TextView bleDesc;
+    public static Switch notifSwitch;
 
     public static BluetoothGattServer gattServer;
     public static BluetoothDevice device;
@@ -135,7 +143,7 @@ public class Constants {
     public static float DistanceThresholdInMeters = 1609.34f;
     public static ArrayList<BlacklistRecord> blacklist;
     public static LocationManager mLocationManager = null;
-    public static BackgroundService.LocationListener[] locListeners = new BackgroundService.LocationListener[2];
+    public static LoggingService.LocationListener[] locListeners = new LoggingService.LocationListener[2];
     public static HashSet<String> scannedUUIDs;
     public static HashMap<String,Integer> scannedUUIDsRSSIs;
     public static HashSet<String> writtenUUIDs;

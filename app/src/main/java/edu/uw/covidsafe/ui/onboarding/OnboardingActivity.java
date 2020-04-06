@@ -1,7 +1,6 @@
 package edu.uw.covidsafe.ui.onboarding;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,12 +10,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Switch;
 
 import com.example.covidsafe.R;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.ui.PermissionLogic;
-import edu.uw.covidsafe.ui.health.HealthFragment;
+import edu.uw.covidsafe.ui.PermissionLogicOld;
 import edu.uw.covidsafe.utils.Constants;
 
 
