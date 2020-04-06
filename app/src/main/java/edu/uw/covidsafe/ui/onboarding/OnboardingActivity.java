@@ -20,6 +20,7 @@ import edu.uw.covidsafe.utils.Constants;
 
 public class OnboardingActivity extends AppCompatActivity {
 
+    boolean forceOnboard = true;
     Activity activity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +35,8 @@ public class OnboardingActivity extends AppCompatActivity {
         Constants.init(this);
         SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         boolean b = prefs.getBoolean(getString(R.string.onboard_enabled_pkey),true);
-//        b=false;
         Log.e("onboarding","should start onboarding? "+b);
-        if (b) {
+        if (b || forceOnboard) {
             setContentView(R.layout.activity_onboarding);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_onboarding,
                     Constants.PagerFragment).commit();
@@ -90,7 +90,7 @@ public class OnboardingActivity extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         boolean b = prefs.getBoolean(getString(R.string.onboard_enabled_pkey),true);
-        if (!b) {
+        if (!b && !forceOnboard) {
             finish();
         }
 
