@@ -95,6 +95,9 @@ public class PermissionFragment extends Fragment {
             }
         });
 
+        bb.setVisibility(View.GONE);
+        bb2.setVisibility(View.GONE);
+
         return view;
     }
 
