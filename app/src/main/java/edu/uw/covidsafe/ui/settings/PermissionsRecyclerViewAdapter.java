@@ -212,7 +212,8 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                                 av.startActivityForResult(enableBtIntent, 0);
                             }
                             if (!Utils.hasBlePermissions(av)) {
-                                ActivityCompat.requestPermissions(av, Constants.blePermissions, 1);
+                                Log.e("results","no ble permission, let's request");
+                                ActivityCompat.requestPermissions(av, Utils.getBlePermissions(), 1);
                             }
                         }
                     }

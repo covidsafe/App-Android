@@ -80,14 +80,14 @@ public class MainFragment extends Fragment {
 
                 updateBroadcastUI();
                 if (isChecked) {
-                    // dummy code
-                    Constants.NotificationAdapter.notifyUser(getString(R.string.exposed_notif));
 
                     if (!gpsEnabled && !bleEnabled) {
                         Utils.mkSnack(getActivity(), view, getString(R.string.prompt_to_enable_error));
                         broadcastSwitch.setChecked(false);
                     }
                     else {
+                        // dummy code
+                        Constants.NotificationAdapter.notifyUser(getString(R.string.exposed_notif));
                         Utils.startLoggingService(getActivity());
                     }
                 }

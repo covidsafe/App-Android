@@ -25,6 +25,12 @@ public class OnboardingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.activity = this;
+        String manufacturer = Build.MANUFACTURER;
+        String model = Build.MODEL;
+        Log.e("metadata","BUILD "+android.os.Build.VERSION.SDK_INT+"");
+        Log.e("metadata","RELEASE "+android.os.Build.VERSION.RELEASE+"");
+        Log.e("metadata","MANUFACTURER "+manufacturer);
+        Log.e("metadata","MODEL "+model);
         Constants.init(this);
         SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         boolean b = prefs.getBoolean(getString(R.string.onboard_enabled_pkey),true);
