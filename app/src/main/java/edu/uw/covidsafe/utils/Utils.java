@@ -420,6 +420,10 @@ public class Utils {
         return true;
     }
 
+    public static boolean canStartTracking() {
+        return false;
+    }
+
     public static void goToUrl (Activity av, String url) {
         Uri uriUrl = Uri.parse(url);
         Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);

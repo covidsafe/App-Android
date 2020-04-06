@@ -74,11 +74,16 @@ public class BluetoothUtils {
     }
 
     public static void finishScan(Context cxt) {
-        Constants.blueAdapter.getBluetoothLeScanner().stopScan(BluetoothScanHelper.mLeScanCallback);
-        for (String uuids : Constants.scannedUUIDs) {
-            String[] elts = uuids.split("-");
-            int rssi = Constants.scannedUUIDsRSSIs.get(uuids);
-            Utils.bleLogToDatabase(cxt, uuids, rssi);
+        if (Constants.blueAdapter != null && Constants.blueAdapter.getBluetoothLeScanner() != null) {
+            Constants.blueAdapter.getBluetoothLeScanner().stopScan(BluetoothScanHelper.mLeScanCallback);
+        }
+
+        if (Constants.scannedUUIDs != null) {
+            for (String uuids : Constants.scannedUUIDs) {
+                String[] elts = uuids.split("-");
+                int rssi = Constants.scannedUUIDsRSSIs.get(uuids);
+                Utils.bleLogToDatabase(cxt, uuids, rssi);
+            }
         }
     }
 

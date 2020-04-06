@@ -1,5 +1,6 @@
 package edu.uw.covidsafe.ui.health;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.example.covidsafe.R;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import edu.uw.covidsafe.comms.NetworkHelper;
 import edu.uw.covidsafe.comms.SendInfectedUserData;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.utils.Constants;
@@ -23,10 +25,14 @@ import edu.uw.covidsafe.utils.Utils;
 
 public class DiagnosisFragment extends Fragment {
 
+    @SuppressLint("RestrictedApi")
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.health_diagnosis, container, false);
+        ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
+        ((MainActivity) getActivity()).getSupportActionBar().show();
+        ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Report Summary");
 
         RecyclerView rview = view.findViewById(R.id.recyclerViewDiagnosis);
@@ -41,7 +47,12 @@ public class DiagnosisFragment extends Fragment {
             uploadButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new SendInfectedUserData(getContext(), getActivity(), view).execute();
+                    if (!NetworkHelper.isNetworkAvailable(getActivity())) {
+                        Utils.mkSnack(getActivity(),view,"Network not available. Please try again.");
+                    }
+                    else {
+                        new SendInfectedUserData(getContext(), getActivity(), view).execute();
+                    }
                 }
             });
         }

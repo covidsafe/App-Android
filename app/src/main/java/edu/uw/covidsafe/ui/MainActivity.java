@@ -83,8 +83,14 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                getSupportFragmentManager().beginTransaction().replace(
-                        R.id.fragment_container, Constants.MainFragment).commit();
+                if (Constants.CurrentFragment.toString().toLowerCase().contains("settings")) {
+                    getSupportFragmentManager().beginTransaction().replace(
+                            R.id.fragment_container, Constants.MainFragment).commit();
+                }
+                else if (Constants.CurrentFragment.toString().toLowerCase().contains("diagnosis")) {
+                    getSupportFragmentManager().beginTransaction().replace(
+                            R.id.fragment_container, Constants.HealthFragment).commit();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -131,16 +137,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.MainFragment).commit();
         }
-//        if (Constants.CurrentFragment != null &&
-//            !Constants.CurrentFragment.toString().toLowerCase().contains("permission")) {
-//            Log.e("state","mainactivity - initview "+Constants.CurrentFragment.toString());
-//            if (Constants.CurrentFragment.toString().toLowerCase().contains("symptom") ||
-//                Constants.CurrentFragment.toString().toLowerCase().contains("diagnosis")) {
-//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.HealthFragment).commit();
-//            }
-//            else {
-//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.CurrentFragment).commit();
-//            }
     }
 
     public void reset(View v) {

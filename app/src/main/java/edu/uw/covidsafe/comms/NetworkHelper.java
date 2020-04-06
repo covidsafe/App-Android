@@ -1,6 +1,9 @@
 package edu.uw.covidsafe.comms;
 
+import android.app.Activity;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -60,5 +63,12 @@ public class NetworkHelper {
         }
         Log.e("net","finished request");
         return response;
+    }
+
+    public static boolean isNetworkAvailable(Activity av) {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) av.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

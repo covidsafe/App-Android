@@ -25,6 +25,7 @@ public class HealthFragment extends Fragment {
         View view = inflater.inflate(R.layout.health_main, container, false);
         ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().show();
+        ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(getActivity().getString(R.string.health_header_text));
         Button reportButton = (Button)view.findViewById(R.id.button3);
         reportButton.setOnClickListener(new View.OnClickListener() {

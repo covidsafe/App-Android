@@ -18,6 +18,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.covidsafe.R;
 
+import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.utils.Constants;
 
 public class PagerFragment extends Fragment {
@@ -33,6 +34,7 @@ public class PagerFragment extends Fragment {
         Log.e("state","PAGER VIEW "+Constants.pageNumber);
         ((OnboardingActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
         ((OnboardingActivity) getActivity()).getSupportActionBar().hide();
+        ((OnboardingActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         view = inflater.inflate(R.layout.onboarding_story, container, false);
         viewPager = view.findViewById(R.id.pager);
