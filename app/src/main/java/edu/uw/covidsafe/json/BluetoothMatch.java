@@ -8,7 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class BluetoothMatch {
-    String user_message;
+    public String user_message;
     public BlueToothSeed[] seeds;
 
     public static BluetoothMatch parse(JSONObject obj) throws JSONException {
@@ -19,6 +19,9 @@ public class BluetoothMatch {
             for (int i = 0; i < array.length(); i++) {
                 bluetoothMatch.seeds[i] = BlueToothSeed.parse(array.getJSONObject(i));
             }
+        }
+        if (obj.has("user_message")) {
+            bluetoothMatch.user_message = obj.getString("user_message");
         }
         return bluetoothMatch;
     }

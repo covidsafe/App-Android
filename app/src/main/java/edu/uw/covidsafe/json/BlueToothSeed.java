@@ -7,8 +7,8 @@ import org.json.JSONObject;
 
 public class BlueToothSeed {
 
-    String seed;
-    UTCTime sequence_start_time;
+    public String seed;
+    public UTCTime sequence_start_time;
 
     public static BlueToothSeed parse(JSONObject obj) throws JSONException {
         BlueToothSeed bluetoothSeed = new BlueToothSeed();

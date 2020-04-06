@@ -65,8 +65,8 @@ public class MainFragment extends Fragment {
         rview2.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         RecyclerView rview3 = view.findViewById(R.id.recyclerViewNotifs);
-        NotifRecyclerViewAdapter adapter3 = new NotifRecyclerViewAdapter(getContext(),getActivity());
-        rview3.setAdapter(adapter3);
+        Constants.NotificationAdapter = new NotifRecyclerViewAdapter(getContext(),getActivity());
+        rview3.setAdapter(Constants.NotificationAdapter);
         rview3.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         broadcastProp = view.findViewById(R.id.broadcastProp);
@@ -81,7 +81,7 @@ public class MainFragment extends Fragment {
                 updateBroadcastUI();
                 if (isChecked) {
                     // dummy code
-                    adapter3.notifyUser();
+                    Constants.NotificationAdapter.notifyUser(getString(R.string.exposed_notif));
 
                     if (!gpsEnabled && !bleEnabled) {
                         Utils.mkSnack(getActivity(), view, getString(R.string.prompt_to_enable_error));
