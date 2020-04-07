@@ -39,11 +39,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-public class PullFromServerTask implements Runnable {
+public class PullFromServerTaskDemo implements Runnable {
 
     Context context;
 
-    public PullFromServerTask(Context context) {
+    public PullFromServerTaskDemo(Context context) {
         this.context = context;
     }
 
@@ -56,20 +56,21 @@ public class PullFromServerTask implements Runnable {
         //////////////////////////////////////////////////////////////////////////////////////////
         // send coarse -> finer grained gps locations, find size of seeds on server
         //////////////////////////////////////////////////////////////////////////////////////////
-        GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
-        List<GpsRecord> gpsRecords = gpsRepo.getSortedRecords();
-        if (gpsRecords.size() == 0) {
-            Log.e("pull","no gps locations, returning");
-            Constants.PullServiceRunning = false;
-            return;
-        }
-        GpsRecord gpsRecord = gpsRecords.get(0);
-
-        int currentGpsPrecision = Constants.MinimumGpsPrecision;
+//        GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
+//        List<GpsRecord> gpsRecords = gpsRepo.getSortedRecords();
+//        if (gpsRecords.size() == 0) {
+//            Log.e("pull","no gps locations, returning");
+//            Constants.PullServiceRunning = false;
+//            return;
+//        }
+//        GpsRecord gpsRecord = gpsRecords.get(0);
+        GpsRecord gpsRecord = new GpsRecord(System.currentTimeMillis(),47.625,-122.25,"");
+        int currentGpsPrecision = Constants.MaximumGpsPrecision;
 
         int sizeOfPayload = 0;
-        long lastQueryTime = prefs.getLong(context.getString(R.string.time_of_last_query_pkey), 0L);
-        while (currentGpsPrecision < Constants.MaximumGpsPrecision) {
+//        long lastQueryTime = prefs.getLong(context.getString(R.string.time_of_last_query_pkey), 0L);
+        long lastQueryTime = 0;
+//        while (currentGpsPrecision < Constants.MaximumGpsPrecision) {
             double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(), currentGpsPrecision);
             double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(), currentGpsPrecision);
 
@@ -82,13 +83,13 @@ public class PullFromServerTask implements Runnable {
             catch(Exception e) {
                 Log.e("err",e.getMessage());
             }
-            if (sizeOfPayload > Constants.MaxPayloadSize) {
-                currentGpsPrecision += 1;
-            }
-            else {
-                break;
-            }
-        }
+//            if (sizeOfPayload > Constants.MaxPayloadSize) {
+//                currentGpsPrecision += 1;
+//            }
+//            else {
+//                break;
+//            }
+//        }
 
         if (sizeOfPayload == 0) {
             Constants.PullServiceRunning = false;
@@ -98,8 +99,8 @@ public class PullFromServerTask implements Runnable {
         //////////////////////////////////////////////////////////////////////////////////////////
         // get list of UUIDs that intersect with our movements and what the server has sent us
         //////////////////////////////////////////////////////////////////////////////////////////
-        double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(), currentGpsPrecision);
-        double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(), currentGpsPrecision);
+//        double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(), currentGpsPrecision);
+//        double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(), currentGpsPrecision);
 
         Log.e("NET ","GET MESSAGES "+sizeOfPayload);
         List<BluetoothMatch> bluetoothMatches = getMessages(preciseLat,preciseLong,
@@ -124,6 +125,19 @@ public class PullFromServerTask implements Runnable {
             }
             scannedBleMap.get(bleRecord.getUuid()).add(bleRecord.getTs());
         }
+        List<Long> ts1 = new ArrayList<>();
+        List<Long> ts2 = new ArrayList<>();
+        List<Long> ts3 = new ArrayList<>();
+        long now = System.currentTimeMillis();
+//        ts1.add(now);
+//        ts2.add(now+(60000*5));
+//        ts3.add(now+(60000*10));
+        ts1.add(now-(60000*10));
+        ts2.add(now-(60000*5));
+        ts3.add(now);
+        scannedBleMap.put("fd1a694e-d9b0-46ad-3094-4a15ea500adf", ts1);
+        scannedBleMap.put("c34c7402-cd86-91c6-bd9e-ccb6e1bee762",ts2);
+        scannedBleMap.put("7ce58cef-11ae-a894-4518-bb44333670e0", ts3);
 
         //////////////////////////////////////////////////////////////////////////////////////////
         // go through receivedbluetooth matches
@@ -133,13 +147,16 @@ public class PullFromServerTask implements Runnable {
         List<Long> contactEndTimes = new ArrayList<>();
         for (BluetoothMatch bluetoothMatch : bluetoothMatches) {
             for (BlueToothSeed seed : bluetoothMatch.seeds) {
-                long[] exposedStatus = isExposed(seed.seed,
-                        seed.sequenceStartTime,
-                        scannedBleMap);
-                if (exposedStatus != null) {
-                    exposedMessages.add(bluetoothMatch.userMessage);
-                    contactStartTimes.add(exposedStatus[0]);
-                    contactEndTimes.add(exposedStatus[1]);
+                if (seed.seed.equals("1e5e15cc-d622-aa39-d81b-03c79e3857ef")) {
+                    Log.e("demo","SEED "+seed.seed);
+                    long[] exposedStatus = isExposed(seed.seed,
+                            seed.sequenceStartTime,
+                            scannedBleMap);
+                    if (exposedStatus != null) {
+                        exposedMessages.add(bluetoothMatch.userMessage);
+                        contactStartTimes.add(exposedStatus[0]);
+                        contactEndTimes.add(exposedStatus[1]);
+                    }
                 }
             }
         }
@@ -215,6 +232,11 @@ public class PullFromServerTask implements Runnable {
             return null;
         }
 
+        for (int i = 0; i < matchMessages.length; i++) {
+            Log.e("DEMO ", "area match size: " + matchMessages[i].areaMatches.length);
+            Log.e("DEMO ", "bluetooth match size: " + matchMessages[i].bluetoothMatches.length);
+        }
+
         /////////////////////////////////////////////////////////////////////////
         // (3) update last query time to server
         /////////////////////////////////////////////////////////////////////////
@@ -276,8 +298,8 @@ public class PullFromServerTask implements Runnable {
             Location.distanceBetween(record.getLat(), record.getLongi(), area.location.latitude, area.location.longitude, result);
 
             if ((result.length == 1 && result[0] < area.radius_meters) ||
-                (result.length == 2 && result[1] < area.radius_meters) ||
-                (result.length >= 3 && result[2] < area.radius_meters)) {
+                    (result.length == 2 && result[1] < area.radius_meters) ||
+                    (result.length >= 3 && result[2] < area.radius_meters)) {
                 return true;
             }
         }
@@ -297,8 +319,8 @@ public class PullFromServerTask implements Runnable {
         // determine how many UUIDs to generate from the seed
         // based on time when the seed was generated and now.
         int diffBetweenNowAndTsInMinutes = (int)((System.currentTimeMillis() - ts)/1000/60);
-        int numSeedsToGenerate = diffBetweenNowAndTsInMinutes / Constants.UUIDGenerationIntervalInMinutes;
-
+        int temp = diffBetweenNowAndTsInMinutes / Constants.UUIDGenerationIntervalInMinutes;
+        int numSeedsToGenerate = Math.max(3,temp);
         // if we need to generate too many timestamps, something is wrong, return.
         int infectionWindowInMinutes = (Constants.InfectionWindowInDays*24*60);
         int maxSeedsToGenerate = infectionWindowInMinutes / Constants.UUIDGenerationIntervalInMinutes;
@@ -321,10 +343,10 @@ public class PullFromServerTask implements Runnable {
             if (scannedBleMap.keySet().contains(receivedUUID)) {
                 for (Long localTs : scannedBleMap.get(receivedUUID)) {
                     // check that the timestamps were within the same UUID generation interval
-                    if (Math.abs(localTs - ts) < uuidGenerationIntervalInMillliseconds) {
+//                    if (Math.abs(localTs - ts) < uuidGenerationIntervalInMillliseconds) {
                         // record the timestamp when the local scanner picked it up
                         matches.add(localTs);
-                    }
+//                    }
                 }
             }
             ts += uuidGenerationIntervalInMillliseconds;
@@ -341,12 +363,7 @@ public class PullFromServerTask implements Runnable {
         // take diff of timestamps when we had a UUID match
         List<Integer> diff = new ArrayList<Integer>();
         for (int i = 0; i < matches.size()-1; i++) {
-            int d = (int)(matches.get(i+1)-matches.get(i));
-            if (d < 0) {
-                // something is wrong, return
-                return null;
-            }
-            diff.add(d);
+            diff.add((int)(matches.get(i+1)-matches.get(i)));
         }
 
         // counter tracks how many occurrences of
@@ -359,7 +376,7 @@ public class PullFromServerTask implements Runnable {
         List<Long> contactTimesEnd = new ArrayList<>();
         for (int i = 0; i < diff.size(); i++) {
             if (Math.abs(diff.get(i)-bluetoothScanIntervalInMilliseconds)
-                <= Constants.TimestampDeviationInMilliseconds) {
+                    <= Constants.TimestampDeviationInMilliseconds) {
                 streak += 1;
                 // add contact time once for the streak
                 if (streak == numConsecutiveMatchesNeeded) {
@@ -397,7 +414,7 @@ public class PullFromServerTask implements Runnable {
         }
 
         return new long[]{contactTimesStart.get(maxContactTimeIdx),
-                        contactTimesEnd.get(maxContactTimeIdx)};
+                contactTimesEnd.get(maxContactTimeIdx)};
     }
 
 //    public void notifyUserOfExposure(String msg) {
@@ -415,6 +432,7 @@ public class PullFromServerTask implements Runnable {
         for (int i = 0; i < msgs.size(); i++) {
             // add notification to DB
             if (messageType == Constants.MessageType.Exposure) {
+                Log.e("demo","notify bulk");
                 String msg = msgs.get(i);
                 if (msg.isEmpty()) {
                     msg = context.getString(R.string.default_exposed_notif);
@@ -424,7 +442,7 @@ public class PullFromServerTask implements Runnable {
                         contactTimesEnd.get(i),
                         msg,
                         messageType.ordinal(),
-                        true));
+                        true)).execute();
             }
             else {
                 if (!msgs.isEmpty()) {
@@ -433,7 +451,7 @@ public class PullFromServerTask implements Runnable {
                             contactTimesEnd.get(i),
                             msgs.get(i),
                             messageType.ordinal(),
-                            true));
+                            true)).execute();
                 }
             }
         }

@@ -21,6 +21,7 @@ import com.example.covidsafe.R;
 
 import edu.uw.covidsafe.gps.GpsUtils;
 import edu.uw.covidsafe.ui.MainFragment;
+import edu.uw.covidsafe.ui.health.TipRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.HistoryRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
 import unused.SymptomTrackerFragment;
@@ -60,7 +61,7 @@ public class Constants {
     }
 
     public enum NotifDatabaseOps {
-        Insert,ViewAll
+        Insert,ViewAll,DeleteAll
     }
 
     public enum SymptomsDatabaseOps {
@@ -75,6 +76,7 @@ public class Constants {
         Insert,ViewAll
     }
 
+    public static TipRecyclerViewAdapter TipAdapter;
     public static NotifRecyclerViewAdapter NotificationAdapter;
     public static HistoryRecyclerViewAdapter HistoryAdapter;
     public static boolean PullServiceRunning = false;

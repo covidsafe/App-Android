@@ -17,6 +17,9 @@ import android.view.View;
 
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.comms.NetworkConstant;
+import edu.uw.covidsafe.ui.health.TipRecyclerViewAdapter;
+import edu.uw.covidsafe.ui.notif.HistoryRecyclerViewAdapter;
+import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
 import com.example.covidsafe.R;
@@ -66,6 +69,10 @@ public class MainActivity extends AppCompatActivity {
         NetworkConstant.init(this);
         this.registerReceiver(BluetoothUtils.bluetoothReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
 //        ServiceUtils.scheduleLookupJob(mContext);
+
+        Constants.TipAdapter = new TipRecyclerViewAdapter(this, this);
+        Constants.NotificationAdapter = new NotifRecyclerViewAdapter(this,this);
+        Constants.HistoryAdapter = new HistoryRecyclerViewAdapter(this,this);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)

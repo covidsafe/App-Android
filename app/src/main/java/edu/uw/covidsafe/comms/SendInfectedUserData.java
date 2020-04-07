@@ -57,6 +57,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
                 UUIDGenerationIntervalInMiliseconds +
                 Constants.InfectionWindowIntervalDeviationInMilliseconds;
 
+        Log.e("demo","get records between "+timestampAtBeginningOfInfectionWindow+","+timestampDeviation);
         SeedUUIDRecord generatedRecord = seedUUIDRepo.getRecordBetween(
                 timestampAtBeginningOfInfectionWindow,
                 timestampDeviation);
@@ -64,6 +65,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         // if user has less than 14 days of records, just get the earliest record
         SeedUUIDRecord recordToSend = generatedRecord;
         if (generatedRecord == null) {
+            Log.e("demo","get zeroth seed");
             List<SeedUUIDRecord> allRecords = seedUUIDRepo.getAllSortedRecords();
             recordToSend = allRecords.get(0);
         }

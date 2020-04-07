@@ -25,9 +25,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import edu.uw.covidsafe.utils.Constants;
-import edu.uw.covidsafe.utils.Utils;
 
-public class CardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
+public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
 
     private ArrayList<String> titles = new ArrayList<>();
     private ArrayList<Object> desc = new ArrayList<>();
@@ -36,42 +35,67 @@ public class CardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     private Context mContext;
     private Activity av;
 
-    public CardRecyclerViewAdapter(Context mContext, Activity av) {
+    public TipRecyclerViewAdapter(Context mContext, Activity av) {
         this.mContext = mContext;
         this.av = av;
-        titles.add("");
-        titles.add("Self-quarantine for 14 days");
-        titles.add("Monitor Your Symptoms");
-        titles.add("Request a test");
-        titles.add("Contact your healthcare professional");
-        titles.add("Isolate from those around you");
-        Date dd = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(dd);
-        calendar.add(Calendar.DATE, Constants.QuarantineLengthInDays);
-        long thresh = calendar.getTime().getTime();
+    }
 
-        SimpleDateFormat format = new SimpleDateFormat("MMMM d");
-        String ss = format.format(new Date(thresh));
+    public void enableTips(int size, View view) {
+        TextView tv = view.findViewById(R.id.sick);
+        if (size>=1 && titles.size()==0) {
+            titles.add("");
+            titles.add("Self-quarantine for 14 days");
+            titles.add("Monitor Your Symptoms");
+            titles.add("Request a test");
+            titles.add("Contact your healthcare professional");
+            titles.add("Isolate from those around you");
+            Date dd = new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(dd);
+            calendar.add(Calendar.DATE, Constants.QuarantineLengthInDays);
+            long thresh = calendar.getTime().getTime();
 
-        desc.add("Call 911 immediately if you are having a medical emergency.");
+            SimpleDateFormat format = new SimpleDateFormat("MMMM d");
+            String ss = format.format(new Date(thresh));
 
-        Spannable s = (Spannable) Html.fromHtml(
-        "If you start your self quarantine today, your 14 days will end <b>"+ss+"</b>. Please check with your local Health Authorities for more guidance."
-        );
+            desc.add("Call 911 immediately if you are having a medical emergency.");
 
-        desc.add(s);
-        desc.add("Egestas tellus rutrum tellus pellentesque eu tincidunt. Odio tempor orci dapibus ultrices in iaculis nunc sed augue suspendisse.");
-        desc.add("Egestas tellus rutrum tellus pellentesque eu tincidunt. Odio tempor orci dapibus ultrices in iaculis nunc sed augue suspendisse.");
-        desc.add("Please contact your healthcare professional for next steps.");
-        desc.add("Egestas tellus rutrum tellus pellentesque eu tincidunt. Odio tempor orci dapibus ultrices in iaculis nunc sed augue suspendisse.");
+            Spannable s = (Spannable) Html.fromHtml(
+                    "If you start your self quarantine today, your 14 days will end <b>"+ss+"</b>. Please check with your local Health Authorities for more guidance."
+            );
 
-        icons.add(mContext.getDrawable(R.drawable.icon_phone));
-        icons.add(mContext.getDrawable(R.drawable.icon_quarantine));
-        icons.add(mContext.getDrawable(R.drawable.icon_symptoms));
-        icons.add(mContext.getDrawable(R.drawable.icon_test));
-        icons.add(mContext.getDrawable(R.drawable.icon_phone2));
-        icons.add(mContext.getDrawable(R.drawable.icon_quarantine));
+            desc.add(s);
+            desc.add("Egestas tellus rutrum tellus pellentesque eu tincidunt. Odio tempor orci dapibus ultrices in iaculis nunc sed augue suspendisse.");
+            desc.add("Egestas tellus rutrum tellus pellentesque eu tincidunt. Odio tempor orci dapibus ultrices in iaculis nunc sed augue suspendisse.");
+            desc.add("Please contact your healthcare professional for next steps.");
+            desc.add("Egestas tellus rutrum tellus pellentesque eu tincidunt. Odio tempor orci dapibus ultrices in iaculis nunc sed augue suspendisse.");
+
+            icons.add(mContext.getDrawable(R.drawable.icon_phone));
+            icons.add(mContext.getDrawable(R.drawable.icon_quarantine));
+            icons.add(mContext.getDrawable(R.drawable.icon_symptoms));
+            icons.add(mContext.getDrawable(R.drawable.icon_test));
+            icons.add(mContext.getDrawable(R.drawable.icon_phone2));
+            icons.add(mContext.getDrawable(R.drawable.icon_quarantine));
+            av.runOnUiThread(new Runnable() {
+                public void run() {
+                    tv.setText("What to Do If You Are Sick");
+                    tv.setVisibility(View.VISIBLE);
+                }});
+            Log.e("notif","tip changed");
+            notifyDataSetChanged();
+        }
+        else if (size==0){
+            titles.clear();
+            desc.clear();
+            icons.clear();
+            av.runOnUiThread(new Runnable() {
+                public void run() {
+                    tv.setText("");
+                    tv.setVisibility(View.GONE);
+                }});
+            Log.e("notif","tip 0 changed");
+            notifyDataSetChanged();
+        }
     }
 
     @NonNull
@@ -80,13 +104,13 @@ public class CardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         View view ;
         if (viewType == 0) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_action, parent, false);
-            RecyclerView.ViewHolder volder = new CardRecyclerViewAdapter.ActionCard(view);
+            RecyclerView.ViewHolder volder = new TipRecyclerViewAdapter.ActionCard(view);
 //            Log.e("state","volder height "+volder.itemView.getMeasuredHeight());
             return volder;
         }
         else {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_call, parent, false);
-            RecyclerView.ViewHolder volder = new CardRecyclerViewAdapter.CallCard(view);
+            RecyclerView.ViewHolder volder = new TipRecyclerViewAdapter.CallCard(view);
 //            Log.e("state","volder height "+volder.itemView.getMeasuredHeight());
             return volder;
         }

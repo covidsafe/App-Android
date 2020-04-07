@@ -153,4 +153,42 @@
         app:layout_constraintGuide_begin="20dp"
         app:layout_constraintGuide_percent=".95" />
 
+    <Button
+        android:id="@+id/button6"
+        android:layout_width="46dp"
+        android:layout_height="43dp"
+        android:width="10dp"
+        android:text="ic"
+        app:layout_constraintStart_toEndOf="@+id/title"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button8"
+        android:layout_width="46dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="40dp"
+        android:width="10dp"
+        android:text="ih"
+        app:layout_constraintStart_toEndOf="@+id/title"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button10"
+        android:layout_width="46dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="40dp"
+        android:width="10dp"
+        android:text="c"
+        app:layout_constraintStart_toEndOf="@+id/button6"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button9"
+        android:layout_width="46dp"
+        android:layout_height="43dp"
+        android:width="10dp"
+        android:text="d"
+        app:layout_constraintStart_toEndOf="@+id/button6"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,21 +8,33 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.covidsafe.R;
 
-import edu.uw.covidsafe.ui.health.CardRecyclerViewAdapter;
+import java.util.LinkedList;
+import java.util.List;
+
+import edu.uw.covidsafe.comms.PullFromServerTask;
+import edu.uw.covidsafe.comms.PullFromServerTaskDemo;
+import edu.uw.covidsafe.ui.health.TipRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.health.ResourceRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.HistoryRecyclerViewAdapter;
+import edu.uw.covidsafe.ui.notif.NotifDbModel;
+import edu.uw.covidsafe.ui.notif.NotifOpsAsyncTask;
+import edu.uw.covidsafe.ui.notif.NotifRecord;
 import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
@@ -42,10 +54,9 @@ public class MainFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().hide();
         view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        RecyclerView rview = view.findViewById(R.id.recyclerViewDiagnosis);
-        CardRecyclerViewAdapter adapter = new CardRecyclerViewAdapter(getActivity(), getActivity());
-        rview.setAdapter(adapter);
-        rview.setLayoutManager(new LinearLayoutManager(getActivity()));
+        RecyclerView tipView = view.findViewById(R.id.recyclerViewTips);
+        tipView.setAdapter(Constants.TipAdapter);
+        tipView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         ImageView settings = (ImageView) view.findViewById(R.id.settings);
         settings.setOnClickListener(new View.OnClickListener() {
@@ -61,14 +72,75 @@ public class MainFragment extends Fragment {
         resourceView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         RecyclerView notifView = view.findViewById(R.id.recyclerViewNotifs);
-        Constants.NotificationAdapter = new NotifRecyclerViewAdapter(getContext(),getActivity());
         notifView.setAdapter(Constants.NotificationAdapter);
         notifView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         RecyclerView historyView = view.findViewById(R.id.recyclerViewHistory);
-        Constants.HistoryAdapter = new HistoryRecyclerViewAdapter(getContext(),getActivity());
         historyView.setAdapter(Constants.HistoryAdapter);
         historyView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        NotifDbModel model = ViewModelProviders.of(getActivity()).get(NotifDbModel.class);
+        model.getAllSorted().observe(getActivity(), new Observer<List<NotifRecord>>() {
+            @Override
+            public void onChanged(List<NotifRecord> notifRecords) {
+                //something in db has changed, update
+//                Toast.makeText(getActivity(),"on changed "+notifRecords.size(),Toast.LENGTH_LONG).show();
+                List<NotifRecord> currentNotifs = new LinkedList<>();
+                List<NotifRecord> historyNotifs = new LinkedList<>();
+                for (NotifRecord notif : notifRecords) {
+                    if (notif.getCurrent()) {
+                        currentNotifs.add(notif);
+                    }
+                    else {
+                        historyNotifs.add(notif);
+                    }
+                }
+                Constants.HistoryAdapter.setRecords(historyNotifs, view);
+                Constants.NotificationAdapter.setRecords(currentNotifs, view);
+                Constants.TipAdapter.enableTips(notifRecords.size(), view);
+            }
+        });
+
+        Button bb = (Button)view.findViewById(R.id.button6);
+        bb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new NotifOpsAsyncTask(getContext(), new NotifRecord(System.currentTimeMillis(),
+                        System.currentTimeMillis(), getString(R.string.default_exposed_notif), Constants.MessageType.Exposure.ordinal(),true)).execute();
+                Utils.notif(getContext());
+            }
+        });
+
+        Button b2b = (Button)view.findViewById(R.id.button9);
+        b2b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new NotifOpsAsyncTask(getContext(),Constants.NotifDatabaseOps.DeleteAll).execute();
+            }
+        });
+
+        Button b3b = (Button)view.findViewById(R.id.button8);
+        b3b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new NotifOpsAsyncTask(getContext(), new NotifRecord(System.currentTimeMillis(),
+                        System.currentTimeMillis(), "hello history", Constants.MessageType.Exposure.ordinal(),false)).execute();
+            }
+        });
+
+        Button b5b = (Button)view.findViewById(R.id.button10);
+        b5b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                String ss = model.records.getValue().size()+"";
+//                for (int i = 0; i < model.records.getValue().size(); i++) {
+//                    ss+=model.records.getValue().get(i).current;
+//                }
+//                Toast.makeText(getContext(), "notif size "+ss,Toast.LENGTH_LONG).show();
+                Thread r = new Thread(new PullFromServerTaskDemo(getContext()));
+                r.start();
+            }
+        });
 
         broadcastProp = view.findViewById(R.id.broadcastProp);
 
