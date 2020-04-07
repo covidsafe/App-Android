@@ -113,6 +113,11 @@ public class Utils {
         GpsUtils.haltGps();
 
         BluetoothUtils.haltBle(av);
+
+        SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(av.getString(R.string.broadcasting_enabled_pkey), false);
+        editor.commit();
     }
 
     public static void updateSwitchStates(Activity av) {
@@ -278,8 +283,6 @@ public class Utils {
     }
 
     public static void startLoggingService(Activity av) {
-//        Utils.bleResults.setText("");
-//        Utils.gpsResults.setText("");
         Constants.LoggingServiceRunning = true;
         Utils.createNotificationChannel(av);
 
@@ -287,12 +290,10 @@ public class Utils {
         intent.putExtra("messenger", new Messenger(Utils.serviceHandler));
         av.startService(intent);
 
-//        Constants.tracking = true;
-//        Constants.startingToTrack = false;
-
-//        Button trackButton = (Button)av.findViewById(R.id.trackButton);
-//        trackButton.setText("Stop tracking");
-//        trackButton.setBackgroundResource(R.drawable.stopbutton);
+        SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(av.getString(R.string.broadcasting_enabled_pkey), true);
+        editor.commit();
     }
 
     public static void startPullService(Activity av) {
@@ -301,29 +302,6 @@ public class Utils {
         Intent intent = new Intent(av, PullService.class);
         av.startService(intent);
     }
-
-//    public static boolean permCheck(Activity av) {
-//        return gpsCheck(av) && bleCheck(av);
-//    }
-
-//    public static boolean gpsCheck(Activity av) {
-//        boolean hasPerms = Utils.hasGpsPermissions(av);
-//        if ((hasPerms && Constants.GPS_ENABLED) ||
-//            (!Constants.GPS_ENABLED && (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || hasPerms))) {
-//            return true;
-//        }
-//        return false;
-//    }
-//
-//    public static boolean bleCheck(Activity av) {
-//        boolean hasPerms = Utils.hasBlePermissions(av);
-//        if (hasPerms &&
-//                (Constants.BLUETOOTH_ENABLED && Constants.blueAdapter != null && Constants.blueAdapter.isEnabled()) ||
-//                (!Constants.BLUETOOTH_ENABLED)) {
-//            return true;
-//        }
-//        return false;
-//    }
 
     public static double getCoarseGpsCoord(double d, int precision) {
 //        Log.e("ERR ",d+","+precision);

@@ -58,6 +58,7 @@ public class PullFromServerTask implements Runnable {
         GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
         List<GpsRecord> gpsRecords = gpsRepo.getSortedRecords();
         if (gpsRecords.size() == 0) {
+            Constants.PullServiceRunning = false;
             return;
         }
         GpsRecord gpsRecord = gpsRecords.get(0);
@@ -88,6 +89,7 @@ public class PullFromServerTask implements Runnable {
         }
 
         if (sizeOfPayload == 0) {
+            Constants.PullServiceRunning = false;
             return;
         }
 
@@ -101,6 +103,7 @@ public class PullFromServerTask implements Runnable {
         BluetoothMatch[] bluetoothMatches = getMessages(preciseLat,preciseLong,
                 currentGpsPrecision, lastQueryTime);
         if (bluetoothMatches == null) {
+            Constants.PullServiceRunning = false;
             return;
         }
 

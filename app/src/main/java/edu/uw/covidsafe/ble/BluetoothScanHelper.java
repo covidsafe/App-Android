@@ -73,7 +73,7 @@ public class BluetoothScanHelper implements Runnable {
                         if (!Constants.scannedUUIDs.contains(contactUuid) &&
                             rssi >= Constants.rssiCutoff) {
                             String[] elts = contactUuid.split("-");
-                            Utils.sendDataToUI(messenger, "ble", elts[elts.length - 1]);
+//                            Utils.sendDataToUI(messenger, "ble", elts[elts.length - 1]);
                             Constants.scannedUUIDs.add(contactUuid);
                             Constants.scannedUUIDsRSSIs.put(contactUuid, rssi);
                         }
