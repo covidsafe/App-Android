@@ -94,7 +94,7 @@ public class Constants {
     public static int LogPurgerIntervalInDays = 60;
     public static int UUIDGenerationIntervalInMinutes = 15;
     public static int CDCExposureTimeInMinutes = 10;
-    public static int TimestampDeviationInMilliseconds = 1000;
+    public static int TimestampDeviationInMilliseconds = 10*1000;
     public static int InfectionWindowIntervalDeviationInMilliseconds = 60*1000;
     public static UUID GATT_SERVICE_UUID = UUID.fromString("8cf0282e-d80f-4eb7-a197-e3e0f965848d");
     public static UUID CHARACTERISTIC_UUID = UUID.fromString("d945590b-5b09-4144-ace7-4063f95bd0bb");
