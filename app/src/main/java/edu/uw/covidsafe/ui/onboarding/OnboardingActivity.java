@@ -17,10 +17,9 @@ import edu.uw.covidsafe.ui.PermissionLogic;
 import edu.uw.covidsafe.ui.PermissionLogicOld;
 import edu.uw.covidsafe.utils.Constants;
 
-
 public class OnboardingActivity extends AppCompatActivity {
 
-    boolean forceOnboard = false;
+    boolean forceOnboard = true;
     Activity activity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

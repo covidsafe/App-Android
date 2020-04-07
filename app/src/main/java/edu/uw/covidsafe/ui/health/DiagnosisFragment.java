@@ -44,8 +44,8 @@ public class DiagnosisFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Report Summary");
 
-        RecyclerView rview = view.findViewById(R.id.recyclerViewTips);
-        rview.setAdapter(Constants.TipAdapter);
+//        RecyclerView rview = view.findViewById(R.id.recyclerViewTips);
+//        rview.setAdapter(Constants.TipAdapter);
 
         Button uploadButton = (Button)view.findViewById(R.id.uploadButton);
         if (uploadButton != null) {
@@ -84,6 +84,12 @@ public class DiagnosisFragment extends Fragment {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         long lastSubmissionDate = prefs.getLong(getString(com.example.covidsafe.R.string.last_submission_date_pkey), 0);
 
+        // TODO: change back after demo
+        TextView sick = (TextView)view.findViewById(R.id.sick);
+        if (sick!=null) {
+            sick.setText("");
+            sick.setVisibility(View.GONE);
+        }
         DiagnosisFragment.updateSubmissionView(getActivity(), getContext(), view, lastSubmissionDate, false);
 
         return view;

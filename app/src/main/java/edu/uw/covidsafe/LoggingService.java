@@ -68,7 +68,7 @@ public class LoggingService extends IntentService {
         Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(getString(R.string.notif_message))
-                .setSmallIcon(R.drawable.ic_android_black_24dp)
+                .setSmallIcon(R.drawable.logo2)
                 .setCategory(Notification.CATEGORY_SERVICE)
                 .build();
         startForeground(1,notification);
