@@ -75,29 +75,33 @@ public class MainFragment extends Fragment {
         broadcastSwitch = view.findViewById(R.id.switch1);
         broadcastSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-                boolean gpsEnabled = prefs.getBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
-                boolean bleEnabled = prefs.getBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
-
-                updateBroadcastUI();
-                if (isChecked) {
-                    if (!gpsEnabled && !bleEnabled) {
-                        Utils.mkSnack(getActivity(), view, getString(R.string.prompt_to_enable_error));
-                        broadcastSwitch.setChecked(false);
-                    }
-                    else {
-                        // dummy code
-                        Constants.NotificationAdapter.notifyUser(getString(R.string.default_exposed_notif));
-                        Utils.startLoggingService(getActivity());
-                    }
-                }
-                else {
-                    Utils.haltLoggingService(getActivity(), view);
-                }
+                broadcastSwitchLogic(isChecked);
             }
         });
 
         return view;
+    }
+
+    public void broadcastSwitchLogic(boolean isChecked) {
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        boolean gpsEnabled = prefs.getBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
+        boolean bleEnabled = prefs.getBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
+
+        updateBroadcastUI();
+        if (isChecked) {
+            if (!gpsEnabled && !bleEnabled) {
+                Utils.mkSnack(getActivity(), view, getString(R.string.prompt_to_enable_error));
+                broadcastSwitch.setChecked(false);
+            }
+            else {
+                // dummy code
+                Constants.NotificationAdapter.notifyUser(getString(R.string.default_exposed_notif));
+                Utils.startLoggingService(getActivity());
+            }
+        }
+        else {
+            Utils.haltLoggingService(getActivity(), view);
+        }
     }
 
     @Override
@@ -113,6 +117,14 @@ public class MainFragment extends Fragment {
         }
 
         updateBroadcastUI();
+
+        // resume broadcasting if it was switched on, but perhaps user restarted phone or previously killed service
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        if (prefs.getBoolean(getString(R.string.broadcasting_enabled_pkey), false)) {
+            Log.e("state","rebroadcast is true");
+            broadcastSwitch.setChecked(true);
+            broadcastSwitchLogic(true);
+        }
     }
 
     public void updateBroadcastUI() {

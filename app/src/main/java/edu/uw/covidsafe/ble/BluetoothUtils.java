@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Handler;
-import android.os.Messenger;
 import android.os.ParcelUuid;
 import android.util.Log;
 
@@ -31,7 +30,6 @@ import java.util.concurrent.TimeUnit;
 import static android.content.Context.BLUETOOTH_SERVICE;
 
 public class BluetoothUtils {
-    public static Messenger messenger;
 
     // react appropriately if user turns of bluetooth off/on in middle of logging
     // this broadcast receiver is only registered when the logging is in process
@@ -68,8 +66,8 @@ public class BluetoothUtils {
                     Log.e("ble","BLE TURNED ON");
                     if (Constants.LoggingServiceRunning) {
                         // the bluetooth sensor is turned on
-                        BluetoothUtils.startBluetoothScan(context, messenger);
-                        BluetoothServerHelper.createServer(context, messenger);
+                        BluetoothUtils.startBluetoothScan(context);
+                        BluetoothServerHelper.createServer(context);
                         mkBeacon();
                     }
 
@@ -89,10 +87,10 @@ public class BluetoothUtils {
         }
     };
 
-    public static void startBluetoothScan(Context context, Messenger messenger) {
+    public static void startBluetoothScan(Context context) {
         ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
-        Log.e("ble","start bluetooth scan "+(messenger==null));
-        Constants.bluetoothScanTask = exec.scheduleWithFixedDelay(new BluetoothScanHelper(context, messenger), 0, Constants.BluetoothScanIntervalInMinutes, TimeUnit.MINUTES);
+        Log.e("ble","start bluetooth scan ");
+        Constants.bluetoothScanTask = exec.scheduleWithFixedDelay(new BluetoothScanHelper(context), 0, Constants.BluetoothScanIntervalInMinutes, TimeUnit.MINUTES);
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -131,9 +129,9 @@ public class BluetoothUtils {
     }
 
     public static void startBle(Context cxt) {
-        Log.e("ble","spin out task "+(messenger==null));
-        BluetoothUtils.startBluetoothScan(cxt, messenger);
-        BluetoothServerHelper.createServer(cxt, messenger);
+        Log.e("ble","spin out task ");
+        BluetoothUtils.startBluetoothScan(cxt);
+        BluetoothServerHelper.createServer(cxt);
         Log.e("ble","make beacon");
         ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
         // run this once to get a seed and broadcast it
@@ -155,8 +153,6 @@ public class BluetoothUtils {
                     .addServiceData(new ParcelUuid(Constants.BEACON_SERVICE_UUID), ByteUtils.uuid2bytes(Constants.contactUUID))
                     .build();
             Log.e("ble","MKBEACON");
-            Constants.scannedUUIDs = new HashSet<String>();
-            Constants.scannedUUIDsRSSIs = new HashMap<String,Integer>();
             BluetoothLeAdvertiser bluetoothLeAdvertiser = Constants.blueAdapter.getBluetoothLeAdvertiser();
             bluetoothLeAdvertiser.startAdvertising(settings, advertiseData, BluetoothScanHelper.advertiseCallback);
         }

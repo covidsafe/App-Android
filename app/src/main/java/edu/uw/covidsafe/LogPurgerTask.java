@@ -1,7 +1,6 @@
 package edu.uw.covidsafe;
 
 import android.content.Context;
-import android.os.Messenger;
 import android.util.Log;
 
 import edu.uw.covidsafe.ble.BleDbRecordRepository;

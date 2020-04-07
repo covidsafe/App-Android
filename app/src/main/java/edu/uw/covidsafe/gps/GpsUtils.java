@@ -39,8 +39,6 @@ public class GpsUtils {
             Date dd = new Date();
             Log.e("gps", location.getLatitude()+","+location.getLongitude());
 
-//            Utils.sendDataToUI(messenger, "gps",location.getLatitude()+","+location.getLongitude());
-
             Utils.gpsLogToDatabase(cxt, location);
         }
 

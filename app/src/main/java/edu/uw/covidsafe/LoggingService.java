@@ -12,7 +12,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Messenger;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -36,9 +35,6 @@ import java.util.concurrent.TimeUnit;
 
 public class LoggingService extends IntentService {
 
-    Messenger messenger;
-
-
     public LoggingService() {
         super("LocationService");
     }
@@ -53,9 +49,6 @@ public class LoggingService extends IntentService {
 
         Bundle bundle = intent.getExtras();
         Log.e("ex","bundle status "+(bundle==null));
-        if (bundle != null) {
-            messenger = (Messenger) bundle.get("messenger");
-        }
 
         SharedPreferences prefs = getApplicationContext().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         boolean bleEnabled = prefs.getBoolean(getApplicationContext().getString(R.string.ble_enabled_pkey), Constants.BLUETOOTH_ENABLED);

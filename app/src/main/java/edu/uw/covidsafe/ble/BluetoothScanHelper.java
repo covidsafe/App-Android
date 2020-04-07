@@ -7,7 +7,6 @@ import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.content.Context;
-import android.os.Messenger;
 import android.os.ParcelUuid;
 import android.util.Log;
 
@@ -15,6 +14,8 @@ import edu.uw.covidsafe.utils.ByteUtils;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -34,11 +35,9 @@ public class BluetoothScanHelper implements Runnable {
     };
 
     static Context cxt;
-    static Messenger messenger;
 
-    public BluetoothScanHelper(Context cxt, Messenger messenger) {
+    public BluetoothScanHelper(Context cxt) {
         this.cxt = cxt;
-        this.messenger = messenger;
     }
 
     @Override
@@ -54,7 +53,9 @@ public class BluetoothScanHelper implements Runnable {
         List<ScanFilter> filters = new LinkedList<ScanFilter>();
         filters.add(filter);
 
-        Log.e("ble","INIT SCAN "+(messenger==null));
+        Constants.scannedUUIDs = new HashSet<String>();
+        Constants.scannedUUIDsRSSIs = new HashMap<String,Integer>();
+
         Constants.blueAdapter.getBluetoothLeScanner().startScan(filters, builder.build(), mLeScanCallback);
     }
 
@@ -70,10 +71,10 @@ public class BluetoothScanHelper implements Runnable {
                         String contactUuid = ByteUtils.byte2UUIDstring(data);
 //                        Log.e("uuid","CONTACT "+contactUuid);
                         int rssi = result.getRssi();
-                        if (!Constants.scannedUUIDs.contains(contactUuid) &&
+                        if (Constants.scannedUUIDs != null &&
+                            !Constants.scannedUUIDs.contains(contactUuid) &&
                             rssi >= Constants.rssiCutoff) {
-                            String[] elts = contactUuid.split("-");
-//                            Utils.sendDataToUI(messenger, "ble", elts[elts.length - 1]);
+//                            String[] elts = contactUuid.split("-");
                             Constants.scannedUUIDs.add(contactUuid);
                             Constants.scannedUUIDsRSSIs.put(contactUuid, rssi);
                         }

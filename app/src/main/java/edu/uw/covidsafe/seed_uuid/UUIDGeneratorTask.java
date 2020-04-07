@@ -2,7 +2,6 @@ package edu.uw.covidsafe.seed_uuid;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Messenger;
 import android.util.Log;
 
 import com.example.covidsafe.R;
