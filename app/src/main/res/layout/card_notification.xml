@@ -84,7 +84,7 @@
                     android:text="You might have been exposed"
                     android:textColor="@color/warningViolet"
                     android:textSize="18sp"
-                    app:layout_constraintEnd_toStartOf="@+id/guidelineV80"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/imageView10"
                     app:layout_constraintTop_toTopOf="parent" />
 

@@ -23,6 +23,7 @@
     <string name="prompt_to_enable_error">Enable Bluetooth and GPS in settings to start logging.</string>
     <string name="bluetooth_is_off">Bluetooth is currently turned off.</string>
 
+    <string name="broadcasting_enabled_pkey">broadcasting</string>
     <string name="gps_enabled_pkey">gpsEnabled</string>
     <string name="ble_enabled_pkey">bleEnabled</string>
     <string name="onboard_enabled_pkey">prefs_onboard</string>

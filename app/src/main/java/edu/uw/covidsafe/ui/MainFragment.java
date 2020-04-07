@@ -81,7 +81,6 @@ public class MainFragment extends Fragment {
 
                 updateBroadcastUI();
                 if (isChecked) {
-
                     if (!gpsEnabled && !bleEnabled) {
                         Utils.mkSnack(getActivity(), view, getString(R.string.prompt_to_enable_error));
                         broadcastSwitch.setChecked(false);
@@ -104,7 +103,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.e("state","main fragment on resume "+Constants.PullServiceRunning);
+        Log.e("state","main fragment on resume "+Constants.PullServiceRunning+","+Constants.LoggingServiceRunning);
         Constants.CurrentFragment = this;
         Constants.MainFragment = this;
         Constants.MainFragmentState = this;

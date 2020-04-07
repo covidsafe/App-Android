@@ -79,7 +79,7 @@ public class BluetoothServerHelper {
                         Log.e("bleserver","contactuuid "+contactUuid);
                         int rssi = 0;
                         String[] elts = contactUuid.split("-");
-                        Utils.sendDataToUI(messenger, "ble", elts[elts.length - 1]);
+//                        Utils.sendDataToUI(messenger, "ble", elts[elts.length - 1]);
 
                         // byte[-128,127] => int[0,255] => rssi[-255,0]
                         if (value.length == 17) {
