@@ -201,6 +201,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         JSONObject resp = NetworkHelper.sendRequest(selfReportRequest, Request.Method.PUT, announceRequestObj);
         if (resp == null) {
             mkSnack(av, view, "There was an error with submitting your traces. Please try again later.");
+            return;
         }
 
 //        edu.uw.covidsafe.json.Status status = null;
@@ -211,9 +212,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
 //            Log.e("err",e.getMessage());
 //        }
 
-        if (resp != null) {
-            mkSnack(av, view, "Your trace data has been submitted.");
-        }
+        mkSnack(av, view, "Your trace data has been submitted.");
     }
 
     public void testDatabase() {

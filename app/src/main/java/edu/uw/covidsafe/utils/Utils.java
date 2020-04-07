@@ -55,7 +55,6 @@ import java.util.List;
 import java.util.UUID;
 
 import edu.uw.covidsafe.ui.notif.NotifRecord;
-import unused.BlacklistRecord;
 
 public class Utils {
 
