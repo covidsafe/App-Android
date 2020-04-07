@@ -14,19 +14,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.covidsafe.R;
 
+import org.w3c.dom.Text;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     Context cxt;
     Activity av;
-    int count = 0;
+    List<NotifRecord> records = new ArrayList<>();
 
     public HistoryRecyclerViewAdapter(Context cxt, Activity av) {
         this.cxt = cxt;
         this.av = av;
-
     }
 
     @NonNull
@@ -38,21 +41,58 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        NotifRecord notif = records.get(position);
+        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm");
+        SimpleDateFormat timeFormat2 = new SimpleDateFormat("h:mma");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("M/d");
+        String tt = timeFormat.format(notif.getTs_start()) +"-"+ timeFormat2.format(notif.getTs_end());
+        ((HistoryCard) holder).time.setText(tt);
+        ((HistoryCard) holder).msg.setText(notif.msg);
+        ((HistoryCard) holder).date.setText(dateFormat.format(notif.getTs_start()));
+    }
 
+    public void setRecords(List<NotifRecord> records, View view) {
+        TextView tv = (TextView)view.findViewById(R.id.historyTitle);
+        if (records.size() == 0) {
+            av.runOnUiThread(new Runnable() {
+                public void run() {
+                    tv.setText("");
+                    tv.setVisibility(View.GONE);
+                }});
+        }
+        else {
+            av.runOnUiThread(new Runnable() {
+                public void run() {
+                    tv.setText("Exposure history");
+                    tv.setVisibility(View.VISIBLE);
+                }});
+        }
+
+        if (records.size() > this.records.size()) {
+            Log.e("notif","history item inserted");
+            notifyItemInserted(0);
+        }
+        else {
+            Log.e("notif","history dataset changed");
+            notifyDataSetChanged();
+        }
+        this.records = records;
     }
 
     @Override
     public int getItemCount() {
-        return count;
+        return records.size();
     }
 
     public class HistoryCard extends RecyclerView.ViewHolder {
         TextView time;
         TextView date;
+        TextView msg;
         HistoryCard(@NonNull View itemView) {
             super(itemView);
             this.time = itemView.findViewById(R.id.time);
             this.date = itemView.findViewById(R.id.date);
+            this.msg = itemView.findViewById(R.id.messageView);
         }
     }
 }

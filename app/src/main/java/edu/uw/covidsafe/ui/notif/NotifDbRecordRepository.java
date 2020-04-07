@@ -2,6 +2,8 @@ package edu.uw.covidsafe.ui.notif;
 
 import android.content.Context;
 
+import androidx.lifecycle.LiveData;
+
 import java.util.List;
 
 public class NotifDbRecordRepository {
@@ -24,7 +26,7 @@ public class NotifDbRecordRepository {
 
     // Room executes all queries on a separate thread.
     // Observed LiveData will notify the observer when the data has changed.
-    public List<NotifRecord> getSortedRecords() {
+    public LiveData<List<NotifRecord>> getSortedRecords() {
         return mRecordDao.getSortedRecords();
     }
 

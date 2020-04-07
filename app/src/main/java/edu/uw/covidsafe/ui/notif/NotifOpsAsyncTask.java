@@ -17,13 +17,13 @@ public class NotifOpsAsyncTask extends AsyncTask<Void, Void, Void> {
 
     public NotifOpsAsyncTask(Context context, NotifRecord rec) {
         this.context = context;
-        this.record = new NotifRecord(rec.getTs_start(), rec.getTs_end(), rec.getMsg(), rec.getMsgType());
+        this.record = new NotifRecord(rec.getTs_start(), rec.getTs_end(), rec.getMsg(), rec.getMsgType(), rec.current);
         this.op = Constants.NotifDatabaseOps.Insert;
     }
 
-    public NotifOpsAsyncTask(Context context) {
+    public NotifOpsAsyncTask(Context context, Constants.NotifDatabaseOps op) {
         this.context = context;
-        this.op = Constants.NotifDatabaseOps.ViewAll;
+        this.op = op;
     }
 
     @Override
@@ -41,6 +41,10 @@ public class NotifOpsAsyncTask extends AsyncTask<Void, Void, Void> {
             for (NotifRecord record : records) {
                 Log.e("notif",record.toString());
             }
+        }
+        else if (this.op == Constants.NotifDatabaseOps.DeleteAll) {
+            Log.e("notif","delete all");
+            repo.deleteAll();
         }
         return null;
     }

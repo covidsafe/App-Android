@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.covidsafe.R;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.text.SimpleDateFormat;
@@ -45,12 +44,8 @@ public class DiagnosisFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Report Summary");
 
-        RecyclerView rview = view.findViewById(R.id.recyclerViewDiagnosis);
-        CardRecyclerViewAdapter adapter = new CardRecyclerViewAdapter(getActivity(), getActivity());
-        if (rview != null) {
-            rview.setAdapter(adapter);
-            rview.setLayoutManager(new LinearLayoutManager(getActivity()));
-        }
+        RecyclerView rview = view.findViewById(R.id.recyclerViewTips);
+        rview.setAdapter(Constants.TipAdapter);
 
         Button uploadButton = (Button)view.findViewById(R.id.uploadButton);
         if (uploadButton != null) {
@@ -114,7 +109,7 @@ public class DiagnosisFragment extends Fragment {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("M/d/YYYY");
                     SimpleDateFormat timeFormat = new SimpleDateFormat("h:mma");
                     Date ts = new Date(lastSubmissionDate);
-                    Spannable out = (Spannable) Html.fromHtml("<b>Last reported</b>: "+dateFormat.format(ts) + " "+timeFormat.format(ts));
+                    Spannable out = (Spannable) Html.fromHtml("<b>Last reported</b>: "+dateFormat.format(ts) + " at "+timeFormat.format(ts));
                     date.setText(out);
                 }
                 else {

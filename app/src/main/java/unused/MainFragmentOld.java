@@ -26,7 +26,7 @@ import edu.uw.covidsafe.ble.BluetoothScanHelper;
 import edu.uw.covidsafe.ble.BluetoothServerHelper;
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.ui.MainActivity;
-import edu.uw.covidsafe.ui.health.CardRecyclerViewAdapter;
+import edu.uw.covidsafe.ui.health.TipRecyclerViewAdapter;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.LoggingService;
 import com.example.covidsafe.R;
@@ -52,7 +52,7 @@ public class MainFragmentOld extends Fragment {
 //        }
 
         RecyclerView rview = view.findViewById(R.id.recyclerViewDiagnosis);
-        CardRecyclerViewAdapter adapter = new CardRecyclerViewAdapter(getActivity(), getActivity());
+        TipRecyclerViewAdapter adapter = new TipRecyclerViewAdapter(getActivity(), getActivity());
         rview.setAdapter(adapter);
         rview.setLayoutManager(new LinearLayoutManager(getActivity()));
 

@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class MessageListResponse {
     public MessageInfo[] messageInfo;
-    public long query_time = 2;
+    public long query_time;
 
     public static MessageListResponse parse(JSONObject obj) throws JSONException {
         MessageListResponse messageListResponse = new MessageListResponse();

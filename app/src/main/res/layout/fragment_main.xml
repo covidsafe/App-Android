@@ -39,7 +39,6 @@
             android:layout_height="wrap_content"
             android:text="Exposure history"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/history"
             app:layout_constraintStart_toStartOf="@+id/guidelineV10"
             app:layout_constraintTop_toBottomOf="@+id/notif" />
 
@@ -47,7 +46,9 @@
             android:id="@+id/history"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             app:layout_constraintTop_toBottomOf="@+id/historyTitle">
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewHistory"
                 android:layout_width="match_parent"
@@ -73,7 +74,7 @@
             app:layout_constraintTop_toBottomOf="@+id/sick"
             >
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewDiagnosis"
+            android:id="@+id/recyclerViewTips"
             android:nestedScrollingEnabled="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
