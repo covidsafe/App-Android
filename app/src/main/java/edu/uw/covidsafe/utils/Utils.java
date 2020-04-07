@@ -202,7 +202,7 @@ public class Utils {
         bigText.setSummaryText("You may have been exposed");
 
         mBuilder.setContentIntent(pendingIntent);
-        mBuilder.setSmallIcon(R.drawable.logo2);
+        mBuilder.setSmallIcon(R.drawable.warning2);
         mBuilder.setContentTitle("Your Title");
         mBuilder.setContentText("Your text");
         mBuilder.setPriority(Notification.PRIORITY_MAX);
