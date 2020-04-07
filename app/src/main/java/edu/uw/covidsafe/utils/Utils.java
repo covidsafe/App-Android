@@ -1,6 +1,7 @@
 package edu.uw.covidsafe.utils;
 
 import android.app.Activity;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -28,6 +29,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -186,21 +188,85 @@ public class Utils {
         return UUID.randomUUID().toString();
     }
 
+    public static void notif2(Context mContext) {
+        NotificationManager mNotificationManager;
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(mContext.getApplicationContext(), "notify_001");
+        Intent ii = new Intent(mContext.getApplicationContext(), MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, ii, 0);
+
+        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+        bigText.bigText("CovidSafe");
+        bigText.setBigContentTitle("You may have been exposed");
+        bigText.setSummaryText("You may have been exposed");
+
+        mBuilder.setContentIntent(pendingIntent);
+        mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
+        mBuilder.setContentTitle("Your Title");
+        mBuilder.setContentText("Your text");
+        mBuilder.setPriority(Notification.PRIORITY_MAX);
+        mBuilder.setStyle(bigText);
+
+        mNotificationManager =
+                (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+
+// === Removed some obsoletes
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            String channelId = "Your_channel_id";
+            NotificationChannel channel = new NotificationChannel(
+                    channelId,
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_HIGH);
+            mNotificationManager.createNotificationChannel(channel);
+            mBuilder.setChannelId(channelId);
+        }
+
+        mNotificationManager.notify(0, mBuilder.build());
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public static void notif(Context context) {
         try {
-//            Thread.sleep(5000);
-            createNotificationChannel(context);
-            Intent fullScreenIntent = new Intent(context, MainActivity.class);
-            PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(context, 0,
-                    fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "123")
+//            createNotificationChannel(context);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel serviceChannel = new NotificationChannel(
+                        "mychannel",
+                        "Example",
+                        NotificationManager.IMPORTANCE_HIGH
+                );
+//                serviceChannel.enableVibration(true);
+//                serviceChannel.enableLights(true);
+                serviceChannel.setDescription("covidsafe channel");
+//                NotificationManager manager = context.getSystemService(
+//                        NotificationManager.class);
+//                manager.createNotificationChannel(serviceChannel);
+                // TODO this call needs API min 23/26??? investigate
+                NotificationManager manager = context.getSystemService(
+                        NotificationManager.class);
+                manager.createNotificationChannel(serviceChannel);
+
+                Notification notif = new NotificationCompat.Builder(context, "mychannel")
                     .setSmallIcon(R.drawable.ic_launcher_background)
-                    .setContentTitle("CovidSafe Alert")
-                    .setContentText("fullScreenPendingIntent")
-                    .setPriority(NotificationCompat.PRIORITY_MAX)
-                    .setCategory(NotificationCompat.CATEGORY_CALL)
-                    .setFullScreenIntent(fullScreenPendingIntent, true)
-                    .setAutoCancel(false);
+                        .setContentTitle("CovidSafe Alert")
+                        .setContentTitle("You've been exposed")
+                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        .setCategory(NotificationCompat.CATEGORY_CALL)
+                        .build();
+                manager.notify(1,notif);
+            }
+//            Intent fullScreenIntent = new Intent(context, MainActivity.class);
+//            PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(context, 0,
+//                    fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "123")
+//                    .setSmallIcon(R.drawable.ic_launcher_background)
+//                    .setContentTitle("CovidSafe Alert")
+//                    .setContentText("fullScreenPendingIntent")
+//                    .setPriority(NotificationCompat.PRIORITY_MAX)
+//                    .setCategory(NotificationCompat.CATEGORY_CALL)
+//                    .setFullScreenIntent(fullScreenPendingIntent, true)
+//                    .setAutoCancel(false);
             // Add the action button
 //                .addAction(R.drawable.ic_launcher_foreground, ctx.getString(R.string.snooze),
 //                        snoozePendingIntent);
@@ -208,10 +274,10 @@ public class Utils {
 //            Uri notification2 = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 //            Ringtone r = RingtoneManager.getRingtone(this, notification2);
 //            r.play();
-            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+//            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 
             // notificationId is a unique int for each notification that you must define
-            notificationManager.notify(13, builder.build());
+//            notificationManager.notify(13, builder.build());
         }
         catch(Exception e) {
             Log.e("ble",e.getMessage());
