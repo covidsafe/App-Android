@@ -7,9 +7,6 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
 @Entity(tableName = "gps_record_table")
 public class GpsRecord {
 
@@ -59,21 +56,4 @@ public class GpsRecord {
         return this.ts+","+this.lat+","+this.longi+","+this.provider;
     }
 
-    public JsonObject toJson() {
-        JsonObject obj = new JsonObject();
-        obj.addProperty("timestamp",ts);
-        obj.addProperty("provider",provider);
-
-        JsonArray arr = new JsonArray();
-        arr.add(lat);
-        arr.add(longi);
-
-        JsonObject geometry = new JsonObject();
-        geometry.addProperty("type","Point");
-        geometry.add("coordinates",arr);
-
-        obj.add("geometry", geometry);
-
-        return obj;
-    }
 }

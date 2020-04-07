@@ -8,19 +8,20 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
-import com.google.gson.JsonObject;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.DataOutputStream;
-import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.net.URL;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -38,7 +39,7 @@ public class NetworkHelper {
             public Map getHeaders() throws AuthFailureError {
                 if (obj != null) {
                     HashMap<String,String> headers = new HashMap<String, String>();
-                    headers.put("Content-Type","application/json-patch+json");
+                    headers.put("Content-Type","application/json");
                     headers.put("Ocp-Apim-Subscription-Key",NetworkConstant.API_KEY);
                     return headers;
                 }
@@ -53,10 +54,36 @@ public class NetworkHelper {
                     switch (statusCode) {
                         case 500:
                             Log.e("err","err is 500");
-                            break;
+                            return null;
+                        default:
+                            Log.e("err","err is "+statusCode);
+                            return null;
                     }
                 }
                 return volleyError;
+            }
+            @Override
+            protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                try {
+                    Log.e("net","parse response "+response.data.length);
+                    if (response.data.length == 0) {
+                        byte[] responseData = "{}".getBytes("UTF8");
+                        response = new NetworkResponse(response.statusCode, responseData, response.headers, response.notModified);
+                    }
+                    else {
+                        try {
+                            String jsonString = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+                            return Response.success(new JSONObject(jsonString),HttpHeaderParser.parseCacheHeaders(response));
+                        } catch (UnsupportedEncodingException e) {
+                            return Response.error(new ParseError(e));
+                        } catch (JSONException je) {
+                            return Response.error(new ParseError(je));
+                        }
+                    }
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                return super.parseNetworkResponse(response);
             }
         }
         ;
@@ -66,7 +93,6 @@ public class NetworkHelper {
         JSONObject response = null;
         try {
             response = future.get(NetworkConstant.TIMEOUT, TimeUnit.SECONDS); // this will block
-            Log.e("net",response.toString());
         } catch (InterruptedException e) {
             Log.e("net","11 "+e.getMessage());
         } catch (ExecutionException e) {
@@ -74,7 +100,7 @@ public class NetworkHelper {
         } catch (TimeoutException e) {
             Log.e("net","33 "+(e.toString())+"");
         }
-        Log.e("net","finished request");
+        Log.e("net","finished request "+response.toString());
         return response;
     }
 

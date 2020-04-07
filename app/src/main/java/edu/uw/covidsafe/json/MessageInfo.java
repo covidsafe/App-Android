@@ -1,8 +1,5 @@
 package edu.uw.covidsafe.json;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 

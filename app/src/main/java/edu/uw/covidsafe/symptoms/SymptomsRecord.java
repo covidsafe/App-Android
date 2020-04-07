@@ -7,7 +7,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.google.gson.JsonObject;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -74,16 +75,16 @@ public class SymptomsRecord {
                 this.troubleBreathing+","+this.chestPain+","+this.confusion+","+this.blue;
     }
 
-    public JsonObject toJson() {
-        JsonObject obj = new JsonObject();
-        obj.addProperty("ts",ts);
-        obj.addProperty("fever",fever);
-        obj.addProperty("cough",cough);
-        obj.addProperty("shortnessOfBreath",shortnessOfBreath);
-        obj.addProperty("troubleBreathing",troubleBreathing);
-        obj.addProperty("chestPain",chestPain);
-        obj.addProperty("confusion",confusion);
-        obj.addProperty("blue",blue);
+    public JSONObject toJson() throws JSONException {
+        JSONObject obj = new JSONObject();
+        obj.put("ts",ts);
+        obj.put("fever",fever);
+        obj.put("cough",cough);
+        obj.put("shortnessOfBreath",shortnessOfBreath);
+        obj.put("troubleBreathing",troubleBreathing);
+        obj.put("chestPain",chestPain);
+        obj.put("confusion",confusion);
+        obj.put("blue",blue);
         return obj;
     }
 }

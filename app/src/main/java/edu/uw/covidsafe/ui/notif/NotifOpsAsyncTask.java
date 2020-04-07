@@ -8,12 +8,6 @@ import android.widget.Toast;
 
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
-import com.google.gson.JsonObject;
-
-import java.io.DataOutputStream;
-import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.net.URL;
 import java.util.List;
 
 public class NotifOpsAsyncTask extends AsyncTask<Void, Void, Void> {

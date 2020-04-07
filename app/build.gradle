@@ -77,6 +77,7 @@ dependencies {
     implementation 'com.microsoft.identity.client:msal:1.2.+'
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.google.android.gms:play-services-auth-api-phone:17.4.0'
+    testImplementation 'org.json:json:20140107'
 
     // gRPC components
     implementation "io.grpc:grpc-okhttp:${grpcVersion}"

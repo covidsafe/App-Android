@@ -20,7 +20,7 @@ import edu.uw.covidsafe.utils.Constants;
 
 public class OnboardingActivity extends AppCompatActivity {
 
-    boolean forceOnboard = true;
+    boolean forceOnboard = false;
     Activity activity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

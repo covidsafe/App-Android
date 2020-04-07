@@ -129,7 +129,7 @@ public class PullFromServerTask implements Runnable {
                 List<Long> contactTimesEnd = new ArrayList<>();
 
                 long[] exposedStatus = isExposed(seed.seed,
-                        seed.sequence_start_time);
+                        seed.sequenceStartTime);
                 if (exposedStatus != null) {
                     exposedMessages.add(bluetoothMatch.user_message);
                     contactStartTimes.add(exposedStatus[0]);
