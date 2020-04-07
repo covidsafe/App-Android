@@ -10,8 +10,8 @@ public class MessageListResponse {
 
     public static MessageListResponse parse(JSONObject obj) throws JSONException {
         MessageListResponse messageListResponse = new MessageListResponse();
-        if (obj.has("messageInfo")) {
-            JSONArray arr = obj.getJSONArray("messageInfo");
+        if (obj.has("messageInfoes")) {
+            JSONArray arr = obj.getJSONArray("messageInfoes");
             messageListResponse.messageInfo = new MessageInfo[arr.length()];
             for (int i = 0; i < arr.length(); i++) {
                 messageListResponse.messageInfo[i] = MessageInfo.parse(arr.getJSONObject(i));

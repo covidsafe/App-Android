@@ -34,16 +34,16 @@ import edu.uw.covidsafe.utils.Utils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 public class PullFromServerTask implements Runnable {
 
     Context context;
-    HashMap<String,Long> scannedBleMap;
 
     public PullFromServerTask(Context context) {
         this.context = context;
-        this.scannedBleMap = new HashMap<>();
     }
 
     @Override
@@ -111,9 +111,13 @@ public class PullFromServerTask implements Runnable {
         // check that the set intersection will work.
         BleDbRecordRepository repo = new BleDbRecordRepository(context);
         List<BleRecord> bleRecords = repo.getAllRecords();
+        HashMap<String,List<Long>> scannedBleMap = new HashMap<>();
         for (BleRecord bleRecord : bleRecords) {
             Log.e("ble",bleRecord.toString());
-            scannedBleMap.put(bleRecord.getUuid(), bleRecord.getTs());
+            if (!scannedBleMap.containsKey(bleRecord.getUuid())) {
+                scannedBleMap.put(bleRecord.getUuid(), new LinkedList<Long>());
+            }
+            scannedBleMap.get(bleRecord.getUuid()).add(bleRecord.getTs());
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -124,14 +128,11 @@ public class PullFromServerTask implements Runnable {
         List<Long> contactEndTimes = new ArrayList<>();
         for (BluetoothMatch bluetoothMatch : bluetoothMatches) {
             for (BlueToothSeed seed : bluetoothMatch.seeds) {
-
-                List<Long> contactTimesStart = new ArrayList<>();
-                List<Long> contactTimesEnd = new ArrayList<>();
-
                 long[] exposedStatus = isExposed(seed.seed,
-                        seed.sequenceStartTime);
+                        seed.sequenceStartTime,
+                        scannedBleMap);
                 if (exposedStatus != null) {
-                    exposedMessages.add(bluetoothMatch.user_message);
+                    exposedMessages.add(bluetoothMatch.userMessage);
                     contactStartTimes.add(exposedStatus[0]);
                     contactEndTimes.add(exposedStatus[1]);
                 }
@@ -187,6 +188,7 @@ public class PullFromServerTask implements Runnable {
 
         String messageRequest = MessageRequest.toHttpString();
         Log.e("NET ","MESSAGE REQUEST num of messages: "+messageListResponse.messageInfo.length);
+        Log.e("NET ","MESSAGE REQUEST payload: "+messageRequestObj.toString());
         response = NetworkHelper.sendRequest(messageRequest, Request.Method.POST, messageRequestObj);
         if (response == null) {
             return null;
@@ -194,7 +196,7 @@ public class PullFromServerTask implements Runnable {
 
         MatchMessage matchMessage = null;
         try {
-            matchMessage = MatchMessage.parse(response);
+            matchMessage = MatchMessage.parse(response.getJSONArray("results").getJSONObject(0));
         }
         catch (Exception e) {
             Log.e("err",e.getMessage());
@@ -227,8 +229,8 @@ public class PullFromServerTask implements Runnable {
         List<String> narrowCastMessages = new ArrayList<String>();
         List<Long> narrowCastMessageStartTimes = new ArrayList<>();
         List<Long> narrowCastMessageEndTimes = new ArrayList<>();
-        if (matchMessage.area_matches != null) {
-            for (AreaMatch areaMatch : matchMessage.area_matches) {
+        if (matchMessage.areaMatches != null) {
+            for (AreaMatch areaMatch : matchMessage.areaMatches) {
                 Area[] areas = areaMatch.areas;
                 for (Area area : areas) {
                     if (intersect(area)) {
@@ -244,7 +246,7 @@ public class PullFromServerTask implements Runnable {
         notifyBulk(Constants.MessageType.NarrowCast, narrowCastMessages,narrowCastMessageStartTimes,narrowCastMessageEndTimes);
         /////////////////////////////////////////////////////////////////////////
 
-        return matchMessage.bluetooth_matches;
+        return matchMessage.bluetoothMatches;
     }
 
     public boolean intersect(Area area) {
@@ -266,7 +268,7 @@ public class PullFromServerTask implements Runnable {
 
     // we get a seed and timestamp from the server for each infected person
     // check if we intersect with the infected person
-    public long[] isExposed(String seed, long ts) {
+    public static long[] isExposed(String seed, long ts, HashMap<String,List<Long>> scannedBleMap) {
         // if timestamp is in the future, something is wrong, return
         if (ts > System.currentTimeMillis()) {
             return null;
@@ -299,8 +301,12 @@ public class PullFromServerTask implements Runnable {
 
         for (String receivedUUID : receivedUUIDs) {
             if (scannedBleMap.keySet().contains(receivedUUID)) {
-                if (Math.abs(scannedBleMap.get(receivedUUID) - ts) < bluetoothScanIntervalInMilliseconds) {
-                    matches.add(ts);
+                for (Long localTs : scannedBleMap.get(receivedUUID)) {
+                    // check that the timestamps were within the same UUID generation interval
+                    if (Math.abs(localTs - ts) < uuidGenerationIntervalInMillliseconds) {
+                        // record the timestamp when the local scanner picked it up
+                        matches.add(localTs);
+                    }
                 }
             }
             ts += uuidGenerationIntervalInMillliseconds;
@@ -345,6 +351,9 @@ public class PullFromServerTask implements Runnable {
                 }
                 streak = 0;
             }
+        }
+        if (contactTimesEnd.size() != contactTimesStart.size()) {
+            contactTimesEnd.add(matches.get(streak));
         }
 
         if (contactTimesStart.size() == 0) {

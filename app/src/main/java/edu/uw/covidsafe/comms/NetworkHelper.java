@@ -15,9 +15,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,15 +39,10 @@ public class NetworkHelper {
         {
             @Override
             public Map getHeaders() throws AuthFailureError {
-                if (obj != null) {
-                    HashMap<String,String> headers = new HashMap<String, String>();
-                    headers.put("Content-Type","application/json");
-                    headers.put("Ocp-Apim-Subscription-Key",NetworkConstant.API_KEY);
-                    return headers;
-                }
-                else {
-                    return new HashMap<String, String>();
-                }
+                HashMap<String,String> headers = new HashMap<String, String>();
+                headers.put("Content-Type","application/json");
+                headers.put("Accept","application/json");
+                return headers;
             }
             @Override
             protected VolleyError parseNetworkError(VolleyError volleyError) {
@@ -65,7 +62,8 @@ public class NetworkHelper {
             @Override
             protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
                 try {
-                    Log.e("net","parse response "+response.data.length);
+                    Log.e("net","parse response size "+response.data.length);
+                    // response is just empty, return an empty json object
                     if (response.data.length == 0) {
                         byte[] responseData = "{}".getBytes("UTF8");
                         response = new NetworkResponse(response.statusCode, responseData, response.headers, response.notModified);
@@ -73,7 +71,18 @@ public class NetworkHelper {
                     else {
                         try {
                             String jsonString = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-                            return Response.success(new JSONObject(jsonString),HttpHeaderParser.parseCacheHeaders(response));
+                            Log.e("net",jsonString);
+
+                            JSONObject obj = null;
+                            try {
+                                obj = new JSONObject(jsonString);
+                            }
+                            catch (JSONException e) {
+                                JSONArray arr = new JSONArray(jsonString);
+                                obj = new JSONObject();
+                                obj.put("results",arr);
+                            }
+                            return Response.success(obj, HttpHeaderParser.parseCacheHeaders(response));
                         } catch (UnsupportedEncodingException e) {
                             return Response.error(new ParseError(e));
                         } catch (JSONException je) {

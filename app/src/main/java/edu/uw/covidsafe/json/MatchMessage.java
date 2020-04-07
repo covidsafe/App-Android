@@ -5,42 +5,29 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MatchMessage {
-    public String bool_expression;
-    public AreaMatch[] area_matches;
-    public BluetoothMatch[] bluetooth_matches;
+    public String boolExpression;
+    public AreaMatch[] areaMatches;
+    public BluetoothMatch[] bluetoothMatches;
 
     public static MatchMessage parse(JSONObject obj) throws JSONException {
         MatchMessage matchMessage = new MatchMessage();
-        if (obj.has("bool_expression")) {
-            matchMessage.bool_expression = obj.getString("bool_expression");
+        if (obj.has("boolExpression")) {
+            matchMessage.boolExpression = obj.getString("boolExpression");
         }
-        if (obj.has("area_matches")) {
-            JSONArray arr = obj.getJSONArray("area_match");
-            matchMessage.area_matches = new AreaMatch[arr.length()];
+        if (obj.has("areaMatches")) {
+            JSONArray arr = obj.getJSONArray("areaMatches");
+            matchMessage.areaMatches = new AreaMatch[arr.length()];
             for (int i = 0; i < arr.length(); i++) {
-                matchMessage.area_matches[i] = AreaMatch.parse(arr.getJSONObject(i));
+                matchMessage.areaMatches[i] = AreaMatch.parse(arr.getJSONObject(i));
             }
         }
-        if (obj.has("bluetooth_matches")) {
-            JSONArray arr = obj.getJSONArray("bluetooth_matches");
-            matchMessage.bluetooth_matches = new BluetoothMatch[arr.length()];
+        if (obj.has("bluetoothMatches")) {
+            JSONArray arr = obj.getJSONArray("bluetoothMatches");
+            matchMessage.bluetoothMatches = new BluetoothMatch[arr.length()];
             for (int i = 0; i < arr.length(); i++) {
-                matchMessage.bluetooth_matches[i] = BluetoothMatch.parse(arr.getJSONObject(i));
+                matchMessage.bluetoothMatches[i] = BluetoothMatch.parse(arr.getJSONObject(i));
             }
         }
-        return matchMessage;
-    }
-
-    public static JSONObject toJson(String[] seed, long[] ts_start, long[] ts_end) throws JSONException {
-        JSONObject matchMessage = new JSONObject();
-        matchMessage.put("match_protocol_version", 1);
-
-        JSONArray arr = new JSONArray();
-        for (int i = 0; i < seed.length; i++) {
-            arr.put(BlueToothSeed.toJson(seed[i], ts_start[i], ts_end[i]));
-        }
-
-        matchMessage.put("bluetooth_match", arr);
         return matchMessage;
     }
 }
