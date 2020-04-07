@@ -46,8 +46,6 @@ import edu.uw.covidsafe.gps.GpsUtils;
 import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -235,44 +233,6 @@ public class Utils {
         Log.e("uuid","uuid log to file");
         FileOperations.append(rec.toString(),
                 cxt, Constants.uuidDirName, Utils.getUuidLogName());
-    }
-
-    public static JsonObject gps2json(List<GpsRecord> records) {
-        JsonArray arr = new JsonArray();
-        for (GpsRecord rec : records) {
-            arr.add(rec.toJson());
-        }
-        JsonObject obj = new JsonObject();
-        obj.add("data", arr);
-        return obj;
-    }
-
-    public static JsonObject ble2json(List<BleRecord> records) {
-        JsonArray arr = new JsonArray();
-        for (BleRecord rec : records) {
-            arr.add(rec.toJson());
-        }
-        JsonObject obj = new JsonObject();
-        obj.add("data", arr);
-        return obj;
-    }
-
-    public static boolean locationInBlacklist(Context cxt, Location loc) {
-        if (Constants.blacklist == null) {
-            Constants.blacklist = FileOperations.readBlacklist(cxt);
-        }
-
-        for (BlacklistRecord record : Constants.blacklist) {
-            Location loc1 = new Location("");
-            loc1.setLatitude(record.lat);
-            loc1.setLongitude(record.longi);
-
-            float distanceInMeters = loc1.distanceTo(loc);
-            if (distanceInMeters < Constants.DistanceThresholdInMeters) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public static String formatDate(String s) {

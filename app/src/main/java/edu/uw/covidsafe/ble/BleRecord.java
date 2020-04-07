@@ -5,8 +5,6 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.google.gson.JsonObject;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -51,12 +49,5 @@ public class BleRecord {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date d = new Date(this.ts);
         return this.uuid +","+sdf.format(d)+","+this.rssi;
-    }
-
-    public JsonObject toJson() {
-        JsonObject obj = new JsonObject();
-        obj.addProperty("id", uuid);
-        obj.addProperty("ts",ts);
-        return obj;
     }
 }

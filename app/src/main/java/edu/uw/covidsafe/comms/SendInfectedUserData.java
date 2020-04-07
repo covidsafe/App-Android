@@ -77,8 +77,9 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
 //            Location loc = GpsUtils.getLastLocation();
 //            lat = loc.getLatitude();
 //            longi = loc.getLongitude();
-            if (Utils.hasGpsPermissions(context)) {
+            if (!Utils.hasGpsPermissions(context)) {
                 mkSnack(av, view, "We need location services enabled to send your traces. Please enable location services permission.");
+                return null;
             }
         }
         else {
@@ -186,22 +187,32 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
             return;
         }
 
-        String announceRequest = SelfReportRequest.toHttpString();
-        JSONObject resp = NetworkHelper.sendRequest(announceRequest, Request.Method.PUT, announceRequestObj);
-
-        edu.uw.covidsafe.json.Status status = null;
+        String selfReportRequest = SelfReportRequest.toHttpString();
+        Log.e("net", "send request to "+selfReportRequest);
         try {
-            status = edu.uw.covidsafe.json.Status.parse(resp);
+            Log.e("net", "payload " + announceRequestObj.toString(2));
         }
         catch(Exception e) {
-            Log.e("err",e.getMessage());
+            Log.e("net",e.getMessage());
         }
+
+        // if status code == 200, this will return at worst an empty json object
+        // if resp is null, the status code != 200
+        JSONObject resp = NetworkHelper.sendRequest(selfReportRequest, Request.Method.PUT, announceRequestObj);
+        if (resp == null) {
+            mkSnack(av, view, "There was an error with submitting your traces. Please try again later.");
+        }
+
+//        edu.uw.covidsafe.json.Status status = null;
+//        try {
+//            status = edu.uw.covidsafe.json.Status.parse(resp);
+//        }
+//        catch(Exception e) {
+//            Log.e("err",e.getMessage());
+//        }
 
         if (resp != null) {
             mkSnack(av, view, "Your trace data has been submitted.");
-        }
-        else {
-            mkSnack(av, view, "There was an error with submitting your traces. Please try again later.");
         }
     }
 

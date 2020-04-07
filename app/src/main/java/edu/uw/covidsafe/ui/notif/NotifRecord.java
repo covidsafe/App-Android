@@ -6,12 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-import androidx.room.TypeConverter;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
-import edu.uw.covidsafe.utils.Constants;
 
 @Entity(tableName = "notif_record_table")
 public class NotifRecord {
