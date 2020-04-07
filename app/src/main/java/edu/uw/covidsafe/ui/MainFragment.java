@@ -95,7 +95,8 @@ public class MainFragment extends Fragment {
             }
             else {
                 // dummy code
-                Constants.NotificationAdapter.notifyUser(getString(R.string.default_exposed_notif));
+//                Constants.NotificationAdapter.notifyUser(getString(R.string.default_exposed_notif));
+                Utils.notif(getContext());
                 Utils.startLoggingService(getActivity());
             }
         }

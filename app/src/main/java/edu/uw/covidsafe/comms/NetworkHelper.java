@@ -78,16 +78,23 @@ public class NetworkHelper {
                                 obj = new JSONObject(jsonString);
                             }
                             catch (JSONException e) {
-                                JSONArray arr = new JSONArray(jsonString);
-                                obj = new JSONObject();
-                                obj.put("results",arr);
+                                Log.e("err",e.getMessage());
+                                try {
+                                    JSONArray arr = new JSONArray(jsonString);
+                                    obj = new JSONObject();
+                                    obj.put("results", arr);
+                                }
+                                catch(JSONException e2) {
+                                    Log.e("err",e2.getMessage());
+                                }
                             }
                             return Response.success(obj, HttpHeaderParser.parseCacheHeaders(response));
                         } catch (UnsupportedEncodingException e) {
                             return Response.error(new ParseError(e));
-                        } catch (JSONException je) {
-                            return Response.error(new ParseError(je));
                         }
+//                        catch (JSONException je) {
+//                            return Response.error(new ParseError(je));
+//                        }
                     }
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();

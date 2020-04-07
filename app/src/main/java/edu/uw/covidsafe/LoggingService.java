@@ -3,6 +3,7 @@ import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +25,7 @@ import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.gps.GpsUtils;
 import edu.uw.covidsafe.seed_uuid.UUIDGeneratorTask;
 import edu.uw.covidsafe.comms.PullFromServerTask;
+import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
 
@@ -62,6 +64,7 @@ public class LoggingService extends IntentService {
             GpsUtils.startGps(getApplicationContext());
         }
 
+        // service running notification
         Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(getString(R.string.notif_message))
@@ -69,37 +72,8 @@ public class LoggingService extends IntentService {
                 .setCategory(Notification.CATEGORY_SERVICE)
                 .build();
         startForeground(1,notification);
-
         //////////////////////////////////////////////////////////////////////////////////////////
-//        try {
-//            Thread.sleep(5000);
-//            createNotificationChannel();
-//            Intent fullScreenIntent = new Intent(this, MainActivity.class);
-//            PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
-//                    fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "123")
-//                    .setSmallIcon(R.drawable.ic_launcher_background)
-//                    .setContentTitle("CovidSafe Alert")
-//                    .setContentText("fullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntentfullScreenPendingIntent")
-//                    .setPriority(NotificationCompat.PRIORITY_MAX)
-//                    .setCategory(NotificationCompat.CATEGORY_CALL)
-//                    .setFullScreenIntent(fullScreenPendingIntent, true)
-//                    .setAutoCancel(false);
-//            // Add the action button
-////                .addAction(R.drawable.ic_launcher_foreground, ctx.getString(R.string.snooze),
-////                        snoozePendingIntent);
-//
-//            Uri notification2 = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//            Ringtone r = RingtoneManager.getRingtone(this, notification2);
-//            r.play();
-//            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-//
-//            // notificationId is a unique int for each notification that you must define
-//            notificationManager.notify(13, builder.build());
-//        }
-//        catch(Exception e) {
-//            Log.e("ble",e.getMessage());
-//        }
+
         return START_NOT_STICKY;
     }
 

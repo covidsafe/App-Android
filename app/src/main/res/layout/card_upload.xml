@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -27,19 +28,45 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/pos"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Positive COVID-19 Diagnosis Reported"
+                android:textSize="20sp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="@+id/guidelineV45"
+                app:layout_constraintEnd_toStartOf="@+id/guidelineV75"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                android:gravity="center_horizontal"
+                android:text="Reported: 4/23/2020 at 9:41am"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@+id/guidelineV85"
+                app:layout_constraintStart_toStartOf="@+id/guidelineV15"
+                app:layout_constraintTop_toBottomOf="@+id/pos" />
 
             <Button
                 android:id="@+id/uploadButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:backgroundTint="@color/purpleLight"
                 android:text="Upload your trace data"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toStartOf="@+id/guidelineV85"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guidelineV15"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/date" />
 
             <Button
                 android:id="@+id/whatHappens"
@@ -51,6 +78,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/purpleLight"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/uploadButton" />
 
@@ -62,6 +90,20 @@
                 app:layout_constraintGuide_percent=".1"
                 app:layout_constraintGuide_begin="20dp" />
 
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineV45"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".2"
+                app:layout_constraintGuide_begin="20dp" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineV75"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".8"
+                app:layout_constraintGuide_begin="20dp" />
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guidelineV85"
                 android:layout_width="wrap_content"

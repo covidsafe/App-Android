@@ -3,6 +3,7 @@ package edu.uw.covidsafe.utils;
 import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,6 +29,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import edu.uw.covidsafe.LoggingService;
@@ -53,6 +55,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.ui.notif.NotifRecord;
 
 public class Utils {
@@ -183,21 +186,56 @@ public class Utils {
         return UUID.randomUUID().toString();
     }
 
+    public static void notif(Context context) {
+        try {
+//            Thread.sleep(5000);
+            createNotificationChannel(context);
+            Intent fullScreenIntent = new Intent(context, MainActivity.class);
+            PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(context, 0,
+                    fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "123")
+                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setContentTitle("CovidSafe Alert")
+                    .setContentText("fullScreenPendingIntent")
+                    .setPriority(NotificationCompat.PRIORITY_MAX)
+                    .setCategory(NotificationCompat.CATEGORY_CALL)
+                    .setFullScreenIntent(fullScreenPendingIntent, true)
+                    .setAutoCancel(false);
+            // Add the action button
+//                .addAction(R.drawable.ic_launcher_foreground, ctx.getString(R.string.snooze),
+//                        snoozePendingIntent);
+
+//            Uri notification2 = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//            Ringtone r = RingtoneManager.getRingtone(this, notification2);
+//            r.play();
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+
+            // notificationId is a unique int for each notification that you must define
+            notificationManager.notify(13, builder.build());
+        }
+        catch(Exception e) {
+            Log.e("ble",e.getMessage());
+        }
+    }
+
     public static void mkSnack(Activity av, View v, String msg) {
-        final Snackbar snackBar = Snackbar.make(v, msg, Snackbar.LENGTH_LONG);
+        av.runOnUiThread(new Runnable() {
+            public void run() {
+                final Snackbar snackBar = Snackbar.make(v, msg, Snackbar.LENGTH_LONG);
 
-        snackBar.setAction("Dismiss", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                snackBar.dismiss();
-            }
-        });
+                snackBar.setAction("Dismiss", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        snackBar.dismiss();
+                    }
+                });
 
-        View snackbarView = snackBar.getView();
-        TextView textView = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
-        textView.setMaxLines(5);
+                View snackbarView = snackBar.getView();
+                TextView textView = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
+                textView.setMaxLines(5);
 
-        snackBar.show();
+                snackBar.show();
+        }});
     }
 
     public static void gpsLogToFile(Context cxt, GpsRecord rec) {
