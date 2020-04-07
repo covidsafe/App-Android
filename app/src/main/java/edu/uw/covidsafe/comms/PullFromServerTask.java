@@ -336,7 +336,7 @@ public class PullFromServerTask implements Runnable {
         List<Long> contactTimesEnd = new ArrayList<>();
         for (int i = 0; i < diff.size(); i++) {
             if (Math.abs(diff.get(i)-bluetoothScanIntervalInMilliseconds)
-                < Constants.TimestampDeviationInMilliseconds) {
+                <= Constants.TimestampDeviationInMilliseconds) {
                 streak += 1;
                 // add contact time once for the streak
                 if (streak == numConsecutiveMatchesNeeded) {
