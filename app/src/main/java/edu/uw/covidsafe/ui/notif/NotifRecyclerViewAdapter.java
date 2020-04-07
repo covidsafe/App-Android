@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.uw.covidsafe.utils.Constants;
+import edu.uw.covidsafe.utils.Utils;
 
 
 public class NotifRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -45,6 +46,7 @@ public class NotifRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         if (records.size() > this.records.size()) {
             Log.e("notif","notif item inserted");
             notifyItemInserted(0);
+            Utils.notif2(cxt);
         }
         else {
             Log.e("notif","notif dataset changed");

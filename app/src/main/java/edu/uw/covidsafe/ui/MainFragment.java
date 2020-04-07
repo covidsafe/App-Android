@@ -84,7 +84,6 @@ public class MainFragment extends Fragment {
             @Override
             public void onChanged(List<NotifRecord> notifRecords) {
                 //something in db has changed, update
-//                Toast.makeText(getActivity(),"on changed "+notifRecords.size(),Toast.LENGTH_LONG).show();
                 List<NotifRecord> currentNotifs = new LinkedList<>();
                 List<NotifRecord> historyNotifs = new LinkedList<>();
                 for (NotifRecord notif : notifRecords) {
@@ -107,7 +106,7 @@ public class MainFragment extends Fragment {
             public void onClick(View v) {
                 new NotifOpsAsyncTask(getContext(), new NotifRecord(System.currentTimeMillis(),
                         System.currentTimeMillis(), getString(R.string.default_exposed_notif), Constants.MessageType.Exposure.ordinal(),true)).execute();
-                Utils.notif(getContext());
+//                Utils.notif(getContext());
             }
         });
 
@@ -123,8 +122,9 @@ public class MainFragment extends Fragment {
         b3b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new NotifOpsAsyncTask(getContext(), new NotifRecord(System.currentTimeMillis(),
-                        System.currentTimeMillis(), "hello history", Constants.MessageType.Exposure.ordinal(),false)).execute();
+//                new NotifOpsAsyncTask(getContext(), new NotifRecord(System.currentTimeMillis(),
+//                        System.currentTimeMillis(), "hello history", Constants.MessageType.Exposure.ordinal(),false)).execute();
+                Utils.notif2(getContext());
             }
         });
 
@@ -166,9 +166,6 @@ public class MainFragment extends Fragment {
                 broadcastSwitch.setChecked(false);
             }
             else {
-                // dummy code
-//                Constants.NotificationAdapter.notifyUser(getString(R.string.default_exposed_notif));
-                Utils.notif(getContext());
                 Utils.startLoggingService(getActivity());
             }
         }

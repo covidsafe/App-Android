@@ -75,6 +75,12 @@ public class MainActivity extends AppCompatActivity {
         Constants.HistoryAdapter = new HistoryRecyclerViewAdapter(this,this);
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Log.e("demo","on new intent");
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
