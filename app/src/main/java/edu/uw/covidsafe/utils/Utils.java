@@ -202,11 +202,12 @@ public class Utils {
         bigText.setSummaryText("You may have been exposed");
 
         mBuilder.setContentIntent(pendingIntent);
-        mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
+        mBuilder.setSmallIcon(R.drawable.logo2);
         mBuilder.setContentTitle("Your Title");
         mBuilder.setContentText("Your text");
         mBuilder.setPriority(Notification.PRIORITY_MAX);
         mBuilder.setStyle(bigText);
+//        mBuilder.setBadgeIconType(R.drawable.logo2);
 
         mNotificationManager =
                 (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -220,6 +221,10 @@ public class Utils {
                     "Channel human readable title",
                     NotificationManager.IMPORTANCE_HIGH);
             mNotificationManager.createNotificationChannel(channel);
+            channel.setShowBadge(true);
+            channel.setAllowBubbles(true);
+            channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+            channel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
             mBuilder.setChannelId(channelId);
         }
 

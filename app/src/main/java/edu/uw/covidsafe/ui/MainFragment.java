@@ -142,6 +142,11 @@ public class MainFragment extends Fragment {
             }
         });
 
+        bb.setEnabled(false);
+        bb.setVisibility(View.GONE);
+        b3b.setEnabled(false);
+        b3b.setVisibility(View.GONE);
+
         broadcastProp = view.findViewById(R.id.broadcastProp);
 
         broadcastSwitch = view.findViewById(R.id.switch1);
