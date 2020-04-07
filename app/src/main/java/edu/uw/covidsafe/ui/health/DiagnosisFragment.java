@@ -1,11 +1,18 @@
 package edu.uw.covidsafe.ui.health;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spannable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -16,6 +23,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.covidsafe.R;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import edu.uw.covidsafe.comms.NetworkHelper;
 import edu.uw.covidsafe.comms.SendInfectedUserData;
@@ -76,7 +86,47 @@ public class DiagnosisFragment extends Fragment {
         rview2.setAdapter(adapter2);
         rview2.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        long lastSubmissionDate = prefs.getLong(getString(com.example.covidsafe.R.string.last_submission_date_pkey), 0);
+
+        DiagnosisFragment.updateSubmissionView(getActivity(), getContext(), view, lastSubmissionDate, false);
+
         return view;
+    }
+
+    public static void updateSubmissionView(Activity av, Context context, View view, long lastSubmissionDate, boolean justReported) {
+        av.runOnUiThread(new Runnable() {
+            public void run() {
+                if (lastSubmissionDate != 0) {
+                    TextView pos = view.findViewById(R.id.pos);
+                    if (justReported) {
+                        Log.e("state","VISIBLE");
+                        pos.setText(context.getString(R.string.pos_text));
+                        pos.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        pos.setText("");
+                        pos.setVisibility(View.GONE);
+                    }
+
+                    TextView date = view.findViewById(R.id.date);
+                    date.setVisibility(View.VISIBLE);
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("M/d/YYYY");
+                    SimpleDateFormat timeFormat = new SimpleDateFormat("h:mma");
+                    Date ts = new Date(lastSubmissionDate);
+                    Spannable out = (Spannable) Html.fromHtml("<b>Last reported</b>: "+dateFormat.format(ts) + " "+timeFormat.format(ts));
+                    date.setText(out);
+                }
+                else {
+                    TextView pos = view.findViewById(R.id.pos);
+                    pos.setText("");
+                    pos.setVisibility(View.GONE);
+                    TextView date = view.findViewById(R.id.date);
+                    date.setText("");
+                    date.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content">
 
         <include
-            android:id="@+id/broadcast"
+            android:id="@+id/upload"
             layout="@layout/card_upload"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
             android:layout_marginTop="10dp"
             app:layout_constraintBottom_toTopOf="@+id/rel"
             app:layout_constraintStart_toStartOf="@+id/guidelineV10"
-            app:layout_constraintTop_toBottomOf="@+id/broadcast" />
+            app:layout_constraintTop_toBottomOf="@+id/upload" />
 
         <RelativeLayout
             android:id="@+id/rel"

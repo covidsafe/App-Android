@@ -385,7 +385,6 @@ public class PullFromServerTask implements Runnable {
 //        Washington State COVID-19 call center: 800-525-0127
 //        https://scanpublichealth.org/faq
 //        Log.e("msg", "BLUETOOTH USER MESSAGE "+msg);
-//        Constants.NotificationAdapter.notifyUser(msg);
 //    }
 
     public void notifyBulk(Constants.MessageType messageType,

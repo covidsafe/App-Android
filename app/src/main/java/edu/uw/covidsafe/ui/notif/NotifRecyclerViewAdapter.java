@@ -37,16 +37,16 @@ public class NotifRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     public void notifyUser(String msg) {
-        if (count == 0) {
-            this.messages.add(msg);
-            notifyItemInserted(count);
-            count += 1;
-        }
+        this.messages.add(msg);
+        notifyItemInserted(count);
+        count += 1;
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((NotifCard)holder).button.setOnClickListener(new View.OnClickListener() {
+        holder.setIsRecyclable(false);
+
+        ((NotifCard)holder).dismissButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.e("RECYCLER","RECYCLER POS "+position);
@@ -65,12 +65,12 @@ public class NotifRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     public class NotifCard extends RecyclerView.ViewHolder {
-        Button button;
+        Button dismissButton;
         TextView header;
         TextView message;
         NotifCard(@NonNull View itemView) {
             super(itemView);
-            this.button = itemView.findViewById(R.id.dismiss);
+            this.dismissButton = itemView.findViewById(R.id.dismiss);
             this.header = itemView.findViewById(R.id.textView11);
             this.message = itemView.findViewById(R.id.textView12);
         }
