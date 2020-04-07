@@ -16,7 +16,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Messenger;
 import android.os.RemoteException;
 import android.text.Html;
 import android.text.Spannable;
@@ -286,9 +285,7 @@ public class Utils {
         Constants.LoggingServiceRunning = true;
         Utils.createNotificationChannel(av);
 
-        Intent intent = new Intent(av, LoggingService.class);
-        intent.putExtra("messenger", new Messenger(Utils.serviceHandler));
-        av.startService(intent);
+        av.startService(new Intent(av, LoggingService.class));
 
         SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
@@ -362,18 +359,18 @@ public class Utils {
         }
         return value;
     }
-
-    public static void sendDataToUI(Messenger messenger, String tag, String log) {
-        Bundle bb = new Bundle();
-        bb.putString(tag, log);
-        Message msg = new Message();
-        msg.setData(bb);
-        try {
-            messenger.send(msg);
-        } catch (RemoteException e) {
-            Log.i("error", "error");
-        }
-    }
+//
+//    public static void sendDataToUI(Messenger messenger, String tag, String log) {
+//        Bundle bb = new Bundle();
+//        bb.putString(tag, log);
+//        Message msg = new Message();
+//        msg.setData(bb);
+//        try {
+//            messenger.send(msg);
+//        } catch (RemoteException e) {
+//            Log.i("error", "error");
+//        }
+//    }
 
     public static String[] getBlePermissions() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -465,7 +462,7 @@ public class Utils {
     }
 
     public static void createNotificationChannel(Context cxt) {
-        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel serviceChannel = new NotificationChannel(
                     Constants.NOTIFICATION_CHANNEL,
                     "Example",
@@ -473,7 +470,6 @@ public class Utils {
             );
             NotificationManager manager = cxt.getSystemService(NotificationManager.class);
             manager.createNotificationChannel(serviceChannel);
-
         }
     }
 

@@ -8,7 +8,6 @@ import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
-import android.os.Messenger;
 import android.util.Log;
 
 import java.util.Arrays;
@@ -22,11 +21,9 @@ import edu.uw.covidsafe.utils.Utils;
 public class BluetoothServerHelper {
 
     static Context cxt;
-    static Messenger messenger;
 
-    public static void createServer(Context cxt, Messenger messenger) {
+    public static void createServer(Context cxt) {
         BluetoothServerHelper.cxt = cxt;
-        BluetoothServerHelper.messenger = messenger;
         Constants.writtenUUIDs = new HashSet<>();
         Log.e("bleserver","createserver");
         BluetoothManager bluetoothManager =
@@ -79,7 +76,6 @@ public class BluetoothServerHelper {
                         Log.e("bleserver","contactuuid "+contactUuid);
                         int rssi = 0;
                         String[] elts = contactUuid.split("-");
-//                        Utils.sendDataToUI(messenger, "ble", elts[elts.length - 1]);
 
                         // byte[-128,127] => int[0,255] => rssi[-255,0]
                         if (value.length == 17) {
