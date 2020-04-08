@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.fragment.app.FragmentTransaction;
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.comms.NetworkConstant;
 import edu.uw.covidsafe.ui.health.TipRecyclerViewAdapter;
@@ -92,12 +93,18 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 if (Constants.CurrentFragment.toString().toLowerCase().contains("settings")) {
-                    getSupportFragmentManager().beginTransaction().replace(
-                            R.id.fragment_container, Constants.MainFragment).commit();
+                    FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+                    tx.setCustomAnimations(
+                            R.anim.enter_left_to_right,R.anim.exit_left_to_right,
+                            R.anim.enter_left_to_right,R.anim.exit_left_to_right);
+                    tx.replace(R.id.fragment_container, Constants.MainFragment).commit();
                 }
                 else if (Constants.CurrentFragment.toString().toLowerCase().contains("diagnosis")) {
-                    getSupportFragmentManager().beginTransaction().replace(
-                            R.id.fragment_container, Constants.HealthFragment).commit();
+                    FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+                    tx.setCustomAnimations(
+                            R.anim.enter_left_to_right,R.anim.exit_left_to_right,
+                            R.anim.enter_left_to_right,R.anim.exit_left_to_right);
+                    tx.replace(R.id.fragment_container, Constants.HealthFragment).commit();
                 }
                 return true;
             default:
@@ -146,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.e("logme","activity destroyed");
+        this.unregisterReceiver(BluetoothUtils.bluetoothReceiver);
     }
 
     public void initView() {

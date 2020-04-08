@@ -2,8 +2,11 @@ package edu.uw.covidsafe.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +17,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -57,7 +61,11 @@ public class MainFragment extends Fragment {
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.SettingsFragment).commit();
+                FragmentTransaction tx = getActivity().getSupportFragmentManager().beginTransaction();
+                tx.setCustomAnimations(
+                        R.anim.enter_right_to_left,R.anim.exit_right_to_left,
+                        R.anim.enter_left_to_right,R.anim.exit_left_to_right);
+                tx.replace(R.id.fragment_container, Constants.SettingsFragment).commit();
             }
         });
 
@@ -116,6 +124,7 @@ public class MainFragment extends Fragment {
     }
 
     public void broadcastSwitchLogic(boolean isChecked) {
+        Log.e("state","broadcast switch logic");
         if (isChecked) {
             PermUtils.gpsSwitchLogic(getActivity());
             PermUtils.bleSwitchLogic(getActivity());
@@ -205,8 +214,13 @@ public class MainFragment extends Fragment {
 //                    ss+=model.records.getValue().get(i).current;
 //                }
 //                Toast.makeText(getContext(), "notif size "+ss,Toast.LENGTH_LONG).show();
-                Thread r = new Thread(new PullFromServerTaskDemo(getContext()));
-                r.start();
+//                Thread r = new Thread(new PullFromServerTaskDemo(getContext()));
+//                r.start();
+
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
+                intent.setData(uri);
+                getActivity().startActivity(intent);
             }
         });
 
