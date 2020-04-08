@@ -1,8 +1,6 @@
 package edu.uw.covidsafe.ui.settings;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,7 +8,6 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.Settings;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,20 +19,16 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.covidsafe.R;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.gps.GpsUtils;
-import edu.uw.covidsafe.ui.PermUtil;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
 
@@ -166,22 +159,12 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                     }
                 }
                 else if (titles.get(position).toLowerCase().contains("location")) {
+                    Log.e("perm","gps set "+isChecked);
                     if (isChecked) {
-                        boolean hasGps = Utils.hasGpsPermissions(av);
-                        Log.e("perm","gps set "+isChecked+","+hasGps);
-                        if (hasGps) {
-                            editor.putBoolean(cxt.getString(R.string.gps_enabled_pkey), true);
-                            editor.commit();
-                            if (Constants.LoggingServiceRunning) {
-                                GpsUtils.startGps(cxt);
-                            }
-                        }
-                        else {
-                            ActivityCompat.requestPermissions(av, Constants.gpsPermissions, 2);
-                        }
+                        PermUtils.gpsSwitchLogic(av);
                     }
                     else {
-                        editor.putBoolean(cxt.getString(R.string.gps_enabled_pkey), false);
+                        editor.putBoolean(av.getString(R.string.gps_enabled_pkey), false);
                         editor.commit();
                         GpsUtils.haltGps();
                         // ble and gps are turned off, halt
@@ -191,34 +174,12 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                     }
                 }
                 else if (titles.get(position).toLowerCase().contains("bluetooth")) {
+                    Log.e("perm","ble set "+isChecked);
                     if (isChecked) {
-                        BluetoothManager bluetoothManager =
-                                (BluetoothManager) av.getSystemService(Context.BLUETOOTH_SERVICE);
-                        Constants.blueAdapter = bluetoothManager.getAdapter();
-
-                        boolean hasBle = Utils.hasBlePermissions(av);
-
-                        Log.e("perm","ble set "+isChecked+","+hasBle+","+Constants.blueAdapter.isEnabled());
-                        if (hasBle && BluetoothUtils.isBluetoothOn(av)) {
-                            editor.putBoolean(cxt.getString(R.string.ble_enabled_pkey), true);
-                            editor.commit();
-                            if (Constants.LoggingServiceRunning) {
-                                BluetoothUtils.startBle(cxt);
-                            }
-                        }
-                        else {
-                            if (Constants.blueAdapter != null && !Constants.blueAdapter.isEnabled()) {
-                                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                                av.startActivityForResult(enableBtIntent, 0);
-                            }
-                            if (!Utils.hasBlePermissions(av)) {
-                                Log.e("results","no ble permission, let's request");
-                                ActivityCompat.requestPermissions(av, Utils.getBlePermissions(), 1);
-                            }
-                        }
+                        PermUtils.bleSwitchLogic(av);
                     }
                     else {
-                        editor.putBoolean(cxt.getString(R.string.ble_enabled_pkey), false);
+                        editor.putBoolean(av.getString(R.string.ble_enabled_pkey), false);
                         editor.commit();
                         BluetoothUtils.haltBle(av);
                         // ble and gps are turned off, halt

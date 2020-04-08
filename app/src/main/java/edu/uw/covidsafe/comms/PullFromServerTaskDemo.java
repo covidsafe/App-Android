@@ -443,6 +443,7 @@ public class PullFromServerTaskDemo implements Runnable {
                         msg,
                         messageType.ordinal(),
                         true)).execute();
+                Utils.notif2(context, "You may have been exposed", msg);
             }
             else {
                 if (!msgs.isEmpty()) {
@@ -452,6 +453,7 @@ public class PullFromServerTaskDemo implements Runnable {
                             msgs.get(i),
                             messageType.ordinal(),
                             true)).execute();
+                    Utils.notif2(context, "Announcement",msgs.get(i));
                 }
             }
         }

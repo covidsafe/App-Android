@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -36,9 +37,6 @@ import edu.uw.covidsafe.utils.Utils;
 
 public class PermissionFragment extends Fragment {
 
-    Button finish;
-    Button back;
-
     View view;
 
     @SuppressLint("RestrictedApi")
@@ -56,22 +54,18 @@ public class PermissionFragment extends Fragment {
         rview3.setAdapter(adapter3);
         rview3.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        finish = (Button) view.findViewById(R.id.skipButton);
-        finish.setOnClickListener(new View.OnClickListener() {
+        Button nextButton = (Button) view.findViewById(R.id.nextButton);
+        nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), MainActivity.class));
             }
         });
 
-        back = (Button) view.findViewById(R.id.nextButton);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), MainActivity.class));
-            }
-        });
+        TextView privacy = view.findViewById(R.id.privacyText);
+        Utils.linkify(privacy,getString(R.string.privacyLink1));
 
+        // test buttons
         Button bb = (Button) view.findViewById(R.id.button4);
         bb.setOnClickListener(new View.OnClickListener() {
             @Override

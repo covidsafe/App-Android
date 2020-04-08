@@ -3,6 +3,7 @@
 <!--    <color name="colorPrimary">#4698CF</color>-->
 <!--    <color name="colorPrimaryDark">#2e5684</color>-->
 <!--    <color name="colorAccent">#2e5684</color>-->
+    <color name="purplePale">#f6f1ff</color>
     <color name="purpleLight">#8d55e9</color>
     <color name="purpleDark">#4b2e83</color>
 
@@ -12,6 +13,7 @@
     <color name="black">#000000</color>
     <color name="gray">#f8f8f8</color>
     <color name="gray2">#b3b3b3</color>
+    <color name="gray3">#e1e1e1</color>
     <color name="darkGray">#6e6e6e</color>
     <color name="warningRed">#e8685e</color>
 

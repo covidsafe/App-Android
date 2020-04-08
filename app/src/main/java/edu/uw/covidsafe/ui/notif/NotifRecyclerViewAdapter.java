@@ -42,14 +42,18 @@ public class NotifRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         return new NotifCard(view);
     }
 
+    int dismissedIndex = -1;
     public void setRecords(List<NotifRecord> records, View view) {
         if (records.size() > this.records.size()) {
             Log.e("notif","notif item inserted");
             notifyItemInserted(0);
-            Utils.notif2(cxt);
+//            Utils.notif2(cxt);
         }
         else {
-            Log.e("notif","notif dataset changed");
+            Log.e("notif","notif remove "+dismissedIndex);
+//            if (dismissedIndex != -1) {
+//                notifyItemRemoved(dismissedIndex);
+//            }
             notifyDataSetChanged();
         }
         this.records = records;
@@ -70,6 +74,8 @@ public class NotifRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         ((NotifCard)holder).dismissButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dismissedIndex = position;
+                Log.e("state","remove "+position);
                 new NotifOpsAsyncTask(cxt, new NotifRecord(rec.ts_start, rec.ts_end, rec.msg, rec.msgType,false)).execute();
             }
         });

@@ -59,6 +59,11 @@
     <string name="retry">Retry</string>
     <string name="sure">I\'m sure</string>
 
+    <string name="logging">Limited trace data is being collected. We keep your identity anonymous.<![CDATA[<font color=#8d55e9><br/><b><a href="https://covidsafe.cs.washington.edu/">Learn More</a></b></font>]]></string>
+    <string name="stopping">Turn broadcasting on to improve the accuracy of your notifications. <![CDATA[<font color=#8d55e9><br/><b><a href="https://covidsafe.cs.washington.edu/">Learn More</a></b></font>]]></string>
+
+    <string name="covidSiteLink">https://covidsafe.cs.washington.edu/</string>
+    <string name="privacyLink1"><![CDATA[<font color=#8d55e9><a href="https://covidsafe.cs.washington.edu/">Learn more about how we protect your privacy.</a></font>]]></string>
     <string name="privacy_link"><![CDATA[<font color=#FFFFFF><a href="http://www.uw.edu">Privacy  |  </a></font>]]></string>
     <string name="terms_link"><![CDATA[<font color=#FFFFFF><a href="http://www.uw.edu">Terms and Conditions</a></font>]]></string>
 
@@ -84,6 +89,19 @@
     </string>
     <string name="perm3desc">
         Enables the detection of exposure risks within a close distance to you, anonymously.
+    </string>
+
+    <string name="storyTitle1">
+        Welcome to CovidSafe
+    </string>
+    <string name="storyTitle2">
+        Exposure Notifications
+    </string>
+    <string name="storyTitle3">
+        Self-Care Tips
+    </string>
+    <string name="storyTitle4">
+        Your Privacy
     </string>
 
     <string name="story1">

@@ -29,21 +29,34 @@
         app:layout_constraintStart_toStartOf="@+id/guidelineV5"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
-    <RelativeLayout
-        android:id="@+id/perms"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/materialCardViewParent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/privacyText">
+        android:layout_marginTop="20dp"
+        app:cardElevation="0dp"
+        app:layout_constraintStart_toStartOf="@+id/guidelineV5"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
+        app:layout_constraintTop_toBottomOf="@+id/privacyText"
+        app:strokeColor="@color/gray"
+        app:strokeWidth="1dp">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewPerms"
+        <RelativeLayout
+            android:id="@+id/perms"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-    </RelativeLayout>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/privacyText">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewPerms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineV5"
@@ -61,39 +74,19 @@
         app:layout_constraintGuide_begin="20dp"
         app:layout_constraintGuide_percent=".95" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout3"
+    <Button
+        android:id="@+id/nextButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/gray"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="@color/purpleLight"
+        android:text="next"
+        android:textColor="@color/white"
+        app:iconGravity="textEnd"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <Button
-            android:id="@+id/skipButton"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Skip"
-            android:textColor="@color/darkGray"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:rippleColor="@color/darkGray" />
-
-        <Button
-            android:id="@+id/nextButton"
-            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="next"
-            android:textColor="@color/purpleLight"
-            app:icon="@drawable/ic_navigate_next_black_24dp"
-            app:iconGravity="textEnd"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
+        app:layout_constraintStart_toStartOf="@+id/guidelineV5" />
 
     <Button
         android:id="@+id/button4"

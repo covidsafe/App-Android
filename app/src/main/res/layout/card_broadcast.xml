@@ -7,7 +7,7 @@
     android:id="@+id/constraint"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    android:background="@color/purpleLight">
+    android:background="@color/white">
 
     <TextView
         android:id="@+id/title"
@@ -17,7 +17,7 @@
         android:layout_marginTop="20dp"
         android:text="@string/app_name_one_line"
         android:textStyle="bold"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="32sp"
         app:layout_constraintBottom_toTopOf="@+id/materialCardView"
         app:layout_constraintStart_toEndOf="@+id/imageView9"
@@ -30,7 +30,7 @@
         android:minWidth="30dp"
         android:minHeight="30dp"
         android:contentDescription="Settings"
-        android:src="@drawable/settings"
+        android:src="@drawable/settings_black"
         app:layout_constraintBottom_toBottomOf="@+id/title"
         app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
         app:layout_constraintTop_toTopOf="@+id/title" />
@@ -40,7 +40,7 @@
         android:layout_width="30dp"
         android:layout_height="0dp"
         android:adjustViewBounds="true"
-        android:src="@drawable/logo"
+        android:src="@drawable/logo_purple"
         app:layout_constraintBottom_toBottomOf="@+id/title"
         app:layout_constraintStart_toStartOf="@+id/guidelineV205"
         app:layout_constraintTop_toTopOf="@+id/title" />
@@ -51,12 +51,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        android:foregroundTint="@color/white"
+        android:backgroundTint="@color/purplePale"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
         app:layout_constraintStart_toStartOf="@+id/guidelineV205"
         app:layout_constraintTop_toBottomOf="@id/title"
-        app:strokeColor="@color/gray"
+        app:strokeColor="@color/gray3"
+        android:elevation="0dp"
         app:strokeWidth="1dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -64,41 +65,31 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/textView9"
+                android:id="@+id/broadcastTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
                 android:text="Broadcasting"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 app:layout_constraintEnd_toStartOf="@+id/guidelineV80"
-                app:layout_constraintStart_toEndOf="@+id/imageView8"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/broadcastProp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
-                android:text="Location sharing and bluetooth tracing are turned on."
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="20dp"
+                android:text="Limited trace data is being collected. We keep your identity anonymous. Learn More."
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guidelineV80"
-                app:layout_constraintStart_toEndOf="@+id/imageView8"
-                app:layout_constraintTop_toBottomOf="@+id/textView9" />
-
-            <ImageView
-                android:id="@+id/imageView8"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:adjustViewBounds="true"
-                android:src="@drawable/icon_broadcast"
-                app:layout_constraintBottom_toBottomOf="@+id/textView9"
-                app:layout_constraintEnd_toStartOf="@+id/guidelineV10"
-                app:layout_constraintTop_toTopOf="@+id/textView9" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/broadcastTitle" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guidelineV05"
@@ -121,14 +112,15 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintGuide_begin="20dp"
-                app:layout_constraintGuide_percent=".80" />
+                app:layout_constraintGuide_percent=".70" />
 
-            <Switch
+            <ImageView
                 android:id="@+id/switch1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
                 android:minWidth="44dp"
                 android:minHeight="44dp"
+                android:src="@drawable/switch_on"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guidelineV80"
@@ -157,6 +149,7 @@
         android:id="@+id/button6"
         android:layout_width="46dp"
         android:layout_height="43dp"
+        android:backgroundTint="@color/white"
         android:width="10dp"
         android:text="ic"
         app:layout_constraintStart_toEndOf="@+id/title"
@@ -168,6 +161,7 @@
         android:layout_height="43dp"
         android:layout_marginTop="40dp"
         android:width="10dp"
+        android:backgroundTint="@color/white"
         android:text="ih"
         app:layout_constraintStart_toEndOf="@+id/title"
         app:layout_constraintTop_toTopOf="parent" />
@@ -179,6 +173,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="40dp"
         android:width="10dp"
+        android:backgroundTint="@color/white"
         android:text=""
         app:layout_constraintStart_toEndOf="@+id/button6"
         app:layout_constraintTop_toTopOf="parent" />
@@ -187,6 +182,7 @@
         android:id="@+id/button9"
         android:layout_width="46dp"
         android:layout_height="43dp"
+        android:backgroundTint="@color/white"
         android:layout_marginStart="20dp"
         android:width="10dp"
         android:text=""
