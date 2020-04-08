@@ -36,12 +36,7 @@ public class HealthFragment extends Fragment {
                 tx.setCustomAnimations(
                         R.anim.enter_right_to_left,R.anim.exit_right_to_left,
                         R.anim.enter_left_to_right,R.anim.exit_left_to_right);
-//                    tx.setCustomAnimations(
-//                            R.anim.enter_bottom_to_top,R.anim.no_anim,
-//                            R.anim.enter_top_to_bottom,R.anim.no_anim);
-//                    tx.addToBackStack(null);
                 tx.replace(R.id.fragment_container, Constants.SubmitFragment).commit();
-//                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.SubmitFragment).commit();
             }
         });
         return view;
