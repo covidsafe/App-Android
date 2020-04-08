@@ -425,6 +425,8 @@ public class PullFromServerTask implements Runnable {
                         msg,
                         messageType.ordinal(),
                         true));
+                Log.e("notif","notif");
+                Utils.notif2(context, "You may have been exposed",msg);
             }
             else {
                 if (!msgs.isEmpty()) {
@@ -434,6 +436,8 @@ public class PullFromServerTask implements Runnable {
                             msgs.get(i),
                             messageType.ordinal(),
                             true));
+                    Log.e("notif","notif");
+                    Utils.notif2(context, "Announcement",msgs.get(i));
                 }
             }
         }

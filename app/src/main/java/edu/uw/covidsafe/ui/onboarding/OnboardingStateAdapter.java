@@ -28,18 +28,22 @@ public class OnboardingStateAdapter extends FragmentPagerAdapter {
         if (position==0) {
             bundle.putInt("image", R.drawable.onboard1);
             bundle.putInt("message", R.string.story1);
+            bundle.putInt("title", R.string.storyTitle1);
         }
         else if (position==1) {
             bundle.putInt("image", R.drawable.onboard2);
             bundle.putInt("message", R.string.story2);
+            bundle.putInt("title", R.string.storyTitle2);
         }
         else if (position==2) {
             bundle.putInt("image", R.drawable.onboard3);
             bundle.putInt("message", R.string.story3);
+            bundle.putInt("title", R.string.storyTitle3);
         }
         else if (position==3) {
             bundle.putInt("image", R.drawable.onboard4);
             bundle.putInt("message", R.string.story4);
+            bundle.putInt("title", R.string.storyTitle4);
         }
         bundle.putInt("pos",position);
         frag.setArguments(bundle);

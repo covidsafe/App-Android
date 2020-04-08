@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
+        Log.e("state","onactivityresult "+requestCode+","+resultCode);
 //        int result = data.getIntExtra(StartActivityForResult.this.getString(R.string.result), -1);
 //        String msg = "requestCode=" + requestCode + ", resultCode=" + resultCode + ", result=" + result;
 //        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();

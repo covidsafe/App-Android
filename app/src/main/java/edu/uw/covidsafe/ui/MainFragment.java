@@ -9,11 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -27,23 +24,21 @@ import com.example.covidsafe.R;
 import java.util.LinkedList;
 import java.util.List;
 
-import edu.uw.covidsafe.comms.PullFromServerTask;
 import edu.uw.covidsafe.comms.PullFromServerTaskDemo;
-import edu.uw.covidsafe.ui.health.TipRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.health.ResourceRecyclerViewAdapter;
-import edu.uw.covidsafe.ui.notif.HistoryRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifDbModel;
 import edu.uw.covidsafe.ui.notif.NotifOpsAsyncTask;
 import edu.uw.covidsafe.ui.notif.NotifRecord;
-import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
+import edu.uw.covidsafe.ui.settings.PermUtils;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
 
 public class MainFragment extends Fragment {
 
     View view;
-    Switch broadcastSwitch;
+    ImageView broadcastSwitch;
     TextView broadcastProp;
+    TextView broadcastTitle;
 
     @SuppressLint("RestrictedApi")
     @Nullable
@@ -100,6 +95,79 @@ public class MainFragment extends Fragment {
             }
         });
 
+        initTestButtons();
+
+        broadcastProp = view.findViewById(R.id.broadcastProp);
+        broadcastTitle = view.findViewById(R.id.broadcastTitle);
+
+        broadcastSwitch = view.findViewById(R.id.switch1);
+        broadcastSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+                boolean gpsEnabled = prefs.getBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
+                boolean bleEnabled = prefs.getBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
+
+                // flip switch to inverse of current broadcasting state
+                broadcastSwitchLogic(!(gpsEnabled||bleEnabled));
+            }
+        });
+        return view;
+    }
+
+    public void broadcastSwitchLogic(boolean isChecked) {
+        if (isChecked) {
+            PermUtils.gpsSwitchLogic(getActivity());
+            PermUtils.bleSwitchLogic(getActivity());
+        }
+        else {
+            Utils.haltLoggingService(getActivity(), view);
+        }
+
+        updateBroadcastUI();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e("state","main fragment on resume "+Constants.PullServiceRunning+","+Constants.LoggingServiceRunning);
+        Constants.CurrentFragment = this;
+        Constants.MainFragment = this;
+        Constants.MainFragmentState = this;
+
+        if (!Constants.PullServiceRunning) {
+            Utils.startPullService(getActivity());
+        }
+
+        updateBroadcastUI();
+
+        // resume broadcasting if it was switched on, but perhaps user restarted phone or previously killed service
+
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        boolean gpsEnabled = prefs.getBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
+        boolean bleEnabled = prefs.getBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
+
+        broadcastSwitchLogic(gpsEnabled||bleEnabled);
+    }
+
+    public void updateBroadcastUI() {
+        Log.e("state","update broadcast ui");
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        boolean gpsEnabled = prefs.getBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
+        boolean bleEnabled = prefs.getBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
+        if (gpsEnabled || bleEnabled) {
+            broadcastSwitch.setImageDrawable(getActivity().getDrawable(R.drawable.switch_on));
+            broadcastTitle.setText("Broadcasting On");
+            Utils.linkify(broadcastProp,getString(R.string.logging));
+        }
+        else {
+            broadcastSwitch.setImageDrawable(getActivity().getDrawable(R.drawable.switch_off));
+            broadcastTitle.setText("Broadcasting Off");
+            Utils.linkify(broadcastProp,getString(R.string.stopping));
+        }
+    }
+
+    public void initTestButtons() {
         Button bb = (Button)view.findViewById(R.id.button6);
         bb.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,7 +192,7 @@ public class MainFragment extends Fragment {
             public void onClick(View v) {
 //                new NotifOpsAsyncTask(getContext(), new NotifRecord(System.currentTimeMillis(),
 //                        System.currentTimeMillis(), "hello history", Constants.MessageType.Exposure.ordinal(),false)).execute();
-                Utils.notif2(getContext());
+//                Utils.notif2(getContext(),"",""");
             }
         });
 
@@ -146,92 +214,5 @@ public class MainFragment extends Fragment {
         bb.setVisibility(View.GONE);
         b3b.setEnabled(false);
         b3b.setVisibility(View.GONE);
-
-        broadcastProp = view.findViewById(R.id.broadcastProp);
-
-        broadcastSwitch = view.findViewById(R.id.switch1);
-        broadcastSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                broadcastSwitchLogic(isChecked);
-            }
-        });
-
-        return view;
-    }
-
-    public void broadcastSwitchLogic(boolean isChecked) {
-        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-        boolean gpsEnabled = prefs.getBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
-        boolean bleEnabled = prefs.getBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
-
-        updateBroadcastUI();
-        if (isChecked) {
-            if (!gpsEnabled && !bleEnabled) {
-                Utils.mkSnack(getActivity(), view, getString(R.string.prompt_to_enable_error));
-                broadcastSwitch.setChecked(false);
-            }
-            else {
-                Utils.startLoggingService(getActivity());
-            }
-        }
-        else {
-            Utils.haltLoggingService(getActivity(), view);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.e("state","main fragment on resume "+Constants.PullServiceRunning+","+Constants.LoggingServiceRunning);
-        Constants.CurrentFragment = this;
-        Constants.MainFragment = this;
-        Constants.MainFragmentState = this;
-
-        if (!Constants.PullServiceRunning) {
-            Utils.startPullService(getActivity());
-        }
-
-        updateBroadcastUI();
-
-        // resume broadcasting if it was switched on, but perhaps user restarted phone or previously killed service
-        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-        if (prefs.getBoolean(getString(R.string.broadcasting_enabled_pkey), false)) {
-            Log.e("state","rebroadcast is true");
-            broadcastSwitch.setChecked(true);
-            broadcastSwitchLogic(true);
-        }
-    }
-
-    public void updateBroadcastUI() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-        boolean gpsEnabled = prefs.getBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
-        boolean bleEnabled = prefs.getBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
-        if (gpsEnabled && bleEnabled) {
-            if (broadcastSwitch.isChecked()) {
-                broadcastProp.setText("Location sharing and bluetooth tracing are turned on");
-            }
-            else {
-                broadcastProp.setText("Location sharing and bluetooth tracing are turned off");
-            }
-        }
-        if (!gpsEnabled && !bleEnabled) {
-            broadcastProp.setText("Location sharing and bluetooth tracing are turned off");
-        }
-        if (gpsEnabled && !bleEnabled) {
-            if (broadcastSwitch.isChecked()) {
-                broadcastProp.setText("Location sharing is turned on and bluetooth tracing is turned off");
-            }
-            else {
-                broadcastProp.setText("Location sharing and bluetooth tracing are turned off");
-            }
-        }
-        if (!gpsEnabled && bleEnabled) {
-            if (broadcastSwitch.isChecked()) {
-                broadcastProp.setText("Location sharing is turned off and bluetooth tracing is turned on");
-            }
-            else {
-                broadcastProp.setText("Location sharing and bluetooth tracing are turned off");
-            }
-        }
     }
 }

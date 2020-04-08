@@ -28,8 +28,8 @@ public class PullService extends IntentService {
         super.onStartCommand(intent, flags, startId);
         Log.e("state","pull service started");
         ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
-        // TODO unchange after demo
-//        Constants.pullFromServerTask = exec.scheduleWithFixedDelay(new PullFromServerTask(getApplicationContext()), 0, Constants.PullFromServerIntervalInMinutes, TimeUnit.MINUTES);
+
+        Constants.pullFromServerTask = exec.scheduleWithFixedDelay(new PullFromServerTask(getApplicationContext()), 0, Constants.PullFromServerIntervalInMinutes, TimeUnit.MINUTES);
         Constants.logPurgerTask = exec.scheduleWithFixedDelay(new LogPurgerTask(getApplicationContext()), 0, Constants.LogPurgerIntervalInDays, TimeUnit.DAYS);
 
         return START_NOT_STICKY;

@@ -37,7 +37,8 @@
         </activity>
 
         <activity
-            android:name="edu.uw.covidsafe.ui.MainActivity">
+            android:name="edu.uw.covidsafe.ui.MainActivity"
+            android:launchMode="singleTop">
         </activity>
         <activity
             android:name="edu.uw.covidsafe.ui.onboarding.OnboardingActivity"

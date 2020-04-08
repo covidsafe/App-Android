@@ -1,6 +1,7 @@
 package edu.uw.covidsafe.ui.onboarding;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,7 +20,7 @@ import edu.uw.covidsafe.utils.Constants;
 
 public class OnboardingActivity extends AppCompatActivity {
 
-    boolean forceOnboard = true;
+    boolean forceOnboard = false;
     Activity activity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class OnboardingActivity extends AppCompatActivity {
         Log.e("onboarding","should start onboarding? "+b);
         if (b || forceOnboard) {
             setContentView(R.layout.activity_onboarding);
+            Constants.pageNumber=4;
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_onboarding,
                     Constants.PagerFragment).commit();
         }
@@ -51,8 +53,11 @@ public class OnboardingActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 Constants.pageNumber = 4;
-                getSupportFragmentManager().beginTransaction().replace(
-                        R.id.fragment_container_onboarding, Constants.PagerFragment).commit();
+                FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+                tx.setCustomAnimations(
+                        R.anim.enter_left_to_right,R.anim.exit_left_to_right,
+                        R.anim.enter_left_to_right,R.anim.exit_left_to_right);
+                tx.replace(R.id.fragment_container_onboarding, Constants.PagerFragment).commit();
                 return true;
         }
         return false;

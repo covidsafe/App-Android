@@ -120,7 +120,8 @@ public class Utils {
 
         SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean(av.getString(R.string.broadcasting_enabled_pkey), false);
+        editor.putBoolean(av.getString(R.string.gps_enabled_pkey), false);
+        editor.putBoolean(av.getString(R.string.ble_enabled_pkey), false);
         editor.commit();
     }
 
@@ -188,23 +189,24 @@ public class Utils {
         return UUID.randomUUID().toString();
     }
 
-    public static void notif2(Context mContext) {
+    public static void notif2(Context mContext, String title, String message) {
         NotificationManager mNotificationManager;
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(mContext.getApplicationContext(), "notify_001");
         Intent ii = new Intent(mContext.getApplicationContext(), MainActivity.class);
+        ii.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, ii, 0);
 
         NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
-        bigText.bigText("CovidSafe");
-        bigText.setBigContentTitle("You may have been exposed");
-        bigText.setSummaryText("You may have been exposed");
+        bigText.bigText(title);
+        bigText.setBigContentTitle(title);
+        bigText.setSummaryText(message);
 
         mBuilder.setContentIntent(pendingIntent);
         mBuilder.setSmallIcon(R.drawable.warning2);
-        mBuilder.setContentTitle("Your Title");
-        mBuilder.setContentText("Your text");
+        mBuilder.setContentTitle(title);
+        mBuilder.setContentText(message);
         mBuilder.setPriority(Notification.PRIORITY_MAX);
         mBuilder.setStyle(bigText);
 //        mBuilder.setBadgeIconType(R.drawable.logo2);
@@ -222,9 +224,6 @@ public class Utils {
                     NotificationManager.IMPORTANCE_HIGH);
             mNotificationManager.createNotificationChannel(channel);
             channel.setShowBadge(true);
-            channel.setAllowBubbles(true);
-            channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
-            channel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
             mBuilder.setChannelId(channelId);
         }
 
@@ -395,11 +394,6 @@ public class Utils {
         Utils.createNotificationChannel(av);
 
         av.startService(new Intent(av, LoggingService.class));
-
-        SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean(av.getString(R.string.broadcasting_enabled_pkey), true);
-        editor.commit();
     }
 
     public static void startPullService(Activity av) {
