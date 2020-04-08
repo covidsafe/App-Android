@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.covidsafe.R;
 import edu.uw.covidsafe.ui.MainActivity;
@@ -31,7 +32,16 @@ public class HealthFragment extends Fragment {
         reportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.SubmitFragment).commit();
+                FragmentTransaction tx = getActivity().getSupportFragmentManager().beginTransaction();
+                tx.setCustomAnimations(
+                        R.anim.enter_right_to_left,R.anim.exit_right_to_left,
+                        R.anim.enter_left_to_right,R.anim.exit_left_to_right);
+//                    tx.setCustomAnimations(
+//                            R.anim.enter_bottom_to_top,R.anim.no_anim,
+//                            R.anim.enter_top_to_bottom,R.anim.no_anim);
+//                    tx.addToBackStack(null);
+                tx.replace(R.id.fragment_container, Constants.SubmitFragment).commit();
+//                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.SubmitFragment).commit();
             }
         });
         return view;
