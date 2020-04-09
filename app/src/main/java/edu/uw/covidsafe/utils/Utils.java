@@ -190,44 +190,46 @@ public class Utils {
     }
 
     public static void notif2(Context mContext, String title, String message) {
-        NotificationManager mNotificationManager;
+        SharedPreferences prefs = mContext.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        if (prefs.getBoolean(mContext.getString(R.string.notifs_enabled_pkey), Constants.NOTIFS_ENABLED)) {
+            NotificationManager mNotificationManager;
 
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(mContext.getApplicationContext(), "notify_001");
-        Intent ii = new Intent(mContext.getApplicationContext(), MainActivity.class);
-        ii.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, ii, 0);
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(mContext.getApplicationContext(), "notify_001");
+            Intent ii = new Intent(mContext.getApplicationContext(), MainActivity.class);
+            ii.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, ii, 0);
 
-        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
-        bigText.bigText(title);
-        bigText.setBigContentTitle(title);
-        bigText.setSummaryText(message);
+            NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+            bigText.bigText(title);
+            bigText.setBigContentTitle(title);
+            bigText.setSummaryText(message);
 
-        mBuilder.setContentIntent(pendingIntent);
-        mBuilder.setSmallIcon(R.drawable.warning2);
-        mBuilder.setContentTitle(title);
-        mBuilder.setContentText(message);
-        mBuilder.setPriority(Notification.PRIORITY_MAX);
-        mBuilder.setStyle(bigText);
+            mBuilder.setContentIntent(pendingIntent);
+            mBuilder.setSmallIcon(R.drawable.warning2);
+            mBuilder.setContentTitle(title);
+            mBuilder.setContentText(message);
+            mBuilder.setPriority(Notification.PRIORITY_MAX);
+            mBuilder.setStyle(bigText);
 //        mBuilder.setBadgeIconType(R.drawable.logo2);
 
-        mNotificationManager =
-                (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager =
+                    (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
 // === Removed some obsoletes
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-        {
-            String channelId = "Your_channel_id";
-            NotificationChannel channel = new NotificationChannel(
-                    channelId,
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_HIGH);
-            mNotificationManager.createNotificationChannel(channel);
-            channel.setShowBadge(true);
-            mBuilder.setChannelId(channelId);
-        }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                String channelId = "Your_channel_id";
+                NotificationChannel channel = new NotificationChannel(
+                        channelId,
+                        "Channel human readable title",
+                        NotificationManager.IMPORTANCE_HIGH);
+                mNotificationManager.createNotificationChannel(channel);
+                channel.setShowBadge(true);
+                mBuilder.setChannelId(channelId);
+            }
 
-        mNotificationManager.notify(0, mBuilder.build());
+            mNotificationManager.notify(0, mBuilder.build());
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

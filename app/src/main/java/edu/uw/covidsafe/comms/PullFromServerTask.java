@@ -246,8 +246,8 @@ public class PullFromServerTask implements Runnable {
                         if (intersect(area)) {
                             Log.e("msg", "NARROWCAST USER MESSAGE " + areaMatch.user_message);
                             narrowCastMessages.add(areaMatch.user_message);
-                            narrowCastMessageStartTimes.add(area.begin_time);
-                            narrowCastMessageEndTimes.add(area.end_time);
+                            narrowCastMessageStartTimes.add(area.beginTime);
+                            narrowCastMessageEndTimes.add(area.endTime);
                             break;
                         }
                     }
@@ -269,15 +269,15 @@ public class PullFromServerTask implements Runnable {
 
     public boolean intersect(Area area) {
         GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
-        List<GpsRecord> gpsRecords = gpsRepo.getRecordsBetweenTimestamps(area.begin_time, area.end_time);
+        List<GpsRecord> gpsRecords = gpsRepo.getRecordsBetweenTimestamps(area.beginTime, area.endTime);
 
         for (GpsRecord record : gpsRecords) {
             float[] result = new float[3];
             Location.distanceBetween(record.getLat(), record.getLongi(), area.location.latitude, area.location.longitude, result);
 
-            if ((result.length == 1 && result[0] < area.radius_meters) ||
-                (result.length == 2 && result[1] < area.radius_meters) ||
-                (result.length >= 3 && result[2] < area.radius_meters)) {
+            if ((result.length == 1 && result[0] < area.radiusMeters) ||
+                (result.length == 2 && result[1] < area.radiusMeters) ||
+                (result.length >= 3 && result[2] < area.radiusMeters)) {
                 return true;
             }
         }

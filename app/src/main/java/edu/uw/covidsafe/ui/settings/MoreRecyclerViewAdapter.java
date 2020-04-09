@@ -40,9 +40,9 @@ public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         desc.add("Share a link of this app");
         desc.add("subtitle");
         desc.add("subtitle");
-        icons.add(cxt.getDrawable(R.drawable.icon_share));
+        icons.add(cxt.getDrawable(R.drawable.icon_share2));
         icons.add(cxt.getDrawable(R.drawable.logo2));
-        icons.add(cxt.getDrawable(R.drawable.icon_faq));
+        icons.add(cxt.getDrawable(R.drawable.icon_faq2));
     }
 
     @NonNull

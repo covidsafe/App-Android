@@ -29,6 +29,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.uw.covidsafe.comms.PullFromServerTaskDemo;
+import edu.uw.covidsafe.hcp.SubmitNarrowcastMessageTask;
 import edu.uw.covidsafe.ui.health.ResourceRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifDbModel;
 import edu.uw.covidsafe.ui.notif.NotifOpsAsyncTask;
@@ -156,23 +157,33 @@ public class MainFragment extends Fragment {
         boolean gpsEnabled = prefs.getBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
         boolean bleEnabled = prefs.getBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
 
-        broadcastSwitchLogic(gpsEnabled||bleEnabled);
+//        broadcastSwitchLogic(gpsEnabled||bleEnabled);
     }
 
     public void updateBroadcastUI() {
         Log.e("state","update broadcast ui");
+        boolean hasGpsPerms = Utils.hasGpsPermissions(getActivity());
+        boolean hasBlePerms = Utils.hasBlePermissions(getActivity());
+
         SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
         boolean gpsEnabled = prefs.getBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
         boolean bleEnabled = prefs.getBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
-        if (gpsEnabled || bleEnabled) {
-            broadcastSwitch.setImageDrawable(getActivity().getDrawable(R.drawable.switch_on));
-            broadcastTitle.setText("Broadcasting On");
-            Utils.linkify(broadcastProp,getString(R.string.logging));
-        }
-        else {
+
+        if ((!hasGpsPerms && !hasBlePerms) || (!gpsEnabled && !bleEnabled)) {
+            editor.putBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
+            editor.putBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
+            editor.commit();
+
             broadcastSwitch.setImageDrawable(getActivity().getDrawable(R.drawable.switch_off));
             broadcastTitle.setText("Broadcasting Off");
             Utils.linkify(broadcastProp,getString(R.string.stopping));
+        }
+        else if (gpsEnabled || bleEnabled) {
+            broadcastSwitch.setImageDrawable(getActivity().getDrawable(R.drawable.switch_on));
+            broadcastTitle.setText("Broadcasting On");
+            Utils.linkify(broadcastProp,getString(R.string.logging));
         }
     }
 
@@ -181,8 +192,8 @@ public class MainFragment extends Fragment {
         bb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new NotifOpsAsyncTask(getContext(), new NotifRecord(System.currentTimeMillis(),
-                        System.currentTimeMillis(), getString(R.string.default_exposed_notif), Constants.MessageType.Exposure.ordinal(),true)).execute();
+//                new NotifOpsAsyncTask(getContext(), new NotifRecord(System.currentTimeMillis(),
+//                        System.currentTimeMillis(), getString(R.string.default_exposed_notif), Constants.MessageType.Exposure.ordinal(),true)).execute();
 //                Utils.notif(getContext());
             }
         });
@@ -191,7 +202,12 @@ public class MainFragment extends Fragment {
         b2b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new NotifOpsAsyncTask(getContext(),Constants.NotifDatabaseOps.DeleteAll).execute();
+//                new NotifOpsAsyncTask(getContext(),Constants.NotifDatabaseOps.DeleteAll).execute();
+
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
+                intent.setData(uri);
+                getActivity().startActivity(intent);
             }
         });
 
@@ -214,13 +230,17 @@ public class MainFragment extends Fragment {
 //                    ss+=model.records.getValue().get(i).current;
 //                }
 //                Toast.makeText(getContext(), "notif size "+ss,Toast.LENGTH_LONG).show();
-//                Thread r = new Thread(new PullFromServerTaskDemo(getContext()));
-//                r.start();
 
-                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
-                intent.setData(uri);
-                getActivity().startActivity(intent);
+                Thread r = new Thread(new PullFromServerTaskDemo(getContext()));
+                r.start();
+//                List<Double> lats = new LinkedList<>();
+//                List<Double> longs = new LinkedList<>();
+//                List<Float> radii = new LinkedList<>();
+//                lats.add(47.625);
+//                longs.add(-122.25);
+//                radii.add(10000f);
+//                String message = "danger";
+//                new SubmitNarrowcastMessageTask(getActivity(), view, lats,longs,radii,message).execute();
             }
         });
 

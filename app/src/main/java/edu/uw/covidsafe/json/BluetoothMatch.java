@@ -30,6 +30,7 @@ public class BluetoothMatch {
             arr.put(seed.toJson());
         }
         bluetooth_match.put("seeds", arr);
+        bluetooth_match.put("user_message", userMessage);
         return bluetooth_match;
     }
 }
