@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/gray4"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent">
 
@@ -23,7 +24,6 @@
         android:gravity="center"
         android:text="Help your community by reporting your diagnosis"
         android:textSize="20sp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guidelineV85"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/guidelineV15"

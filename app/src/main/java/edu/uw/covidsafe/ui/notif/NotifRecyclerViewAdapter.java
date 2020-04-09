@@ -67,9 +67,17 @@ public class NotifRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         SimpleDateFormat timeFormat2 = new SimpleDateFormat("h:mma");
         SimpleDateFormat dateFormat = new SimpleDateFormat("M/d");
 
+        if (rec.msgType == Constants.MessageType.Exposure.ordinal()) {
+            ((NotifCard)holder).header.setText("You might have been exposed");
+        }
+        else {
+            ((NotifCard)holder).header.setText("Announcement");
+        }
+
         String tt = timeFormat.format(rec.getTs_start()) +"-"+ timeFormat2.format(rec.getTs_end());
 
-        Spannable ss = (Spannable)Html.fromHtml(rec.msg+" This was during <b>"+dateFormat.format(rec.getTs_start())+ "</b> during <b>"+tt+"</b>");
+//        Spannable ss = (Spannable)Html.fromHtml(rec.msg+" This was during <b>"+dateFormat.format(rec.getTs_start())+ "</b> during <b>"+tt+"</b>");
+        Spannable ss = (Spannable)Html.fromHtml(rec.msg+" This was during <b>"+dateFormat.format(rec.getTs_start())+".");
         ((NotifCard)holder).message.setText(ss);
         ((NotifCard)holder).dismissButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -71,19 +71,18 @@ public class GpsUtils {
         }
     }
 
-//    public static Location getLastLocation(Context cxt) {
-//        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(cxt);
-//        fusedLocationClient.getLastLocation()
-//                .addOnSuccessListener((Activity) cxt, new OnSuccessListener<Location>() {
-//                    @Override
-//                    public void onSuccess(Location location) {
-//                        // Got last known location. In some rare situations this can be null.
-//                        if (location != null) {
-//                            // Logic to handle location object
-//                        }
-//                    }
-//                });
-//    }
+    public static Location getLastLocation(Context cxt) {
+        LocationManager locationManager = (LocationManager) cxt.getSystemService(Context.LOCATION_SERVICE);
+        try {
+            return locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        }
+        catch (SecurityException e) {
+            return null;
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
 
     public static void startGps(Context cxt) {
         initializeLocationManager(cxt);

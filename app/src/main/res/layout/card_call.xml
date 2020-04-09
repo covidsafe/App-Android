@@ -29,12 +29,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="1dp"
-        android:backgroundTint="@color/orange"
+        android:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
         app:layout_constraintStart_toStartOf="@+id/guidelineV05"
         app:layout_constraintTop_toTopOf="parent"
-        app:strokeColor="@color/gray"
+        app:strokeColor="@color/orange2"
         app:strokeWidth="1dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -49,7 +49,7 @@
                 android:layout_marginTop="13dp"
                 android:layout_marginBottom="12dp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/rect2"
+                android:src="@drawable/rect3"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guidelineV10"
                 app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +60,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/icon_phone"
+                android:src="@drawable/icon_phone3"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView7"
                 app:layout_constraintEnd_toEndOf="@+id/imageView7"
                 app:layout_constraintHorizontal_bias="0.526"

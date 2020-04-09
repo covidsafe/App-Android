@@ -16,7 +16,6 @@ import java.util.List;
 import edu.uw.covidsafe.comms.NetworkHelper;
 import edu.uw.covidsafe.json.Area;
 import edu.uw.covidsafe.json.AreaMatch;
-import edu.uw.covidsafe.json.MatchMessage;
 
 public class SubmitNarrowcastMessageTask extends AsyncTask<Void, Void, Void> {
 
@@ -38,31 +37,28 @@ public class SubmitNarrowcastMessageTask extends AsyncTask<Void, Void, Void> {
         this.msg = msg;
     }
 
-    public MatchMessage packageData() {
-        MatchMessage matchMessage = new MatchMessage();
-
+    public AreaMatch packageData() {
         AreaMatch amatch = new AreaMatch();
-        amatch.user_message = this.msg;
+        amatch.userMessage = this.msg;
         amatch.areas = new Area[lats.size()];
         for (int i = 0; i < lats.size(); i++) {
-            amatch.areas[i] = new Area(lats.get(i),longs.get(i),radii.get(i),System.currentTimeMillis(),System.currentTimeMillis());
+            amatch.areas[i] = new Area(lats.get(i),longs.get(i),radii.get(i),
+                    System.currentTimeMillis(),System.currentTimeMillis());
         }
 
-        matchMessage.areaMatches = new AreaMatch[]{amatch};
-
-        return matchMessage;
+        return amatch;
     }
 
     @Override
     protected Void doInBackground(Void... params) {
         Log.e("narrowcast","SubmitNarrowcastMessageTask");
-        String url = MatchMessage.toHttpString();
+        String url = AreaMatch.toHttpString();
 
-        MatchMessage matchMessage = packageData();
+        AreaMatch areaMatch = packageData();
 
         JSONObject matchMessageObj = null;
         try {
-            matchMessageObj = matchMessage.toJSON();
+            matchMessageObj = areaMatch.toJson();
         }
         catch (Exception e) {
             Log.e("err",e.getMessage());
@@ -72,9 +68,15 @@ public class SubmitNarrowcastMessageTask extends AsyncTask<Void, Void, Void> {
         }
 
         Log.e("narrowcast","sendreqest");
+        try {
+            Log.e("narrowcast", matchMessageObj.toString(2));
+        }
+        catch(Exception e) {
+            Log.e("err",e.getMessage());
+        }
         JSONObject resp = NetworkHelper.sendRequest(url, Request.Method.PUT, matchMessageObj);
         if (resp == null) {
-            mkSnack(av, view, "There was an error with submitting your traces. Please try again later.");
+            mkSnack(av, view, "There was an error with submitting your message. Please try again later.");
             return null;
         }
 

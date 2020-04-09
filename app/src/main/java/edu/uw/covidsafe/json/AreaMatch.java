@@ -4,10 +4,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import edu.uw.covidsafe.comms.NetworkConstant;
+
 public class AreaMatch {
 
     public Area[] areas;
-    public String user_message;
+    public String userMessage;
 
     public JSONObject toJson() throws JSONException {
         JSONObject area_match = new JSONObject();
@@ -16,7 +18,7 @@ public class AreaMatch {
             arr.put(area.toJson());
         }
         area_match.put("areas", arr);
-        area_match.put("user_message",user_message);
+        area_match.put("userMessage", userMessage);
         return area_match;
     }
 
@@ -29,9 +31,13 @@ public class AreaMatch {
                 areaMatch.areas[i] = Area.parse(array.getJSONObject(i));
             }
         }
-        if (obj.has("user_message")) {
-            areaMatch.user_message = obj.getString("user_message");
+        if (obj.has("userMessage")) {
+            areaMatch.userMessage = obj.getString("userMessage");
         }
         return areaMatch;
+    }
+
+    public static String toHttpString() {
+        return NetworkConstant.BASE_URL+"Messages/AreaReport";
     }
 }

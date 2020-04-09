@@ -90,6 +90,9 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:2.2.1"
     androidTestImplementation "androidx.room:room-testing:2.2.1"
 
+    implementation 'net.zetetic:android-database-sqlcipher:4.3.0'
+    implementation "androidx.sqlite:sqlite:2.0.1"
+
     implementation 'org.greenrobot:eventbus:3.2.0'
     implementation group: 'commons-codec', name: 'commons-codec', version: '1.14'
     implementation group: 'io.grpc', name: 'grpc-netty', version: '1.28.0'

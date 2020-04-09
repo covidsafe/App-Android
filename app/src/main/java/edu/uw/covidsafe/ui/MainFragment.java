@@ -4,6 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -132,9 +135,10 @@ public class MainFragment extends Fragment {
         }
         else {
             Utils.haltLoggingService(getActivity(), view);
+            PermUtils.transition(true, getActivity());
         }
 
-        updateBroadcastUI();
+        updateBroadcastUI(false);
     }
 
     @Override
@@ -149,18 +153,10 @@ public class MainFragment extends Fragment {
             Utils.startPullService(getActivity());
         }
 
-        updateBroadcastUI();
-
-        // resume broadcasting if it was switched on, but perhaps user restarted phone or previously killed service
-
-        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-        boolean gpsEnabled = prefs.getBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
-        boolean bleEnabled = prefs.getBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
-
-//        broadcastSwitchLogic(gpsEnabled||bleEnabled);
+        updateBroadcastUI(true);
     }
 
-    public void updateBroadcastUI() {
+    public void updateBroadcastUI(boolean updateSwitch) {
         Log.e("state","update broadcast ui");
         boolean hasGpsPerms = Utils.hasGpsPermissions(getActivity());
         boolean hasBlePerms = Utils.hasBlePermissions(getActivity());
@@ -176,16 +172,32 @@ public class MainFragment extends Fragment {
             editor.putBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
             editor.commit();
 
-            broadcastSwitch.setImageDrawable(getActivity().getDrawable(R.drawable.switch_off));
+            if (updateSwitch) {
+                Log.e("transition","set to off");
+                broadcastSwitch.setImageDrawable(getActivity().getDrawable(R.drawable.switch_off));
+            }
+
             broadcastTitle.setText("Broadcasting Off");
             Utils.linkify(broadcastProp,getString(R.string.stopping));
         }
+        else if (!hasGpsPerms) {
+            editor.putBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
+            editor.commit();
+        }
+        else if (!hasBlePerms) {
+            editor.putBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
+            editor.commit();
+        }
         else if (gpsEnabled || bleEnabled) {
-            broadcastSwitch.setImageDrawable(getActivity().getDrawable(R.drawable.switch_on));
+            if (updateSwitch) {
+                Log.e("transition","set to on");
+                broadcastSwitch.setImageDrawable(getActivity().getDrawable(R.drawable.switch_on));
+            }
             broadcastTitle.setText("Broadcasting On");
             Utils.linkify(broadcastProp,getString(R.string.logging));
         }
     }
+
 
     public void initTestButtons() {
         Button bb = (Button)view.findViewById(R.id.button6);
@@ -203,11 +215,18 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
 //                new NotifOpsAsyncTask(getContext(),Constants.NotifDatabaseOps.DeleteAll).execute();
+//                SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+//                boolean gpsEnabled = prefs.getBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
+//                boolean bleEnabled = prefs.getBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
+//
+//                Log.e("sensor","status "+gpsEnabled+","+bleEnabled);
+//                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+//                Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
+//                intent.setData(uri);
+//                getActivity().startActivity(intent);
 
-                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
-                intent.setData(uri);
-                getActivity().startActivity(intent);
+                Thread r = new Thread(new PullFromServerTaskDemo(getContext(), getActivity(), view));
+                r.start();
             }
         });
 
@@ -231,16 +250,14 @@ public class MainFragment extends Fragment {
 //                }
 //                Toast.makeText(getContext(), "notif size "+ss,Toast.LENGTH_LONG).show();
 
-                Thread r = new Thread(new PullFromServerTaskDemo(getContext()));
-                r.start();
-//                List<Double> lats = new LinkedList<>();
-//                List<Double> longs = new LinkedList<>();
-//                List<Float> radii = new LinkedList<>();
-//                lats.add(47.625);
-//                longs.add(-122.25);
-//                radii.add(10000f);
-//                String message = "danger";
-//                new SubmitNarrowcastMessageTask(getActivity(), view, lats,longs,radii,message).execute();
+                List<Double> lats = new LinkedList<>();
+                List<Double> longs = new LinkedList<>();
+                List<Float> radii = new LinkedList<>();
+                lats.add(47.625);
+                longs.add(-122.25);
+                radii.add(10000f);
+                String message = "danger";
+                new SubmitNarrowcastMessageTask(getActivity(), view, lats,longs,radii,message).execute();
             }
         });
 

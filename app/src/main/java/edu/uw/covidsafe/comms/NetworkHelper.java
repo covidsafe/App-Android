@@ -117,7 +117,12 @@ public class NetworkHelper {
         } catch (TimeoutException e) {
             Log.e("net","33 "+(e.toString())+"");
         }
-        Log.e("net","finished request "+response.toString());
+        if (response != null) {
+            Log.e("net", "finished request " + response.toString());
+        }
+        else {
+            Log.e("net", "finished request ");
+        }
         return response;
     }
 

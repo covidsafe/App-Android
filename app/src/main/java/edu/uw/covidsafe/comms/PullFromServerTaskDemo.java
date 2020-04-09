@@ -1,16 +1,23 @@
 package edu.uw.covidsafe.comms;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.location.LocationManager;
+import android.text.SpannableStringBuilder;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.example.covidsafe.R;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import edu.uw.covidsafe.gps.GpsUtils;
 import edu.uw.covidsafe.json.Area;
 import edu.uw.covidsafe.ble.BleDbRecordRepository;
 import edu.uw.covidsafe.ble.BleRecord;
@@ -37,14 +44,17 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 
 public class PullFromServerTaskDemo implements Runnable {
 
     Context context;
+    Activity av;
+    View view;
 
-    public PullFromServerTaskDemo(Context context) {
+    public PullFromServerTaskDemo(Context context, Activity av, View view) {
         this.context = context;
+        this.av = av;
+        this.view = view;
     }
 
     @Override
@@ -267,8 +277,8 @@ public class PullFromServerTaskDemo implements Runnable {
                     Area[] areas = areaMatch.areas;
                     for (Area area : areas) {
                         if (intersect(area)) {
-                            Log.e("msg", "NARROWCAST USER MESSAGE " + areaMatch.user_message);
-                            narrowCastMessages.add(areaMatch.user_message);
+                            Log.e("msg", "NARROWCAST USER MESSAGE " + areaMatch.userMessage);
+                            narrowCastMessages.add(areaMatch.userMessage);
                             narrowCastMessageStartTimes.add(area.beginTime);
                             narrowCastMessageEndTimes.add(area.endTime);
                             break;
@@ -293,6 +303,16 @@ public class PullFromServerTaskDemo implements Runnable {
     public boolean intersect(Area area) {
         GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
         List<GpsRecord> gpsRecords = gpsRepo.getRecordsBetweenTimestamps(area.beginTime, area.endTime);
+        if (gpsRecords.size() == 0) {
+            if (!Utils.hasGpsPermissions(context)) {
+                mkSnack(av, view, "We need location services enabled to check for announcements. Please enable location services permission.");
+                return false;
+            }
+            else {
+                Location loc = GpsUtils.getLastLocation(context);
+                gpsRecords.add(new GpsRecord(0,loc.getLatitude(),loc.getLongitude(),""));
+            }
+        }
 
         for (GpsRecord record : gpsRecords) {
             float[] result = new float[3];
@@ -433,7 +453,7 @@ public class PullFromServerTaskDemo implements Runnable {
         for (int i = 0; i < msgs.size(); i++) {
             // add notification to DB
             if (messageType == Constants.MessageType.Exposure) {
-                Log.e("demo","notify bulk");
+                Log.e("demo","notify exposure");
                 String msg = msgs.get(i);
                 if (msg.isEmpty()) {
                     msg = context.getString(R.string.default_exposed_notif);
@@ -448,15 +468,38 @@ public class PullFromServerTaskDemo implements Runnable {
             }
             else {
                 if (!msgs.isEmpty()) {
+                    Log.e("demo","narrowcast exposure");
                     new NotifOpsAsyncTask(context, new NotifRecord(
                             contactTimesStart.get(i),
                             contactTimesEnd.get(i),
                             msgs.get(i),
-                            messageType.ordinal(),
+                            Constants.MessageType.NarrowCast.ordinal(),
                             true)).execute();
                     Utils.notif2(context, "Announcement",msgs.get(i));
                 }
             }
         }
+    }
+
+    public static void mkSnack(Activity av, View v, String msg) {
+        av.runOnUiThread(new Runnable() {
+            public void run() {
+                SpannableStringBuilder builder = new SpannableStringBuilder();
+                builder.append(msg);
+                Snackbar snackBar = Snackbar.make(v, builder, Snackbar.LENGTH_LONG);
+
+                snackBar.setAction("Dismiss", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        snackBar.dismiss();
+                    }
+                });
+
+                View snackbarView = snackBar.getView();
+                TextView textView = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
+                textView.setMaxLines(5);
+
+                snackBar.show();
+            }});
     }
 }
