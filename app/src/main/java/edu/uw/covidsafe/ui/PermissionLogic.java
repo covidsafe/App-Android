@@ -47,7 +47,6 @@ public class PermissionLogic {
                 if (shouldAsk) {
                     makeRationaleDialog(av, requestCode, Manifest.permission.ACCESS_BACKGROUND_LOCATION);
                 } else if (!shouldAsk) {
-
                     // preemptively add it
                     Constants.SuppressSwitchStateCheck = true;
                     editor.putBoolean(av.getString(R.string.gps_enabled_pkey), true);
@@ -65,7 +64,7 @@ public class PermissionLogic {
             if (fineResult == PackageManager.PERMISSION_DENIED) {
                 boolean shouldAsk;
                 shouldAsk = ActivityCompat.shouldShowRequestPermissionRationale(av, Manifest.permission.ACCESS_FINE_LOCATION);
-                if (requestCode == 1 && shouldAsk) {
+                if (shouldAsk) {
                     makeRationaleDialog(av, requestCode, Manifest.permission.ACCESS_FINE_LOCATION);
                 } else if (!shouldAsk) {
                     // preemptively add it
@@ -101,9 +100,17 @@ public class PermissionLogic {
         SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
+        String msg;
+        if (requestCode == 1) {
+            msg = av.getString(R.string.perm_ble_ask);
+        }
+        else {
+            msg = av.getString(R.string.perm_gps_ask);
+        }
+
         AlertDialog dialog = new MaterialAlertDialogBuilder(av)
                 .setTitle("Permission denied")
-                .setMessage(av.getString(R.string.perm_ble_ask))
+                .setMessage(msg)
                 .setNegativeButton(R.string.no,new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

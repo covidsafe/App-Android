@@ -63,6 +63,7 @@ public class NetworkHelper {
             protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
                 try {
                     Log.e("net","parse response size "+response.data.length);
+                    Log.e("net","parse status code "+response.statusCode);
                     // response is just empty, return an empty json object
                     if (response.data.length == 0) {
                         byte[] responseData = "{}".getBytes("UTF8");

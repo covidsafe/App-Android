@@ -20,8 +20,8 @@ import edu.uw.covidsafe.utils.Utils;
 
 public class PermUtils {
     public static void gpsSwitchLogic(Activity av) {
-        SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
+            SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
 
         boolean hasGps = Utils.hasGpsPermissions(av);
         if (hasGps) {
@@ -36,6 +36,7 @@ public class PermUtils {
             }
         }
         else {
+            Log.e("state","REQUEST GPS PERMS");
             ActivityCompat.requestPermissions(av, Constants.gpsPermissions, 2);
         }
     }
