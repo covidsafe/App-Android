@@ -1,16 +1,22 @@
 package edu.uw.covidsafe.comms;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.text.SpannableStringBuilder;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.example.covidsafe.R;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import edu.uw.covidsafe.gps.GpsUtils;
 import edu.uw.covidsafe.json.Area;
 import edu.uw.covidsafe.ble.BleDbRecordRepository;
 import edu.uw.covidsafe.ble.BleRecord;
@@ -269,6 +275,15 @@ public class PullFromServerTask implements Runnable {
     public boolean intersect(Area area) {
         GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
         List<GpsRecord> gpsRecords = gpsRepo.getRecordsBetweenTimestamps(area.beginTime, area.endTime);
+        if (gpsRecords.size() == 0) {
+            if (Utils.hasGpsPermissions(context)) {
+                Location loc = GpsUtils.getLastLocation(context);
+                gpsRecords.add(new GpsRecord(0,loc.getLatitude(),loc.getLongitude(),""));
+            }
+            else {
+                return false;
+            }
+        }
 
         for (GpsRecord record : gpsRecords) {
             float[] result = new float[3];
