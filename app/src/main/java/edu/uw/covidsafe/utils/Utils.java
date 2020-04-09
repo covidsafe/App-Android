@@ -192,6 +192,7 @@ public class Utils {
     public static void notif2(Context mContext, String title, String message) {
         SharedPreferences prefs = mContext.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         if (prefs.getBoolean(mContext.getString(R.string.notifs_enabled_pkey), Constants.NOTIFS_ENABLED)) {
+            Log.e("notif","notif");
             NotificationManager mNotificationManager;
 
             NotificationCompat.Builder mBuilder =

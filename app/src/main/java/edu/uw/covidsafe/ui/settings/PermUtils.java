@@ -6,8 +6,12 @@ import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.core.app.ActivityCompat;
 
@@ -20,8 +24,8 @@ import edu.uw.covidsafe.utils.Utils;
 
 public class PermUtils {
     public static void gpsSwitchLogic(Activity av) {
-            SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
+        SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
 
         boolean hasGps = Utils.hasGpsPermissions(av);
         if (hasGps) {
@@ -30,6 +34,7 @@ public class PermUtils {
             if (!Constants.LoggingServiceRunning) {
                 Utils.startLoggingService(av);
                 GpsUtils.startGps(av);
+                PermUtils.transition(false,av);
             }
             else {
                 GpsUtils.startGps(av);
@@ -57,6 +62,7 @@ public class PermUtils {
             if (!Constants.LoggingServiceRunning) {
                 Utils.startLoggingService(av);
                 BluetoothUtils.startBle(av);
+                PermUtils.transition(false,av);
             }
             else {
                 BluetoothUtils.startBle(av);
@@ -72,5 +78,26 @@ public class PermUtils {
                 ActivityCompat.requestPermissions(av, Utils.getBlePermissions(), 1);
             }
         }
+    }
+
+    public static void transition(boolean toOff, Activity av) {
+        Log.e("transition","transition "+toOff);
+        Drawable backgrounds[] = new Drawable[2];
+        Resources res = av.getResources();
+        if (toOff) {
+            backgrounds[0] = res.getDrawable(R.drawable.switch_on);
+            backgrounds[1] = res.getDrawable(R.drawable.switch_off);
+        }
+        else {
+            backgrounds[0] = res.getDrawable(R.drawable.switch_off);
+            backgrounds[1] = res.getDrawable(R.drawable.switch_on);
+        }
+
+        TransitionDrawable crossfader = new TransitionDrawable(backgrounds);
+
+        ImageView image = (ImageView)av.findViewById(R.id.switch1);
+        image.setImageDrawable(crossfader);
+
+        crossfader.startTransition(1000);
     }
 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,6 +68,15 @@ public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                     String shareMessage= "Download and learn more about the CovidSafe app at covidsafe.cs.washington.edu";
                     shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
                     av.startActivity(Intent.createChooser(shareIntent, "Select a sharing option"));
+                }
+            });
+        }
+        else if (titles.get(position).toLowerCase().contains("about")) {
+            ((MoreCard)holder).card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(av.getString(R.string.covidSiteLink)));
+                    av.startActivity(browserIntent);
                 }
             });
         }

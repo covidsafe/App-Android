@@ -3,21 +3,27 @@ package edu.uw.covidsafe.comms;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.AsyncTask;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.android.volley.Request;
+import com.example.covidsafe.R;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONObject;
 
 import edu.uw.covidsafe.gps.GpsDbRecordRepository;
 import edu.uw.covidsafe.gps.GpsRecord;
+import edu.uw.covidsafe.gps.GpsUtils;
 import edu.uw.covidsafe.json.SelfReportRequest;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDDbRecordRepository;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
+import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.ui.health.DiagnosisFragment;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
@@ -78,12 +84,14 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         double longi = 0;
 
         if (sortedGpsRecords.size() == 0) {
-//            Location loc = GpsUtils.getLastLocation();
-//            lat = loc.getLatitude();
-//            longi = loc.getLongitude();
             if (!Utils.hasGpsPermissions(context)) {
                 mkSnack(av, view, "We need location services enabled to send your traces. Please enable location services permission.");
                 return null;
+            }
+            else {
+                Location loc = GpsUtils.getLastLocation(context);
+                lat = loc.getLatitude();
+                longi = loc.getLongitude();
             }
         }
         else {
@@ -114,7 +122,21 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
     public static void mkSnack(Activity av, View v, String msg) {
         av.runOnUiThread(new Runnable() {
             public void run() {
-                final Snackbar snackBar = Snackbar.make(v, msg, Snackbar.LENGTH_LONG);
+
+                //        SpannableStringBuilder builder = new SpannableStringBuilder();
+                //        builder.append("My message ").append(" ");
+                //        builder.setSpan(new ImageSpan(MainActivity.this, R.drawable.ic_launcher), builder.length() - 1, builder.length(), 0);
+                //        builder.append(" next message");
+                //        Snackbar.make(parent view, builder, Snackbar.LENGTH_LONG).show();]
+
+                //        TextView textView = (TextView)snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
+                //        textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.check, 0, 0, 0);
+                //        textView.setCompoundDrawablePadding(av.getResources().getDimensionPixelOffset(R.dimen.ic));
+
+                SpannableStringBuilder builder = new SpannableStringBuilder();
+//                builder.setSpan(new ImageSpan(av, R.drawable.check), builder.length() - 1, builder.length(), 0);
+                builder.append(msg);
+                Snackbar snackBar = Snackbar.make(v, builder, Snackbar.LENGTH_LONG);
 
                 snackBar.setAction("Dismiss", new View.OnClickListener() {
                     @Override
@@ -123,17 +145,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
                     }
                 });
 
-                //        SpannableStringBuilder builder = new SpannableStringBuilder();
-                //        builder.append("My message ").append(" ");
-                //        builder.setSpan(new ImageSpan(MainActivity.this, R.drawable.ic_launcher), builder.length() - 1, builder.length(), 0);
-                //        builder.append(" next message");
-                //        Snackbar.make(parent view, builder, Snackbar.LENGTH_LONG).show();]
-
                 View snackbarView = snackBar.getView();
-                //        TextView textView = (TextView)snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
-                //        textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.check, 0, 0, 0);
-                //        textView.setCompoundDrawablePadding(av.getResources().getDimensionPixelOffset(R.dimen.ic));
-
                 TextView textView = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
                 textView.setMaxLines(5);
 

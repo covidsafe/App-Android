@@ -3,7 +3,10 @@ package edu.uw.covidsafe.ui.health;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spannable;
@@ -68,10 +71,18 @@ public class DiagnosisFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     AlertDialog dialog = new MaterialAlertDialogBuilder(getActivity())
-                            .setMessage("If you trace data, people who have visited any locations you've recently been to will be notified that they might have been exposed.")
+                            .setMessage("If you upload  trace data, people who have visited any locations you've recently been to will be notified that they might have been exposed.")
+                            .setNegativeButton("Learn more", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.covidSiteLink)));
+                                    startActivity(browserIntent);
+                                }
+                            })
                             .setPositiveButton("Dismiss", null)
                             .setCancelable(false).create();
                     dialog.show();
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getContext().getResources().getColor(R.color.darkGray));
                 }
             });
         }

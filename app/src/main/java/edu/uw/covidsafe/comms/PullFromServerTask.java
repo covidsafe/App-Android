@@ -37,7 +37,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 
 public class PullFromServerTask implements Runnable {
 
@@ -244,8 +243,8 @@ public class PullFromServerTask implements Runnable {
                     Area[] areas = areaMatch.areas;
                     for (Area area : areas) {
                         if (intersect(area)) {
-                            Log.e("msg", "NARROWCAST USER MESSAGE " + areaMatch.user_message);
-                            narrowCastMessages.add(areaMatch.user_message);
+                            Log.e("msg", "NARROWCAST USER MESSAGE " + areaMatch.userMessage);
+                            narrowCastMessages.add(areaMatch.userMessage);
                             narrowCastMessageStartTimes.add(area.beginTime);
                             narrowCastMessageEndTimes.add(area.endTime);
                             break;

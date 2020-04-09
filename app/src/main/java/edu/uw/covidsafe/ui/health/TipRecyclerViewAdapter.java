@@ -70,7 +70,7 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             desc.add("Please contact your healthcare professional for next steps.");
             desc.add("Egestas tellus rutrum tellus pellentesque eu tincidunt. Odio tempor orci dapibus ultrices in iaculis nunc sed augue suspendisse.");
 
-            icons.add(mContext.getDrawable(R.drawable.icon_phone));
+            icons.add(mContext.getDrawable(R.drawable.icon_phone3));
             icons.add(mContext.getDrawable(R.drawable.icon_quarantine));
             icons.add(mContext.getDrawable(R.drawable.icon_symptoms));
             icons.add(mContext.getDrawable(R.drawable.icon_test));

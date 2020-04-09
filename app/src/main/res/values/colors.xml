@@ -8,12 +8,14 @@
     <color name="purpleDark">#4b2e83</color>
 
     <color name="orange">#fff2c8</color>
+    <color name="orange2">#f5c53d</color>
     <color name="white">#ffffff</color>
     <color name="warningViolet">#e3008c</color>
     <color name="black">#000000</color>
     <color name="gray">#f8f8f8</color>
     <color name="gray2">#b3b3b3</color>
     <color name="gray3">#e1e1e1</color>
+    <color name="gray4">#fafafa</color>
     <color name="darkGray">#6e6e6e</color>
     <color name="warningRed">#e8685e</color>
 

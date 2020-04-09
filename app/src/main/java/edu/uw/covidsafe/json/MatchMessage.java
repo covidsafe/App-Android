@@ -54,8 +54,4 @@ public class MatchMessage {
         }
         return matchMessage;
     }
-
-    public static String toHttpString() {
-        return NetworkConstant.BASE_URL+"Messages/AreaReport";
-    }
 }
