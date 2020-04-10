@@ -3,10 +3,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Request;
 import com.example.covidsafe.R;
@@ -44,16 +48,29 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class PullFromServerTask implements Runnable {
+public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
 
     Context context;
+    View view;
 
-    public PullFromServerTask(Context context) {
+    public PullFromServerTask(Context context, View view) {
         this.context = context;
+        this.view = view;
     }
 
     @Override
-    public void run() {
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+        if (view != null) {
+            SwipeRefreshLayout swipeLayout = view.findViewById(R.id.swiperefresh);
+            swipeLayout.setRefreshing(false);
+            ImageView refresh = view.findViewById(R.id.refresh);
+            refresh.clearAnimation();
+        }
+    }
+
+    @Override
+    protected Void doInBackground(Void... params) {
         Log.e("uuid", "PULL FROM SERVER");
 
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
@@ -66,7 +83,7 @@ public class PullFromServerTask implements Runnable {
         if (gpsRecords.size() == 0) {
             Log.e("pull","no gps locations, returning");
             Constants.PullServiceRunning = false;
-            return;
+            return null;
         }
         GpsRecord gpsRecord = gpsRecords.get(0);
 
@@ -97,7 +114,7 @@ public class PullFromServerTask implements Runnable {
 
         if (sizeOfPayload == 0) {
             Constants.PullServiceRunning = false;
-            return;
+            return null;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -111,7 +128,7 @@ public class PullFromServerTask implements Runnable {
                 currentGpsPrecision, lastQueryTime);
         if (bluetoothMatches == null || bluetoothMatches.size() == 0) {
             Constants.PullServiceRunning = false;
-            return;
+            return null;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -149,6 +166,7 @@ public class PullFromServerTask implements Runnable {
             }
         }
         notifyBulk(Constants.MessageType.Exposure, exposedMessages, contactStartTimes, contactEndTimes);
+        return null;
     }
 
     // sync blockig op
