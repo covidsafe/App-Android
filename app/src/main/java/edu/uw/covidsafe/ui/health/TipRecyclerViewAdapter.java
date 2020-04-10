@@ -49,6 +49,7 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             titles.add("Request a test");
             titles.add("Contact your healthcare professional");
             titles.add("Isolate from those around you");
+            titles.add("Practice Good Hygiene");
             Date dd = new Date();
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(dd);
@@ -69,6 +70,7 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             desc.add("Egestas tellus rutrum tellus pellentesque eu tincidunt. Odio tempor orci dapibus ultrices in iaculis nunc sed augue suspendisse.");
             desc.add("Please contact your healthcare professional for next steps.");
             desc.add("Egestas tellus rutrum tellus pellentesque eu tincidunt. Odio tempor orci dapibus ultrices in iaculis nunc sed augue suspendisse.");
+            desc.add("Egestas tellus rutrum tellus pellentesque eu tincidunt. Odio tempor orci dapibus ultrices in iaculis nunc sed augue suspendisse.");
 
             icons.add(mContext.getDrawable(R.drawable.icon_phone3));
             icons.add(mContext.getDrawable(R.drawable.icon_quarantine));
@@ -76,6 +78,7 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             icons.add(mContext.getDrawable(R.drawable.icon_test));
             icons.add(mContext.getDrawable(R.drawable.icon_phone2));
             icons.add(mContext.getDrawable(R.drawable.icon_quarantine));
+            icons.add(mContext.getDrawable(R.drawable.icon_health));
             av.runOnUiThread(new Runnable() {
                 public void run() {
                     tv.setText("What to Do If You Are Sick");
