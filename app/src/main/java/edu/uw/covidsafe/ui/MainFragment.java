@@ -14,7 +14,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,12 +29,14 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.covidsafe.R;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import edu.uw.covidsafe.comms.PullFromServerTask;
 import edu.uw.covidsafe.comms.PullFromServerTaskDemo;
 import edu.uw.covidsafe.hcp.SubmitNarrowcastMessageTask;
 import edu.uw.covidsafe.ui.health.ResourceRecyclerViewAdapter;
@@ -47,6 +53,8 @@ public class MainFragment extends Fragment {
     ImageView broadcastSwitch;
     TextView broadcastProp;
     TextView broadcastTitle;
+    ImageView refresh;
+    SwipeRefreshLayout swipeLayout;
 
     @SuppressLint("RestrictedApi")
     @Nullable
@@ -56,10 +64,28 @@ public class MainFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().hide();
         view = inflater.inflate(R.layout.fragment_main, container, false);
+        refresh = (ImageView) view.findViewById(R.id.refresh);
 
         RecyclerView tipView = view.findViewById(R.id.recyclerViewTips);
         tipView.setAdapter(Constants.TipAdapter);
         tipView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        swipeLayout = view.findViewById(R.id.swiperefresh);
+        swipeLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        refreshTask();
+                    }
+                }
+        );
+
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refreshTask();
+            }
+        });
 
         ImageView settings = (ImageView) view.findViewById(R.id.settings);
         settings.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +153,18 @@ public class MainFragment extends Fragment {
         return view;
     }
 
+    public void refreshTask() {
+        new PullFromServerTask(getContext(),view).execute();
+//        new PullFromServerTaskDemo(getContext(),getActivity(),view).execute();
+        RotateAnimation rotate = new RotateAnimation(0,360,
+                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotate.setDuration(1000);
+        rotate.setRepeatCount(Animation.INFINITE);
+        rotate.setRepeatMode(Animation.INFINITE);
+        rotate.setInterpolator(new LinearInterpolator());
+        refresh.startAnimation(rotate);
+    }
+
     public void broadcastSwitchLogic(boolean isChecked) {
         Log.e("state","broadcast switch logic");
         if (isChecked) {
@@ -154,6 +192,9 @@ public class MainFragment extends Fragment {
         }
 
         updateBroadcastUI(true);
+
+        swipeLayout.setRefreshing(false);
+        refresh.clearAnimation();
     }
 
     public void updateBroadcastUI(boolean updateSwitch) {
@@ -200,16 +241,6 @@ public class MainFragment extends Fragment {
 
 
     public void initTestButtons() {
-        Button bb = (Button)view.findViewById(R.id.button6);
-        bb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                new NotifOpsAsyncTask(getContext(), new NotifRecord(System.currentTimeMillis(),
-//                        System.currentTimeMillis(), getString(R.string.default_exposed_notif), Constants.MessageType.Exposure.ordinal(),true)).execute();
-//                Utils.notif(getContext());
-            }
-        });
-
         Button b2b = (Button)view.findViewById(R.id.button9);
         b2b.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -225,18 +256,6 @@ public class MainFragment extends Fragment {
 //                intent.setData(uri);
 //                getActivity().startActivity(intent);
 
-                Thread r = new Thread(new PullFromServerTaskDemo(getContext(), getActivity(), view));
-                r.start();
-            }
-        });
-
-        Button b3b = (Button)view.findViewById(R.id.button8);
-        b3b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                new NotifOpsAsyncTask(getContext(), new NotifRecord(System.currentTimeMillis(),
-//                        System.currentTimeMillis(), "hello history", Constants.MessageType.Exposure.ordinal(),false)).execute();
-//                Utils.notif2(getContext(),"",""");
             }
         });
 
@@ -260,10 +279,5 @@ public class MainFragment extends Fragment {
                 new SubmitNarrowcastMessageTask(getActivity(), view, lats,longs,radii,message).execute();
             }
         });
-
-        bb.setEnabled(false);
-        bb.setVisibility(View.GONE);
-        b3b.setEnabled(false);
-        b3b.setVisibility(View.GONE);
     }
 }

@@ -30,6 +30,7 @@ import edu.uw.covidsafe.ui.health.DiagnosisFragment;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Timer;
 import java.util.UUID;
 import java.util.concurrent.ScheduledFuture;
 
@@ -93,6 +94,7 @@ public class Constants {
     public static int BluetoothScanIntervalInMinutes = 5;
     public static int BluetoothScanPeriodInSeconds = 10;
     public static int PullFromServerIntervalInMinutes = 60;
+    public static int PullFromServerIntervalInMinutesInMilliseconds = PullFromServerIntervalInMinutes*60*1000;
     public static int LogPurgerIntervalInDays = 60;
     public static int UUIDGenerationIntervalInMinutes = 15;
     public static int CDCExposureTimeInMinutes = 10;
@@ -124,7 +126,7 @@ public class Constants {
     public static ScheduledFuture uuidGeneartionTask;
     public static ScheduledFuture bluetoothScanTask;
     public static ScheduledFuture bluetoothServerTask;
-    public static ScheduledFuture pullFromServerTask;
+    public static Timer pullFromServerTask;
     public static ScheduledFuture logPurgerTask;
     public static boolean startingToTrack = false;
     public static String SHARED_PREFENCE_NAME = "preferences";
