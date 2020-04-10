@@ -92,48 +92,26 @@ public class DiagnosisFragment extends Fragment {
         rview2.setAdapter(adapter2);
         rview2.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-        long lastSubmissionDate = prefs.getLong(getString(com.example.covidsafe.R.string.last_submission_date_pkey), 0);
-
-        // TODO: change back after demo
-        TextView sick = (TextView)view.findViewById(R.id.sick);
-        if (sick!=null) {
-            sick.setText("");
-            sick.setVisibility(View.GONE);
-        }
-        DiagnosisFragment.updateSubmissionView(getActivity(), getContext(), view, lastSubmissionDate, false);
+        DiagnosisFragment.updateSubmissionView(getActivity(), getContext(), view, false);
 
         return view;
     }
 
-    public static void updateSubmissionView(Activity av, Context context, View view, long lastSubmissionDate, boolean justReported) {
+    public static void updateSubmissionView(Activity av, Context context, View view, boolean justReported) {
         av.runOnUiThread(new Runnable() {
             public void run() {
-                if (lastSubmissionDate != 0) {
-                    TextView pos = view.findViewById(R.id.pos);
-                    if (justReported) {
-                        Log.e("state","VISIBLE");
-                        pos.setText(context.getString(R.string.pos_text));
-                        pos.setVisibility(View.VISIBLE);
-                    }
-                    else {
-                        pos.setText("");
-                        pos.setVisibility(View.GONE);
-                    }
-
-                    TextView date = view.findViewById(R.id.date);
-                    date.setVisibility(View.VISIBLE);
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("M/d/YYYY");
-                    SimpleDateFormat timeFormat = new SimpleDateFormat("h:mma");
-                    Date ts = new Date(lastSubmissionDate);
-                    Spannable out = (Spannable) Html.fromHtml("<b>Last reported</b>: "+dateFormat.format(ts) + " at "+timeFormat.format(ts));
-                    date.setText(out);
+                TextView pos = view.findViewById(R.id.pos);
+                TextView date = view.findViewById(R.id.date);
+                if (justReported) {
+                    Log.e("state","VISIBLE");
+                    pos.setText(context.getString(R.string.pos_text));
+                    pos.setVisibility(View.VISIBLE);
+                    date.setText("");
+                    date.setVisibility(View.GONE);
                 }
                 else {
-                    TextView pos = view.findViewById(R.id.pos);
                     pos.setText("");
                     pos.setVisibility(View.GONE);
-                    TextView date = view.findViewById(R.id.date);
                     date.setText("");
                     date.setVisibility(View.GONE);
                 }
