@@ -4,10 +4,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Request;
 import com.example.covidsafe.R;
@@ -45,7 +49,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class PullFromServerTaskDemo implements Runnable {
+public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
 
     Context context;
     Activity av;
@@ -58,7 +62,16 @@ public class PullFromServerTaskDemo implements Runnable {
     }
 
     @Override
-    public void run() {
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+        SwipeRefreshLayout swipeLayout = view.findViewById(R.id.swiperefresh);
+        swipeLayout.setRefreshing(false);
+        ImageView refresh = view.findViewById(R.id.refresh);
+        refresh.clearAnimation();
+    }
+
+    @Override
+    protected Void doInBackground(Void... params) {
         Log.e("uuid", "PULL FROM SERVER");
 
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
@@ -104,7 +117,7 @@ public class PullFromServerTaskDemo implements Runnable {
 
         if (sizeOfPayload == 0) {
             Constants.PullServiceRunning = false;
-            return;
+            return null;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -118,7 +131,7 @@ public class PullFromServerTaskDemo implements Runnable {
                 currentGpsPrecision, lastQueryTime);
         if (bluetoothMatches == null || bluetoothMatches.size() == 0) {
             Constants.PullServiceRunning = false;
-            return;
+            return null;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -172,6 +185,7 @@ public class PullFromServerTaskDemo implements Runnable {
             }
         }
         notifyBulk(Constants.MessageType.Exposure, exposedMessages, contactStartTimes, contactEndTimes);
+        return null;
     }
 
     // sync blockig op
