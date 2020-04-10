@@ -234,12 +234,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         Log.e("state","trace data submitted");
         mkSnack(av, view, "Your trace data has been submitted.");
 
-        long lastSubmissionDate = System.currentTimeMillis();
-        SharedPreferences.Editor editor = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
-        editor.putLong(context.getString(com.example.covidsafe.R.string.last_submission_date_pkey), lastSubmissionDate);
-        editor.commit();
-
-        DiagnosisFragment.updateSubmissionView(av, context, view, lastSubmissionDate, true);
+        DiagnosisFragment.updateSubmissionView(av, context, view, true);
     }
 
     public void testDatabase() {
