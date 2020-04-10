@@ -43,8 +43,10 @@ import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
 import edu.uw.covidsafe.utils.Utils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -64,10 +66,20 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
+
+        SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        long ts = System.currentTimeMillis();
+        editor.putLong(context.getString(R.string.last_refresh_date_pkey), ts);
+        editor.commit();
+
         SwipeRefreshLayout swipeLayout = view.findViewById(R.id.swiperefresh);
         swipeLayout.setRefreshing(false);
         ImageView refresh = view.findViewById(R.id.refresh);
         refresh.clearAnimation();
+        TextView lastUpdated = view.findViewById(R.id.lastUpdated);
+        SimpleDateFormat format = new SimpleDateFormat("h:MM a");
+        lastUpdated.setText("Last updated: "+format.format(new Date(ts)));
     }
 
     @Override

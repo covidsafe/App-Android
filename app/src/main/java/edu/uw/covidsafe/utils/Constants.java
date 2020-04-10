@@ -118,6 +118,8 @@ public class Constants {
     public static TextView bleDesc;
     public static Switch notifSwitch;
 
+    public static String AndroidKeyStore = "AndroidKeyStore";
+    public static String KEY_ALIAS = "mykeys";
     public static BluetoothGattServer gattServer;
     public static BluetoothDevice device;
     public static BluetoothGatt gatt;

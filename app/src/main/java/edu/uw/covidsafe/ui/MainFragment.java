@@ -33,6 +33,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.covidsafe.R;
 
+import org.w3c.dom.Text;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,6 +59,7 @@ public class MainFragment extends Fragment {
     TextView broadcastTitle;
     ImageView refresh;
     SwipeRefreshLayout swipeLayout;
+    TextView lastUpdated;
 
     @SuppressLint("RestrictedApi")
     @Nullable
@@ -65,6 +70,7 @@ public class MainFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().hide();
         view = inflater.inflate(R.layout.fragment_main, container, false);
         refresh = (ImageView) view.findViewById(R.id.refresh);
+        lastUpdated = (TextView) view.findViewById(R.id.lastUpdated);
 
         RecyclerView tipView = view.findViewById(R.id.recyclerViewTips);
         tipView.setAdapter(Constants.TipAdapter);
@@ -195,6 +201,17 @@ public class MainFragment extends Fragment {
 
         swipeLayout.setRefreshing(false);
         refresh.clearAnimation();
+
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        long ts = prefs.getLong(getActivity().getString(R.string.last_refresh_date_pkey), 0);
+        if (ts != 0) {
+            SimpleDateFormat format = new SimpleDateFormat("h:MM a");
+            lastUpdated.setText("Last updated: "+format.format(new Date(ts)));
+        }
+        else {
+            lastUpdated.setText("");
+            lastUpdated.setVisibility(View.GONE);
+        }
     }
 
     public void updateBroadcastUI(boolean updateSwitch) {
