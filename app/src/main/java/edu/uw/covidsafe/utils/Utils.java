@@ -68,43 +68,6 @@ public class Utils {
     public static TextView bleResults;
     public static TextView bleBeaconId;
 
-    public static Handler serviceHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-//            Bundle reply = msg.getData();
-//            String out1 = reply.getString("gps");
-//            String out2 = reply.getString("ble");
-//            String out3 = reply.getString("uuid");
-//            if (out1!=null) {
-//                if (gpsLines > 20) {
-//                    String ss = gpsResults.getText().toString();
-//                    int ii = ss.indexOf("\n");
-//                    String oo = ss.substring(ii+1,ss.length()) + out1+"\n";
-//                    gpsResults.setText(oo);
-//                }
-//                else {
-//                    gpsResults.append(out1 + "\n");
-//                }
-//                gpsLines+=1;
-//            }
-//            if (out2!=null) {
-//                if (bleLines > 20) {
-//                    String ss = bleResults.getText().toString();
-//                    int ii = ss.indexOf("\n");
-//                    String oo = ss.substring(ii+1,ss.length()) + out2+"\n";
-//                    bleResults.setText(oo);
-//                }
-//                else {
-//                    bleResults.append(out2 + "\n");
-//                }
-//                bleLines+=1;
-//            }
-//            if (out3 != null) {
-//                bleBeaconId.setText(out3);
-//            }
-        }
-    };
-
     public static void haltLoggingService(Activity av, View view) {
         if (Constants.LoggingServiceRunning && view != null) {
             Utils.mkSnack(av, view, "Logging is now turned off.");
@@ -183,10 +146,6 @@ public class Utils {
             return false;
         }
         return true;
-    }
-
-    public static String randomGUID() {
-        return UUID.randomUUID().toString();
     }
 
     public static void notif2(Context mContext, String title, String message) {
@@ -281,10 +240,6 @@ public class Utils {
         new BleOpsAsyncTask(cxt, id, rssi).execute();
     }
 
-//    public static void uuidLogToDatabase(Context cxt, String seed, UUID uuid) {
-//        new SeedUUIDOpsAsyncTask(cxt, seed, uuid).execute();
-//    }
-
     public static void uuidLogToFile(Context cxt, SeedUUIDRecord rec) {
         Log.e("uuid","uuid log to file");
         FileOperations.append(rec.toString(),
@@ -302,34 +257,6 @@ public class Utils {
         }
         catch(Exception e) {
             Log.e("test",e.getMessage());
-        }
-        return "";
-    }
-
-    public static double[] address2gps(Context cxt, String addr) {
-        Geocoder geocoder = new Geocoder(cxt);
-        List<Address> addresses;
-        try {
-            addresses = geocoder.getFromLocationName(addr, 1);
-            Log.e("logme","ADDRESS 2 GPS");
-            double latitude = addresses.get(0).getLatitude();
-            double longitude = addresses.get(0).getLongitude();
-            return new double[] {latitude,longitude};
-        }
-        catch(Exception e) {
-            Log.e("logme", e.getMessage());
-        }
-        return null;
-    }
-
-    public static String convertDate(String s) {
-        SimpleDateFormat d1 = new SimpleDateFormat("E, dd MMMM yyyy");
-        SimpleDateFormat d2 = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            return d2.format(d1.parse(s));
-        }
-        catch(Exception e) {
-            e.printStackTrace();
         }
         return "";
     }
@@ -391,39 +318,6 @@ public class Utils {
     public static int log(long x, int base) {
         return (int) (Math.log(x) / Math.log(base));
     }
-
-    public static BitSet convert(long value) {
-        BitSet bits = new BitSet();
-        int index = 0;
-        while (value != 0L) {
-            if (value % 2L != 0) {
-                bits.set(index);
-            }
-            ++index;
-            value = value >>> 1;
-        }
-        return bits;
-    }
-
-    public static long convert(BitSet bits) {
-        long value = 0L;
-        for (int i = 0; i < bits.length(); ++i) {
-            value += bits.get(i) ? (1L << i) : 0L;
-        }
-        return value;
-    }
-//
-//    public static void sendDataToUI(Messenger messenger, String tag, String log) {
-//        Bundle bb = new Bundle();
-//        bb.putString(tag, log);
-//        Message msg = new Message();
-//        msg.setData(bb);
-//        try {
-//            messenger.send(msg);
-//        } catch (RemoteException e) {
-//            Log.i("error", "error");
-//        }
-//    }
 
     public static String[] getBlePermissions() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -562,23 +456,6 @@ public class Utils {
         return dateFormat.format(date);
     }
 
-//    public static Date getLastSubmitTime(Context cxt) {
-//        String ss = FileOperations.readSubmitLog(cxt);
-//        if (ss.isEmpty()) {
-//            return null;
-//        }
-//        Log.e("logme","last line "+ss);
-//        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-//        Date date = null;
-//        try {
-//            return dateFormat.parse(ss);
-//        }
-//        catch(Exception e) {
-//            Log.e("logme",e.getMessage());
-//        }
-//        return null;
-//    }
-
     public static boolean canSubmitSymptoms(Context av, int submitThresh) {
         SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         long subDate = prefs.getLong(av.getString(R.string.symptom_submission_date_pkey), 0L);
@@ -621,20 +498,6 @@ public class Utils {
         return false;
     }
 
-    public static int compareDates(Date d1, Date d2) {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        try {
-            int diff = Utils.daysBetween(d2, d1);
-            Log.e("logme", "days betweeen " + diff);
-
-            return diff;
-        }
-        catch(Exception e) {
-            Log.e("logme",e.getMessage());
-        }
-        return -1;
-    }
-
     public static int daysBetween(Date d1, Date d2) {
         return (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
     }
@@ -653,18 +516,5 @@ public class Utils {
         else {
             return i&0xff;
         }
-    }
-
-    public static void writeLastSentLog(Context cxt, long ts) {
-        SharedPreferences.Editor sharedPref = cxt.getSharedPreferences(
-                Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
-        sharedPref.putString(Constants.lastSentName, CryptoUtils.encryptTimestamp(cxt, ts));
-        sharedPref.commit();
-    }
-
-    public static long readLastSentLog(Context cxt) {
-        SharedPreferences sharedPref = cxt.getSharedPreferences(
-                Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-        return CryptoUtils.decryptTimestamp(cxt, sharedPref.getString(Constants.lastSentName, ""));
     }
 }

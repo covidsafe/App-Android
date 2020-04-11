@@ -73,6 +73,10 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         if (generatedRecord == null) {
             Log.e("demo","get zeroth seed");
             List<SeedUUIDRecord> allRecords = seedUUIDRepo.getAllSortedRecords();
+            if (allRecords.size() == 0) {
+                mkSnack(av, view, "An error occurred. Please try again later.");
+                return null;
+            }
             recordToSend = allRecords.get(0);
         }
 
@@ -106,7 +110,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
             // ask healthies to generate from ts_start till now (when infected publishes data)
             long ts_start = recordToSend.ts;
             long ts_end = System.currentTimeMillis();
-            sendRequest(recordToSend.seed,
+            sendRequest(recordToSend.getSeed(),
                     ts_start, ts_end,
                     getCoarseGpsCoord(lat, gpsResolution),
                     getCoarseGpsCoord(longi, gpsResolution),

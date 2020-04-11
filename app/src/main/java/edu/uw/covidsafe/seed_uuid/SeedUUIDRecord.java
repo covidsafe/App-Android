@@ -5,6 +5,10 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import org.apache.commons.codec.digest.Crypt;
+
+import edu.uw.covidsafe.utils.CryptoUtils;
+
 @Entity(tableName = "seed_uuid_record_table")
 public class SeedUUIDRecord {
 
@@ -15,25 +19,30 @@ public class SeedUUIDRecord {
 
     @NonNull
     @ColumnInfo(name = "seed")
-    public String seed;
+    private String seedEncrypted;
 
     @NonNull
     @ColumnInfo(name = "uuid")
-    public String uuid;
+    private String uuidEncrypted;
 
-    public SeedUUIDRecord(@NonNull long ts, String seed, String uuid) {
+    public SeedUUIDRecord(@NonNull long ts, String seedEncrypted, String uuidEncrypted) {
         this.ts = ts;
-        this.seed = seed;
-        this.uuid = uuid;
+        setSeed(seedEncrypted);
+        setUUID(uuidEncrypted);
     }
 
     public long getTs() { return this.ts; }
 
-    public String getSeed() { return this.seed; }
+    public String getSeedEncrypted() { return this.seedEncrypted; }
 
-    public String getUUID() { return this.uuid; }
+    public String getSeed() { return CryptoUtils.decrypt(this.seedEncrypted); }
 
-    public String toString() {
-        return this.ts+","+this.seed+","+this.uuid.toString();
-    }
+    public void setSeed(String seed) { this.seedEncrypted = CryptoUtils.encrypt(seed); }
+
+    public String getUuidEncrypted() { return this.uuidEncrypted; }
+
+    public String getUUID() { return this.uuidEncrypted; }
+
+    public void setUUID(String uuid) { this.uuidEncrypted = CryptoUtils.encrypt(uuid); }
+
 }

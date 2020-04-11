@@ -26,7 +26,7 @@ import static junit.framework.TestCase.assertTrue;
 public class TestAES256 {
     @Test
     public void test_creation_of_AESPair() throws NoSuchAlgorithmException {
-        AESPair symmetricKeyPair = AES256.generateKeyPair();
+        AESPair symmetricKeyPair = AES256.generateKeyPairOld();
         SecretKey key = symmetricKeyPair.getKey();
         byte[] IV = symmetricKeyPair.getIV();
         assertEquals(IV.length, 16);
@@ -38,7 +38,7 @@ public class TestAES256 {
             IllegalBlockSizeException, InvalidKeyException, BadPaddingException,
             InvalidAlgorithmParameterException, NoSuchPaddingException {
 
-        AESPair keyPair = AES256.generateKeyPair();
+        AESPair keyPair = AES256.generateKeyPairOld();
         byte[] plainTextMessage = SHA256.hash("hello this is a message");
         System.out.println("Plain text message : " +
                 ByteHelper.convertBytesToHex(plainTextMessage));
@@ -64,7 +64,7 @@ public class TestAES256 {
 
         assertTrue(messageRecovered);
 
-        AESPair rogueKeyPair = AES256.generateKeyPair();
+        AESPair rogueKeyPair = AES256.generateKeyPairOld();
         boolean messageRecoveredFail = true;
         try {
             AES256.decrypt(cipherTextFromPlainText, rogueKeyPair.getKey(), rogueKeyPair.getIV());
@@ -76,7 +76,7 @@ public class TestAES256 {
 
     @Test
     public void test_serialization_and_deserialization() throws NoSuchAlgorithmException {
-        AESPair keyPair = AES256.generateKeyPair();
+        AESPair keyPair = AES256.generateKeyPairOld();
         SecretKey key = keyPair.getKey();
         byte[] IV = keyPair.getIV();
         byte[] sk = AES256.serializeSecretKey(key);
