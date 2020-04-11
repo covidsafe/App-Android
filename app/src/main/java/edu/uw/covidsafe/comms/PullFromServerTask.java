@@ -62,6 +62,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPostExecute(Void aVoid) {
+        Log.e("refresh","post execute");
         super.onPostExecute(aVoid);
 
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
@@ -71,20 +72,25 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         editor.commit();
 
         if (view != null) {
+            Log.e("refresh","updating ui");
             SwipeRefreshLayout swipeLayout = view.findViewById(R.id.swiperefresh);
             swipeLayout.setRefreshing(false);
             ImageView refresh = view.findViewById(R.id.refresh);
             refresh.clearAnimation();
             TextView lastUpdated = view.findViewById(R.id.lastUpdated);
-            SimpleDateFormat format = new SimpleDateFormat("h:MM a");
-            lastUpdated.setText("Last updated: "+format.format(new Date(ts)));
+            SimpleDateFormat format = new SimpleDateFormat("h:mm a");
+            Date dd = new Date(ts);
+            String out = "Last updated: "+format.format(dd);
+            Log.e("refresh",ts+"");
+            Log.e("refresh",out);
+            lastUpdated.setText(out);
+            lastUpdated.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     protected Void doInBackground(Void... params) {
         Log.e("uuid", "PULL FROM SERVER");
-
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
 
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -169,6 +175,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
             for (BlueToothSeed seed : bluetoothMatch.seeds) {
                 long[] exposedStatus = isExposed(seed.seed,
                         seed.sequenceStartTime,
+                        seed.sequenceEndTime,
                         scannedBleMap);
                 if (exposedStatus != null) {
                     exposedMessages.add(bluetoothMatch.userMessage);
@@ -330,9 +337,9 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
 
     // we get a seed and timestamp from the server for each infected person
     // check if we intersect with the infected person
-    public static long[] isExposed(String seed, long ts, HashMap<String,List<Long>> scannedBleMap) {
+    public static long[] isExposed(String seed, long start_ts, long end_ts, HashMap<String,List<Long>> scannedBleMap) {
         // if timestamp is in the future, something is wrong, return
-        if (ts > System.currentTimeMillis()) {
+        if (start_ts > System.currentTimeMillis() || end_ts > System.currentTimeMillis() || end_ts > start_ts) {
             return null;
         }
         // convert our BLE DB records into convenient data structures
@@ -340,7 +347,14 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
 
         // determine how many UUIDs to generate from the seed
         // based on time when the seed was generated and now.
-        int diffBetweenNowAndTsInMinutes = (int)((System.currentTimeMillis() - ts)/1000/60);
+        int diffBetweenNowAndTsInMinutes = 0;
+
+        if (end_ts == 0 || end_ts < 0) {
+            diffBetweenNowAndTsInMinutes = (int) ((System.currentTimeMillis() - start_ts) / 1000 / 60);
+        }
+        else {
+            diffBetweenNowAndTsInMinutes = (int) ((end_ts - start_ts) / 1000 / 60);
+        }
         int numSeedsToGenerate = diffBetweenNowAndTsInMinutes / Constants.UUIDGenerationIntervalInMinutes;
 
         // if we need to generate too many timestamps, something is wrong, return.
@@ -365,13 +379,13 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
             if (scannedBleMap.keySet().contains(receivedUUID)) {
                 for (Long localTs : scannedBleMap.get(receivedUUID)) {
                     // check that the timestamps were within the same UUID generation interval
-                    if (Math.abs(localTs - ts) < uuidGenerationIntervalInMillliseconds) {
+                    if (Math.abs(localTs - start_ts) < uuidGenerationIntervalInMillliseconds) {
                         // record the timestamp when the local scanner picked it up
                         matches.add(localTs);
                     }
                 }
             }
-            ts += uuidGenerationIntervalInMillliseconds;
+            start_ts += uuidGenerationIntervalInMillliseconds;
         }
 
         // calculate how many matches we need to say user is exposed for at least 10 minutes
