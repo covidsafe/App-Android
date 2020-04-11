@@ -6,7 +6,6 @@
         <item name="colorPrimary">@color/purpleLight</item>
         <item name="colorPrimaryDark">@color/purpleDark</item>
         <item name="colorAccent">@color/purpleDark</item>
-        <item name="android:windowLightStatusBar">true</item>
     </style>
 
 </resources>

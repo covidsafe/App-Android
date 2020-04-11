@@ -8,12 +8,15 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
@@ -69,6 +72,15 @@ public class MainFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().hide();
         view = inflater.inflate(R.layout.fragment_main, container, false);
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Window window = getActivity().getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(getActivity().getResources().getColor(R.color.white));
+        }
+
         refresh = (ImageView) view.findViewById(R.id.refresh);
         lastUpdated = (TextView) view.findViewById(R.id.lastUpdated);
 
@@ -160,6 +172,7 @@ public class MainFragment extends Fragment {
     }
 
     public void refreshTask() {
+        Log.e("refresh","freshtask");
         new PullFromServerTask(getContext(),view).execute();
 //        new PullFromServerTaskDemo(getContext(),getActivity(),view).execute();
         RotateAnimation rotate = new RotateAnimation(0,360,
@@ -296,5 +309,10 @@ public class MainFragment extends Fragment {
                 new SubmitNarrowcastMessageTask(getActivity(), view, lats,longs,radii,message).execute();
             }
         });
+
+        b2b.setText("");
+        b2b.setVisibility(View.GONE);
+        b5b.setText("");
+        b5b.setVisibility(View.GONE);
     }
 }

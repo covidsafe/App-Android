@@ -35,14 +35,6 @@ public class OnboardingActivity extends AppCompatActivity {
         Log.e("metadata","MANUFACTURER "+manufacturer);
         Log.e("metadata","MODEL "+model);
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Window window = activity.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(activity.getResources().getColor(R.color.white));
-        }
-
         Constants.init(this);
         SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         boolean b = prefs.getBoolean(getString(R.string.onboard_enabled_pkey),true);
