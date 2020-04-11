@@ -1,5 +1,9 @@
 package edu.uw.covidsafe.ui.settings;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
@@ -9,6 +13,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,6 +26,9 @@ import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.gps.GpsUtils;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
+
+import static android.view.View.SCALE_X;
+import static android.view.View.SCALE_Y;
 
 public class PermUtils {
     public static void gpsSwitchLogic(Activity av) {
@@ -85,19 +93,80 @@ public class PermUtils {
         Drawable backgrounds[] = new Drawable[2];
         Resources res = av.getResources();
         if (toOff) {
-            backgrounds[0] = res.getDrawable(R.drawable.switch_on);
+            backgrounds[0] = res.getDrawable(R.drawable.switch_on_noring);
             backgrounds[1] = res.getDrawable(R.drawable.switch_off);
+            TransitionDrawable crossfader = new TransitionDrawable(backgrounds);
+
+            ImageView image = (ImageView)av.findViewById(R.id.powerButton);
+            image.setImageDrawable(crossfader);
+
+            crossfader.startTransition(1000);
+
+            image = (ImageView)av.findViewById(R.id.ring);
+            PropertyValuesHolder a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f,0f);
+            final ObjectAnimator anim1 = ObjectAnimator.ofPropertyValuesHolder(image, a1);
+            anim1.setDuration(1000);
+            anim1.start();
         }
         else {
             backgrounds[0] = res.getDrawable(R.drawable.switch_off);
-            backgrounds[1] = res.getDrawable(R.drawable.switch_on);
+            backgrounds[1] = res.getDrawable(R.drawable.switch_on_noring);
+            TransitionDrawable crossfader = new TransitionDrawable(backgrounds);
+
+            ImageView image = (ImageView)av.findViewById(R.id.powerButton);
+            image.setImageDrawable(crossfader);
+
+            crossfader.startTransition(1000);
+
+            animate(av);
         }
+    }
 
-        TransitionDrawable crossfader = new TransitionDrawable(backgrounds);
+    public static void animate(Activity av) {
+        ImageView image = (ImageView)av.findViewById(R.id.ring);
+        PropertyValuesHolder a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 0f,1f);
+        final ObjectAnimator anim1 = ObjectAnimator.ofPropertyValuesHolder(image, a1);
+        anim1.setDuration(1000);
 
-        ImageView image = (ImageView)av.findViewById(R.id.switch1);
-        image.setImageDrawable(crossfader);
+        PropertyValuesHolder pvhX = PropertyValuesHolder.ofFloat(SCALE_X, 1f,1.5f);
+        PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat(SCALE_Y, 1f,1.5f);
+        PropertyValuesHolder alpha = PropertyValuesHolder.ofFloat(View.ALPHA, 1f,0f);
+        final ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(image, pvhX, pvhY,alpha);
+        animator.setDuration(1000);
+        animator.start();
 
-        crossfader.startTransition(1000);
+        animator.addListener(new AnimatorListenerAdapter() {
+            private boolean mCanceled;
+            int times = 0;
+            @Override
+            public void onAnimationStart(Animator animation) {
+                mCanceled = false;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                mCanceled = true;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (!mCanceled&&times<2) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            animator.start();
+                            Log.e("times",times+"");
+                            times += 1;
+                        }
+                    }, 1000);
+                }
+                else {
+                    Log.e("times","stop");
+                    image.setScaleX(1f);
+                    image.setScaleY(1f);
+                    anim1.start();
+                }
+            }
+        });
     }
 }
