@@ -60,9 +60,9 @@ public class AES256 {
         Cipher cipher = Cipher.getInstance(Constants.AES_SETTINGS);
 
         // prepend IV to all data we encrypt and store
-        byte[] ivBytes = cipher.getIV();
         cipher.init(Cipher.ENCRYPT_MODE, secretKey);
         byte[] encryptedBytes = cipher.doFinal(plainTextMessage);
+        byte[] ivBytes = cipher.getIV();
 
         byte[] encryptedWhole = new byte[ivBytes.length+encryptedBytes.length];
         int counter = 0;
@@ -91,8 +91,8 @@ public class AES256 {
         SecretKey secretKeyDecrypt = secretKeyEntryDecrypt.getSecretKey();
 
         // separate IV from data
-        byte[] dataToDecrypt = new byte[dataToDecryptWhole.length-Constants.IV_LEN];
         byte[] ivToPass = new byte[Constants.IV_LEN];
+        byte[] dataToDecrypt = new byte[dataToDecryptWhole.length-Constants.IV_LEN];
         int counter = 0;
         for (int i = 0; i < Constants.IV_LEN; i++) {
             ivToPass[i] = dataToDecryptWhole[i];
