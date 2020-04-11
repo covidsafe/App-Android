@@ -37,9 +37,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.uw.covidsafe.comms.PullFromServerTask;
+import edu.uw.covidsafe.comms.PullFromServerTaskDemo;
 import edu.uw.covidsafe.hcp.SubmitNarrowcastMessageTask;
 import edu.uw.covidsafe.ui.health.ResourceRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifDbModel;
+import edu.uw.covidsafe.ui.notif.NotifOpsAsyncTask;
 import edu.uw.covidsafe.ui.notif.NotifRecord;
 import edu.uw.covidsafe.ui.settings.PermUtils;
 import edu.uw.covidsafe.utils.Constants;
@@ -94,6 +96,14 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 refreshTask();
+            }
+        });
+
+        ImageView xall = (ImageView) view.findViewById(R.id.xall);
+        xall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new NotifOpsAsyncTask(getContext(),Constants.NotifDatabaseOps.DeleteAll).execute();
             }
         });
 
@@ -166,8 +176,8 @@ public class MainFragment extends Fragment {
 
     public void refreshTask() {
         Log.e("refresh","freshtask");
-        new PullFromServerTask(getContext(),view).execute();
-//        new PullFromServerTaskDemo(getContext(),getActivity(),view).execute();
+//        new PullFromServerTask(getContext(),view).execute();
+        new PullFromServerTaskDemo(getContext(),getActivity(),view).execute();
         RotateAnimation rotate = new RotateAnimation(0,360,
                 Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         rotate.setDuration(1000);
@@ -211,7 +221,7 @@ public class MainFragment extends Fragment {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         long ts = prefs.getLong(getActivity().getString(R.string.last_refresh_date_pkey), 0);
         if (ts != 0) {
-            SimpleDateFormat format = new SimpleDateFormat("h:MM a");
+            SimpleDateFormat format = new SimpleDateFormat("h:mm a");
             lastUpdated.setText("Last updated: "+format.format(new Date(ts)));
         }
         else {
@@ -301,10 +311,10 @@ public class MainFragment extends Fragment {
 
 
     public void initTestButtons() {
-        Button b2b = (Button)view.findViewById(R.id.button9);
-        b2b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+//        Button b2b = (Button)view.findViewById(R.id.button9);
+//        b2b.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
 //                new NotifOpsAsyncTask(getContext(),Constants.NotifDatabaseOps.DeleteAll).execute();
 //                SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
 //                boolean gpsEnabled = prefs.getBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
@@ -316,33 +326,33 @@ public class MainFragment extends Fragment {
 //                intent.setData(uri);
 //                getActivity().startActivity(intent);
 
-            }
-        });
+//            }
+//        });
 
-        Button b5b = (Button)view.findViewById(R.id.button10);
-        b5b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+//        Button b5b = (Button)view.findViewById(R.id.button10);
+//        b5b.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
 //                String ss = model.records.getValue().size()+"";
 //                for (int i = 0; i < model.records.getValue().size(); i++) {
 //                    ss+=model.records.getValue().get(i).current;
 //                }
 //                Toast.makeText(getContext(), "notif size "+ss,Toast.LENGTH_LONG).show();
 
-                List<Double> lats = new LinkedList<>();
-                List<Double> longs = new LinkedList<>();
-                List<Float> radii = new LinkedList<>();
-                lats.add(47.625);
-                longs.add(-122.25);
-                radii.add(10000f);
-                String message = "danger";
-                new SubmitNarrowcastMessageTask(getActivity(), view, lats,longs,radii,message).execute();
-            }
-        });
+//                List<Double> lats = new LinkedList<>();
+//                List<Double> longs = new LinkedList<>();
+//                List<Float> radii = new LinkedList<>();
+//                lats.add(47.625);
+//                longs.add(-122.25);
+//                radii.add(10000f);
+//                String message = "danger";
+//                new SubmitNarrowcastMessageTask(getActivity(), view, lats,longs,radii,message).execute();
+//            }
+//        });
 
-        b2b.setText("");
-        b2b.setVisibility(View.GONE);
-        b5b.setText("");
-        b5b.setVisibility(View.GONE);
+//        b2b.setText("");
+//        b2b.setVisibility(View.GONE);
+//        b5b.setText("");
+//        b5b.setVisibility(View.GONE);
     }
 }

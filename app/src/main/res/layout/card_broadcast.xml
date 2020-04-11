@@ -23,6 +23,20 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:id="@+id/xall"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="20dp"
+        android:contentDescription="Settings"
+        android:minWidth="30dp"
+        android:minHeight="30dp"
+        android:src="@drawable/ic_delete_black_24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/title"
+        app:layout_constraintEnd_toStartOf="@+id/refresh"
+        app:layout_constraintTop_toTopOf="@+id/title"
+        app:layout_constraintVertical_bias="0.538" />
+
+    <ImageView
         android:id="@+id/refresh"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -62,9 +76,11 @@
         android:id="@+id/materialCardView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:backgroundTint="@color/purplePale"
         android:elevation="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
         app:layout_constraintStart_toStartOf="@+id/guidelineV205"
         app:layout_constraintTop_toBottomOf="@id/title"
@@ -136,13 +152,14 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guidelineV80"
                 app:layout_constraintTop_toTopOf="parent" />
+
             <ImageView
                 android:id="@+id/ring"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
+                android:alpha="0"
                 android:minWidth="44dp"
                 android:minHeight="44dp"
-                android:alpha="0"
                 android:src="@drawable/ring"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -151,26 +168,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
-
-    <Button
-        android:id="@+id/button10"
-        android:layout_width="46dp"
-        android:layout_height="43dp"
-        android:width="10dp"
-        android:backgroundTint="@color/white"
-        android:text=""
-        app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
-
-    <Button
-        android:id="@+id/button9"
-        android:layout_width="46dp"
-        android:layout_height="43dp"
-        android:width="10dp"
-        android:backgroundTint="@color/white"
-        android:text=""
-        app:layout_constraintStart_toStartOf="@+id/guidelineV205"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineV205"

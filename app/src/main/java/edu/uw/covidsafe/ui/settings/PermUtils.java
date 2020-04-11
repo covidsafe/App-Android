@@ -110,12 +110,12 @@ public class PermUtils {
             ImageView image = (ImageView)av.findViewById(R.id.powerButton);
             image.setImageDrawable(crossfader);
 
-            crossfader.startTransition(1000);
+            crossfader.startTransition(500);
 
             image = (ImageView)av.findViewById(R.id.ring);
             PropertyValuesHolder a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f,0f);
             final ObjectAnimator anim1 = ObjectAnimator.ofPropertyValuesHolder(image, a1);
-            anim1.setDuration(1000);
+            anim1.setDuration(500);
             anim1.start();
         }
         else {
@@ -126,7 +126,7 @@ public class PermUtils {
             ImageView image = (ImageView)av.findViewById(R.id.powerButton);
             image.setImageDrawable(crossfader);
 
-            crossfader.startTransition(1000);
+            crossfader.startTransition(500);
             stopit = false;
             animate(av);
         }
