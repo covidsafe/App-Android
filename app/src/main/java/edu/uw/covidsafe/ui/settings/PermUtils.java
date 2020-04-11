@@ -108,15 +108,19 @@ public class PermUtils {
             TransitionDrawable crossfader = new TransitionDrawable(backgrounds);
 
             ImageView image = (ImageView)av.findViewById(R.id.powerButton);
-            image.setImageDrawable(crossfader);
+            if (image != null) {
+                image.setImageDrawable(crossfader);
+            }
 
             crossfader.startTransition(500);
 
             image = (ImageView)av.findViewById(R.id.ring);
-            PropertyValuesHolder a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f,0f);
-            final ObjectAnimator anim1 = ObjectAnimator.ofPropertyValuesHolder(image, a1);
-            anim1.setDuration(500);
-            anim1.start();
+            if (image != null) {
+                PropertyValuesHolder a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f, 0f);
+                final ObjectAnimator anim1 = ObjectAnimator.ofPropertyValuesHolder(image, a1);
+                anim1.setDuration(500);
+                anim1.start();
+            }
         }
         else {
             backgrounds[0] = res.getDrawable(R.drawable.switch_off);
@@ -124,11 +128,13 @@ public class PermUtils {
             TransitionDrawable crossfader = new TransitionDrawable(backgrounds);
 
             ImageView image = (ImageView)av.findViewById(R.id.powerButton);
-            image.setImageDrawable(crossfader);
+            if (image != null) {
+                image.setImageDrawable(crossfader);
 
-            crossfader.startTransition(500);
-            stopit = false;
-            animate(av);
+                crossfader.startTransition(500);
+                stopit = false;
+                animate(av);
+            }
         }
     }
 

@@ -198,7 +198,7 @@ public class MainFragment extends Fragment {
             PermUtils.transition(true, getActivity());
         }
 
-        updateBroadcastUI(false);
+        updateBroadcastUI(true);
     }
 
     @Override
@@ -213,7 +213,7 @@ public class MainFragment extends Fragment {
             Utils.startPullService(getActivity());
         }
 
-        updateBroadcastUI(true);
+        updateBroadcastUI(false);
 
         swipeLayout.setRefreshing(false);
         refresh.clearAnimation();
@@ -230,7 +230,7 @@ public class MainFragment extends Fragment {
         }
     }
 
-    public void updateBroadcastUI(boolean updateSwitch) {
+    public void updateBroadcastUI(boolean animate) {
         Log.e("state","update broadcast ui");
         boolean hasGpsPerms = Utils.hasGpsPermissions(getActivity());
         boolean hasBlePerms = Utils.hasBlePermissions(getActivity());
@@ -246,7 +246,7 @@ public class MainFragment extends Fragment {
             editor.putBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
             editor.commit();
 
-            if (updateSwitch) {
+            if (animate) {
                 Log.e("transition","set to off");
                 broadcastSwitch.setImageDrawable(getActivity().getDrawable(R.drawable.switch_off));
                 broadcastRing.setAlpha(0f);
@@ -272,6 +272,8 @@ public class MainFragment extends Fragment {
                 anim2.start();
             }
             else {
+                broadcastSwitch.setImageDrawable(getActivity().getDrawable(R.drawable.switch_off));
+                broadcastRing.setAlpha(0f);
                 broadcastTitle.setText("Broadcasting Off");
                 Utils.linkify(broadcastProp,getString(R.string.stopping));
             }
@@ -285,7 +287,7 @@ public class MainFragment extends Fragment {
             editor.commit();
         }
         else if (gpsEnabled || bleEnabled) {
-            if (updateSwitch) {
+            if (animate) {
                 Log.e("transition","set to on");
                 broadcastSwitch.setImageDrawable(getActivity().getDrawable(R.drawable.switch_on));
                 broadcastRing.setAlpha(1f);
@@ -311,6 +313,8 @@ public class MainFragment extends Fragment {
                 anim2.start();
             }
             else {
+                broadcastSwitch.setImageDrawable(getActivity().getDrawable(R.drawable.switch_on));
+                broadcastRing.setAlpha(1f);
                 broadcastTitle.setText("Broadcasting On");
                 Utils.linkify(broadcastProp,getString(R.string.logging));
             }
