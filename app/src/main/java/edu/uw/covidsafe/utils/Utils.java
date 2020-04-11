@@ -106,7 +106,7 @@ public class Utils {
     };
 
     public static void haltLoggingService(Activity av, View view) {
-        if (Constants.LoggingServiceRunning) {
+        if (Constants.LoggingServiceRunning && view != null) {
             Utils.mkSnack(av, view, "Logging is now turned off.");
         }
 

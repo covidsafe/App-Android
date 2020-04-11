@@ -31,6 +31,10 @@ import static android.view.View.SCALE_X;
 import static android.view.View.SCALE_Y;
 
 public class PermUtils {
+
+    static ObjectAnimator switchOnAnimator = null;
+    static boolean stopit = true;
+
     public static void gpsSwitchLogic(Activity av) {
         SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
@@ -93,7 +97,13 @@ public class PermUtils {
         Drawable backgrounds[] = new Drawable[2];
         Resources res = av.getResources();
         if (toOff) {
-            backgrounds[0] = res.getDrawable(R.drawable.switch_on_noring);
+            if (switchOnAnimator != null) {
+                Log.e("times","cancel");
+                switchOnAnimator.cancel();
+                stopit = true;
+            }
+
+            backgrounds[0] = res.getDrawable(R.drawable.switch_on);
             backgrounds[1] = res.getDrawable(R.drawable.switch_off);
             TransitionDrawable crossfader = new TransitionDrawable(backgrounds);
 
@@ -110,14 +120,14 @@ public class PermUtils {
         }
         else {
             backgrounds[0] = res.getDrawable(R.drawable.switch_off);
-            backgrounds[1] = res.getDrawable(R.drawable.switch_on_noring);
+            backgrounds[1] = res.getDrawable(R.drawable.switch_on);
             TransitionDrawable crossfader = new TransitionDrawable(backgrounds);
 
             ImageView image = (ImageView)av.findViewById(R.id.powerButton);
             image.setImageDrawable(crossfader);
 
             crossfader.startTransition(1000);
-
+            stopit = false;
             animate(av);
         }
     }
@@ -131,11 +141,11 @@ public class PermUtils {
         PropertyValuesHolder pvhX = PropertyValuesHolder.ofFloat(SCALE_X, 1f,1.5f);
         PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat(SCALE_Y, 1f,1.5f);
         PropertyValuesHolder alpha = PropertyValuesHolder.ofFloat(View.ALPHA, 1f,0f);
-        final ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(image, pvhX, pvhY,alpha);
-        animator.setDuration(1000);
-        animator.start();
+        switchOnAnimator = ObjectAnimator.ofPropertyValuesHolder(image, pvhX, pvhY,alpha);
+        switchOnAnimator.setDuration(1000);
+        switchOnAnimator.start();
 
-        animator.addListener(new AnimatorListenerAdapter() {
+        switchOnAnimator.addListener(new AnimatorListenerAdapter() {
             private boolean mCanceled;
             int times = 0;
             @Override
@@ -145,7 +155,11 @@ public class PermUtils {
 
             @Override
             public void onAnimationCancel(Animator animation) {
+                Log.e("times","on cancel");
                 mCanceled = true;
+                image.setScaleX(1f);
+                image.setScaleY(1f);
+                image.setAlpha(0f);
             }
 
             @Override
@@ -154,13 +168,15 @@ public class PermUtils {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            animator.start();
-                            Log.e("times",times+"");
-                            times += 1;
+                            if (!stopit) {
+                                switchOnAnimator.start();
+                                Log.e("times", times + "," + mCanceled);
+                                times += 1;
+                            }
                         }
                     }, 1000);
                 }
-                else {
+                else if (!mCanceled && !stopit){
                     Log.e("times","stop");
                     image.setScaleX(1f);
                     image.setScaleY(1f);
