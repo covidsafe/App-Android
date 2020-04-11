@@ -250,27 +250,31 @@ public class MainFragment extends Fragment {
                 Log.e("transition","set to off");
                 broadcastSwitch.setImageDrawable(getActivity().getDrawable(R.drawable.switch_off));
                 broadcastRing.setAlpha(0f);
+
+                PropertyValuesHolder a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f,0f);
+                PropertyValuesHolder a2 = PropertyValuesHolder.ofFloat(View.ALPHA, 0f,1f);
+                ObjectAnimator anim1 = ObjectAnimator.ofPropertyValuesHolder(broadcastTitle, a1);
+                anim1.setDuration(1000);
+                ObjectAnimator anim2 = ObjectAnimator.ofPropertyValuesHolder(broadcastTitle, a2);
+                anim2.setDuration(1000);
+                anim1.start();
+                broadcastTitle.setText("Broadcasting Off");
+                anim2.start();
+
+                a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f,0f);
+                a2 = PropertyValuesHolder.ofFloat(View.ALPHA, 0f,1f);
+                anim1 = ObjectAnimator.ofPropertyValuesHolder(broadcastProp, a1);
+                anim1.setDuration(1000);
+                anim2 = ObjectAnimator.ofPropertyValuesHolder(broadcastProp, a2);
+                anim2.setDuration(1000);
+                anim1.start();
+                Utils.linkify(broadcastProp,getString(R.string.stopping));
+                anim2.start();
             }
-
-            PropertyValuesHolder a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f,0f);
-            PropertyValuesHolder a2 = PropertyValuesHolder.ofFloat(View.ALPHA, 0f,1f);
-            ObjectAnimator anim1 = ObjectAnimator.ofPropertyValuesHolder(broadcastTitle, a1);
-            anim1.setDuration(1000);
-            ObjectAnimator anim2 = ObjectAnimator.ofPropertyValuesHolder(broadcastTitle, a2);
-            anim2.setDuration(1000);
-            anim1.start();
-            broadcastTitle.setText("Broadcasting Off");
-            anim2.start();
-
-            a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f,0f);
-            a2 = PropertyValuesHolder.ofFloat(View.ALPHA, 0f,1f);
-            anim1 = ObjectAnimator.ofPropertyValuesHolder(broadcastProp, a1);
-            anim1.setDuration(1000);
-            anim2 = ObjectAnimator.ofPropertyValuesHolder(broadcastProp, a2);
-            anim2.setDuration(1000);
-            anim1.start();
-            Utils.linkify(broadcastProp,getString(R.string.stopping));
-            anim2.start();
+            else {
+                broadcastTitle.setText("Broadcasting Off");
+                Utils.linkify(broadcastProp,getString(R.string.stopping));
+            }
         }
         else if (!hasGpsPerms) {
             editor.putBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
@@ -284,28 +288,32 @@ public class MainFragment extends Fragment {
             if (updateSwitch) {
                 Log.e("transition","set to on");
                 broadcastSwitch.setImageDrawable(getActivity().getDrawable(R.drawable.switch_on));
+                broadcastRing.setAlpha(1f);
+
+                PropertyValuesHolder a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f,0f);
+                PropertyValuesHolder a2 = PropertyValuesHolder.ofFloat(View.ALPHA, 0f,1f);
+                ObjectAnimator anim1 = ObjectAnimator.ofPropertyValuesHolder(broadcastTitle, a1);
+                anim1.setDuration(1000);
+                ObjectAnimator anim2 = ObjectAnimator.ofPropertyValuesHolder(broadcastTitle, a2);
+                anim2.setDuration(1000);
+                anim1.start();
+                broadcastTitle.setText("Broadcasting On");
+                anim2.start();
+
+                a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f,0f);
+                a2 = PropertyValuesHolder.ofFloat(View.ALPHA, 0f,1f);
+                anim1 = ObjectAnimator.ofPropertyValuesHolder(broadcastProp, a1);
+                anim1.setDuration(1000);
+                anim2 = ObjectAnimator.ofPropertyValuesHolder(broadcastProp, a2);
+                anim2.setDuration(1000);
+                anim1.start();
+                Utils.linkify(broadcastProp,getString(R.string.logging));
+                anim2.start();
             }
-            broadcastRing.setAlpha(1f);
-
-            PropertyValuesHolder a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f,0f);
-            PropertyValuesHolder a2 = PropertyValuesHolder.ofFloat(View.ALPHA, 0f,1f);
-            ObjectAnimator anim1 = ObjectAnimator.ofPropertyValuesHolder(broadcastTitle, a1);
-            anim1.setDuration(1000);
-            ObjectAnimator anim2 = ObjectAnimator.ofPropertyValuesHolder(broadcastTitle, a2);
-            anim2.setDuration(1000);
-            anim1.start();
-            broadcastTitle.setText("Broadcasting On");
-            anim2.start();
-
-            a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f,0f);
-            a2 = PropertyValuesHolder.ofFloat(View.ALPHA, 0f,1f);
-            anim1 = ObjectAnimator.ofPropertyValuesHolder(broadcastProp, a1);
-            anim1.setDuration(1000);
-            anim2 = ObjectAnimator.ofPropertyValuesHolder(broadcastProp, a2);
-            anim2.setDuration(1000);
-            anim1.start();
-            Utils.linkify(broadcastProp,getString(R.string.logging));
-            anim2.start();
+            else {
+                broadcastTitle.setText("Broadcasting On");
+                Utils.linkify(broadcastProp,getString(R.string.logging));
+            }
         }
     }
 

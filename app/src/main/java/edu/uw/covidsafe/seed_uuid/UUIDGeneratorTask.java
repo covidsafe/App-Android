@@ -33,7 +33,7 @@ public class UUIDGeneratorTask implements Runnable {
         byte[] mostRecentSeed = ByteUtils.string2byteArray(mostRecentSeedStr);
 
         SeedUUIDRecord generatedRecord = CryptoUtils.generateSeed(context, mostRecentSeed);
-        Constants.contactUUID = UUID.fromString(generatedRecord.uuid);
+        Constants.contactUUID = UUID.fromString(generatedRecord.getUUID());
 
         if (Constants.blueAdapter != null && Constants.blueAdapter.getBluetoothLeAdvertiser() != null) {
             Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothScanHelper.advertiseCallback);

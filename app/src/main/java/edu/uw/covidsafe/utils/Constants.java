@@ -118,7 +118,11 @@ public class Constants {
     public static TextView bleDesc;
     public static Switch notifSwitch;
 
-    public static String AndroidKeyStore = "AndroidKeyStore";
+    public static int IV_LEN = 16;
+    public static String CharSet = "UTF-8";
+    public static String AES_SETTINGS = "AES/CBC/PKCS7Padding";
+    public static String RSA_SETTINGS = "RSA/ECB/PKCS1Padding";
+    public static String KEY_PROVIDER = "AndroidKeyStore";
     public static String KEY_ALIAS = "mykeys";
     public static BluetoothGattServer gattServer;
     public static BluetoothDevice device;
