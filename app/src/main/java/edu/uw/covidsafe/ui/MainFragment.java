@@ -1,5 +1,7 @@
 package edu.uw.covidsafe.ui;
 
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -182,7 +184,7 @@ public class MainFragment extends Fragment {
             PermUtils.bleSwitchLogic(getActivity());
         }
         else {
-            Utils.haltLoggingService(getActivity(), view);
+            Utils.haltLoggingService(getActivity(), null);
             PermUtils.transition(true, getActivity());
         }
 
@@ -240,8 +242,25 @@ public class MainFragment extends Fragment {
                 broadcastRing.setAlpha(0f);
             }
 
+            PropertyValuesHolder a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f,0f);
+            PropertyValuesHolder a2 = PropertyValuesHolder.ofFloat(View.ALPHA, 0f,1f);
+            ObjectAnimator anim1 = ObjectAnimator.ofPropertyValuesHolder(broadcastTitle, a1);
+            anim1.setDuration(1000);
+            ObjectAnimator anim2 = ObjectAnimator.ofPropertyValuesHolder(broadcastTitle, a2);
+            anim2.setDuration(1000);
+            anim1.start();
             broadcastTitle.setText("Broadcasting Off");
+            anim2.start();
+
+            a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f,0f);
+            a2 = PropertyValuesHolder.ofFloat(View.ALPHA, 0f,1f);
+            anim1 = ObjectAnimator.ofPropertyValuesHolder(broadcastProp, a1);
+            anim1.setDuration(1000);
+            anim2 = ObjectAnimator.ofPropertyValuesHolder(broadcastProp, a2);
+            anim2.setDuration(1000);
+            anim1.start();
             Utils.linkify(broadcastProp,getString(R.string.stopping));
+            anim2.start();
         }
         else if (!hasGpsPerms) {
             editor.putBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
@@ -256,9 +275,27 @@ public class MainFragment extends Fragment {
                 Log.e("transition","set to on");
                 broadcastSwitch.setImageDrawable(getActivity().getDrawable(R.drawable.switch_on));
             }
-            broadcastTitle.setText("Broadcasting On");
             broadcastRing.setAlpha(1f);
+
+            PropertyValuesHolder a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f,0f);
+            PropertyValuesHolder a2 = PropertyValuesHolder.ofFloat(View.ALPHA, 0f,1f);
+            ObjectAnimator anim1 = ObjectAnimator.ofPropertyValuesHolder(broadcastTitle, a1);
+            anim1.setDuration(1000);
+            ObjectAnimator anim2 = ObjectAnimator.ofPropertyValuesHolder(broadcastTitle, a2);
+            anim2.setDuration(1000);
+            anim1.start();
+            broadcastTitle.setText("Broadcasting On");
+            anim2.start();
+
+            a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f,0f);
+            a2 = PropertyValuesHolder.ofFloat(View.ALPHA, 0f,1f);
+            anim1 = ObjectAnimator.ofPropertyValuesHolder(broadcastProp, a1);
+            anim1.setDuration(1000);
+            anim2 = ObjectAnimator.ofPropertyValuesHolder(broadcastProp, a2);
+            anim2.setDuration(1000);
+            anim1.start();
             Utils.linkify(broadcastProp,getString(R.string.logging));
+            anim2.start();
         }
     }
 
