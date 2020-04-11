@@ -126,12 +126,24 @@
                 app:layout_constraintGuide_percent=".70" />
 
             <ImageView
-                android:id="@+id/switch1"
+                android:id="@+id/powerButton"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:minWidth="44dp"
                 android:minHeight="44dp"
-                android:src="@drawable/switch_on"
+                android:src="@drawable/switch_on_noring"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guidelineV80"
+                app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+                android:id="@+id/ring"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:minWidth="44dp"
+                android:minHeight="44dp"
+                android:alpha="0"
+                android:src="@drawable/ring"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guidelineV80"

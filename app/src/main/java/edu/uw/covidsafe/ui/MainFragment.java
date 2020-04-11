@@ -2,15 +2,9 @@ package edu.uw.covidsafe.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +15,6 @@ import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,19 +29,15 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.covidsafe.R;
 
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import edu.uw.covidsafe.comms.PullFromServerTask;
-import edu.uw.covidsafe.comms.PullFromServerTaskDemo;
 import edu.uw.covidsafe.hcp.SubmitNarrowcastMessageTask;
 import edu.uw.covidsafe.ui.health.ResourceRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifDbModel;
-import edu.uw.covidsafe.ui.notif.NotifOpsAsyncTask;
 import edu.uw.covidsafe.ui.notif.NotifRecord;
 import edu.uw.covidsafe.ui.settings.PermUtils;
 import edu.uw.covidsafe.utils.Constants;
@@ -58,6 +47,7 @@ public class MainFragment extends Fragment {
 
     View view;
     ImageView broadcastSwitch;
+    ImageView broadcastRing;
     TextView broadcastProp;
     TextView broadcastTitle;
     ImageView refresh;
@@ -156,7 +146,8 @@ public class MainFragment extends Fragment {
         broadcastProp = view.findViewById(R.id.broadcastProp);
         broadcastTitle = view.findViewById(R.id.broadcastTitle);
 
-        broadcastSwitch = view.findViewById(R.id.switch1);
+        broadcastSwitch = view.findViewById(R.id.powerButton);
+        broadcastRing = view.findViewById(R.id.ring);
         broadcastSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -246,6 +237,7 @@ public class MainFragment extends Fragment {
             if (updateSwitch) {
                 Log.e("transition","set to off");
                 broadcastSwitch.setImageDrawable(getActivity().getDrawable(R.drawable.switch_off));
+                broadcastRing.setAlpha(0f);
             }
 
             broadcastTitle.setText("Broadcasting Off");
@@ -265,6 +257,7 @@ public class MainFragment extends Fragment {
                 broadcastSwitch.setImageDrawable(getActivity().getDrawable(R.drawable.switch_on));
             }
             broadcastTitle.setText("Broadcasting On");
+            broadcastRing.setAlpha(1f);
             Utils.linkify(broadcastProp,getString(R.string.logging));
         }
     }
