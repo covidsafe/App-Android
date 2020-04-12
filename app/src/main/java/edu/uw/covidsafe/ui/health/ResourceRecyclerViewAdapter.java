@@ -58,7 +58,7 @@ public class ResourceRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         ((ResourceCard)holder).card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.goToUrl(av, links.get(position));
+                Utils.openPhone(av, links.get(position));
             }
         });
     }
