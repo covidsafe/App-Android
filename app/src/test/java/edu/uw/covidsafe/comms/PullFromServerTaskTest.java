@@ -88,7 +88,7 @@ public class PullFromServerTaskTest {
 
             // this is a seed
             long[] times = PullFromServerTask.isExposed("00000000-0000-0000-0000-000000000000",
-                    t0, scannedBleMap);
+                    t0, 0, scannedBleMap);
             if (testCase == 1) {
                 assertNull(times);
             } else if (testCase == 2) {

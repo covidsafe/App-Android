@@ -34,6 +34,19 @@ public class TestAES256 {
     }
 
     @Test
+    public void testDecryption() {
+        try {
+            String data = "aTylpmAcXuHtdBjbkNLK//ElBH/RrWwztRILSp2dzZSH1kLfW+gYolSix2Lpca3giUN7yMMnT4b2\nHUIqn5O+Kw==";
+            String out = AES256.decrypt(data);
+            String expected = "590c652d-7150-4268-be08-ada6c1f75fb2";
+            System.out.println(out);
+        }
+        catch(Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Test
     public void test_AES256_encryption_and_decryption() throws NoSuchAlgorithmException,
             IllegalBlockSizeException, InvalidKeyException, BadPaddingException,
             InvalidAlgorithmParameterException, NoSuchPaddingException {
