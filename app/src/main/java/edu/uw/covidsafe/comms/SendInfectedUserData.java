@@ -97,6 +97,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
                 Location loc = GpsUtils.getLastLocation(context);
                 if (loc == null) {
                     mkSnack(av, view, "We need location services enabled to send your traces. Please enable location services permission.");
+                    return null;
                 }
                 lat = loc.getLatitude();
                 longi = loc.getLongitude();
