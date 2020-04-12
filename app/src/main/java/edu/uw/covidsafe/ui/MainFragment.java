@@ -209,10 +209,6 @@ public class MainFragment extends Fragment {
         Constants.MainFragment = this;
         Constants.MainFragmentState = this;
 
-        if (!Constants.PullServiceRunning) {
-            Utils.startPullService(getActivity());
-        }
-
         updateBroadcastUI(false);
 
         swipeLayout.setRefreshing(false);

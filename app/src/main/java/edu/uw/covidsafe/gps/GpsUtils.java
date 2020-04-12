@@ -74,7 +74,20 @@ public class GpsUtils {
     public static Location getLastLocation(Context cxt) {
         LocationManager locationManager = (LocationManager) cxt.getSystemService(Context.LOCATION_SERVICE);
         try {
-            return locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            Log.e("err","got last known location");
+            Location loc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (loc != null) {
+                return loc;
+            }
+            loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (loc != null) {
+                return loc;
+            }
+            loc = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+            if (loc != null) {
+                return loc;
+            }
+            return null;
         }
         catch (SecurityException e) {
             Log.e("err",e.getMessage());
