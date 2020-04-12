@@ -5,8 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -14,7 +12,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
-import android.text.Spannable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,9 +29,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.covidsafe.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import edu.uw.covidsafe.comms.NetworkHelper;
 import edu.uw.covidsafe.comms.SendInfectedUserData;
@@ -69,8 +63,10 @@ public class DiagnosisFragment extends Fragment {
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(getActivity().getString(R.string.health_header_text)));
 
-//        RecyclerView rview = view.findViewById(R.id.recyclerViewTips);
-//        rview.setAdapter(Constants.TipAdapter);
+        RecyclerView rview = view.findViewById(R.id.recyclerViewTipsDiagnosis);
+        rview.setAdapter(Constants.DiagnosisTipAdapter);
+        rview.setLayoutManager(new LinearLayoutManager(getActivity()));
+        Constants.DiagnosisTipAdapter.enableTips(1,view);
 
         Button uploadButton = (Button)view.findViewById(R.id.uploadButton);
         if (uploadButton != null) {

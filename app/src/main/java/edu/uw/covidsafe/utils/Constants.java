@@ -77,7 +77,8 @@ public class Constants {
         Insert,ViewAll
     }
 
-    public static TipRecyclerViewAdapter TipAdapter;
+    public static TipRecyclerViewAdapter MainTipAdapter;
+    public static TipRecyclerViewAdapter DiagnosisTipAdapter;
     public static NotifRecyclerViewAdapter NotificationAdapter;
     public static HistoryRecyclerViewAdapter HistoryAdapter;
     public static boolean PullServiceRunning = false;

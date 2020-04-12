@@ -16,7 +16,6 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,9 +35,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import edu.uw.covidsafe.comms.PullFromServerTask;
 import edu.uw.covidsafe.comms.PullFromServerTaskDemo;
-import edu.uw.covidsafe.hcp.SubmitNarrowcastMessageTask;
 import edu.uw.covidsafe.ui.health.ResourceRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifDbModel;
 import edu.uw.covidsafe.ui.notif.NotifOpsAsyncTask;
@@ -79,7 +76,7 @@ public class MainFragment extends Fragment {
         lastUpdated = (TextView) view.findViewById(R.id.lastUpdated);
 
         RecyclerView tipView = view.findViewById(R.id.recyclerViewTips);
-        tipView.setAdapter(Constants.TipAdapter);
+        tipView.setAdapter(Constants.MainTipAdapter);
         tipView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         swipeLayout = view.findViewById(R.id.swiperefresh);
@@ -149,7 +146,7 @@ public class MainFragment extends Fragment {
                 }
                 Constants.HistoryAdapter.setRecords(historyNotifs, view);
                 Constants.NotificationAdapter.setRecords(currentNotifs, view);
-                Constants.TipAdapter.enableTips(notifRecords.size(), view);
+                Constants.MainTipAdapter.enableTips(notifRecords.size(), view);
             }
         });
 
