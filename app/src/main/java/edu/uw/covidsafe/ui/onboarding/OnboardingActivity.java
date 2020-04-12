@@ -15,10 +15,16 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.example.covidsafe.R;
+
+import java.util.UUID;
+
+import edu.uw.covidsafe.seed_uuid.SeedUUIDOpsAsyncTask;
+import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.ui.PermissionLogic;
 import edu.uw.covidsafe.ui.PermissionLogicOld;
 import edu.uw.covidsafe.utils.Constants;
+import edu.uw.covidsafe.utils.CryptoUtils;
 
 public class OnboardingActivity extends AppCompatActivity {
 

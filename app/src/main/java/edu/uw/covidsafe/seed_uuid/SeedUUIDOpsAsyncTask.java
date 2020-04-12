@@ -7,6 +7,7 @@ import android.util.Log;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
 
+import java.util.List;
 import java.util.UUID;
 
 public class SeedUUIDOpsAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -20,6 +21,10 @@ public class SeedUUIDOpsAsyncTask extends AsyncTask<Void, Void, Void> {
         this.op = Constants.UUIDDatabaseOps.Insert;
     }
 
+    public SeedUUIDOpsAsyncTask(Constants.UUIDDatabaseOps ops) {
+        this.op = ops;
+    }
+
     @Override
     protected Void doInBackground(Void... params) {
         Log.e("ble","doinbackground uuid "+this.op);
@@ -29,13 +34,16 @@ public class SeedUUIDOpsAsyncTask extends AsyncTask<Void, Void, Void> {
             if (Constants.WRITE_TO_DISK) {
                 Utils.uuidLogToFile(this.context, this.record);
             }
+            List<SeedUUIDRecord> records = repo.getAllRecords();
+            SeedUUIDRecord out = records.get(0);
+            Log.e("adf",out.toString());
         }
-//        else if (this.op == Constants.UUIDDatabaseOps.ViewAll) {
-//            List<UUIDRecord> records = repo.getAllRecords();
-//            for (UUIDRecord record : records) {
-//                Log.e("uuid",record.toString());
-//            }
-//        }
+        else if (this.op == Constants.UUIDDatabaseOps.ViewAll) {
+            List<SeedUUIDRecord> records = repo.getAllRecords();
+            for (SeedUUIDRecord record : records) {
+                Log.e("uuid",record.toString());
+            }
+        }
         return null;
     }
 }

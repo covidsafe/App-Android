@@ -20,6 +20,9 @@ import android.view.WindowManager;
 import androidx.fragment.app.FragmentTransaction;
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.comms.NetworkConstant;
+import edu.uw.covidsafe.crypto.AES256;
+import edu.uw.covidsafe.seed_uuid.SeedUUIDOpsAsyncTask;
+import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
 import edu.uw.covidsafe.ui.health.TipRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.HistoryRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
@@ -33,18 +36,23 @@ import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
 
+import org.apache.commons.codec.digest.Crypt;
+
+import java.util.UUID;
+
 
 public class MainActivity extends AppCompatActivity {
-    private Context mContext;
 
     Activity activity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Log.e("state","main activity oncreate");
         this.activity = this;
         setContentView(R.layout.activity_main);
-        mContext = this;
+
         String manufacturer = Build.MANUFACTURER;
         String model = Build.MODEL;
         Log.e("metadata","BUILD "+android.os.Build.VERSION.SDK_INT+"");
@@ -56,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         Crashes.setEnabled(true);
 
         CryptoUtils.keyInit(this);
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.getMenu().clear();
         bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_release);

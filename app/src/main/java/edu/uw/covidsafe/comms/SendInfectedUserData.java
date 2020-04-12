@@ -29,6 +29,7 @@ import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
 
 import java.util.List;
+import java.util.UUID;
 
 public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
 
@@ -110,7 +111,11 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
             // ask healthies to generate from ts_start till now (when infected publishes data)
             long ts_start = recordToSend.ts;
             long ts_end = System.currentTimeMillis();
-            sendRequest(recordToSend.getSeed(),
+
+            SeedUUIDRecord temp = new SeedUUIDRecord(System.currentTimeMillis(), UUID.randomUUID().toString(),UUID.randomUUID().toString());
+
+            String seed = recordToSend.getSeed();
+            sendRequest(seed,
                     ts_start, ts_end,
                     getCoarseGpsCoord(lat, gpsResolution),
                     getCoarseGpsCoord(longi, gpsResolution),

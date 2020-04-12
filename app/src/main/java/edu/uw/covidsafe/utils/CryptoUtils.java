@@ -40,7 +40,7 @@ import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
 public class CryptoUtils {
 
     // make very first seed
-    public static void generateInitSeed(Context context, boolean forceRefresh) {
+    public static SeedUUIDRecord generateInitSeed(Context context, boolean forceRefresh) {
         String initSeed = UUID.randomUUID().toString();
 
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
@@ -56,7 +56,9 @@ public class CryptoUtils {
                     initSeed, "");
             Log.e("uuid","generate initial seed");
             new SeedUUIDOpsAsyncTask(context, record).execute();
+            return record;
         }
+        return null;
     }
 
     // chain generation for potentially exposed users
