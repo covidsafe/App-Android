@@ -55,7 +55,7 @@ public class SettingsFragment extends Fragment {
             window.setStatusBarColor(getActivity().getResources().getColor(R.color.white));
         }
 
-        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material);
+        final Drawable upArrow = getActivity().getDrawable(R.drawable.abc_ic_ab_back_material);
         upArrow.setColorFilter(getActivity().getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
         ((MainActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(upArrow);
 

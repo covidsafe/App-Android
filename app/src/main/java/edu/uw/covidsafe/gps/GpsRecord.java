@@ -32,17 +32,17 @@ public class GpsRecord {
     public GpsRecord(@NonNull long ts, String latEncrypted, String longiEncrypted, String provider) {
         this.ts = ts;
         if (latEncrypted.length() > 0 && latEncrypted.charAt(latEncrypted.length()-1) == '\n') {
-            setLat(Double.parseDouble(latEncrypted));
+            this.latEncrypted = latEncrypted;
         }
         else {
-            this.latEncrypted = latEncrypted;
+            setLat(Double.parseDouble(latEncrypted));
         }
 
         if (longiEncrypted.length() > 0 && longiEncrypted.charAt(longiEncrypted.length()-1) == '\n') {
-            setLongi(Double.parseDouble(longiEncrypted));
+            this.longiEncrypted = longiEncrypted;
         }
         else {
-            this.longiEncrypted = longiEncrypted;
+            setLongi(Double.parseDouble(longiEncrypted));
         }
 
         this.provider = provider;

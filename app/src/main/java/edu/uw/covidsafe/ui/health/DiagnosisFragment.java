@@ -63,7 +63,7 @@ public class DiagnosisFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().show();
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material);
+        final Drawable upArrow = getActivity().getDrawable(R.drawable.abc_ic_ab_back_material);
         upArrow.setColorFilter(getActivity().getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
         ((MainActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(upArrow);
 

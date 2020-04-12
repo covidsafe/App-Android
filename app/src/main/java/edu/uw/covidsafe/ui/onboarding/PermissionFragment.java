@@ -66,7 +66,7 @@ public class PermissionFragment extends Fragment {
         ((OnboardingActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((OnboardingActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(getActivity().getString(R.string.permissions_header_text)));
 
-        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material);
+        final Drawable upArrow = getActivity().getDrawable(R.drawable.abc_ic_ab_back_material);
         upArrow.setColorFilter(getActivity().getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
         ((OnboardingActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(upArrow);
 
