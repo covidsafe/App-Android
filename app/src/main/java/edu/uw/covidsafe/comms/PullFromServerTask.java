@@ -315,6 +315,9 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         if (gpsRecords.size() == 0) {
             if (Utils.hasGpsPermissions(context)) {
                 Location loc = GpsUtils.getLastLocation(context);
+                if (loc == null) {
+                    return false;
+                }
                 gpsRecords.add(new GpsRecord(0,loc.getLatitude(),loc.getLongitude(),""));
             }
             else {
