@@ -37,7 +37,7 @@
             app:layout_constraintTop_toBottomOf="@+id/sick"
             >
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewTips"
+                android:id="@+id/recyclerViewTipsDiagnosis"
                 android:nestedScrollingEnabled="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

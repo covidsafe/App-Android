@@ -41,6 +41,7 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public void enableTips(int size, View view) {
+        Log.e("tip","enabletips");
         TextView tv = view.findViewById(R.id.sick);
         if (size>=1 && titles.size()==0) {
             titles.add("");
@@ -81,8 +82,10 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             icons.add(mContext.getDrawable(R.drawable.icon_health));
             av.runOnUiThread(new Runnable() {
                 public void run() {
-                    tv.setText("What to Do If You Are Sick");
-                    tv.setVisibility(View.VISIBLE);
+                    if (tv!=null) {
+                        tv.setText("What to Do If You Are Sick");
+                        tv.setVisibility(View.VISIBLE);
+                    }
                 }});
             Log.e("notif","tip changed");
             notifyDataSetChanged();
@@ -105,6 +108,7 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view ;
+        Log.e("tip","oncreateviewholder");
         if (viewType == 0) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_action, parent, false);
             RecyclerView.ViewHolder volder = new TipRecyclerViewAdapter.ActionCard(view);
@@ -121,6 +125,7 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        Log.e("tip","oncreateviewholder "+position);
         if (titles.get(position).isEmpty()) {
             ((CallCard) holder).desc.setText((String)desc.get(position));
             ((CallCard)holder).icon.setImageDrawable(icons.get(position));
