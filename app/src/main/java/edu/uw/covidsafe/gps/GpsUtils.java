@@ -77,9 +77,11 @@ public class GpsUtils {
             return locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         }
         catch (SecurityException e) {
+            Log.e("err",e.getMessage());
             return null;
         }
         catch (Exception e) {
+            Log.e("err",e.getMessage());
             return null;
         }
     }
