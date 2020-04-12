@@ -1,10 +1,8 @@
 package edu.uw.covidsafe.comms;
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.AsyncTask;
-import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,7 +12,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Request;
 import com.example.covidsafe.R;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -487,7 +484,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
                         messageType.ordinal(),
                         true));
                 Log.e("notif","notif");
-                Utils.notif2(context, "You may have been exposed",msg);
+                Utils.sendNotification(context, "You may have been exposed",msg);
             }
             else {
                 if (!msgs.isEmpty()) {
@@ -498,7 +495,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
                             messageType.ordinal(),
                             true));
                     Log.e("notif","notif");
-                    Utils.notif2(context, "Announcement",msgs.get(i));
+                    Utils.sendNotification(context, "Announcement",msgs.get(i));
                 }
             }
         }

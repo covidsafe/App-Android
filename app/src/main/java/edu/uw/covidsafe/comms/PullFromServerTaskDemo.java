@@ -3,7 +3,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
@@ -304,7 +303,7 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
                     Area[] areas = areaMatch.areas;
                     for (Area area : areas) {
                         if (intersect(area)) {
-                            Log.e("msg", "NARROWCAST USER MESSAGE " + areaMatch.userMessage);
+                            Log.e("msg", "NARROWCAST USER MESSAGE " + areaMatch.userMessage+","+area.beginTime+","+area.endTime);
                             narrowCastMessages.add(areaMatch.userMessage);
                             narrowCastMessageStartTimes.add(area.beginTime);
                             narrowCastMessageEndTimes.add(area.endTime);
@@ -494,7 +493,7 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
                         msg,
                         messageType.ordinal(),
                         true)).execute();
-                Utils.notif2(context, "You may have been exposed", msg);
+                Utils.sendNotification(context, "You may have been exposed", msg);
             }
             else {
                 if (!msgs.isEmpty()) {
@@ -505,7 +504,7 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
                             msgs.get(i),
                             Constants.MessageType.NarrowCast.ordinal(),
                             true)).execute();
-                    Utils.notif2(context, "Announcement",msgs.get(i));
+                    Utils.sendNotification(context, "Announcement",msgs.get(i));
                 }
             }
         }
