@@ -90,7 +90,11 @@ public class CryptoUtils {
             // get the most recent seed/uuid pair
             // fill in the uuid, put back into DB
             SeedUUIDDbRecordRepository seedUUIDRepo = new SeedUUIDDbRecordRepository(context);
-            SeedUUIDRecord mostRecentRecord = seedUUIDRepo.getAllSortedRecords().get(0);
+            List<SeedUUIDRecord> records = seedUUIDRepo.getAllSortedRecords();
+            if (records.size() == 0) {
+                return null;
+            }
+            SeedUUIDRecord mostRecentRecord = records.get(0);
             mostRecentRecord.setUUID(dummyRecord.getUUID());
             new SeedUUIDOpsAsyncTask(context, mostRecentRecord).execute();
 
@@ -119,12 +123,10 @@ public class CryptoUtils {
         byte[] seed = ByteUtils.string2byteArray(s);
         ArrayList<String> uuids = new ArrayList<>();
         try {
-            long ts = System.currentTimeMillis();
             for (int i = 0; i < numSeedsToGenerate; i++) {
                 String[] record = generateSeedChainHelper(seed);
                 seed = ByteUtils.string2byteArray(record[0]);
                 uuids.add(record[1]);
-//                Log.e("chain","chain time "+i+","+(System.currentTimeMillis()-ts));
             }
         }
         catch(Exception e) {

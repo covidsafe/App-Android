@@ -34,9 +34,6 @@ public class SeedUUIDOpsAsyncTask extends AsyncTask<Void, Void, Void> {
             if (Constants.WRITE_TO_DISK) {
                 Utils.uuidLogToFile(this.context, this.record);
             }
-            List<SeedUUIDRecord> records = repo.getAllRecords();
-            SeedUUIDRecord out = records.get(0);
-            Log.e("adf",out.toString());
         }
         else if (this.op == Constants.UUIDDatabaseOps.ViewAll) {
             List<SeedUUIDRecord> records = repo.getAllRecords();
