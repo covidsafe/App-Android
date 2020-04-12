@@ -34,13 +34,13 @@ public class ResourceRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         this.cxt = cxt;
         this.av = av;
         titles.add("CDC Guidance");
-        titles.add("NYC Department of Health");
+        titles.add("King County Department of Health");
         desc.add(cxt.getString(R.string.lipsum3));
         desc.add(cxt.getString(R.string.lipsum3));
         icons.add(cxt.getDrawable(R.drawable.res1));
-        icons.add(cxt.getDrawable(R.drawable.res2));
+        icons.add(cxt.getDrawable(R.drawable.kclogo));
         links.add("https://www.cdc.gov/");
-        links.add("https://www1.nyc.gov/site/doh/index.page");
+        links.add("http://www.kingcounty.gov/covid");
     }
 
     @NonNull

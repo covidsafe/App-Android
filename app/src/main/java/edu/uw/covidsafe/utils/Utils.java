@@ -148,22 +148,23 @@ public class Utils {
         return true;
     }
 
-    public static void notif2(Context mContext, String title, String message) {
+    public static void sendNotification(Context mContext, String title, String message) {
         SharedPreferences prefs = mContext.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mContext.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
         if (prefs.getBoolean(mContext.getString(R.string.notifs_enabled_pkey), Constants.NOTIFS_ENABLED)) {
             Log.e("notif","notif");
             NotificationManager mNotificationManager;
 
             NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(mContext.getApplicationContext(), "notify_001");
+                    new NotificationCompat.Builder(mContext.getApplicationContext(), Constants.NOTIFICATION_CHANNEL);
             Intent ii = new Intent(mContext.getApplicationContext(), MainActivity.class);
             ii.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, ii, 0);
 
             NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
-            bigText.bigText(title);
+            bigText.bigText(message);
             bigText.setBigContentTitle(title);
-            bigText.setSummaryText(message);
+//            bigText.setSummaryText(message);
 
             mBuilder.setContentIntent(pendingIntent);
             mBuilder.setSmallIcon(R.drawable.warning2);
@@ -188,7 +189,10 @@ public class Utils {
                 mBuilder.setChannelId(channelId);
             }
 
-            mNotificationManager.notify(0, mBuilder.build());
+            int notifID = prefs.getInt(mContext.getString(R.string.notif_id_pkey),0);
+            mNotificationManager.notify(notifID, mBuilder.build());
+            editor.putInt(mContext.getString(R.string.notif_id_pkey),notifID+1);
+            editor.commit();
         }
     }
 
