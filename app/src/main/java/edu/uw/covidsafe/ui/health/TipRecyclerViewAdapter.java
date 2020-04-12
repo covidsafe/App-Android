@@ -18,6 +18,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.covidsafe.R;
+import com.google.android.material.card.MaterialCardView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import edu.uw.covidsafe.utils.Constants;
+import edu.uw.covidsafe.utils.Utils;
 
 public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
 
@@ -129,6 +131,12 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         if (titles.get(position).isEmpty()) {
             ((CallCard) holder).desc.setText((String)desc.get(position));
             ((CallCard)holder).icon.setImageDrawable(icons.get(position));
+            ((CallCard)holder).card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Utils.openPhone(av, mContext.getString(R.string.phone));
+                }
+            });
         }
         else {
             ((ActionCard)holder).title.setText(titles.get(position));
@@ -162,6 +170,7 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         TextView title;
         TextView desc;
         ConstraintLayout parentLayout;
+        MaterialCardView card;
 
         ActionCard(@NonNull View itemView) {
             super(itemView);
@@ -170,6 +179,7 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             this.title.setMovementMethod(LinkMovementMethod.getInstance());
             this.desc = itemView.findViewById(R.id.textView5);
             this.parentLayout = itemView.findViewById(R.id.parent_layout2);
+            this.card = itemView.findViewById(R.id.materialCardView);
         }
     }
 
@@ -177,12 +187,14 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         ImageView icon;
         TextView desc;
         ConstraintLayout parentLayout;
+        MaterialCardView card;
 
         CallCard(@NonNull View itemView) {
             super(itemView);
             this.icon = itemView.findViewById(R.id.icon);
             this.desc = itemView.findViewById(R.id.textView7);
             this.parentLayout = itemView.findViewById(R.id.parent_layout);
+            this.card = itemView.findViewById(R.id.materialCardView);
         }
     }
 }

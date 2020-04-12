@@ -387,9 +387,8 @@ public class Utils {
         return true;
     }
 
-    public static void goToUrl (Activity av, String url) {
-        Uri uriUrl = Uri.parse(url);
-        Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+    public static void openPhone (Activity av, String phoneNumber) {
+        Intent launchBrowser = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+phoneNumber));
         av.startActivity(launchBrowser);
     }
 

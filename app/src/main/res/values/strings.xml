@@ -39,6 +39,8 @@
     <string name="time_of_last_query_pkey">time_of_last_query_pkey</string>
     <string name="notif_id_pkey">notif_id_pkey</string>
 
+    <string name="phone">911</string>
+
     <string name="perm_gps_rationale">Without this permission, we will be unable to capture location information. Are you sure you want to deny this permission?</string>
     <string name="perm_gps_ask">We require access to location information when the app is closed. Would you like to open app settings to enable this?</string>
 
