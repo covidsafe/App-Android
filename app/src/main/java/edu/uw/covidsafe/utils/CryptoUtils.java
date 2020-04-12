@@ -73,6 +73,15 @@ public class CryptoUtils {
         return dummyRecord;
     }
 
+    public static String[] generateSeedChainHelper(byte[] seed) throws DigestException{
+        byte[] out = new byte[32];
+        SHA256.hash(seed, out);
+        byte[] generatedSeedBytes = Arrays.copyOfRange(out,0,16);
+        byte[] generatedIDBytes = Arrays.copyOfRange(out,16,32);
+        return new String[] {ByteUtils.byte2UUIDstring(generatedSeedBytes),
+                ByteUtils.byte2UUIDstring(generatedIDBytes)};
+    }
+
     // generation ith seed
     public static SeedUUIDRecord generateSeed(Context context, byte[] seed) {
         try {
@@ -110,10 +119,12 @@ public class CryptoUtils {
         byte[] seed = ByteUtils.string2byteArray(s);
         ArrayList<String> uuids = new ArrayList<>();
         try {
+            long ts = System.currentTimeMillis();
             for (int i = 0; i < numSeedsToGenerate; i++) {
-                SeedUUIDRecord record = generateSeedHelper(seed);
-                seed = ByteUtils.string2byteArray(record.getSeed());
-                uuids.add(record.getUUID());
+                String[] record = generateSeedChainHelper(seed);
+                seed = ByteUtils.string2byteArray(record[0]);
+                uuids.add(record[1]);
+//                Log.e("chain","chain time "+i+","+(System.currentTimeMillis()-ts));
             }
         }
         catch(Exception e) {
