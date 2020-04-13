@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -69,24 +70,29 @@ public class NotifRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
         if (rec.msgType == Constants.MessageType.Exposure.ordinal()) {
             ((NotifCard)holder).header.setText("You might have been exposed");
-        }
-        else {
-            ((NotifCard)holder).header.setText("Announcement");
-        }
 
-        String tt = timeFormat.format(rec.getTs_start()) +"-"+ timeFormat2.format(rec.getTs_end());
+            String tt = timeFormat.format(rec.getTs_start()) +"-"+ timeFormat2.format(rec.getTs_end());
 
 //        Spannable ss = (Spannable)Html.fromHtml(rec.msg+" This was during <b>"+dateFormat.format(rec.getTs_start())+ "</b> during <b>"+tt+"</b>");
-        Spannable ss = (Spannable)Html.fromHtml(rec.msg+" This was during <b>"+dateFormat.format(rec.getTs_start())+".");
-        ((NotifCard)holder).message.setText(ss);
-        ((NotifCard)holder).dismissButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismissedIndex = position;
-                Log.e("state","remove "+position);
-                new NotifOpsAsyncTask(cxt, new NotifRecord(rec.ts_start, rec.ts_end, rec.msg, rec.msgType,false)).execute();
-            }
-        });
+            Spannable ss = (Spannable)Html.fromHtml(rec.msg+" This was during <b>"+dateFormat.format(rec.getTs_start())+".");
+            ((NotifCard)holder).message.setText(ss);
+            ((NotifCard)holder).dismissButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dismissedIndex = position;
+                    Log.e("state","remove "+position);
+                    new NotifOpsAsyncTask(cxt, new NotifRecord(rec.ts_start, rec.ts_end, rec.msg, rec.msgType,false)).execute();
+                }
+            });
+            ((NotifCard)holder).icon.setImageDrawable(av.getDrawable(R.drawable.warning3));
+        }
+        else {
+            ((NotifCard)holder).message.setText(rec.msg);
+            ((NotifCard)holder).header.setText("Announcement");
+            ((NotifCard)holder).contact.setText("");
+            ((NotifCard)holder).contact.setVisibility(View.GONE);
+            ((NotifCard)holder).icon.setImageDrawable(av.getDrawable(R.drawable.ic_info_outline_black_24dp));
+        }
     }
 
     @Override
@@ -98,11 +104,15 @@ public class NotifRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         Button dismissButton;
         TextView header;
         TextView message;
+        TextView contact;
+        ImageView icon;
         NotifCard(@NonNull View itemView) {
             super(itemView);
+            this.icon = itemView.findViewById(R.id.imageView10);
             this.dismissButton = itemView.findViewById(R.id.dismiss);
             this.header = itemView.findViewById(R.id.textView11);
             this.message = itemView.findViewById(R.id.textView12);
+            this.contact = itemView.findViewById(R.id.textView13);
         }
     }
 }

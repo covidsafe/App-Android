@@ -53,7 +53,7 @@ public class ResourceRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ((ResourceCard) holder).title.setText((String)titles.get(position));
-        ((ResourceCard) holder).desc.setText((String)desc.get(position));
+//        ((ResourceCard) holder).desc.setText((String)desc.get(position));
         ((ResourceCard)holder).icon.setImageDrawable(icons.get(position));
         ((ResourceCard)holder).card.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +71,7 @@ public class ResourceRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     public class ResourceCard extends RecyclerView.ViewHolder {
         ImageView icon;
         TextView title;
-        TextView desc;
+//        TextView desc;
         MaterialCardView card;
         ConstraintLayout parentLayout;
 
@@ -79,7 +79,7 @@ public class ResourceRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             super(itemView);
             this.icon = itemView.findViewById(R.id.imageView3);
             this.title = itemView.findViewById(R.id.textView);
-            this.desc = itemView.findViewById(R.id.resdesc);
+//            this.desc = itemView.findViewById(R.id.resdesc);
             this.card = itemView.findViewById(R.id.cdcView);
             this.parentLayout = itemView.findViewById(R.id.parent);
         }

@@ -46,42 +46,35 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 //        Log.e("tip","enabletips");
         TextView tv = view.findViewById(R.id.sick);
         if (size>=1 && titles.size()==0) {
+
             titles.add("");
-            titles.add("Self-quarantine for 14 days");
-            titles.add("Monitor Your Symptoms");
-            titles.add("Request a test");
-            titles.add("Contact your healthcare professional");
-            titles.add("Isolate from those around you");
-            titles.add("Practice Good Hygiene");
-            Date dd = new Date();
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(dd);
-            calendar.add(Calendar.DATE, Constants.QuarantineLengthInDays);
-            long thresh = calendar.getTime().getTime();
-
-            SimpleDateFormat format = new SimpleDateFormat("MMMM d");
-            String ss = format.format(new Date(thresh));
-
             desc.add("Call 911 immediately if you are having a medical emergency.");
-
-            Spannable s = (Spannable) Html.fromHtml(
-                    "If you start your self quarantine today, your 14 days will end <b>"+ss+"</b>. Please check with your local Health Authorities for more guidance."
-            );
-
-            desc.add(s);
-            desc.add("Egestas tellus rutrum tellus pellentesque eu tincidunt. Odio tempor orci dapibus ultrices in iaculis nunc sed augue suspendisse.");
-            desc.add("Egestas tellus rutrum tellus pellentesque eu tincidunt. Odio tempor orci dapibus ultrices in iaculis nunc sed augue suspendisse.");
-            desc.add("Please contact your healthcare professional for next steps.");
-            desc.add("Egestas tellus rutrum tellus pellentesque eu tincidunt. Odio tempor orci dapibus ultrices in iaculis nunc sed augue suspendisse.");
-            desc.add("Egestas tellus rutrum tellus pellentesque eu tincidunt. Odio tempor orci dapibus ultrices in iaculis nunc sed augue suspendisse.");
-
             icons.add(mContext.getDrawable(R.drawable.icon_phone3));
+
+            titles.add("Self-quarantine for 14 days");
+            desc.add(getQuarantineTime());
             icons.add(mContext.getDrawable(R.drawable.icon_quarantine));
+
+            titles.add("Monitor Your Symptoms");
+            desc.add("If you think you have been exposed to COVID-19 and develop a fever and symptoms, such as cough or difficulty breathing, call your healthcare provider for medical advice.");
             icons.add(mContext.getDrawable(R.drawable.icon_symptoms));
+
+            titles.add("Request a test");
+            desc.add("If you have symptoms of COVID-19 and want to get tested, try calling your state or local health department or a medical provider.");
             icons.add(mContext.getDrawable(R.drawable.icon_test));
-            icons.add(mContext.getDrawable(R.drawable.icon_phone2));
-            icons.add(mContext.getDrawable(R.drawable.icon_quarantine));
-            icons.add(mContext.getDrawable(R.drawable.icon_health));
+//
+//            titles.add("Contact your healthcare professional");
+//            desc.add("Please contact your healthcare professional for next steps.");
+//            icons.add(mContext.getDrawable(R.drawable.icon_phone2));
+//
+//            titles.add("Isolate from those around you");
+//            desc.add("Egestas tellus rutrum tellus pellentesque eu tincidunt. Odio tempor orci dapibus ultrices in iaculis nunc sed augue suspendisse.");
+//            icons.add(mContext.getDrawable(R.drawable.icon_quarantine));
+
+//            titles.add("Practice Good Hygiene");
+//            desc.add("Egestas tellus rutrum tellus pellentesque eu tincidunt. Odio tempor orci dapibus ultrices in iaculis nunc sed augue suspendisse.");
+//            icons.add(mContext.getDrawable(R.drawable.icon_health));
+
             av.runOnUiThread(new Runnable() {
                 public void run() {
                     if (tv!=null) {
@@ -104,6 +97,21 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 //            Log.e("notif","tip 0 changed");
             notifyDataSetChanged();
         }
+    }
+
+    public Spannable getQuarantineTime() {
+        Date dd = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dd);
+        calendar.add(Calendar.DATE, Constants.QuarantineLengthInDays);
+        long thresh = calendar.getTime().getTime();
+
+        SimpleDateFormat format = new SimpleDateFormat("MMMM d");
+        String ss = format.format(new Date(thresh));
+
+        return (Spannable) Html.fromHtml(
+                "If you start your self quarantine today, your 14 days will end <b>"+ss+"</b>. Please check with your local Health Authorities for more guidance."
+        );
     }
 
     @NonNull
