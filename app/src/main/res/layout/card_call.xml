@@ -42,30 +42,18 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imageView7"
+                android:id="@+id/icon"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="13dp"
                 android:layout_marginBottom="12dp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/rect3"
+                android:src="@drawable/icon_phone3"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guidelineV10"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/icon"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:adjustViewBounds="true"
-                android:src="@drawable/icon_phone3"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView7"
-                app:layout_constraintEnd_toEndOf="@+id/imageView7"
-                app:layout_constraintHorizontal_bias="0.526"
-                app:layout_constraintStart_toStartOf="@+id/imageView7"
-                app:layout_constraintTop_toTopOf="@+id/imageView7" />
 
             <TextView
                 android:id="@+id/textView7"
@@ -78,7 +66,7 @@
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView7"
+                app:layout_constraintStart_toEndOf="@+id/icon"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.Guideline

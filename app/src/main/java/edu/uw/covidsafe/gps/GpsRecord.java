@@ -31,18 +31,21 @@ public class GpsRecord {
 
     public GpsRecord(@NonNull long ts, String latEncrypted, String longiEncrypted, String provider) {
         this.ts = ts;
-        if (latEncrypted.length() > 0 && latEncrypted.charAt(latEncrypted.length()-1) == '\n') {
-            this.latEncrypted = latEncrypted;
-        }
-        else {
-            setLat(Double.parseDouble(latEncrypted));
+        if (latEncrypted.length() > 0) {
+            if (latEncrypted.charAt(latEncrypted.length()-1) == '\n') {
+                this.latEncrypted = latEncrypted;
+            }
+            else {
+                setLat(Double.parseDouble(latEncrypted));
+            }
         }
 
-        if (longiEncrypted.length() > 0 && longiEncrypted.charAt(longiEncrypted.length()-1) == '\n') {
-            this.longiEncrypted = longiEncrypted;
-        }
-        else {
-            setLongi(Double.parseDouble(longiEncrypted));
+        if (longiEncrypted.length() > 0) {
+            if (longiEncrypted.charAt(longiEncrypted.length() - 1) == '\n') {
+                this.longiEncrypted = longiEncrypted;
+            } else {
+                setLongi(Double.parseDouble(longiEncrypted));
+            }
         }
 
         this.provider = provider;

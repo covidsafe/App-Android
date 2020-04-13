@@ -501,7 +501,7 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
                     new NotifOpsAsyncTask(context, new NotifRecord(
                             contactTimesStart.get(i),
                             contactTimesEnd.get(i),
-                            msgs.get(i),
+                            "Please refrain from entering the playground on 40th Ave. until April 6th as it is undergoing decontamination.",
                             Constants.MessageType.NarrowCast.ordinal(),
                             true)).execute();
                     Utils.sendNotification(context, "Announcement",msgs.get(i));

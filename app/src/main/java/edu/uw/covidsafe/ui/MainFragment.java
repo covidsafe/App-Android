@@ -97,6 +97,7 @@ public class MainFragment extends Fragment {
         });
 
         ImageView xall = (ImageView) view.findViewById(R.id.xall);
+        xall.setAlpha(0f);
         xall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,6 +145,10 @@ public class MainFragment extends Fragment {
                         historyNotifs.add(notif);
                     }
                 }
+//                Constants.HistoryAdapter.setRecords(new LinkedList<>(), view);
+//                Constants.NotificationAdapter.setRecords(currentNotifs, view);
+//                Constants.MainTipAdapter.enableTips(1, view);
+
                 Constants.HistoryAdapter.setRecords(historyNotifs, view);
                 Constants.NotificationAdapter.setRecords(currentNotifs, view);
                 Constants.MainTipAdapter.enableTips(notifRecords.size(), view);

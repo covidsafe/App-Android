@@ -42,28 +42,16 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imageView7"
+                android:id="@+id/icon"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="16dp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/rect"
+                android:src="@drawable/icon_quarantine"
                 app:layout_constraintEnd_toStartOf="@+id/guidelineV10"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/icon"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:adjustViewBounds="true"
-                android:src="@drawable/icon_quarantine"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView7"
-                app:layout_constraintEnd_toEndOf="@+id/imageView7"
-                app:layout_constraintHorizontal_bias="0.526"
-                app:layout_constraintStart_toStartOf="@+id/imageView7"
-                app:layout_constraintTop_toTopOf="@+id/imageView7" />
 
             <TextView
                 android:id="@+id/textView7"
@@ -79,7 +67,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/textView5"
                 app:layout_constraintEnd_toStartOf="@+id/guidelineV85"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/imageView7"
+                app:layout_constraintStart_toEndOf="@+id/icon"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -93,7 +81,7 @@
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView7" />
+                app:layout_constraintTop_toBottomOf="@+id/icon" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guidelineV10"

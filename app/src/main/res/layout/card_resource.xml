@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -27,8 +27,8 @@
 
             <ImageView
                 android:id="@+id/imageView3"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:src="@drawable/res1"
@@ -39,24 +39,19 @@
 
             <TextView
                 android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="CDC Guidance"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="@+id/guidelineV30"
-                app:layout_constraintTop_toTopOf="@+id/imageView3" />
-
-            <TextView
-                android:id="@+id/resdesc"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="25dp"
-                android:text="@string/lipsum3"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp"
+                android:gravity="center_horizontal|left"
+                android:text="CDC Guidance"
+                android:textColor="@color/black"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guidelineV80"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/guidelineV30"
-                app:layout_constraintTop_toBottomOf="@+id/textView" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guidelineV30"
@@ -72,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintGuide_begin="20dp"
-                app:layout_constraintGuide_percent=".9" />
+                app:layout_constraintGuide_percent=".8" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

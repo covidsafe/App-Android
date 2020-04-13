@@ -245,7 +245,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
 //        }
 
         Log.e("state","trace data submitted");
-        mkSnack(av, view, "Your trace data has been submitted.");
+        mkSnack(av, view, "Your report has been submitted.");
 
         DiagnosisFragment.updateSubmissionView(av, context, view, true);
     }

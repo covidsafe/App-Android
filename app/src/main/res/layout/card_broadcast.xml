@@ -64,8 +64,8 @@
 
     <ImageView
         android:id="@+id/imageView9"
-        android:layout_width="30dp"
-        android:layout_height="0dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:adjustViewBounds="true"
         android:src="@drawable/logo_purple"
         app:layout_constraintBottom_toBottomOf="@+id/title"
@@ -76,7 +76,7 @@
         android:id="@+id/materialCardView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="@color/purplePale"
         android:elevation="0dp"
