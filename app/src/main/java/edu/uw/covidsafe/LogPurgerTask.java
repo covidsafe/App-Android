@@ -1,6 +1,7 @@
 package edu.uw.covidsafe;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import edu.uw.covidsafe.ble.BleDbRecordRepository;
@@ -17,6 +18,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import com.example.covidsafe.R;
+
 public class LogPurgerTask implements Runnable {
 
     Context context;
@@ -29,10 +32,13 @@ public class LogPurgerTask implements Runnable {
     public void run() {
         Log.e("uuid", "PURGE LOGS");
         try {
+            SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+            int daysOfLogsToKeep = prefs.getInt(context.getString(R.string.purge_frequency_pkey),Constants.DefaultDaysOfLogsToKeep);
+
             Date date = new Date();
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
-            calendar.add(Calendar.DATE, -Constants.DaysOfLogsToKeep);
+            calendar.add(Calendar.DATE, - daysOfLogsToKeep);
             long thresh = calendar.getTime().getTime();
             Log.e("ble","THRESH "+thresh);
 

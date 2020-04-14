@@ -42,6 +42,8 @@ public class OnboardingActivity extends AppCompatActivity {
         Log.e("metadata","MODEL "+model);
 
         Constants.init(this);
+        CryptoUtils.keyInit(this);
+
         SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         boolean b = prefs.getBoolean(getString(R.string.onboard_enabled_pkey),true);
         Log.e("onboarding","should start onboarding? "+b);

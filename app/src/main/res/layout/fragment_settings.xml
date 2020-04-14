@@ -43,6 +43,19 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/traceSettings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/perms">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewTraceSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    </RelativeLayout>
+
     <TextView
         android:id="@+id/moreTitle"
         android:layout_width="0dp"
@@ -52,7 +65,7 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
         app:layout_constraintStart_toStartOf="@+id/guidelineV5"
-        app:layout_constraintTop_toBottomOf="@id/perms" />
+        app:layout_constraintTop_toBottomOf="@id/traceSettings" />
 
     <View
         android:id="@+id/view2"

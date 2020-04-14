@@ -65,20 +65,25 @@ public class SettingsFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(getActivity().getString(R.string.settings_header_text)));
 
-        RecyclerView rview3 = view.findViewById(R.id.recyclerViewPerms);
+        RecyclerView rviewPerms = view.findViewById(R.id.recyclerViewPerms);
         PermissionsRecyclerViewAdapter adapter3 = new PermissionsRecyclerViewAdapter(getContext(),getActivity(), view);
-        rview3.setAdapter(adapter3);
-        rview3.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rviewPerms.setAdapter(adapter3);
+        rviewPerms.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        RecyclerView rview4 = view.findViewById(R.id.recyclerViewMore);
+        RecyclerView rviewTracesettings = view.findViewById(R.id.recyclerViewTraceSettings);
+        TraceSettingsRecyclerViewAdapter adapterTraceSettings = new TraceSettingsRecyclerViewAdapter(getContext(),getActivity(), view);
+        rviewTracesettings.setAdapter(adapterTraceSettings);
+        rviewTracesettings.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        RecyclerView rviewMore = view.findViewById(R.id.recyclerViewMore);
         MoreRecyclerViewAdapter adapter4 = new MoreRecyclerViewAdapter(getContext(),getActivity());
-        rview4.setAdapter(adapter4);
-        rview4.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rviewMore.setAdapter(adapter4);
+        rviewMore.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        RecyclerView rview5 = view.findViewById(R.id.recyclerViewMisc);
+        RecyclerView rviewMisc = view.findViewById(R.id.recyclerViewMisc);
         MiscRecyclerViewAdapter adapter5 = new MiscRecyclerViewAdapter(getContext(),getActivity());
-        rview5.setAdapter(adapter5);
-        rview5.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rviewMisc.setAdapter(adapter5);
+        rviewMisc.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         return view;
     }

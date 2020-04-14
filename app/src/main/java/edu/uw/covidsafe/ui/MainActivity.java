@@ -54,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
         AppCenter.start(getApplication(), Constants.AnalyticsSecret, Analytics.class, Crashes.class);
         Crashes.setEnabled(true);
 
-        CryptoUtils.keyInit(this);
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.getMenu().clear();
         bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_release);

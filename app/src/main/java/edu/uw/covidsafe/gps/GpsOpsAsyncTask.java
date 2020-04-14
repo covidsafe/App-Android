@@ -16,6 +16,7 @@ GpsOpsAsyncTask extends AsyncTask<Void, Void, Void> {
     private Constants.GpsDatabaseOps op;
 
     public GpsOpsAsyncTask(Context context, Location loc, long ts) {
+        Log.e("gps", "gps ops async task constructor");
         this.context = context;
         this.record = new GpsRecord(ts, loc.getLatitude(), loc.getLongitude(), loc.getProvider());
         this.op = Constants.GpsDatabaseOps.Insert;
@@ -23,7 +24,7 @@ GpsOpsAsyncTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... params) {
-        Log.e("ble","doinbackground gps "+this.op);
+        Log.e("gps","doinbackground gps "+this.op);
         GpsDbRecordRepository repo = new GpsDbRecordRepository(context);
         if (this.op == Constants.GpsDatabaseOps.Insert) {
             repo.insert(this.record);

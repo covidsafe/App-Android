@@ -1,21 +1,11 @@
 package edu.uw.covidsafe.gps;
 
-import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import edu.uw.covidsafe.LoggingService;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
 
@@ -35,10 +25,7 @@ public class GpsUtils {
 
         @Override
         public void onLocationChanged(Location location) {
-            DateFormat dateFormat = new SimpleDateFormat("hh:mm.ss aa");
-            Date dd = new Date();
             Log.e("gps", location.getLatitude()+","+location.getLongitude());
-
             Utils.gpsLogToDatabase(cxt, location);
         }
 
@@ -106,11 +93,11 @@ public class GpsUtils {
 
             locListeners[0] = new LocationListener(LocationManager.NETWORK_PROVIDER, cxt);
             Constants.mLocationManager.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER, Constants.LOCATION_INTERVAL, Constants.LOCATION_DISTANCE,
+                    LocationManager.NETWORK_PROVIDER, Constants.GPS_TIME_INTERVAL_IN_MILLISECONDS, Constants.GPS_LOCATION_INTERVAL_IN_METERS,
                     locListeners[0]);
             locListeners[1] = new LocationListener(LocationManager.GPS_PROVIDER, cxt);
             Constants.mLocationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER, Constants.LOCATION_INTERVAL, Constants.LOCATION_DISTANCE,
+                    LocationManager.GPS_PROVIDER, Constants.GPS_TIME_INTERVAL_IN_MILLISECONDS, Constants.GPS_LOCATION_INTERVAL_IN_METERS,
                     locListeners[1]);
 
         } catch (java.lang.SecurityException ex) {

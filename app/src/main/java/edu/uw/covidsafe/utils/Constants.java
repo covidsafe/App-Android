@@ -106,8 +106,15 @@ public class Constants {
     public static UUID BEACON_SERVICE_UUID = UUID.fromString("0000D028-0000-1000-8000-00805F9B34FB");
     public static UUID contactUUID = null;
 
-    public static final int LOCATION_INTERVAL = 1000;
-    public static final float LOCATION_DISTANCE = 1f;
+    //GPS_TIME_INTERVAL and GPS_LOCATION_INTERVAL used to control frequency of location updates
+    //to optimize for power, note that GPS_TIME_INTERVAL is the primary method by which
+    // power is conserverd.
+    public static final int GPS_TIME_INTERVAL_IN_MINUTES = 10;
+    public static final int GPS_TIME_INTERVAL_IN_MILLISECONDS = 1000*60*GPS_TIME_INTERVAL_IN_MINUTES;
+
+    // our maximum GPS precision corresponds to ~7km
+    // our spatial sampling rate should be 2x less than that
+    public static final float GPS_LOCATION_INTERVAL_IN_METERS = 3500;
 
     public static boolean NOTIFS_ENABLED = false;
     public static boolean GPS_ENABLED = false;
@@ -167,7 +174,7 @@ public class Constants {
     public static int MaxBlacklistSize = 3;
     public static int NumFilesToDisplay = 14;
     public static int SubmitThresh = 1;
-    public static int DaysOfLogsToKeep= 14;
+    public static int DefaultDaysOfLogsToKeep = 28;
     public static float DistanceThresholdInMeters = 1609.34f;
     public static ArrayList<BlacklistRecord> blacklist;
     public static LocationManager mLocationManager = null;
