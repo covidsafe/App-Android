@@ -10,6 +10,13 @@
         app:showAsAction="always|withText" />
 
     <item
+        android:id="@+id/action_contact_log"
+        android:enabled="true"
+        android:icon="@drawable/ic_edit_black_24dp"
+        android:title="Contact log"
+        app:showAsAction="always|withText" />
+
+    <item
         android:id="@+id/action_report"
         android:enabled="true"
         android:icon="@drawable/nav2"
@@ -17,7 +24,7 @@
         app:showAsAction="always|withText" />
 
     <item
-        android:id="@+id/action_help"
+        android:id="@+id/action_settings"
         android:enabled="true"
         android:icon="@drawable/nav3"
         android:title="Resources"

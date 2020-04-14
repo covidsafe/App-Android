@@ -35,6 +35,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import edu.uw.covidsafe.comms.PullFromServerTask;
 import edu.uw.covidsafe.comms.PullFromServerTaskDemo;
 import edu.uw.covidsafe.ui.health.ResourceRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifDbModel;
@@ -178,8 +179,12 @@ public class MainFragment extends Fragment {
 
     public void refreshTask() {
         Log.e("refresh","freshtask");
-//        new PullFromServerTask(getContext(),view).execute();
-        new PullFromServerTaskDemo(getContext(),getActivity(),view).execute();
+        if (Constants.DEBUG) {
+            new PullFromServerTaskDemo(getContext(), getActivity(), view).execute();
+        }
+        else {
+            new PullFromServerTask(getContext(),view).execute();
+        }
         RotateAnimation rotate = new RotateAnimation(0,360,
                 Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         rotate.setDuration(1000);

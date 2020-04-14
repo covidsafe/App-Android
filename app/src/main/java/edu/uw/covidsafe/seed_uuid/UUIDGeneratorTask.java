@@ -30,9 +30,10 @@ public class UUIDGeneratorTask implements Runnable {
         // get the most recently generated seed
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         String mostRecentSeedStr = prefs.getString(context.getString(R.string.most_recent_seed_pkey), "");
+        long mostRecentSeedTimestampStr = prefs.getLong(context.getString(R.string.most_recent_seed_timestamp_pkey), System.currentTimeMillis());
         byte[] mostRecentSeed = ByteUtils.string2byteArray(mostRecentSeedStr);
 
-        SeedUUIDRecord generatedRecord = CryptoUtils.generateSeed(context, mostRecentSeed);
+        SeedUUIDRecord generatedRecord = CryptoUtils.generateSeed(context, mostRecentSeed, mostRecentSeedTimestampStr);
         if (generatedRecord != null) {
             Constants.contactUUID = UUID.fromString(generatedRecord.getUUID());
         }

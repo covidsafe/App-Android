@@ -1,4 +1,4 @@
-package edu.uw.covidsafe.ui.resources;
+package edu.uw.covidsafe.ui.faq;
 
 import android.annotation.SuppressLint;
 import android.graphics.drawable.ColorDrawable;
@@ -6,9 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -27,16 +25,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.ui.health.ResourceRecyclerViewAdapter;
 import edu.uw.covidsafe.utils.Constants;
-import edu.uw.covidsafe.utils.Utils;
 
 import com.example.covidsafe.R;
-import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-public class ResourcesFragment extends Fragment {
+public class FaqFragment extends Fragment {
 
     ExpandableListView lv1;
     ExpandableListView lv2;
@@ -46,7 +41,7 @@ public class ResourcesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.e("logme","HELP");
-        View view = inflater.inflate(R.layout.fragment_resources, container, false);
+        View view = inflater.inflate(R.layout.fragment_faq, container, false);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getActivity().getWindow();
@@ -230,7 +225,7 @@ public class ResourcesFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.e("logme","HELP");
-        Constants.HelpFragment = this;
+        Constants.FaqFragment = this;
         Constants.CurrentFragment = this;
 
     }
@@ -239,7 +234,7 @@ public class ResourcesFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Constants.HelpFragment = this;
+        Constants.FaqFragment = this;
         Constants.CurrentFragment = this;
     }
 }

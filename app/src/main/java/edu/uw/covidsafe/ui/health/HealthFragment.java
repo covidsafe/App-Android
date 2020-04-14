@@ -51,7 +51,7 @@ public class HealthFragment extends Fragment {
                 tx.setCustomAnimations(
                         R.anim.enter_right_to_left,R.anim.exit_right_to_left,
                         R.anim.enter_left_to_right,R.anim.exit_left_to_right);
-                tx.replace(R.id.fragment_container, Constants.SubmitFragment).commit();
+                tx.replace(R.id.fragment_container, Constants.DiagnosisFragment).commit();
             }
         });
         return view;

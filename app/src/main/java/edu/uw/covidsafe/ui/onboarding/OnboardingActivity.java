@@ -13,20 +13,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.example.covidsafe.R;
 
-import java.util.UUID;
-
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.comms.NetworkConstant;
-import edu.uw.covidsafe.seed_uuid.SeedUUIDOpsAsyncTask;
-import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.ui.PermissionLogic;
-import edu.uw.covidsafe.ui.PermissionLogicOld;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
 
@@ -50,7 +43,7 @@ public class OnboardingActivity extends AppCompatActivity {
 
         //seed doesn't yet exist
         //generate seed
-        CryptoUtils.generateInitSeed(getApplicationContext(), false);
+        CryptoUtils.generateInitSeed(getApplicationContext());
 
         NetworkConstant.init(this);
         this.registerReceiver(BluetoothUtils.bluetoothReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));

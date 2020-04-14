@@ -21,8 +21,12 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
@@ -36,29 +40,86 @@ import edu.uw.covidsafe.crypto.SHA256;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDDbRecordRepository;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDOpsAsyncTask;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
+import edu.uw.covidsafe.seed_uuid.UUIDGeneratorTask;
 
 public class CryptoUtils {
 
     // make very first seed
-    public static SeedUUIDRecord generateInitSeed(Context context, boolean forceRefresh) {
+    public static SeedUUIDRecord generateInitSeed(Context context) {
         String initSeed = UUID.randomUUID().toString();
 
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
         String s = prefs.getString(context.getString(R.string.most_recent_seed_pkey),"");
-        if (s.isEmpty() || forceRefresh) {
+        if (s.isEmpty()) {
+            long ts = System.currentTimeMillis();
             editor.putString(context.getString(R.string.most_recent_seed_pkey), initSeed);
+            editor.putLong(context.getString(R.string.most_recent_seed_timestamp_pkey), ts);
             editor.commit();
 
             // add record with timestamp and empty uuid
-            SeedUUIDRecord record = new SeedUUIDRecord(System.currentTimeMillis(),
+            SeedUUIDRecord record = new SeedUUIDRecord(ts,
                     initSeed, "");
             Log.e("uuid","generate initial seed");
             new SeedUUIDOpsAsyncTask(context, record).execute();
             return record;
         }
         return null;
+    }
+
+    public static void regenerateSeedUponReport(Context context) throws ExecutionException, InterruptedException, DigestException {
+        // disable the current uuid generation task
+        // delete all stored seeds and uuids
+        Constants.uuidGeneartionTask.cancel(true);
+        new SeedUUIDOpsAsyncTask(Constants.UUIDDatabaseOps.DeleteAll).execute().get();
+
+        // generate a new random seed
+        // generate seeds for a period of InfectionWindow
+        // store all of these to disk
+        byte[] seed = ByteUtils.uuid2bytes(UUID.randomUUID());
+        int infectionWindowInMinutes = 60*24*Constants.InfectionWindowInDays;
+        int generationIntervalsInInfectionWindow = infectionWindowInMinutes/Constants.UUIDGenerationIntervalInMinutes;
+
+        int infectionWindowInMilliseconds = 1000*60*60*24*Constants.InfectionWindowInDays;
+
+        long previousGenerationTimestamp = TimeUtils.getPreviousGenerationTimestamp(System.currentTimeMillis());
+        long ti = previousGenerationTimestamp - infectionWindowInMilliseconds;
+
+        long uuidGenerationIntervalInMilliSeconds = Constants.UUIDGenerationIntervalInSeconds;
+
+        List<SeedUUIDRecord> records = new LinkedList<>();
+        for (int i = 0; i < generationIntervalsInInfectionWindow; i++) {
+            records.add(generateSeedHelper(seed, ti));
+            ti += uuidGenerationIntervalInMilliSeconds;
+        }
+        new SeedUUIDOpsAsyncTask(context, records).execute();
+
+        // commit the fast-forwarded-to-now uuid and seed to prefs
+        // restart the uuid generator task
+        SeedUUIDRecord lastRecord = records.get(records.size()-1);
+
+        SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putString(context.getString(R.string.most_recent_seed_pkey), lastRecord.getSeed());
+        editor.putLong(context.getString(R.string.most_recent_seed_timestamp_pkey), lastRecord.getTs());
+        editor.commit();
+
+        ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
+        Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(
+                new UUIDGeneratorTask(context), TimeUtils.getDelayTilllUUIDBroadcastInSeconds(System.currentTimeMillis()), Constants.UUIDGenerationIntervalInSeconds, TimeUnit.SECONDS);
+    }
+
+    public static SeedUUIDRecord generateSeedHelper(byte[] seed, long ts) throws DigestException{
+        byte[] out = new byte[32];
+        SHA256.hash(seed, out);
+        byte[] generatedSeedBytes = Arrays.copyOfRange(out,0,16);
+        byte[] generatedIDBytes = Arrays.copyOfRange(out,16,32);
+        SeedUUIDRecord dummyRecord = new SeedUUIDRecord(
+                ts, ByteUtils.byte2UUIDstring(generatedSeedBytes),
+                ByteUtils.byte2UUIDstring(generatedIDBytes));
+        return dummyRecord;
     }
 
     // chain generation for potentially exposed users
@@ -82,8 +143,22 @@ public class CryptoUtils {
                 ByteUtils.byte2UUIDstring(generatedIDBytes)};
     }
 
+    public static SeedUUIDRecord generateSeed(Context context, byte[] seed, long ts) {
+        long previousGenerationTimestamp = TimeUtils.getPreviousGenerationTimestamp(System.currentTimeMillis());
+
+        int numSeedsToGenerate= (int)Math.ceil((previousGenerationTimestamp-ts)/(double)Constants.UUIDGenerationIntervalInMinutes);
+
+        byte[] s = seed;
+        SeedUUIDRecord record = null;
+        for (int i = 0; i < numSeedsToGenerate; i++) {
+            record = generateSeedHelper(context, s);
+            s = ByteUtils.uuid2bytes(UUID.fromString(record.getSeed()));
+        }
+        return record;
+    }
+
     // generation ith seed
-    public static SeedUUIDRecord generateSeed(Context context, byte[] seed) {
+    public static SeedUUIDRecord generateSeedHelper(Context context, byte[] seed) {
         try {
             SeedUUIDRecord dummyRecord = generateSeedHelper(seed);
 
@@ -101,7 +176,8 @@ public class CryptoUtils {
             // create the next record with the generated seed
             // return this and store in DB if necessary
             String generatedSeed = dummyRecord.getSeed();
-            SeedUUIDRecord nextRecord = new SeedUUIDRecord(System.currentTimeMillis(),
+            long ts = System.currentTimeMillis();
+            SeedUUIDRecord nextRecord = new SeedUUIDRecord(ts,
                     generatedSeed, "");
 
             new SeedUUIDOpsAsyncTask(context, nextRecord).execute();
@@ -109,6 +185,7 @@ public class CryptoUtils {
             SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString(context.getString(R.string.most_recent_seed_pkey), generatedSeed);
+            editor.putLong(context.getString(R.string.most_recent_seed_timestamp_pkey), ts);
             editor.commit();
 
             return mostRecentRecord;
