@@ -98,6 +98,7 @@ public class Constants {
     public static int PullFromServerIntervalInMinutesInMilliseconds = PullFromServerIntervalInMinutes*60*1000;
     public static int LogPurgerIntervalInDays = 60;
     public static int UUIDGenerationIntervalInMinutes = 15;
+    public static int UUIDGenerationIntervalInSeconds = UUIDGenerationIntervalInMinutes*60;
     public static int CDCExposureTimeInMinutes = 10;
     public static int TimestampDeviationInMilliseconds = 10*1000;
     public static int InfectionWindowIntervalDeviationInMilliseconds = 60*1000;
