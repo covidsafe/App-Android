@@ -1,6 +1,7 @@
 package edu.uw.covidsafe.gps;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -31,6 +32,9 @@ public class GpsRecord {
 
     public GpsRecord(@NonNull long ts, String latEncrypted, String longiEncrypted, String provider) {
         this.ts = ts;
+
+        Log.e("gps",ts+","+latEncrypted+","+longiEncrypted+","+provider);
+
         if (latEncrypted.length() > 0) {
             if (latEncrypted.charAt(latEncrypted.length()-1) == '\n') {
                 this.latEncrypted = latEncrypted;
@@ -58,14 +62,6 @@ public class GpsRecord {
         this.provider = provider;
     }
 
-    public GpsRecord(@NonNull String ss) {
-        String[] elts = ss.split(",");
-        this.ts = Long.parseLong(elts[0]);
-//        setLat(Double.parseDouble(elts[1]));
-//        setLongi(Double.parseDouble(elts[2]));
-        this.provider = elts[3];
-    }
-
     public long getTs() {
         return this.ts;
     }
@@ -74,13 +70,21 @@ public class GpsRecord {
 
     public double getLat() { return Double.parseDouble(CryptoUtils.decrypt(this.latEncrypted+"")); }
 
-    public void setLat(double lat) { this.latEncrypted = CryptoUtils.encrypt(lat+""); }
+    public void setLat(double lat) {
+        String s = CryptoUtils.encrypt(lat+"");
+//        Log.e("gps","setting encrypted lat "+lat+"=>"+s);
+        this.latEncrypted = s;
+    }
 
     public String getLongiEncrypted() { return this.longiEncrypted; }
 
     public double getLongi() { return Double.parseDouble(CryptoUtils.decrypt(this.longiEncrypted+"")); }
 
-    public void setLongi(double longi) { this.longiEncrypted = CryptoUtils.encrypt(longi+""); }
+    public void setLongi(double longi) {
+        String s = CryptoUtils.encrypt(longi+"");
+//        Log.e("gps","setting encrypted longi "+longi+"=>"+s);
+        this.longiEncrypted = s;
+    }
 
     public String getProvider() { return this.provider; }
 

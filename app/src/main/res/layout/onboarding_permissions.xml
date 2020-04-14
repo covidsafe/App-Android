@@ -10,7 +10,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Enable real-time notifications to get alerts about potential exposures or heightened infection risk within your neighborhood.\n\nEnable location sharing and Bluetooth permissions to trace if you have been exposed to COVID-19."
+        android:text="@string/permissionsHeader"
         android:textSize="15sp"
         app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
         app:layout_constraintStart_toStartOf="@+id/guidelineV5"

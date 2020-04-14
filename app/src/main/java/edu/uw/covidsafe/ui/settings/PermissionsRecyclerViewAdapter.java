@@ -45,9 +45,9 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
         this.cxt = cxt;
         this.av = av;
         this.view = view;
-        titles.add("Notifications");
-        titles.add("Location Sharing");
-        titles.add("Bluetooth Tracing");
+        titles.add(cxt.getString(R.string.perm1));
+        titles.add(cxt.getString(R.string.perm2));
+        titles.add(cxt.getString(R.string.perm3));
         desc.add(cxt.getString(R.string.perm1desc));
         desc.add(cxt.getString(R.string.perm2desc));
         desc.add(cxt.getString(R.string.perm3desc));

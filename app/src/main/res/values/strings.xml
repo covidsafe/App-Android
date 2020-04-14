@@ -38,6 +38,7 @@
     <string name="symptom_submission_date_pkey">symptom_submission_date_pkey</string>
     <string name="time_of_last_query_pkey">time_of_last_query_pkey</string>
     <string name="notif_id_pkey">notif_id_pkey</string>
+    <string name="purge_frequency_pkey">purge_frequency_pkey</string>
 
     <string name="phone">911</string>
 
@@ -69,7 +70,7 @@
     <string name="stopping">Turn broadcasting on to improve the accuracy of your notifications. <![CDATA[<font color=#8d55e9><br/><b><a href="https://covidsafe.cs.washington.edu/">Learn More</a></b></font>]]></string>
 
     <string name="covidSiteLink">https://covidsafe.cs.washington.edu/</string>
-    <string name="privacyLink1"><![CDATA[<font color=#8d55e9><a href="https://covidsafe.cs.washington.edu/">Learn more about how we protect your privacy.</a></font>]]></string>
+    <string name="privacyLink1"><![CDATA[<font color=#8d55e9><a href="https://covidsafe.cs.washington.edu/">Learn more.</a></font>]]></string>
     <string name="privacy_link"><![CDATA[<font color=#FFFFFF><a href="http://www.uw.edu">Privacy  |  </a></font>]]></string>
     <string name="terms_link"><![CDATA[<font color=#FFFFFF><a href="http://www.uw.edu">Terms and Conditions</a></font>]]></string>
 
@@ -80,22 +81,28 @@
     <string name="lipsum5">Egestas tellus rutrum tellus ultrices in iaculis pellentesque eu tincidunt?</string>
     <string name="lipsum6">Odio tempor orci dapibus ultrices in iaculis </string>
     <string name="privacyText">
-        Learn more about how we protect your privacy.
+        Learn more
+    </string>
+    <string name="permissionsHeader">
+        Enable real-time notifications to get alerts about potential exposure and public health messages relevant to you.\n\nCovidSafe reveals no information about you without your consent.
     </string>
 
     <string name="perm1">Notifications</string>
-    <string name="perm2">Location Sharing</string>
+    <string name="perm2">Location Logging</string>
     <string name="perm3">Bluetooth Tracing</string>
 
     <string name="perm1desc">
-        Receive push notifications for exposure risks in your area.
+        Receive notifications for exposure risks in your area.
     </string>
     <string name="perm2desc">
-        Share your location information with Healthcare Providers.
+        Receive announcements and notifications relevant to your neighborhood. All location information is stored locally.
     </string>
     <string name="perm3desc">
-        Enables the detection of exposure risks within a close distance to you, anonymously.
+        Emit and detect random numbers by Bluetooth to later discover exposure risks.
     </string>
+
+    <string name="setting1">Length of data storage</string>
+    <string name="setting1desc">Number of days until local logs are automatically deleted.</string>
 
     <string name="storyTitle1">
         Welcome to CovidSafe
