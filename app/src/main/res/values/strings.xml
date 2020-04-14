@@ -34,6 +34,7 @@
     <string name="onboard_enabled_pkey">prefs_onboard</string>
     <string name="notifs_enabled_pkey">prefs_notifs</string>
     <string name="most_recent_seed_pkey">most_recent_seed_pkey</string>
+    <string name="most_recent_seed_timestamp_pkey">most_recent_seed_timestamp_pkey</string>
     <string name="diagnosis_pkey">prefs_diagnosis_date</string>
     <string name="symptom_submission_date_pkey">symptom_submission_date_pkey</string>
     <string name="time_of_last_query_pkey">time_of_last_query_pkey</string>

@@ -164,6 +164,9 @@ public class MainActivity extends AppCompatActivity {
                             selectedFragment = Constants.SettingsFragment;
                         }
                         break;
+                    case R.id.action_contact_log:
+                        selectedFragment = Constants.ContactLogFragment;
+                        break;
                     case R.id.action_report:
 //                        Log.e("STate", "cur fragment "+Constants.CurrentFragment.toString());
                         if (Constants.ReportFragmentState.toString().toLowerCase().contains("diagnosis")) {
@@ -173,11 +176,8 @@ public class MainActivity extends AppCompatActivity {
                             selectedFragment = Constants.HealthFragment;
                         }
                         break;
-                    case R.id.action_help:
-                        selectedFragment = Constants.HelpFragment;
-                        break;
                     case R.id.action_settings:
-                        selectedFragment = Constants.SettingsFragment;
+                        selectedFragment = Constants.FaqFragment;
                         break;
                 }
 

@@ -26,6 +26,7 @@ import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.ui.health.DiagnosisFragment;
 import edu.uw.covidsafe.utils.Constants;
+import edu.uw.covidsafe.utils.CryptoUtils;
 import edu.uw.covidsafe.utils.Utils;
 
 import java.util.List;
@@ -122,6 +123,15 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
                     getCoarseGpsCoord(lat, gpsResolution),
                     getCoarseGpsCoord(longi, gpsResolution),
                     gpsResolution);
+
+            Log.e("state","trace data submitted");
+            mkSnack(av, view, "Your report has been submitted.");
+
+            DiagnosisFragment.updateSubmissionView(av, context, view, true);
+
+            //refresh the seed if report was successful
+            // TODO needs to be run in async?
+            CryptoUtils.regenerateSeedUponReport(context);
         }
         catch(Exception e) {
             Log.e("err",e.getMessage());
@@ -241,11 +251,6 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
 //        catch(Exception e) {
 //            Log.e("err",e.getMessage());
 //        }
-
-        Log.e("state","trace data submitted");
-        mkSnack(av, view, "Your report has been submitted.");
-
-        DiagnosisFragment.updateSubmissionView(av, context, view, true);
     }
 
     public void testDatabase() {

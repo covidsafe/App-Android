@@ -1,6 +1,5 @@
-package edu.uw.covidsafe.ui.resources;
+package edu.uw.covidsafe.ui.faq;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

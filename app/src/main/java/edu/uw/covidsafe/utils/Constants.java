@@ -3,8 +3,6 @@ package edu.uw.covidsafe.utils;
 import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattServer;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,11 +13,8 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-import edu.uw.covidsafe.LoggingService;
-
 import com.example.covidsafe.R;
 
-import edu.uw.covidsafe.gps.GpsUtils;
 import edu.uw.covidsafe.ui.MainFragment;
 import edu.uw.covidsafe.ui.health.TipRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.HistoryRecyclerViewAdapter;
@@ -27,27 +22,21 @@ import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
 import unused.SymptomTrackerFragment;
 import edu.uw.covidsafe.ui.health.DiagnosisFragment;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Timer;
 import java.util.UUID;
 import java.util.concurrent.ScheduledFuture;
 
-import edu.uw.covidsafe.ui.resources.ResourcesFragment;
+import edu.uw.covidsafe.ui.faq.FaqFragment;
 import edu.uw.covidsafe.ui.health.HealthFragment;
 import edu.uw.covidsafe.ui.settings.SettingsFragment;
-import unused.BlacklistRecord;
-import unused.HistoryFragment;
+import edu.uw.covidsafe.ui.contact_log.ContactLogFragment;
 
 import edu.uw.covidsafe.ui.onboarding.PermissionFragment;
 import edu.uw.covidsafe.ui.onboarding.PagerFragment;
 
 public class Constants {
-
-    public enum UploadSources {
-        Disk, Db
-    }
 
     public enum MessageType {
         Exposure,NarrowCast
@@ -55,7 +44,6 @@ public class Constants {
 
     public static boolean WRITE_TO_DISK = true;
     public static boolean DEBUG = true;
-    public static UploadSources UploadSource = UploadSources.Disk;
 
     public enum BleDatabaseOps {
         Insert,ViewAll
@@ -74,7 +62,7 @@ public class Constants {
     }
 
     public enum UUIDDatabaseOps {
-        Insert,ViewAll
+        BatchInsert, Insert,ViewAll,DeleteAll
     }
 
     public static TipRecyclerViewAdapter MainTipAdapter;
@@ -89,7 +77,6 @@ public class Constants {
     public static int rssiCutoff = -82;
     public static int MaximumGpsPrecision = 4;
     public static int MinimumGpsPrecision = 0;
-    public static int InfectionWindowInDays = 14;
     public static int SPLASH_DISPLAY_LENGTH = 1000;
     public static String AnalyticsSecret = "4cd15ae0-9294-40ba-a8b5-a8d77b76783b";
     public static int BluetoothScanIntervalInMinutes = 5;
@@ -134,13 +121,10 @@ public class Constants {
     public static String KEY_PROVIDER = "AndroidKeyStore";
     public static String KEY_ALIAS = "mykeys";
     public static BluetoothGattServer gattServer;
-    public static BluetoothDevice device;
-    public static BluetoothGatt gatt;
     public static BluetoothAdapter blueAdapter;
     public static int statusSubmitted = -1;
     public static ScheduledFuture uuidGeneartionTask;
     public static ScheduledFuture bluetoothScanTask;
-    public static ScheduledFuture bluetoothServerTask;
     public static Timer pullFromServerTask;
     public static ScheduledFuture logPurgerTask;
     public static boolean startingToTrack = false;
@@ -150,12 +134,11 @@ public class Constants {
     public static Fragment ReportFragmentState;
     public static Fragment MainFragmentState;
     public static Fragment HealthFragment;
-    public static Fragment SubmitFragment;
-    public static Fragment HelpFragment;
-    public static Fragment HistoryFragment;
     public static Fragment SymptomTrackerFragment;
     public static Fragment DiagnosisFragment;
     public static Fragment SettingsFragment;
+    public static Fragment FaqFragment;
+    public static Fragment ContactLogFragment;
     public static Fragment CurrentFragment;
     public static Fragment PermissionsFragment;
     public static Fragment PagerFragment;
@@ -164,20 +147,12 @@ public class Constants {
     public static String bleDirName = "ble";
     public static String symptomsDirName = "symptoms";
     public static String uuidDirName = "uuid";
-    public static String formDirName = "form";
-    public static String blacklistDirName = "blacklist";
-    public static String logFileName = "log.txt";
     public static String lastSentName = "lastsent";
-    public static String lastSentFileName = "lastsent.txt";
-    public static String blacklistFileName = "blacklist.txt";
-    public static String DiagnosisReportFileName = "diagnosis.txt";
     public static boolean tracking = false;
-    public static int MaxBlacklistSize = 3;
     public static int NumFilesToDisplay = 14;
     public static int SubmitThresh = 1;
-    public static int DefaultDaysOfLogsToKeep = 28;
-    public static float DistanceThresholdInMeters = 1609.34f;
-    public static ArrayList<BlacklistRecord> blacklist;
+    public static int InfectionWindowInDays = 28;
+    public static int DefaultDaysOfLogsToKeep = InfectionWindowInDays;
     public static LocationManager mLocationManager = null;
     public static HashSet<String> scannedUUIDs;
     public static HashMap<String,Integer> scannedUUIDsRSSIs;
@@ -206,15 +181,19 @@ public class Constants {
     public static void init(Activity av) {
         Log.e("logme","constants init");
         MainFragment = new MainFragment();
-        HelpFragment = new ResourcesFragment();
-        HealthFragment = new HealthFragment();
-        SubmitFragment = new DiagnosisFragment();
-        HistoryFragment = new HistoryFragment();
-        SymptomTrackerFragment = new SymptomTrackerFragment();
-        DiagnosisFragment = new DiagnosisFragment();
         SettingsFragment = new SettingsFragment();
+
+        ContactLogFragment = new ContactLogFragment();
+
+        DiagnosisFragment = new DiagnosisFragment();
+        HealthFragment = new HealthFragment();
+
+        FaqFragment = new FaqFragment();
+
         PermissionsFragment = new PermissionFragment();
         PagerFragment = new PagerFragment();
+
+        SymptomTrackerFragment = new SymptomTrackerFragment();
         ReportFragmentState = HealthFragment;
         if (!DEBUG) {
             LOG_TO_DISK = false;
