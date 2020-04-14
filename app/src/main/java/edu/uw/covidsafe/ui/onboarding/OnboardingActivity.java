@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +20,8 @@ import com.example.covidsafe.R;
 
 import java.util.UUID;
 
+import edu.uw.covidsafe.ble.BluetoothUtils;
+import edu.uw.covidsafe.comms.NetworkConstant;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDOpsAsyncTask;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
 import edu.uw.covidsafe.ui.MainActivity;
@@ -43,6 +47,13 @@ public class OnboardingActivity extends AppCompatActivity {
 
         Constants.init(this);
         CryptoUtils.keyInit(this);
+
+        //seed doesn't yet exist
+        //generate seed
+        CryptoUtils.generateInitSeed(getApplicationContext(), false);
+
+        NetworkConstant.init(this);
+        this.registerReceiver(BluetoothUtils.bluetoothReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
 
         SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         boolean b = prefs.getBoolean(getString(R.string.onboard_enabled_pkey),true);

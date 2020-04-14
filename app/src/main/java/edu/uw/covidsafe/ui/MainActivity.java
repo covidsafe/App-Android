@@ -63,14 +63,6 @@ public class MainActivity extends AppCompatActivity {
         editor.putBoolean(getString(R.string.onboard_enabled_pkey), false);
         editor.commit();
 
-        //seed doesn't yet exist
-        //generate seed
-        CryptoUtils.generateInitSeed(getApplicationContext(), false);
-
-        NetworkConstant.init(this);
-        this.registerReceiver(BluetoothUtils.bluetoothReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
-//        ServiceUtils.scheduleLookupJob(mContext);
-
         Constants.MainTipAdapter = new TipRecyclerViewAdapter(this, this);
         Constants.DiagnosisTipAdapter = new TipRecyclerViewAdapter(this, this);
         Constants.NotificationAdapter = new NotifRecyclerViewAdapter(this,this);
@@ -117,19 +109,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
         Log.e("state","onactivityresult "+requestCode+","+resultCode);
-//        int result = data.getIntExtra(StartActivityForResult.this.getString(R.string.result), -1);
-//        String msg = "requestCode=" + requestCode + ", resultCode=" + resultCode + ", result=" + result;
-//        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-//        Log.e("aa","onactivityresult "+requestCode+","+resultCode);
-
-        //bluetooth is now turned on
-//        if (requestCode == 0 && resultCode == -1) {
-//            if (Constants.startingToTrack) {
-//                Log.e("logme","starting to track");
-//                Utils.startBackgroundService(this);
-//            }
-//        }
-        Log.e("perms","onactivityresult "+requestCode+","+resultCode);
         boolean hasBlePerms = Utils.hasBlePermissions(getApplicationContext());
         if (requestCode == 0 && resultCode == -1) {
             if (hasBlePerms) {

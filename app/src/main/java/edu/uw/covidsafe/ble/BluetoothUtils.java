@@ -22,8 +22,12 @@ import edu.uw.covidsafe.utils.ByteUtils;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -135,8 +139,58 @@ public class BluetoothUtils {
         Log.e("ble","make beacon");
         ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
         // run this once to get a seed and broadcast it
+        // have the generator be triggered at synchronized fixed 15 minute intervals:
+        // e.g. 10:15, 10:30, 10:45
         Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(
-                new UUIDGeneratorTask(cxt), 0, Constants.UUIDGenerationIntervalInMinutes, TimeUnit.MINUTES);
+                new UUIDGeneratorTask(cxt), getDelayInSeconds(), Constants.UUIDGenerationIntervalInSeconds, TimeUnit.SECONDS);
+    }
+
+    public static int getDelayInSeconds() {
+        SimpleDateFormat hourFormat = new SimpleDateFormat("hh");
+        SimpleDateFormat minuteFormat = new SimpleDateFormat("mm");
+        SimpleDateFormat secondFormat = new SimpleDateFormat("ss");
+
+        Date dd = new Date();
+
+        int hour = Integer.parseInt(hourFormat.format(dd));
+        int minute = Integer.parseInt(minuteFormat.format(dd));
+        int second = Integer.parseInt(secondFormat.format(dd));
+
+        List<Integer> intervals = new LinkedList<>();
+        for (int i = 0; i < 60/Constants.UUIDGenerationIntervalInMinutes; i++) {
+            intervals.add(i*Constants.UUIDGenerationIntervalInMinutes);
+        }
+
+        int delay = 0;
+        if (second == 0 && intervals.contains(minute)) {
+            delay = 0;
+        }
+        else {
+            int closestIntervalIndex = 0;
+            if (minute < intervals.get(intervals.size()-1)) {
+                for (int i = 0; i < intervals.size(); i++) {
+                    if (minute >= intervals.get(i)) {
+                        closestIntervalIndex = i+1;
+                    }
+                }
+            }
+
+            int targetMinute = intervals.get(closestIntervalIndex);
+            String time = hour+":"+targetMinute;
+            if (intervals.get(closestIntervalIndex) == 0) {
+                time = (hour+1)+":"+targetMinute;
+            }
+
+            int secondDelay = 60-second;
+            int minuteDelay = targetMinute-minute-1;
+            if (targetMinute == 0) {
+                secondDelay = 60-second;
+                minuteDelay = 60-minute-1;
+            }
+            delay = minuteDelay*60+secondDelay;
+//            System.out.println("closest interval "+hour+":"+minute+"."+second+","+time+"=>"+minuteDelay+","+secondDelay+","+delay);
+        }
+        return delay;
     }
 
     public static void mkBeacon() {

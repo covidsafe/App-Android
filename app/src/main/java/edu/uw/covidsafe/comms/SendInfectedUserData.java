@@ -116,8 +116,6 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
             long ts_start = recordToSend.ts;
             long ts_end = System.currentTimeMillis();
 
-            SeedUUIDRecord temp = new SeedUUIDRecord(System.currentTimeMillis(), UUID.randomUUID().toString(),UUID.randomUUID().toString());
-
             String seed = recordToSend.getSeed();
             sendRequest(seed,
                     ts_start, ts_end,
