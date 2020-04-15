@@ -216,6 +216,18 @@ public class MainFragment extends Fragment {
         Constants.MainFragment = this;
         Constants.MainFragmentState = this;
 
+        if (!Constants.LoggingServiceRunning) {
+            SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+            boolean gpsEnabled = prefs.getBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
+            boolean bleEnabled = prefs.getBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
+            if (gpsEnabled) {
+                PermUtils.gpsSwitchLogic(getActivity());
+            }
+            if (bleEnabled) {
+                PermUtils.bleSwitchLogic(getActivity());
+            }
+        }
+
         updateBroadcastUI(false);
 
         swipeLayout.setRefreshing(false);

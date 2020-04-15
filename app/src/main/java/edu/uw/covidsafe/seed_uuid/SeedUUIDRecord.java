@@ -61,7 +61,7 @@ public class SeedUUIDRecord {
 
     public String getUuidEncrypted() { return this.uuidEncrypted; }
 
-    public String getUUID() { return this.uuidEncrypted; }
+    public String getUUID() { return CryptoUtils.decrypt(this.uuidEncrypted); }
 
     public void setUUID(String uuid) { this.uuidEncrypted = CryptoUtils.encrypt(uuid); }
 

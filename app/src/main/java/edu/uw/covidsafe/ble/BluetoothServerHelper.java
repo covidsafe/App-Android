@@ -10,6 +10,7 @@ import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.util.Log;
 
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -58,8 +59,11 @@ public class BluetoothServerHelper {
                 Log.e("bleserver","read request "+characteristic.getUuid().toString());
                 if (characteristic.getUuid().equals(Constants.CHARACTERISTIC_UUID)) {
                     Log.e("bleserver","going to send "+Constants.contactUUID);
-                    Constants.gattServer.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, 0,
-                            ByteUtils.uuid2bytes(Constants.contactUUID));
+                    byte[] contactUuidBytes = ByteUtils.uuid2bytes(Constants.contactUUID);
+                    Log.e("bleserver","converted to bytes "+contactUuidBytes.length);
+                    boolean status = Constants.gattServer.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, 0,
+                            contactUuidBytes);
+                    Log.e("bleserver","status "+status);
                 }
             }
 
@@ -80,6 +84,10 @@ public class BluetoothServerHelper {
                         // byte[-128,127] => int[0,255] => rssi[-255,0]
                         if (value.length == 17) {
                             rssi = -Utils.byteConvert(value[16]);
+                            Log.e("bleserver","received an rssi value of "+rssi);
+                        }
+                        else {
+                            Log.e("bleserver","rssi value not received");
                         }
                         Log.e("bleserver","rssi "+rssi+","+device.getAddress());
 

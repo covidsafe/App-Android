@@ -66,7 +66,7 @@ public class BluetoothScanHelper implements Runnable {
                     super.onScanResult(callbackType, result);
                     Map<ParcelUuid, byte[]> map = result.getScanRecord().getServiceData();
                     byte[] data = map.get(new ParcelUuid(Constants.BEACON_SERVICE_UUID));
-                    Log.e("ble","onscanresult "+(data==null));
+//                    Log.e("ble","onscanresult "+(data==null));
                     if (data != null && data.length == 16) {
                         String contactUuid = ByteUtils.byte2UUIDstring(data);
 //                        Log.e("uuid","CONTACT "+contactUuid);
