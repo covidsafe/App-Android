@@ -24,6 +24,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -36,8 +37,8 @@ public class AES256 {
         KeyGenerator keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, Constants.KEY_PROVIDER);
         KeyGenParameterSpec keyGenParameterSpec = new KeyGenParameterSpec.Builder(Constants.KEY_ALIAS,
                 KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
-                .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
+                .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
                 .setKeySize(256)
                 .setRandomizedEncryptionRequired(true)
                 .build();
@@ -103,7 +104,7 @@ public class AES256 {
 
         // decrypt and convert back to string
         Cipher cipherDecrypt = Cipher.getInstance(Constants.AES_SETTINGS);
-        cipherDecrypt.init(Cipher.DECRYPT_MODE, secretKeyDecrypt, new IvParameterSpec(ivToPass));
+        cipherDecrypt.init(Cipher.DECRYPT_MODE, secretKeyDecrypt, new GCMParameterSpec(Constants.GCM_TLEN, ivToPass));
         byte[] decrypted = cipherDecrypt.doFinal(dataToDecrypt);
         return new String(decrypted, Constants.CharSet);
     }

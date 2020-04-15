@@ -84,6 +84,13 @@ public class OnboardingActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.e("logme","activity destroyed");
+        this.unregisterReceiver(BluetoothUtils.bluetoothReceiver);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
         Log.e("aa","onactivityresult "+requestCode+","+resultCode);

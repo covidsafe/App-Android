@@ -114,9 +114,10 @@ public class Constants {
     public static TextView bleDesc;
     public static Switch notifSwitch;
 
-    public static int IV_LEN = 16;
+    public static int IV_LEN = 12;
+    public static int GCM_TLEN = 128;
     public static String CharSet = "UTF-8";
-    public static String AES_SETTINGS = "AES/CBC/PKCS7Padding";
+    public static String AES_SETTINGS = "AES/GCM/NoPadding";
     public static String RSA_SETTINGS = "RSA/ECB/PKCS1Padding";
     public static String KEY_PROVIDER = "AndroidKeyStore";
     public static String KEY_ALIAS = "mykeys";
