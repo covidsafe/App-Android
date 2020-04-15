@@ -33,16 +33,17 @@ public class UUIDGeneratorTask implements Runnable {
         long mostRecentSeedTimestampStr = prefs.getLong(context.getString(R.string.most_recent_seed_timestamp_pkey), System.currentTimeMillis());
         byte[] mostRecentSeed = ByteUtils.string2byteArray(mostRecentSeedStr);
 
-        SeedUUIDRecord generatedRecord = CryptoUtils.generateSeed(context, mostRecentSeed, mostRecentSeedTimestampStr);
+        SeedUUIDRecord generatedRecord = CryptoUtils.generateSeedHelper(context, mostRecentSeed);
         if (generatedRecord != null) {
             Constants.contactUUID = UUID.fromString(generatedRecord.getUUID());
         }
 
         if (Constants.blueAdapter != null && Constants.blueAdapter.getBluetoothLeAdvertiser() != null) {
+            Log.e("ble", "about to stop advertising");
             Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothScanHelper.advertiseCallback);
-
             //restart beacon after UUID generation
-            BluetoothUtils.mkBeacon();
+            Log.e("ble", "about to mkbeacon");
+            BluetoothUtils.mkBeacon(context);
         }
     }
 }

@@ -73,7 +73,7 @@ public class BluetoothUtils {
                         // the bluetooth sensor is turned on
                         BluetoothUtils.startBluetoothScan(context);
                         BluetoothServerHelper.createServer(context);
-                        mkBeacon();
+                        mkBeacon(context);
                     }
 
                     if (Utils.hasBlePermissions(context)){
@@ -95,7 +95,8 @@ public class BluetoothUtils {
     public static void startBluetoothScan(Context context) {
         ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
         Log.e("ble","start bluetooth scan ");
-        Constants.bluetoothScanTask = exec.scheduleWithFixedDelay(new BluetoothScanHelper(context), 0, Constants.BluetoothScanIntervalInMinutes, TimeUnit.MINUTES);
+        Constants.bluetoothScanTask = exec.scheduleWithFixedDelay(new BluetoothScanHelper(context),
+                0, Constants.BluetoothScanIntervalInMinutes, TimeUnit.MINUTES);
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -142,25 +143,38 @@ public class BluetoothUtils {
         // run this once to get a seed and broadcast it
         // have the generator be triggered at synchronized fixed 15 minute intervals:
         // e.g. 10:15, 10:30, 10:45
-        Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(
-                new UUIDGeneratorTask(cxt), TimeUtils.getDelayTilllUUIDBroadcastInSeconds(System.currentTimeMillis()), Constants.UUIDGenerationIntervalInSeconds, TimeUnit.SECONDS);
+
+        if (Constants.DEBUG) {
+            Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(
+                    new UUIDGeneratorTask(cxt), 0, Constants.UUIDGenerationIntervalInSeconds, TimeUnit.SECONDS);
+        }
+        else {
+            Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(
+                    new UUIDGeneratorTask(cxt), TimeUtils.getDelayTilllUUIDBroadcastInSeconds(System.currentTimeMillis()), Constants.UUIDGenerationIntervalInSeconds, TimeUnit.SECONDS);
+        }
     }
 
-    public static void mkBeacon() {
-        if (Constants.BLUETOOTH_ENABLED) {
+    public static void mkBeacon(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        boolean bleEnabled = prefs.getBoolean(context.getString(R.string.ble_enabled_pkey), false);
+        Log.e("ble","mkbeacon "+bleEnabled);
+        if (bleEnabled) {
             AdvertiseSettings settings = new AdvertiseSettings.Builder()
                     .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
                     .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)
                     .setConnectable(true)
                     .build();
 
+            Log.e("ble","contact uuid "+Constants.contactUUID);
+            byte[] contactUUID = ByteUtils.uuid2bytes(Constants.contactUUID);
+            Log.e("ble","converted uuid to bytes");
             AdvertiseData advertiseData = new AdvertiseData.Builder()
                     .setIncludeDeviceName(false)
                     .addServiceUuid(new ParcelUuid(Constants.BEACON_SERVICE_UUID))
-                    .addServiceData(new ParcelUuid(Constants.BEACON_SERVICE_UUID), ByteUtils.uuid2bytes(Constants.contactUUID))
+                    .addServiceData(new ParcelUuid(Constants.BEACON_SERVICE_UUID), contactUUID)
                     .build();
-            Log.e("ble","MKBEACON");
             BluetoothLeAdvertiser bluetoothLeAdvertiser = Constants.blueAdapter.getBluetoothLeAdvertiser();
+            Log.e("ble","start advertising");
             bluetoothLeAdvertiser.startAdvertising(settings, advertiseData, BluetoothScanHelper.advertiseCallback);
         }
     }
