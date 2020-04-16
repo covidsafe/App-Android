@@ -21,6 +21,7 @@ import edu.uw.covidsafe.comms.NetworkConstant;
 import edu.uw.covidsafe.ui.health.TipRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.HistoryRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
+import edu.uw.covidsafe.ui.settings.PermUtils;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
 import com.example.covidsafe.R;
@@ -127,6 +128,22 @@ public class MainActivity extends AppCompatActivity {
         Constants.init(this);
         initView();
         initBottomNav();
+
+        if (!Constants.LoggingServiceRunning) {
+            SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+            boolean gpsEnabled = prefs.getBoolean(getString(R.string.gps_enabled_pkey), false);
+            boolean bleEnabled = prefs.getBoolean(getString(R.string.ble_enabled_pkey), false);
+            if (gpsEnabled) {
+                PermUtils.gpsSwitchLogic(this);
+            }
+            if (bleEnabled) {
+                PermUtils.bleSwitchLogic(this);
+            }
+        }
+
+        if (!Constants.PullServiceRunning) {
+            Utils.startPullService(this);
+        }
     }
 
     @Override
@@ -169,9 +186,9 @@ public class MainActivity extends AppCompatActivity {
                             selectedFragment = Constants.SettingsFragment;
                         }
                         break;
-                    case R.id.action_contact_log:
-                        selectedFragment = Constants.ContactLogFragment;
-                        break;
+//                    case R.id.action_contact_log:
+//                        selectedFragment = Constants.ContactLogFragment;
+//                        break;
                     case R.id.action_report:
 //                        Log.e("STate", "cur fragment "+Constants.CurrentFragment.toString());
                         if (Constants.ReportFragmentState.toString().toLowerCase().contains("diagnosis")) {
