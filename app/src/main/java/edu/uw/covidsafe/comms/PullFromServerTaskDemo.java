@@ -100,7 +100,7 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
 //            return;
 //        }
 //        GpsRecord gpsRecord = gpsRecords.get(0);
-        GpsRecord gpsRecord = new GpsRecord(TimeUtils.getTime(),47.625,-123.25,"");
+        GpsRecord gpsRecord = new GpsRecord(TimeUtils.getTime(),47.625,-124.25,"");
 //        int currentGpsPrecision = Constants.MaximumGpsPrecision;
         int currentGpsPrecision = 4;
 
@@ -503,7 +503,7 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
                         msg,
                         messageType.ordinal(),
                         true)).execute();
-                Utils.sendNotification(context, "You may have been exposed", msg);
+                Utils.sendNotification(context, "You may have been exposed", msg, R.drawable.warning2);
             }
             else {
                 if (!msgs.isEmpty()) {
@@ -514,7 +514,7 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
                             msgs.get(i),
                             Constants.MessageType.NarrowCast.ordinal(),
                             true)).execute();
-                    Utils.sendNotification(context, "Announcement",msgs.get(i));
+                    Utils.sendNotification(context, "Announcement",msgs.get(i), R.drawable.ic_info_outline_black_24dp);
                 }
             }
         }

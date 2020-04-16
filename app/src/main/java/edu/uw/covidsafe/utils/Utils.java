@@ -150,7 +150,7 @@ public class Utils {
         return true;
     }
 
-    public static void sendNotification(Context mContext, String title, String message) {
+    public static void sendNotification(Context mContext, String title, String message, int icon) {
         SharedPreferences prefs = mContext.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = mContext.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
         if (prefs.getBoolean(mContext.getString(R.string.notifs_enabled_pkey), Constants.NOTIFS_ENABLED)) {
@@ -169,7 +169,7 @@ public class Utils {
 //            bigText.setSummaryText(message);
 
             mBuilder.setContentIntent(pendingIntent);
-            mBuilder.setSmallIcon(R.drawable.warning2);
+            mBuilder.setSmallIcon(icon);
             mBuilder.setContentTitle(title);
             mBuilder.setContentText(message);
             mBuilder.setPriority(Notification.PRIORITY_MAX);

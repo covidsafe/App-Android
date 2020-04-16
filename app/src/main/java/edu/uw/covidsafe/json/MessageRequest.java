@@ -34,6 +34,6 @@ public class MessageRequest {
     }
 
     public static String toHttpString() {
-        return NetworkConstant.BASE_URL+"Message/";
+        return NetworkConstant.BASE_URL+"Message?api-version="+NetworkConstant.API_VERSION;
     }
 }

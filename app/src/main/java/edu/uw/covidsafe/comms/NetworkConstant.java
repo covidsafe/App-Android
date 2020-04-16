@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 public class NetworkConstant {
     public static String BASE_URL = "https://csapi.azurefd.net/api/";
     public static String API_KEY = "6755814d12ef46a2a7a206a8117abe45";
+    public static String API_VERSION = "2020-04-15";
     public static int TIMEOUT = 10;
     static RequestQueue requestQueue;
     static Gson gson;

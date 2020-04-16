@@ -29,6 +29,6 @@ public class MessageListRequest {
     }
 
     public static String toHttpString(double lat, double longi, int precision, long lastQueryTime) {
-        return NetworkConstant.BASE_URL+"Messages/"+String.format("List?lat=%f&lon=%f&precision=%d&lastTimestamp=%d",lat,longi,precision,lastQueryTime);
+        return NetworkConstant.BASE_URL+"Messages/"+String.format("List?lat=%f&lon=%f&precision=%d&lastTimestamp=%d&api-version=%s",lat,longi,precision,lastQueryTime,NetworkConstant.API_VERSION);
     }
 }
