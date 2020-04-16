@@ -492,7 +492,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
                         messageType.ordinal(),
                         true));
                 Log.e("notif","notif");
-                Utils.sendNotification(context, "You may have been exposed",msg);
+                Utils.sendNotification(context, "You may have been exposed",msg, R.drawable.warning2);
             }
             else {
                 if (!msgs.isEmpty()) {
@@ -503,7 +503,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
                             messageType.ordinal(),
                             true));
                     Log.e("notif","notif");
-                    Utils.sendNotification(context, "Announcement",msgs.get(i));
+                    Utils.sendNotification(context, "Announcement",msgs.get(i), R.drawable.ic_info_black_24dp);
                 }
             }
         }

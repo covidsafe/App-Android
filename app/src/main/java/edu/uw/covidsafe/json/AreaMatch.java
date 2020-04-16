@@ -38,6 +38,6 @@ public class AreaMatch {
     }
 
     public static String toHttpString() {
-        return NetworkConstant.BASE_URL+"Messages/AreaReport";
+        return NetworkConstant.BASE_URL+"Messages/AreaReport?api-version="+NetworkConstant.API_VERSION;
     }
 }
