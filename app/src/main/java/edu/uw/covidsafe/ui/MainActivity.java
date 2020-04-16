@@ -186,9 +186,9 @@ public class MainActivity extends AppCompatActivity {
                             selectedFragment = Constants.SettingsFragment;
                         }
                         break;
-                    case R.id.action_contact_log:
-                        selectedFragment = Constants.ContactLogFragment;
-                        break;
+//                    case R.id.action_contact_log:
+//                        selectedFragment = Constants.ContactLogFragment;
+//                        break;
                     case R.id.action_report:
 //                        Log.e("STate", "cur fragment "+Constants.CurrentFragment.toString());
                         if (Constants.ReportFragmentState.toString().toLowerCase().contains("diagnosis")) {
