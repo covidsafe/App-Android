@@ -73,7 +73,7 @@ public class Constants {
     public static boolean LoggingServiceRunning = false;
     public static boolean SuppressSwitchStateCheck = false;
     public static int QuarantineLengthInDays = 14;
-    public static int MaxPayloadSize = 10000;
+    public static int MaxPayloadSize = 1000;
     public static int rssiCutoff = -82;
     public static int MaximumGpsPrecision = 4;
     public static int MinimumGpsPrecision = 0;

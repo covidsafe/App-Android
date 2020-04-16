@@ -33,7 +33,7 @@ public class GpsRecord {
     public GpsRecord(@NonNull long ts, String latEncrypted, String longiEncrypted, String provider) {
         this.ts = ts;
 
-        Log.e("gps",ts+","+latEncrypted+","+longiEncrypted+","+provider);
+//        Log.e("gps",ts+","+latEncrypted+","+longiEncrypted+","+provider);
 
         if (latEncrypted.length() > 0) {
             if (latEncrypted.charAt(latEncrypted.length()-1) == '\n') {

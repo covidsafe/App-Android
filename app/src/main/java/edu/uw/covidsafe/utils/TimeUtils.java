@@ -1,5 +1,7 @@
 package edu.uw.covidsafe.utils;
 
+import com.instacart.library.truetime.TrueTime;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -7,6 +9,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class TimeUtils {
+
+    public static long getTime() {
+        if (!TrueTime.isInitialized()) {
+            return System.currentTimeMillis();
+        }
+        else {
+            return TrueTime.now().getTime();
+        }
+    }
 
     // returns the prior synchronized interval time
     // e.g. 2:05 => 2:00

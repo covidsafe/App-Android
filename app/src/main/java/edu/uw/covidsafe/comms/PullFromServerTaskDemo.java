@@ -40,6 +40,7 @@ import edu.uw.covidsafe.ui.notif.NotifOpsAsyncTask;
 import edu.uw.covidsafe.ui.notif.NotifRecord;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
+import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
 
 import java.text.SimpleDateFormat;
@@ -68,7 +69,7 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
 
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        long ts = System.currentTimeMillis();
+        long ts = TimeUtils.getTime();
         editor.putLong(context.getString(R.string.last_refresh_date_pkey), ts);
         editor.commit();
 
@@ -84,7 +85,7 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... params) {
-        Log.e("uuid", "PULL FROM SERVER");
+        Log.e("uuid", "PULL FROM SERVER DEMO");
 
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
 
@@ -99,9 +100,9 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
 //            return;
 //        }
 //        GpsRecord gpsRecord = gpsRecords.get(0);
-        GpsRecord gpsRecord = new GpsRecord(System.currentTimeMillis(),47.6504003,-122.3208422,"");
+        GpsRecord gpsRecord = new GpsRecord(TimeUtils.getTime(),47.625,-123.25,"");
 //        int currentGpsPrecision = Constants.MaximumGpsPrecision;
-        int currentGpsPrecision = 3;
+        int currentGpsPrecision = 4;
 
         int sizeOfPayload = 0;
 //        long lastQueryTime = prefs.getLong(context.getString(R.string.time_of_last_query_pkey), 0L);
@@ -127,7 +128,14 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
 //            }
 //        }
 
-        if (sizeOfPayload == 0) {
+        if (sizeOfPayload == 0 || sizeOfPayload > Constants.MaxPayloadSize) {
+            // potentially too many messages, set the last query time to now.
+            // retry at another time
+            lastQueryTime = TimeUtils.getTime();
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putLong(context.getString(R.string.time_of_last_query_pkey), lastQueryTime);
+            editor.commit();
+
             Constants.PullServiceRunning = false;
             return null;
         }
@@ -164,7 +172,7 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
         List<Long> ts1 = new ArrayList<>();
         List<Long> ts2 = new ArrayList<>();
         List<Long> ts3 = new ArrayList<>();
-        long now = System.currentTimeMillis();
+        long now = TimeUtils.getTime();
 //        ts1.add(now);
 //        ts2.add(now+(60000*5));
 //        ts3.add(now+(60000*10));
@@ -203,8 +211,10 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
     // sync blockig op
     public int howBig(double lat, double longi, int precision, long ts) throws JSONException {
         String messageSizeRequest = MessageSizeRequest.toHttpString(lat, longi, precision, ts);
-        JSONObject jsonResp = NetworkHelper.sendRequest(messageSizeRequest, Request.Method.GET, null);
+        Log.e("howbig",messageSizeRequest);
+        JSONObject jsonResp = NetworkHelper.sendRequest(messageSizeRequest, Request.Method.HEAD, null);
         MessageSizeResponse messageSizeResponse = MessageSizeResponse.parse(jsonResp);
+        Log.e("howbig",jsonResp.toString(2));
         return messageSizeResponse.sizeOfQueryResponse;
     }
 
@@ -277,16 +287,16 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
         /////////////////////////////////////////////////////////////////////////
         // (3) update last query time to server
         /////////////////////////////////////////////////////////////////////////
-        ArrayList<Long> queryTimes = new ArrayList<Long>();
-        for (MessageInfo messageInfo : messageListResponse.messageInfo) {
-            queryTimes.add(messageInfo.MessageTimestamp);
-        }
-        Collections.sort(queryTimes, Collections.reverseOrder());
+//        ArrayList<Long> queryTimes = new ArrayList<Long>();
+//        for (MessageInfo messageInfo : messageListResponse.messageInfo) {
+//            queryTimes.add(messageInfo.MessageTimestamp);
+//        }
+//        Collections.sort(queryTimes, Collections.reverseOrder());
 
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        if (queryTimes.size() > 0) {
-            editor.putLong(context.getString(R.string.time_of_last_query_pkey), queryTimes.get(0));
+        if (messageListResponse.maxResponseTimestamp > 0) {
+            editor.putLong(context.getString(R.string.time_of_last_query_pkey), messageListResponse.maxResponseTimestamp);
             editor.commit();
         }
         /////////////////////////////////////////////////////////////////////////
@@ -360,7 +370,7 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
     // check if we intersect with the infected person
     public static long[] isExposed(String seed, long ts, HashMap<String,List<Long>> scannedBleMap) {
         // if timestamp is in the future, something is wrong, return
-        if (ts > System.currentTimeMillis()) {
+        if (ts > TimeUtils.getTime()) {
             return null;
         }
         // convert our BLE DB records into convenient data structures
@@ -368,7 +378,7 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
 
         // determine how many UUIDs to generate from the seed
         // based on time when the seed was generated and now.
-        int diffBetweenNowAndTsInMinutes = (int)((System.currentTimeMillis() - ts)/1000/60);
+        int diffBetweenNowAndTsInMinutes = (int)((TimeUtils.getTime() - ts)/1000/60);
         int temp = diffBetweenNowAndTsInMinutes / Constants.UUIDGenerationIntervalInMinutes;
         int numSeedsToGenerate = Math.max(3,temp);
         // if we need to generate too many timestamps, something is wrong, return.
@@ -387,7 +397,7 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
         // user B may only wake up to scan the ID after BluetoothScanIntervalInMinutes
         List<Long> matches = new ArrayList<>();
         int bluetoothScanIntervalInMilliseconds = Constants.BluetoothScanIntervalInMinutes*60000;
-        int uuidGenerationIntervalInMillliseconds = Constants.UUIDGenerationIntervalInMinutes*60000;
+//        int uuidGenerationIntervalInMillliseconds = Constants.UUIDGenerationIntervalInMinutes*60000;
 
         for (String receivedUUID : receivedUUIDs) {
             if (scannedBleMap.keySet().contains(receivedUUID)) {
@@ -399,7 +409,7 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
 //                    }
                 }
             }
-            ts += uuidGenerationIntervalInMillliseconds;
+//            ts += uuidGenerationIntervalInMillliseconds;
         }
 
         // calculate how many matches we need to say user is exposed for at least 10 minutes
@@ -501,7 +511,7 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
                     new NotifOpsAsyncTask(context, new NotifRecord(
                             contactTimesStart.get(i),
                             contactTimesEnd.get(i),
-                            "Please refrain from entering the playground on 40th Ave. until April 6th as it is undergoing decontamination.",
+                            msgs.get(i),
                             Constants.MessageType.NarrowCast.ordinal(),
                             true)).execute();
                     Utils.sendNotification(context, "Announcement",msgs.get(i));

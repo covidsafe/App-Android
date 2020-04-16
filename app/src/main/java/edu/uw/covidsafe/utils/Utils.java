@@ -138,7 +138,7 @@ public class Utils {
 
     public static void markDiagnosisSubmitted(Activity av) {
         SharedPreferences.Editor editor = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
-        editor.putLong(av.getString(R.string.diagnosis_pkey), System.currentTimeMillis());
+        editor.putLong(av.getString(R.string.diagnosis_pkey), TimeUtils.getTime());
         editor.commit();
     }
 
@@ -229,7 +229,7 @@ public class Utils {
     }
 
     public static void gpsLogToDatabase(Context cxt, Location loc) {
-        new GpsOpsAsyncTask(cxt, loc, System.currentTimeMillis()).execute();
+        new GpsOpsAsyncTask(cxt, loc, TimeUtils.getTime()).execute();
     }
 
     public static void bleLogToFile(Context cxt, BleRecord rec) {
@@ -271,7 +271,11 @@ public class Utils {
         Constants.LoggingServiceRunning = true;
         Utils.createNotificationChannel(av);
 
-        av.startService(new Intent(av, LoggingService.class));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            av.startForegroundService(new Intent(av, LoggingService.class));
+        } else {
+            av.startService(new Intent(av, LoggingService.class));
+        }
     }
 
     public static void startPullService(Activity av) {
@@ -483,7 +487,7 @@ public class Utils {
 
     public static void updateSymptomSubmitTime(Activity av) {
         SharedPreferences.Editor prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
-        prefs.putLong(av.getString(R.string.symptom_submission_date_pkey), System.currentTimeMillis());
+        prefs.putLong(av.getString(R.string.symptom_submission_date_pkey), TimeUtils.getTime());
         prefs.commit();
     }
 

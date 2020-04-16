@@ -24,6 +24,7 @@ import edu.uw.covidsafe.comms.NetworkHelper;
 import edu.uw.covidsafe.symptoms.SymptomsOpsAsyncTask;
 import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.utils.Constants;
+import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
 
 public class SymptomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -139,7 +140,7 @@ public class SymptomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 .setPositiveButton(R.string.ok,null)
                 .setCancelable(false).create();
         dialog.show();
-        SymptomsRecord rec = new SymptomsRecord(System.currentTimeMillis(),
+        SymptomsRecord rec = new SymptomsRecord(TimeUtils.getTime(),
                 boxes.get(0).isChecked(),
                 boxes.get(1).isChecked(),
                 boxes.get(2).isChecked(),

@@ -76,14 +76,6 @@ public class NotifRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 //        Spannable ss = (Spannable)Html.fromHtml(rec.msg+" This was during <b>"+dateFormat.format(rec.getTs_start())+ "</b> during <b>"+tt+"</b>");
             Spannable ss = (Spannable)Html.fromHtml(rec.msg+" This was during <b>"+dateFormat.format(rec.getTs_start())+".");
             ((NotifCard)holder).message.setText(ss);
-            ((NotifCard)holder).dismissButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dismissedIndex = position;
-                    Log.e("state","remove "+position);
-                    new NotifOpsAsyncTask(cxt, new NotifRecord(rec.ts_start, rec.ts_end, rec.msg, rec.msgType,false)).execute();
-                }
-            });
             ((NotifCard)holder).icon.setImageDrawable(av.getDrawable(R.drawable.warning3));
         }
         else {
@@ -93,6 +85,14 @@ public class NotifRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             ((NotifCard)holder).contact.setVisibility(View.GONE);
             ((NotifCard)holder).icon.setImageDrawable(av.getDrawable(R.drawable.ic_info_outline_black_24dp));
         }
+        ((NotifCard)holder).dismissButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismissedIndex = position;
+                Log.e("state","remove "+position);
+                new NotifOpsAsyncTask(cxt, new NotifRecord(rec.ts_start, rec.ts_end, rec.msg, rec.msgType,false)).execute();
+            }
+        });
     }
 
     @Override

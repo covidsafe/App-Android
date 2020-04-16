@@ -150,7 +150,7 @@ public class BluetoothUtils {
         }
         else {
             Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(
-                    new UUIDGeneratorTask(cxt), TimeUtils.getDelayTilllUUIDBroadcastInSeconds(System.currentTimeMillis()), Constants.UUIDGenerationIntervalInSeconds, TimeUnit.SECONDS);
+                    new UUIDGeneratorTask(cxt), 0, Constants.UUIDGenerationIntervalInSeconds, TimeUnit.SECONDS);
         }
     }
 

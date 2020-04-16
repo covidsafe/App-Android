@@ -7,6 +7,7 @@ import org.json.JSONObject;
 public class MessageListResponse {
     public MessageInfo[] messageInfo;
     public long query_time;
+    public long maxResponseTimestamp = 0;
 
     public static MessageListResponse parse(JSONObject obj) throws JSONException {
         MessageListResponse messageListResponse = new MessageListResponse();
@@ -19,6 +20,9 @@ public class MessageListResponse {
         }
         if (obj.has("query_time")) {
             messageListResponse.query_time = obj.getLong("query_time");
+        }
+        if (obj.has("maxResponseTimestamp")) {
+            messageListResponse.maxResponseTimestamp = obj.getLong("maxResponseTimestamp");
         }
         return messageListResponse;
     }
