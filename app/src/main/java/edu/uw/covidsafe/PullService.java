@@ -12,6 +12,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import edu.uw.covidsafe.comms.PullFromServerTask;
+import edu.uw.covidsafe.comms.PullFromServerTaskDemo;
 import edu.uw.covidsafe.utils.Constants;
 
 import static com.microsoft.appcenter.utils.HandlerUtils.runOnUiThread;
@@ -40,7 +41,12 @@ public class PullService extends IntentService {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new PullFromServerTask(getApplicationContext(),null).execute();
+//                        if (Constants.DEBUG) {
+//                            new PullFromServerTaskDemo(getApplicationContext(), getActivity(), view).execute();
+//                        }
+//                        else {
+                            new PullFromServerTask(getApplicationContext(), null).execute();
+//                        }
                     }
                 });
             }

@@ -11,6 +11,7 @@ import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.utils.ByteUtils;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
+import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
 
 import java.util.UUID;
@@ -30,7 +31,7 @@ public class UUIDGeneratorTask implements Runnable {
         // get the most recently generated seed
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         String mostRecentSeedStr = prefs.getString(context.getString(R.string.most_recent_seed_pkey), "");
-        long mostRecentSeedTimestampStr = prefs.getLong(context.getString(R.string.most_recent_seed_timestamp_pkey), System.currentTimeMillis());
+        long mostRecentSeedTimestampStr = prefs.getLong(context.getString(R.string.most_recent_seed_timestamp_pkey), TimeUtils.getTime());
         byte[] mostRecentSeed = ByteUtils.string2byteArray(mostRecentSeedStr);
 
         SeedUUIDRecord generatedRecord = CryptoUtils.generateSeedHelper(context, mostRecentSeed);

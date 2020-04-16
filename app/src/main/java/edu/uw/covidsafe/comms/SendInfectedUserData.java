@@ -27,6 +27,7 @@ import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.ui.health.DiagnosisFragment;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
+import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
 
 import java.util.List;
@@ -59,7 +60,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         int UUIDGenerationIntervalInMiliseconds = Constants.UUIDGenerationIntervalInMinutes*60*1000;
 
         // find timestamp 14 days ago
-        long timestampAtBeginningOfInfectionWindow = System.currentTimeMillis() - infectionWindowInMilliseconds;
+        long timestampAtBeginningOfInfectionWindow = TimeUtils.getTime() - infectionWindowInMilliseconds;
         // find 6 minutes past 14 days ago
         long timestampDeviation = timestampAtBeginningOfInfectionWindow +
                 UUIDGenerationIntervalInMiliseconds +
@@ -115,7 +116,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         try {
             // ask healthies to generate from ts_start till now (when infected publishes data)
             long ts_start = recordToSend.ts;
-            long ts_end = System.currentTimeMillis();
+            long ts_end = TimeUtils.getTime();
 
             String seed = recordToSend.getSeed();
             sendRequest(seed,

@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.example.covidsafe.R;
+import com.instacart.library.truetime.TrueTime;
 
 public class LogPurgerTask implements Runnable {
 
@@ -32,6 +33,9 @@ public class LogPurgerTask implements Runnable {
     public void run() {
         Log.e("uuid", "PURGE LOGS");
         try {
+            Log.e("truetime","truetime init");
+            TrueTime.build().initialize();
+
             SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
             int daysOfLogsToKeep = prefs.getInt(context.getString(R.string.purge_frequency_pkey),Constants.DefaultDaysOfLogsToKeep);
 

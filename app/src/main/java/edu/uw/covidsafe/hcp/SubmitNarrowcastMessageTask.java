@@ -16,6 +16,7 @@ import java.util.List;
 import edu.uw.covidsafe.comms.NetworkHelper;
 import edu.uw.covidsafe.json.Area;
 import edu.uw.covidsafe.json.AreaMatch;
+import edu.uw.covidsafe.utils.TimeUtils;
 
 public class SubmitNarrowcastMessageTask extends AsyncTask<Void, Void, Void> {
 
@@ -43,9 +44,8 @@ public class SubmitNarrowcastMessageTask extends AsyncTask<Void, Void, Void> {
         amatch.areas = new Area[lats.size()];
         for (int i = 0; i < lats.size(); i++) {
             amatch.areas[i] = new Area(lats.get(i),longs.get(i),radii.get(i),
-                    System.currentTimeMillis(),System.currentTimeMillis());
+                    TimeUtils.getTime(),TimeUtils.getTime());
         }
-
         return amatch;
     }
 
@@ -74,6 +74,7 @@ public class SubmitNarrowcastMessageTask extends AsyncTask<Void, Void, Void> {
         catch(Exception e) {
             Log.e("err",e.getMessage());
         }
+        Log.e("narrowcast",url);
         JSONObject resp = NetworkHelper.sendRequest(url, Request.Method.PUT, matchMessageObj);
         if (resp == null) {
             mkSnack(av, view, "There was an error with submitting your message. Please try again later.");

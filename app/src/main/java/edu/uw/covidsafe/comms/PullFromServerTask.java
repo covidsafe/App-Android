@@ -37,6 +37,7 @@ import edu.uw.covidsafe.ui.notif.NotifOpsAsyncTask;
 import edu.uw.covidsafe.ui.notif.NotifRecord;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
+import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
 
 import java.text.SimpleDateFormat;
@@ -64,7 +65,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
 
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        long ts = System.currentTimeMillis();
+        long ts = TimeUtils.getTime();
         editor.putLong(context.getString(R.string.last_refresh_date_pkey), ts);
         editor.commit();
 
@@ -127,7 +128,14 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
             }
         }
 
-        if (sizeOfPayload == 0) {
+        if (sizeOfPayload == 0 || sizeOfPayload > Constants.MaxPayloadSize) {
+            // potentially too many messages, set the last query time to now.
+            // retry at another time
+            lastQueryTime = TimeUtils.getTime();
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putLong(context.getString(R.string.time_of_last_query_pkey), lastQueryTime);
+            editor.commit();
+
             Constants.PullServiceRunning = false;
             return null;
         }
@@ -188,7 +196,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
     // sync blockig op
     public int howBig(double lat, double longi, int precision, long ts) throws JSONException {
         String messageSizeRequest = MessageSizeRequest.toHttpString(lat, longi, precision, ts);
-        JSONObject jsonResp = NetworkHelper.sendRequest(messageSizeRequest, Request.Method.GET, null);
+        JSONObject jsonResp = NetworkHelper.sendRequest(messageSizeRequest, Request.Method.HEAD, null);
         MessageSizeResponse messageSizeResponse = MessageSizeResponse.parse(jsonResp);
         return messageSizeResponse.sizeOfQueryResponse;
     }
@@ -257,16 +265,16 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         /////////////////////////////////////////////////////////////////////////
         // (3) update last query time to server
         /////////////////////////////////////////////////////////////////////////
-        ArrayList<Long> queryTimes = new ArrayList<Long>();
-        for (MessageInfo messageInfo : messageListResponse.messageInfo) {
-            queryTimes.add(messageInfo.MessageTimestamp);
-        }
-        Collections.sort(queryTimes, Collections.reverseOrder());
+//        ArrayList<Long> queryTimes = new ArrayList<Long>();
+//        for (MessageInfo messageInfo : messageListResponse.messageInfo) {
+//            queryTimes.add(messageInfo.MessageTimestamp);
+//        }
+//        Collections.sort(queryTimes, Collections.reverseOrder());
 
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        if (queryTimes.size() > 0) {
-            editor.putLong(context.getString(R.string.time_of_last_query_pkey), queryTimes.get(0));
+        if (messageListResponse.maxResponseTimestamp > 0) {
+            editor.putLong(context.getString(R.string.time_of_last_query_pkey), messageListResponse.maxResponseTimestamp);
             editor.commit();
         }
         /////////////////////////////////////////////////////////////////////////
@@ -339,7 +347,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
     // check if we intersect with the infected person
     public static long[] isExposed(String seed, long start_ts, long end_ts, HashMap<String,List<Long>> scannedBleMap) {
         // if timestamp is in the future, something is wrong, return
-        if (start_ts > System.currentTimeMillis() || end_ts > System.currentTimeMillis() || end_ts > start_ts) {
+        if (start_ts > TimeUtils.getTime() || end_ts > TimeUtils.getTime() || end_ts > start_ts) {
             return null;
         }
         // convert our BLE DB records into convenient data structures
@@ -350,7 +358,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         int diffBetweenNowAndTsInMinutes = 0;
 
         if (end_ts == 0 || end_ts < 0) {
-            diffBetweenNowAndTsInMinutes = (int) ((System.currentTimeMillis() - start_ts) / 1000 / 60);
+            diffBetweenNowAndTsInMinutes = (int) ((TimeUtils.getTime() - start_ts) / 1000 / 60);
         }
         else {
             diffBetweenNowAndTsInMinutes = (int) ((end_ts - start_ts) / 1000 / 60);
@@ -373,19 +381,19 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         // user B may only wake up to scan the ID after BluetoothScanIntervalInMinutes
         List<Long> matches = new ArrayList<>();
         int bluetoothScanIntervalInMilliseconds = Constants.BluetoothScanIntervalInMinutes*60000;
-        int uuidGenerationIntervalInMillliseconds = Constants.UUIDGenerationIntervalInMinutes*60000;
+//        int uuidGenerationIntervalInMillliseconds = Constants.UUIDGenerationIntervalInMinutes*60000;
 
         for (String receivedUUID : receivedUUIDs) {
             if (scannedBleMap.keySet().contains(receivedUUID)) {
                 for (Long localTs : scannedBleMap.get(receivedUUID)) {
                     // check that the timestamps were within the same UUID generation interval
-                    if (Math.abs(localTs - start_ts) < uuidGenerationIntervalInMillliseconds) {
+//                    if (Math.abs(localTs - start_ts) < uuidGenerationIntervalInMillliseconds) {
                         // record the timestamp when the local scanner picked it up
                         matches.add(localTs);
-                    }
+//                    }
                 }
             }
-            start_ts += uuidGenerationIntervalInMillliseconds;
+//            start_ts += uuidGenerationIntervalInMillliseconds;
         }
 
         // calculate how many matches we need to say user is exposed for at least 10 minutes

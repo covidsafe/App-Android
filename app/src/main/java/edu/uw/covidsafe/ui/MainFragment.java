@@ -37,6 +37,7 @@ import java.util.List;
 
 import edu.uw.covidsafe.comms.PullFromServerTask;
 import edu.uw.covidsafe.comms.PullFromServerTaskDemo;
+import edu.uw.covidsafe.hcp.SubmitNarrowcastMessageTask;
 import edu.uw.covidsafe.ui.health.ResourceRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifDbModel;
 import edu.uw.covidsafe.ui.notif.NotifOpsAsyncTask;
@@ -181,6 +182,14 @@ public class MainFragment extends Fragment {
         Log.e("refresh","freshtask");
         if (Constants.DEBUG) {
             new PullFromServerTaskDemo(getContext(), getActivity(), view).execute();
+//            List<Double> lats = new LinkedList<>();
+//            List<Double> lons = new LinkedList<>();
+//            List<Float> radii = new LinkedList<>();
+//            lats.add(74.12345);
+//            lons.add(-39.12345);
+//            radii.add(100f);
+//            String msg = "stay home";
+//            new SubmitNarrowcastMessageTask(getActivity(),view,lats,lons,radii,msg).execute();
         }
         else {
             new PullFromServerTask(getContext(),view).execute();
@@ -215,18 +224,6 @@ public class MainFragment extends Fragment {
         Constants.CurrentFragment = this;
         Constants.MainFragment = this;
         Constants.MainFragmentState = this;
-
-        if (!Constants.LoggingServiceRunning) {
-            SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-            boolean gpsEnabled = prefs.getBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
-            boolean bleEnabled = prefs.getBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
-            if (gpsEnabled) {
-                PermUtils.gpsSwitchLogic(getActivity());
-            }
-            if (bleEnabled) {
-                PermUtils.bleSwitchLogic(getActivity());
-            }
-        }
 
         updateBroadcastUI(false);
 

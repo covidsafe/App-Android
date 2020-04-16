@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import edu.uw.covidsafe.utils.Constants;
+import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class BleOpsAsyncTask extends AsyncTask<Void, Void, Void> {
 
     public BleOpsAsyncTask(Context activity, String id, int rssi) {
         this.context = activity;
-        this.result = new BleRecord(id, System.currentTimeMillis(), rssi);
+        this.result = new BleRecord(id, TimeUtils.getTime(), rssi);
         this.op = Constants.BleDatabaseOps.Insert;
     }
 

@@ -29,6 +29,6 @@ public class MessageSizeRequest {
     }
 
     public static String toHttpString(double lat, double longi, int precision, long ts) {
-        return NetworkConstant.BASE_URL+"Messages/"+String.format("Size?lat=%f&lon=%f&precision=%d&lastTimestamp=%d",lat,longi,precision,ts);
+        return NetworkConstant.BASE_URL+"Messages/List/"+String.format("?lat=%f&lon=%f&precision=%d&lastTimestamp=%d",lat,longi,precision,ts);
     }
 }

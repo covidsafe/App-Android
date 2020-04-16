@@ -67,6 +67,13 @@ public class NetworkHelper {
                     // response is just empty, return an empty json object
                     if (response.data.length == 0) {
                         byte[] responseData = "{}".getBytes("UTF8");
+                        if (method == Request.Method.HEAD) {
+                            if (response.headers.containsKey("Content-Length")) {
+                                int len = Integer.parseInt(response.headers.get("Content-Length"));
+                                String json = "{sizeOfQueryResponse:"+len+"}";
+                                responseData = json.getBytes("UTF-8");
+                            }
+                        }
                         response = new NetworkResponse(response.statusCode, responseData, response.headers, response.notModified);
                     }
                     else {

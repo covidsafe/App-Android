@@ -53,7 +53,7 @@ public class CryptoUtils {
 
         String s = prefs.getString(context.getString(R.string.most_recent_seed_pkey),"");
         if (s.isEmpty()) {
-            long ts = System.currentTimeMillis();
+            long ts = TimeUtils.getTime();
             editor.putString(context.getString(R.string.most_recent_seed_pkey), initSeed);
             editor.putLong(context.getString(R.string.most_recent_seed_timestamp_pkey), ts);
             editor.commit();
@@ -83,7 +83,7 @@ public class CryptoUtils {
 
         int infectionWindowInMilliseconds = 1000*60*60*24*Constants.InfectionWindowInDays;
 
-        long previousGenerationTimestamp = TimeUtils.getPreviousGenerationTimestamp(System.currentTimeMillis());
+        long previousGenerationTimestamp = TimeUtils.getPreviousGenerationTimestamp(TimeUtils.getTime());
         long ti = previousGenerationTimestamp - infectionWindowInMilliseconds;
 
         long uuidGenerationIntervalInMilliSeconds = Constants.UUIDGenerationIntervalInSeconds;
@@ -108,7 +108,7 @@ public class CryptoUtils {
 
         ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
         Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(
-                new UUIDGeneratorTask(context), TimeUtils.getDelayTilllUUIDBroadcastInSeconds(System.currentTimeMillis()), Constants.UUIDGenerationIntervalInSeconds, TimeUnit.SECONDS);
+                new UUIDGeneratorTask(context), 0, Constants.UUIDGenerationIntervalInSeconds, TimeUnit.SECONDS);
     }
 
     public static SeedUUIDRecord generateSeedHelper(byte[] seed, long ts) throws DigestException{
@@ -144,7 +144,7 @@ public class CryptoUtils {
     }
 
     public static SeedUUIDRecord generateSeed(Context context, byte[] seed, long ts) {
-        long previousGenerationTimestamp = TimeUtils.getPreviousGenerationTimestamp(System.currentTimeMillis());
+        long previousGenerationTimestamp = TimeUtils.getPreviousGenerationTimestamp(TimeUtils.getTime());
 
         int numSeedsToGenerate= (int)Math.ceil((previousGenerationTimestamp-ts)/(double)Constants.UUIDGenerationIntervalInMinutes);
 
@@ -176,7 +176,7 @@ public class CryptoUtils {
             // create the next record with the generated seed
             // return this and store in DB if necessary
             String generatedSeed = dummyRecord.getSeed();
-            long ts = System.currentTimeMillis();
+            long ts = TimeUtils.getTime();
             SeedUUIDRecord nextRecord = new SeedUUIDRecord(ts,
                     generatedSeed, "");
 
