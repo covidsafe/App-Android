@@ -271,7 +271,11 @@ public class Utils {
         Constants.LoggingServiceRunning = true;
         Utils.createNotificationChannel(av);
 
-        av.startService(new Intent(av, LoggingService.class));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            av.startForegroundService(new Intent(av, LoggingService.class));
+        } else {
+            av.startService(new Intent(av, LoggingService.class));
+        }
     }
 
     public static void startPullService(Activity av) {
