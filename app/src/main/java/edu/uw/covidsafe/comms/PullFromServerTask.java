@@ -27,7 +27,6 @@ import edu.uw.covidsafe.json.AreaMatch;
 import edu.uw.covidsafe.json.BlueToothSeed;
 import edu.uw.covidsafe.json.BluetoothMatch;
 import edu.uw.covidsafe.json.MatchMessage;
-import edu.uw.covidsafe.json.MessageInfo;
 import edu.uw.covidsafe.json.MessageListRequest;
 import edu.uw.covidsafe.json.MessageListResponse;
 import edu.uw.covidsafe.json.MessageRequest;
@@ -42,7 +41,6 @@ import edu.uw.covidsafe.utils.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -374,7 +372,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         int numSeedsToGenerate = diffBetweenNowAndTsInMinutes / Constants.UUIDGenerationIntervalInMinutes;
 
         // if we need to generate too many timestamps, something is wrong, return.
-        int infectionWindowInMinutes = (Constants.InfectionWindowInDays*24*60);
+        int infectionWindowInMinutes = (Constants.DefaultInfectionWindowInDays *24*60);
         int maxSeedsToGenerate = infectionWindowInMinutes / Constants.UUIDGenerationIntervalInMinutes;
         if (numSeedsToGenerate > maxSeedsToGenerate) {
             return null;

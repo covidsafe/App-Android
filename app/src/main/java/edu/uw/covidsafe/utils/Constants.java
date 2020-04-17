@@ -158,8 +158,8 @@ public class Constants {
     public static boolean tracking = false;
     public static int NumFilesToDisplay = 14;
     public static int SubmitThresh = 1;
-    public static int InfectionWindowInDays = 14;
-    public static int DefaultDaysOfLogsToKeep = InfectionWindowInDays;
+    public static int DefaultInfectionWindowInDays = 14;
+    public static int DefaultDaysOfLogsToKeep = DefaultInfectionWindowInDays;
     public static LocationManager mLocationManager = null;
     public static HashSet<String> scannedUUIDs;
     public static HashMap<String,Integer> scannedUUIDsRSSIs;

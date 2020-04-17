@@ -52,7 +52,7 @@ public class LogPurgerTask implements Runnable {
 
         try {
             SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-            int daysOfLogsToKeep = prefs.getInt(context.getString(R.string.purge_frequency_pkey), Constants.DefaultDaysOfLogsToKeep);
+            int daysOfLogsToKeep = prefs.getInt(context.getString(R.string.infection_window_in_days_pkeys), Constants.DefaultDaysOfLogsToKeep);
 
             Date date = new Date();
             Calendar calendar = Calendar.getInstance();
