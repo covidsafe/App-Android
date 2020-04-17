@@ -46,6 +46,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
+        Log.e("regenerate","status "+status);
         if (status) {
             new RegenerateSeedUponReport(context).execute();
         }
