@@ -29,25 +29,28 @@ public class BluetoothServerHelper {
         Log.e("bleserver","createserver");
         BluetoothManager bluetoothManager =
                 (BluetoothManager) cxt.getSystemService(Context.BLUETOOTH_SERVICE);
-        Constants.gattServer = bluetoothManager.openGattServer(cxt, gattServerCallback);
-        Log.e("bleserver","is server null "+(Constants.gattServer==null));
-        if (Constants.gattServer != null) {
-            BluetoothGattService service = new BluetoothGattService(Constants.GATT_SERVICE_UUID, BluetoothGattService.SERVICE_TYPE_PRIMARY);
+        if (Constants.gattServer == null) {
+            Constants.gattServer = bluetoothManager.openGattServer(cxt, gattServerCallback);
+            Log.e("bleserver", "is server null " + (Constants.gattServer == null));
+            if (Constants.gattServer != null) {
+                BluetoothGattService service = new BluetoothGattService(Constants.GATT_SERVICE_UUID, BluetoothGattService.SERVICE_TYPE_PRIMARY);
 
-            int permission = BluetoothGattCharacteristic.PERMISSION_WRITE | BluetoothGattCharacteristic.PERMISSION_READ;
-            int property = BluetoothGattCharacteristic.PROPERTY_WRITE|BluetoothGattCharacteristic.PROPERTY_READ;
+                int permission = BluetoothGattCharacteristic.PERMISSION_WRITE | BluetoothGattCharacteristic.PERMISSION_READ;
+                int property = BluetoothGattCharacteristic.PROPERTY_WRITE | BluetoothGattCharacteristic.PROPERTY_READ;
 
-            BluetoothGattCharacteristic charac1 = new BluetoothGattCharacteristic(Constants.CHARACTERISTIC_UUID,
-                    property,permission);
+                BluetoothGattCharacteristic charac1 = new BluetoothGattCharacteristic(Constants.CHARACTERISTIC_UUID,
+                        property, permission);
 
-            service.addCharacteristic(charac1);
-            Constants.gattServer.addService(service);
+                service.addCharacteristic(charac1);
+                Constants.gattServer.addService(service);
+            }
         }
     }
 
     public static void stopServer() {
         if (Constants.gattServer != null) {
             Constants.gattServer.close();
+            Constants.gattServer = null;
         }
     }
 

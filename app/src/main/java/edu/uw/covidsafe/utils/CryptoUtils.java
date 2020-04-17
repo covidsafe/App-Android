@@ -18,9 +18,11 @@ import java.security.Key;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -68,61 +70,72 @@ public class CryptoUtils {
         return null;
     }
 
-    public static void regenerateSeedUponReport(Context context) throws ExecutionException, InterruptedException, DigestException {
-        // disable the current uuid generation task
-        // delete all stored seeds and uuids
-        Constants.uuidGeneartionTask.cancel(true);
-        new SeedUUIDOpsAsyncTask(Constants.UUIDDatabaseOps.DeleteAll).execute().get();
+    // this is used by uuid generator
+    // it generates enough UUIDs to fill the gap between the last time this method was called and now
+    public static UUID generateSeedHelper(Context context, byte[] seed, long mostRecentSeedTimestamp) {
+        int UUIDGenerationIntervalInMiliseconds = Constants.UUIDGenerationIntervalInMinutes*60*1000;
 
-        // generate a new random seed
-        // generate seeds for a period of InfectionWindow
-        // store all of these to disk
-        byte[] seed = ByteUtils.uuid2bytes(UUID.randomUUID());
-        int infectionWindowInMinutes = 60*24*Constants.InfectionWindowInDays;
-        int generationIntervalsInInfectionWindow = infectionWindowInMinutes/Constants.UUIDGenerationIntervalInMinutes;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm aa");
 
-        int infectionWindowInMilliseconds = 1000*60*60*24*Constants.InfectionWindowInDays;
+        long curTime = TimeUtils.getTime();
 
-        long previousGenerationTimestamp = TimeUtils.getPreviousGenerationTimestamp(TimeUtils.getTime());
-        long ti = previousGenerationTimestamp - infectionWindowInMilliseconds;
+        int numSeedsToGenerate = Math.round((curTime - mostRecentSeedTimestamp) / UUIDGenerationIntervalInMiliseconds);
 
-        long uuidGenerationIntervalInMilliSeconds = Constants.UUIDGenerationIntervalInSeconds;
-
-        List<SeedUUIDRecord> records = new LinkedList<>();
-        for (int i = 0; i < generationIntervalsInInfectionWindow; i++) {
-            records.add(generateSeedHelper(seed, ti));
-            ti += uuidGenerationIntervalInMilliSeconds;
+        Log.e("crypto","num to generate "+numSeedsToGenerate);
+        if (mostRecentSeedTimestamp == 0) {
+            numSeedsToGenerate = 1;
         }
-        new SeedUUIDOpsAsyncTask(context, records).execute();
 
-        // commit the fast-forwarded-to-now uuid and seed to prefs
-        // restart the uuid generator task
-        SeedUUIDRecord lastRecord = records.get(records.size()-1);
+        if (numSeedsToGenerate <= 0) {
+            return null;
+        }
 
-        SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
+        SeedUUIDDbRecordRepository seedUUIDRepo = new SeedUUIDDbRecordRepository(context);
+        List<SeedUUIDRecord> records = seedUUIDRepo.getAllSortedRecords();
+        if (records.size() == 0) {
+            return null;
+        }
+        SeedUUIDRecord mostRecentRecord = records.get(0);
 
-        editor.putString(context.getString(R.string.most_recent_seed_pkey), lastRecord.getSeed());
-        editor.putLong(context.getString(R.string.most_recent_seed_timestamp_pkey), lastRecord.getTs());
-        editor.commit();
+        try {
+            String generatedSeed = "";
+            String generatedUUID = null;
+            long ts = mostRecentSeedTimestamp;
+            for (int i = 0; i < numSeedsToGenerate; i++) {
+                SeedUUIDRecord dummyRecord = generateSeedHelper(seed);
 
-        ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
-        Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(
-                new UUIDGeneratorTask(context), 0, Constants.UUIDGenerationIntervalInSeconds, TimeUnit.SECONDS);
+                mostRecentRecord.setUUID(dummyRecord.getUUID());
+                generatedUUID = dummyRecord.getUUID();
+                new SeedUUIDOpsAsyncTask(context, mostRecentRecord).execute();
+
+                generatedSeed = dummyRecord.getSeed();
+
+                mostRecentRecord = new SeedUUIDRecord(ts,
+                        generatedSeed, "");
+
+                ts += UUIDGenerationIntervalInMiliseconds;
+            }
+            new SeedUUIDOpsAsyncTask(context, mostRecentRecord).execute();
+
+            Log.e("crypto","setting new preference time "+generatedSeed+","+ts);
+            SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString(context.getString(R.string.most_recent_seed_pkey), generatedSeed);
+            editor.putLong(context.getString(R.string.most_recent_seed_timestamp_pkey), curTime);
+            editor.commit();
+            Log.e("crypto","done setting new preference time");
+
+            Log.e("crypto","returning most recent record" +mostRecentRecord.getSeed()+","+mostRecentRecord.getUUID());
+            return UUID.fromString(generatedUUID);
+        }
+        catch(Exception e) {
+            Log.e("err",e.getMessage());
+        }
+
+        return UUID.randomUUID();
     }
 
-    public static SeedUUIDRecord generateSeedHelper(byte[] seed, long ts) throws DigestException{
-        byte[] out = new byte[32];
-        SHA256.hash(seed, out);
-        byte[] generatedSeedBytes = Arrays.copyOfRange(out,0,16);
-        byte[] generatedIDBytes = Arrays.copyOfRange(out,16,32);
-        SeedUUIDRecord dummyRecord = new SeedUUIDRecord(
-                ts, ByteUtils.byte2UUIDstring(generatedSeedBytes),
-                ByteUtils.byte2UUIDstring(generatedIDBytes));
-        return dummyRecord;
-    }
-
-    // chain generation for potentially exposed users
+    // this generates a single seed
     public static SeedUUIDRecord generateSeedHelper(byte[] seed) throws DigestException{
         byte[] out = new byte[32];
         SHA256.hash(seed, out);
@@ -134,68 +147,7 @@ public class CryptoUtils {
         return dummyRecord;
     }
 
-    public static String[] generateSeedChainHelper(byte[] seed) throws DigestException{
-        byte[] out = new byte[32];
-        SHA256.hash(seed, out);
-        byte[] generatedSeedBytes = Arrays.copyOfRange(out,0,16);
-        byte[] generatedIDBytes = Arrays.copyOfRange(out,16,32);
-        return new String[] {ByteUtils.byte2UUIDstring(generatedSeedBytes),
-                ByteUtils.byte2UUIDstring(generatedIDBytes)};
-    }
-
-    public static SeedUUIDRecord generateSeed(Context context, byte[] seed, long ts) {
-        long previousGenerationTimestamp = TimeUtils.getPreviousGenerationTimestamp(TimeUtils.getTime());
-
-        int numSeedsToGenerate= (int)Math.ceil((previousGenerationTimestamp-ts)/(double)Constants.UUIDGenerationIntervalInMinutes);
-
-        byte[] s = seed;
-        SeedUUIDRecord record = null;
-        for (int i = 0; i < numSeedsToGenerate; i++) {
-            record = generateSeedHelper(context, s);
-            s = ByteUtils.uuid2bytes(UUID.fromString(record.getSeed()));
-        }
-        return record;
-    }
-
-    // generation ith seed
-    public static SeedUUIDRecord generateSeedHelper(Context context, byte[] seed) {
-        try {
-            SeedUUIDRecord dummyRecord = generateSeedHelper(seed);
-
-            // get the most recent seed/uuid pair
-            // fill in the uuid, put back into DB
-            SeedUUIDDbRecordRepository seedUUIDRepo = new SeedUUIDDbRecordRepository(context);
-            List<SeedUUIDRecord> records = seedUUIDRepo.getAllSortedRecords();
-            if (records.size() == 0) {
-                return null;
-            }
-            SeedUUIDRecord mostRecentRecord = records.get(0);
-            mostRecentRecord.setUUID(dummyRecord.getUUID());
-            new SeedUUIDOpsAsyncTask(context, mostRecentRecord).execute();
-
-            // create the next record with the generated seed
-            // return this and store in DB if necessary
-            String generatedSeed = dummyRecord.getSeed();
-            long ts = TimeUtils.getTime();
-            SeedUUIDRecord nextRecord = new SeedUUIDRecord(ts,
-                    generatedSeed, "");
-
-            new SeedUUIDOpsAsyncTask(context, nextRecord).execute();
-
-            SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putString(context.getString(R.string.most_recent_seed_pkey), generatedSeed);
-            editor.putLong(context.getString(R.string.most_recent_seed_timestamp_pkey), ts);
-            editor.commit();
-
-            return mostRecentRecord;
-        }
-        catch(DigestException e) {
-            Log.e("error",e.getMessage());
-        }
-        return null;
-    }
-
+    // used by healthy users to calculate all UUIDs they may have been exposed to
     public static List<String> chainGenerateUUIDFromSeed(String s, int numSeedsToGenerate) {
         byte[] seed = ByteUtils.string2byteArray(s);
         ArrayList<String> uuids = new ArrayList<>();
@@ -211,26 +163,22 @@ public class CryptoUtils {
         }
         return uuids;
     }
-//
-//    public static String encryptTimestamp(Context cxt, long ts) {
-//        return encryptHelper(cxt, ByteUtils.longToBytes(ts));
-//    }
 
-//    public static long decryptTimestamp(Context cxt, String encryptedB64) {
-//        byte[] bb = decryptHelper(cxt, encryptedB64);
-//        if (bb == null) {
-//            return 0;
-//        }
-//        return ByteUtils.bytesToLong(bb);
-//    }
+    private static String[] generateSeedChainHelper(byte[] seed) throws DigestException{
+        byte[] out = new byte[32];
+        SHA256.hash(seed, out);
+        byte[] generatedSeedBytes = Arrays.copyOfRange(out,0,16);
+        byte[] generatedIDBytes = Arrays.copyOfRange(out,16,32);
+        return new String[] {ByteUtils.byte2UUIDstring(generatedSeedBytes),
+                ByteUtils.byte2UUIDstring(generatedIDBytes)};
+    }
 
-    static KeyStore keyStore;
     public static void keyInit(Context cxt) {
         try {
-            keyStore = KeyStore.getInstance(Constants.KEY_PROVIDER);
-            keyStore.load(null);
+            Constants.keyStore = KeyStore.getInstance(Constants.KEY_PROVIDER);
+            Constants.keyStore.load(null);
             // Generate the RSA key pairs
-            if (!keyStore.containsAlias(Constants.KEY_ALIAS)) {
+            if (!Constants.keyStore.containsAlias(Constants.KEY_ALIAS)) {
                 // Generate a key pair for encryption
                 // use symmetric if version is high enough, else assymetric
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -249,6 +197,7 @@ public class CryptoUtils {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 return AES256.decrypt(data);
+//                return data;
             } else {
                 return RSA.decrypt(data);
             }
@@ -263,6 +212,7 @@ public class CryptoUtils {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 return AES256.encrypt(data);
+//                return data;
             } else {
                 return RSA.encrypt(data);
             }

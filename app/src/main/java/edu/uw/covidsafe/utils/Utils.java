@@ -123,9 +123,10 @@ public class Utils {
         }
         if (Constants.bleSwitch != null) {
             boolean hasBlePerms = Utils.hasBlePermissions(av);
+            boolean isBluetoothOn = BluetoothUtils.isBluetoothOn(av);
             Log.e("perm","ble get "+hasBlePerms);
 //            editor.putBoolean(av.getString(R.string.ble_enabled_pkey),hasBlePerms);
-            if (!hasBlePerms) {
+            if (!hasBlePerms || !isBluetoothOn) {
 //                Constants.bleSwitch.setOnCheckedChangeListener (null);
                 Constants.bleSwitch.setChecked (false);
 //                Constants.bleSwitch.setOnCheckedChangeListener (PermUtil.listener);

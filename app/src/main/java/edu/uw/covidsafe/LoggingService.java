@@ -23,8 +23,6 @@ import com.example.covidsafe.R;
 import edu.uw.covidsafe.ble.BluetoothServerHelper;
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.gps.GpsUtils;
-import edu.uw.covidsafe.seed_uuid.UUIDGeneratorTask;
-import edu.uw.covidsafe.comms.PullFromServerTask;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;

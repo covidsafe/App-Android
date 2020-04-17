@@ -73,10 +73,12 @@ public class PermUtils {
             editor.commit();
             if (!Constants.LoggingServiceRunning) {
                 Utils.startLoggingService(av);
+                Log.e("ble","ble switch logic");
                 BluetoothUtils.startBle(av);
                 PermUtils.transition(false,av);
             }
             else {
+                Log.e("ble","ble switch logic2");
                 BluetoothUtils.startBle(av);
             }
         }

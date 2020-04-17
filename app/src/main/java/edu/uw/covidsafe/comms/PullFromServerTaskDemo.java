@@ -48,8 +48,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
 
@@ -58,6 +60,7 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
     View view;
 
     public PullFromServerTaskDemo(Context context, Activity av, View view) {
+        Constants.PullFromServerTaskRunning = true;
         this.context = context;
         this.av = av;
         this.view = view;
@@ -81,6 +84,7 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
         SimpleDateFormat format = new SimpleDateFormat("h:mm a");
         lastUpdated.setText("Last updated: "+format.format(new Date(ts)));
         lastUpdated.setVisibility(View.VISIBLE);
+        Constants.PullFromServerTaskRunning = false;
     }
 
     @Override
@@ -189,14 +193,16 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
         List<String> exposedMessages = new ArrayList<>();
         List<Long> contactStartTimes = new ArrayList<>();
         List<Long> contactEndTimes = new ArrayList<>();
+        Set<String> seenSeeds = new HashSet<>();
         for (BluetoothMatch bluetoothMatch : bluetoothMatches) {
             for (BlueToothSeed seed : bluetoothMatch.seeds) {
-                if (seed.seed.equals("1e5e15cc-d622-aa39-d81b-03c79e3857ef")) {
+                if (seed.seed.equals("1e5e15cc-d622-aa39-d81b-03c79e3857ef") && !seenSeeds.contains(seed.seed)) {
                     Log.e("demo","SEED "+seed.seed);
                     long[] exposedStatus = isExposed(seed.seed,
                             seed.sequenceStartTime,
                             scannedBleMap);
                     if (exposedStatus != null) {
+                        seenSeeds.add(seed.seed);
                         exposedMessages.add(bluetoothMatch.userMessage);
                         contactStartTimes.add(exposedStatus[0]);
                         contactEndTimes.add(exposedStatus[1]);

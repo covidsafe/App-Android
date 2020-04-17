@@ -65,4 +65,6 @@ public class SeedUUIDRecord {
 
     public void setUUID(String uuid) { this.uuidEncrypted = CryptoUtils.encrypt(uuid); }
 
+    public void setTs(long ts) {this.ts = ts;}
+
 }

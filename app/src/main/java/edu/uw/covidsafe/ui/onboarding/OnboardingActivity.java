@@ -20,8 +20,10 @@ import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.comms.NetworkConstant;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.ui.PermissionLogic;
+import edu.uw.covidsafe.ui.settings.PermUtils;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
+import edu.uw.covidsafe.utils.Utils;
 
 public class OnboardingActivity extends AppCompatActivity {
 
@@ -100,17 +102,29 @@ public class OnboardingActivity extends AppCompatActivity {
         super.onActivityResult(requestCode,resultCode,data);
         Log.e("aa","onactivityresult "+requestCode+","+resultCode);
         //bluetooth is now turned on
-
-//        Switch bleSwitch = (Switch) findViewById(R.id.bleSwitch);
-//        if (requestCode == 0 && resultCode == 0) {
-//            if (bleSwitch != null) {
-//                bleSwitch.setChecked(false);
-//                Constants.BLUETOOTH_ENABLED = false;
-//                SharedPreferences.Editor editor = getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
-//                editor.putBoolean(getString(R.string.ble_enabled_pkey), false);
-//                editor.commit();
-//            }
-//        }
+        boolean hasBlePerms = Utils.hasBlePermissions(getApplicationContext());
+        if (requestCode == 0) {
+            if (resultCode == -1) {
+                if (hasBlePerms) {
+                    SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
+                    editor.putBoolean(getApplicationContext().getString(R.string.ble_enabled_pkey), true);
+                    editor.commit();
+                    if (!Constants.LoggingServiceRunning) {
+                        Utils.startLoggingService(this);
+                        Log.e("ble","ble switch logic");
+                        BluetoothUtils.startBle(this);
+                        PermUtils.transition(false,this);
+                    }
+                    else {
+                        Log.e("ble","ble switch logic2");
+                        BluetoothUtils.startBle(this);
+                    }
+                }
+            }
+            else if (resultCode == 0) {
+                Utils.updateSwitchStates(this);
+            }
+        }
     }
 
     @Override

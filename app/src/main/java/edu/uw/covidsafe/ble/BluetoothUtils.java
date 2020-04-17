@@ -93,10 +93,12 @@ public class BluetoothUtils {
     };
 
     public static void startBluetoothScan(Context context) {
-        ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
         Log.e("ble","start bluetooth scan ");
-        Constants.bluetoothScanTask = exec.scheduleWithFixedDelay(new BluetoothScanHelper(context),
-                0, Constants.BluetoothScanIntervalInMinutes, TimeUnit.MINUTES);
+        if (Constants.bluetoothScanTask == null || Constants.bluetoothScanTask.isDone()) {
+            ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
+            Constants.bluetoothScanTask = exec.scheduleWithFixedDelay(new BluetoothScanHelper(context),
+                    0, Constants.BluetoothScanIntervalInMinutes, TimeUnit.MINUTES);
+        }
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -139,16 +141,12 @@ public class BluetoothUtils {
         BluetoothUtils.startBluetoothScan(cxt);
         BluetoothServerHelper.createServer(cxt);
         Log.e("ble","make beacon");
-        ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
         // run this once to get a seed and broadcast it
         // have the generator be triggered at synchronized fixed 15 minute intervals:
         // e.g. 10:15, 10:30, 10:45
 
-        if (Constants.DEBUG) {
-            Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(
-                    new UUIDGeneratorTask(cxt), 0, Constants.UUIDGenerationIntervalInSeconds, TimeUnit.SECONDS);
-        }
-        else {
+        if (Constants.uuidGeneartionTask == null || Constants.uuidGeneartionTask.isDone()) {
+            ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
             Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(
                     new UUIDGeneratorTask(cxt), 0, Constants.UUIDGenerationIntervalInSeconds, TimeUnit.SECONDS);
         }

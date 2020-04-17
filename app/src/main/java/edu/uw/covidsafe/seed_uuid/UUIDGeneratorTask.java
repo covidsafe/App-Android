@@ -31,14 +31,20 @@ public class UUIDGeneratorTask implements Runnable {
         // get the most recently generated seed
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         String mostRecentSeedStr = prefs.getString(context.getString(R.string.most_recent_seed_pkey), "");
-        long mostRecentSeedTimestampStr = prefs.getLong(context.getString(R.string.most_recent_seed_timestamp_pkey), TimeUtils.getTime());
+        long mostRecentSeedTimestamp = prefs.getLong(context.getString(R.string.most_recent_seed_timestamp_pkey), 0);
         byte[] mostRecentSeed = ByteUtils.string2byteArray(mostRecentSeedStr);
 
-        SeedUUIDRecord generatedRecord = CryptoUtils.generateSeedHelper(context, mostRecentSeed);
-        if (generatedRecord != null) {
-            Constants.contactUUID = UUID.fromString(generatedRecord.getUUID());
+        UUID uuid = CryptoUtils.generateSeedHelper(context, mostRecentSeed, mostRecentSeedTimestamp);
+        Log.e("ble","changing contact uuid now");
+        if (uuid != null) {
+            Log.e("ble","changing contact uuid now to "+uuid.toString());
+            Constants.contactUUID = UUID.fromString(uuid.toString());
         }
 
+        Log.e("ble","can we broadcast?"+(Constants.blueAdapter!=null));
+        if (Constants.blueAdapter!=null) {
+            Log.e("ble","is advertiser null?"+(Constants.blueAdapter.getBluetoothLeAdvertiser()==null));
+        }
         if (Constants.blueAdapter != null && Constants.blueAdapter.getBluetoothLeAdvertiser() != null) {
             Log.e("ble", "about to stop advertising");
             Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothScanHelper.advertiseCallback);

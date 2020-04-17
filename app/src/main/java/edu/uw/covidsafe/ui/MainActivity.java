@@ -111,11 +111,26 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode,resultCode,data);
         Log.e("state","onactivityresult "+requestCode+","+resultCode);
         boolean hasBlePerms = Utils.hasBlePermissions(getApplicationContext());
-        if (requestCode == 0 && resultCode == -1) {
-            if (hasBlePerms) {
-                SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
-                editor.putBoolean(getApplicationContext().getString(R.string.ble_enabled_pkey), true);
-                editor.commit();
+        if (requestCode == 0) {
+            if (resultCode == -1) {
+                if (hasBlePerms) {
+                    SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
+                    editor.putBoolean(getApplicationContext().getString(R.string.ble_enabled_pkey), true);
+                    editor.commit();
+                    if (!Constants.LoggingServiceRunning) {
+                        Utils.startLoggingService(this);
+                        Log.e("ble","ble switch logic");
+                        BluetoothUtils.startBle(this);
+                        PermUtils.transition(false,this);
+                    }
+                    else {
+                        Log.e("ble","ble switch logic2");
+                        BluetoothUtils.startBle(this);
+                    }
+                }
+            }
+            else if (resultCode == 0) {
+                Utils.updateSwitchStates(this);
             }
         }
     }
