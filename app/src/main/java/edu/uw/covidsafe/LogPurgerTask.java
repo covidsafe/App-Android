@@ -11,6 +11,7 @@ import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDDbRecordRepository;
 import edu.uw.covidsafe.symptoms.SymptomsDbRecordRepository;
 import edu.uw.covidsafe.utils.Constants;
+import io.reactivex.schedulers.Schedulers;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -20,6 +21,7 @@ import java.util.UUID;
 
 import com.example.covidsafe.R;
 import com.instacart.library.truetime.TrueTime;
+import com.instacart.library.truetime.TrueTimeRx;
 
 public class LogPurgerTask implements Runnable {
 
@@ -34,17 +36,30 @@ public class LogPurgerTask implements Runnable {
         Log.e("uuid", "PURGE LOGS");
         try {
             Log.e("truetime","truetime init");
-            TrueTime.build().initialize();
+            TrueTimeRx.build()
+                    .initializeRx("time.apple.com")
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(date -> {
+                        Log.e("truetime", "TrueTime was initialized and we have a time: " + date);
+                    }, throwable -> {
+                        throwable.printStackTrace();
+                    });
+            Log.e("truetime","truetime build");
+        }
+        catch(Exception e) {
+            Log.e("truetime",e.getMessage());
+        }
 
+        try {
             SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-            int daysOfLogsToKeep = prefs.getInt(context.getString(R.string.purge_frequency_pkey),Constants.DefaultDaysOfLogsToKeep);
+            int daysOfLogsToKeep = prefs.getInt(context.getString(R.string.purge_frequency_pkey), Constants.DefaultDaysOfLogsToKeep);
 
             Date date = new Date();
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
-            calendar.add(Calendar.DATE, - daysOfLogsToKeep);
+            calendar.add(Calendar.DATE, -daysOfLogsToKeep);
             long thresh = calendar.getTime().getTime();
-            Log.e("ble","THRESH "+thresh);
+            Log.e("ble", "THRESH " + thresh);
 
             BleDbRecordRepository bleRepo = new BleDbRecordRepository(context);
             GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
@@ -57,7 +72,7 @@ public class LogPurgerTask implements Runnable {
             seedUUIDRepo.deleteEarlierThan(thresh);
         }
         catch(Exception e) {
-            Log.e("ble",e.getMessage());
+                Log.e("logpurger",e.getMessage());
         }
     }
 

@@ -1,5 +1,7 @@
 package edu.uw.covidsafe.utils;
 
+import android.util.Log;
+
 import com.instacart.library.truetime.TrueTime;
 
 import java.text.ParseException;
@@ -11,6 +13,7 @@ import java.util.List;
 public class TimeUtils {
 
     public static long getTime() {
+//        Log.e("truetime","get time "+TrueTime.isInitialized());
         if (!TrueTime.isInitialized()) {
             return System.currentTimeMillis();
         }
