@@ -12,9 +12,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import edu.uw.covidsafe.seed_uuid.SeedUUIDOpsAsyncTask;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
+import edu.uw.covidsafe.seed_uuid.UUIDGeneratorTask;
 
 public class RegenerateSeedUponReport extends AsyncTask<Void, Void, Void> {
 
@@ -28,7 +31,9 @@ public class RegenerateSeedUponReport extends AsyncTask<Void, Void, Void> {
     protected void onPreExecute() {
         Log.e("crypto","regenerateSeedUponReport");
         super.onPreExecute();
-        Constants.uuidGeneartionTask.cancel(true);
+        if (Constants.uuidGeneartionTask != null) {
+            Constants.uuidGeneartionTask.cancel(true);
+        }
         try {
             new SeedUUIDOpsAsyncTask(Constants.UUIDDatabaseOps.DeleteAll, context).execute().get();
         } catch (ExecutionException e) {
@@ -36,6 +41,14 @@ public class RegenerateSeedUponReport extends AsyncTask<Void, Void, Void> {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+        ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
+        Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(
+                new UUIDGeneratorTask(context), 0, Constants.UUIDGenerationIntervalInSeconds, TimeUnit.SECONDS);
     }
 
     @Override
@@ -74,7 +87,7 @@ public class RegenerateSeedUponReport extends AsyncTask<Void, Void, Void> {
         byte[] seed = ByteUtils.uuid2bytes(UUID.randomUUID());
         for (int i = 0; i < numSeedsToGenerate-1; i++) {
             if (i%10==0) {
-                Log.e("crypto ", i + "/" + numSeedsToGenerate);
+//                Log.e("crypto ", i + "/" + numSeedsToGenerate);
                 Log.e("time","timing "+i+"-"+(System.currentTimeMillis()-time));
             }
             SeedUUIDRecord record = null;

@@ -257,7 +257,19 @@ public class MainFragment extends Fragment {
         boolean gpsEnabled = prefs.getBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
         boolean bleEnabled = prefs.getBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
 
+        if (!hasGpsPerms) {
+            Log.e("state","no gps");
+            editor.putBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
+            editor.commit();
+        }
+        if (!hasBlePerms) {
+            Log.e("state","no ble");
+            editor.putBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
+            editor.commit();
+        }
+
         if ((!hasGpsPerms && !hasBlePerms) || (!gpsEnabled && !bleEnabled)) {
+            Log.e("state","no perms");
             editor.putBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
             editor.putBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
             editor.commit();
@@ -294,15 +306,8 @@ public class MainFragment extends Fragment {
                 Utils.linkify(broadcastProp,getString(R.string.stopping));
             }
         }
-        else if (!hasGpsPerms) {
-            editor.putBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
-            editor.commit();
-        }
-        else if (!hasBlePerms) {
-            editor.putBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
-            editor.commit();
-        }
         else if (gpsEnabled || bleEnabled) {
+            Log.e("state","has one enabled");
             if (animate) {
                 Log.e("transition","set to on");
                 broadcastSwitch.setImageDrawable(getActivity().getDrawable(R.drawable.switch_on));
