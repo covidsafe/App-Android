@@ -44,6 +44,8 @@ import edu.uw.covidsafe.ui.notif.NotifOpsAsyncTask;
 import edu.uw.covidsafe.ui.notif.NotifRecord;
 import edu.uw.covidsafe.ui.settings.PermUtils;
 import edu.uw.covidsafe.utils.Constants;
+import edu.uw.covidsafe.utils.CryptoUtils;
+import edu.uw.covidsafe.utils.RegenerateSeedUponReport;
 import edu.uw.covidsafe.utils.Utils;
 
 public class MainFragment extends Fragment {
@@ -179,9 +181,10 @@ public class MainFragment extends Fragment {
     }
 
     public void refreshTask() {
-        Log.e("refresh","freshtask");
-        if (Constants.DEBUG) {
-            new PullFromServerTaskDemo(getContext(), getActivity(), view).execute();
+        Log.e("refresh","freshtask ");
+        if (!Constants.PullFromServerTaskRunning) {
+            if (Constants.DEBUG) {
+                new PullFromServerTaskDemo(getContext(), getActivity(), view).execute();
 //            List<Double> lats = new LinkedList<>();
 //            List<Double> lons = new LinkedList<>();
 //            List<Float> radii = new LinkedList<>();
@@ -190,10 +193,11 @@ public class MainFragment extends Fragment {
 //            radii.add(100f);
 //            String msg = "stay home";
 //            new SubmitNarrowcastMessageTask(getActivity(),view,lats,lons,radii,msg).execute();
+            } else {
+                new PullFromServerTask(getContext(), view).execute();
+            }
         }
-        else {
-            new PullFromServerTask(getContext(),view).execute();
-        }
+
         RotateAnimation rotate = new RotateAnimation(0,360,
                 Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         rotate.setDuration(1000);

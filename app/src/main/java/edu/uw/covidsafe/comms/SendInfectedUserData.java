@@ -27,6 +27,7 @@ import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.ui.health.DiagnosisFragment;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
+import edu.uw.covidsafe.utils.RegenerateSeedUponReport;
 import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
 
@@ -38,6 +39,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
     Activity av;
     Context context;
     View view;
+    boolean status = false;
 
     public SendInfectedUserData(Context context, Activity av, View view) {
         this.context = context;
@@ -48,6 +50,9 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
+        if (status) {
+            new RegenerateSeedUponReport(context).execute();
+        }
     }
 
     @Override
@@ -78,6 +83,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
             List<SeedUUIDRecord> allRecords = seedUUIDRepo.getAllSortedRecords();
             if (allRecords.size() == 0) {
                 mkSnack(av, view, "An error occurred. Please try again later.");
+                status = false;
                 return null;
             }
             recordToSend = allRecords.get(0);
@@ -93,12 +99,14 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         if (sortedGpsRecords.size() == 0) {
             if (!Utils.hasGpsPermissions(context)) {
                 mkSnack(av, view, "We need location services enabled to send your traces. Please enable location services permission.");
+                status = false;
                 return null;
             }
             else {
                 Location loc = GpsUtils.getLastLocation(context);
                 if (loc == null) {
                     mkSnack(av, view, "We need location services enabled to send your traces. Please enable location services permission.");
+                    status = false;
                     return null;
                 }
                 lat = loc.getLatitude();
@@ -129,10 +137,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
             mkSnack(av, view, "Your report has been submitted.");
 
             DiagnosisFragment.updateSubmissionView(av, context, view, true);
-
-            //refresh the seed if report was successful
-            // TODO needs to be run in async?
-            CryptoUtils.regenerateSeedUponReport(context);
+            status = true;
         }
         catch(Exception e) {
             Log.e("err",e.getMessage());
@@ -225,6 +230,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
             Log.e("err",e.getMessage());
         }
         if (announceRequestObj == null) {
+            status = false;
             return;
         }
 
@@ -235,6 +241,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         }
         catch(Exception e) {
             Log.e("net",e.getMessage());
+            status = false;
         }
 
         // if status code == 200, this will return at worst an empty json object
@@ -242,6 +249,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         JSONObject resp = NetworkHelper.sendRequest(selfReportRequest, Request.Method.PUT, announceRequestObj);
         if (resp == null) {
             mkSnack(av, view, "There was an error with submitting your traces. Please try again later.");
+            status = false;
             return;
         }
 

@@ -48,22 +48,35 @@ public class AES256 {
 
     public static String encrypt(String plaintext) throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException, UnrecoverableEntryException, NoSuchPaddingException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
         // convert string to byte[] for encryption
+        long t1 = System.currentTimeMillis();
         byte[] plainTextMessage = plaintext.getBytes(Constants.CharSet);
+
 
         // get key store, generate cipher IV
         // prepend IV to all data we encrypt and store
-        KeyStore keyStore = KeyStore.getInstance(Constants.KEY_PROVIDER);
-        keyStore.load(null);
+        if (Constants.keyStore == null) {
+            Constants.keyStore = KeyStore.getInstance(Constants.KEY_PROVIDER);
+            Constants.keyStore.load(null);
+        }
 
-        KeyStore.SecretKeyEntry secretKeyEntry =
-                (KeyStore.SecretKeyEntry)keyStore.getEntry(Constants.KEY_ALIAS, null);
-        SecretKey secretKey = secretKeyEntry.getSecretKey();
+        if (Constants.secretKey == null) {
+            KeyStore.SecretKeyEntry secretKeyEntry =
+                    (KeyStore.SecretKeyEntry)Constants.keyStore.getEntry(Constants.KEY_ALIAS, null);
+            Constants.secretKey = secretKeyEntry.getSecretKey();
+        }
+
         Cipher cipher = Cipher.getInstance(Constants.AES_SETTINGS);
 
         // prepend IV to all data we encrypt and store
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+        cipher.init(Cipher.ENCRYPT_MODE, Constants.secretKey);
+
+//        Log.e("aes","init "+(System.currentTimeMillis()-t1)+"");
+        t1 = System.currentTimeMillis();
         byte[] encryptedBytes = cipher.doFinal(plainTextMessage);
         byte[] ivBytes = cipher.getIV();
+
+//        Log.e("aes","do final "+(System.currentTimeMillis()-t1)+"");
+        t1 = System.currentTimeMillis();
 
         byte[] encryptedWhole = new byte[ivBytes.length+encryptedBytes.length];
         int counter = 0;
@@ -76,7 +89,9 @@ public class AES256 {
         }
 
         // return base64 encoded string
-        return android.util.Base64.encodeToString(encryptedWhole,0);
+        String ss = android.util.Base64.encodeToString(encryptedWhole,0);
+
+        return ss;
     }
 
     public static String decrypt(String encryptedStr) throws NoSuchPaddingException, NoSuchAlgorithmException, KeyStoreException, CertificateException, IOException, UnrecoverableEntryException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, InvalidKeyException {
@@ -84,12 +99,16 @@ public class AES256 {
         byte[] dataToDecryptWhole = android.util.Base64.decode(encryptedStr,0);
 
         // get secret key from key store
-        KeyStore keyStore = KeyStore.getInstance(Constants.KEY_PROVIDER);
-        keyStore.load(null);
+        if (Constants.keyStore == null) {
+            Constants.keyStore = KeyStore.getInstance(Constants.KEY_PROVIDER);
+            Constants.keyStore.load(null);
+        }
 
-        KeyStore.SecretKeyEntry secretKeyEntryDecrypt =
-                (KeyStore.SecretKeyEntry) keyStore.getEntry(Constants.KEY_ALIAS, null);
-        SecretKey secretKeyDecrypt = secretKeyEntryDecrypt.getSecretKey();
+        if (Constants.secretKey == null) {
+            KeyStore.SecretKeyEntry secretKeyEntry =
+                    (KeyStore.SecretKeyEntry)Constants.keyStore.getEntry(Constants.KEY_ALIAS, null);
+            Constants.secretKey = secretKeyEntry.getSecretKey();
+        }
 
         // separate IV from data
         byte[] ivToPass = new byte[Constants.IV_LEN];
@@ -104,7 +123,7 @@ public class AES256 {
 
         // decrypt and convert back to string
         Cipher cipherDecrypt = Cipher.getInstance(Constants.AES_SETTINGS);
-        cipherDecrypt.init(Cipher.DECRYPT_MODE, secretKeyDecrypt, new GCMParameterSpec(Constants.GCM_TLEN, ivToPass));
+        cipherDecrypt.init(Cipher.DECRYPT_MODE, Constants.secretKey, new GCMParameterSpec(Constants.GCM_TLEN, ivToPass));
         byte[] decrypted = cipherDecrypt.doFinal(dataToDecrypt);
         return new String(decrypted, Constants.CharSet);
     }

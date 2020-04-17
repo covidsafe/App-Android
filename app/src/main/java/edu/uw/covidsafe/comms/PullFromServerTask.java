@@ -45,8 +45,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
 
@@ -54,6 +56,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
     View view;
 
     public PullFromServerTask(Context context, View view) {
+        Constants.PullFromServerTaskRunning = true;
         this.context = context;
         this.view = view;
     }
@@ -84,6 +87,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
             lastUpdated.setText(out);
             lastUpdated.setVisibility(View.VISIBLE);
         }
+        Constants.PullFromServerTaskRunning = false;
     }
 
     @Override
@@ -176,16 +180,20 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         List<String> exposedMessages = new ArrayList<>();
         List<Long> contactStartTimes = new ArrayList<>();
         List<Long> contactEndTimes = new ArrayList<>();
+        Set<String> seenSeeds = new HashSet<>();
         for (BluetoothMatch bluetoothMatch : bluetoothMatches) {
             for (BlueToothSeed seed : bluetoothMatch.seeds) {
-                long[] exposedStatus = isExposed(seed.seed,
-                        seed.sequenceStartTime,
-                        seed.sequenceEndTime,
-                        scannedBleMap);
-                if (exposedStatus != null) {
-                    exposedMessages.add(bluetoothMatch.userMessage);
-                    contactStartTimes.add(exposedStatus[0]);
-                    contactEndTimes.add(exposedStatus[1]);
+                if (!seenSeeds.contains(seed.seed)) {
+                    long[] exposedStatus = isExposed(seed.seed,
+                            seed.sequenceStartTime,
+                            seed.sequenceEndTime,
+                            scannedBleMap);
+                    if (exposedStatus != null) {
+                        seenSeeds.add(seed.seed);
+                        exposedMessages.add(bluetoothMatch.userMessage);
+                        contactStartTimes.add(exposedStatus[0]);
+                        contactEndTimes.add(exposedStatus[1]);
+                    }
                 }
             }
         }

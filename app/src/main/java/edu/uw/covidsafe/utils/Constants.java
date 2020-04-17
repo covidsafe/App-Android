@@ -22,11 +22,14 @@ import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
 import unused.SymptomTrackerFragment;
 import edu.uw.covidsafe.ui.health.DiagnosisFragment;
 
+import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Timer;
 import java.util.UUID;
 import java.util.concurrent.ScheduledFuture;
+
+import javax.crypto.SecretKey;
 
 import edu.uw.covidsafe.ui.faq.FaqFragment;
 import edu.uw.covidsafe.ui.health.HealthFragment;
@@ -42,7 +45,7 @@ public class Constants {
         Exposure,NarrowCast
     }
 
-    public static boolean WRITE_TO_DISK = true;
+    public static boolean WRITE_TO_DISK = false;
     public static boolean DEBUG = true;
 
     public enum BleDatabaseOps {
@@ -82,8 +85,9 @@ public class Constants {
     public static int BluetoothScanIntervalInMinutes = 5;
     public static int BluetoothScanPeriodInSeconds = 10;
     public static int PullFromServerIntervalInMinutes = 60;
-    public static int PullFromServerIntervalInMinutesInMilliseconds = PullFromServerIntervalInMinutes*60*1000;
-    public static int LogPurgerIntervalInDays = 60;
+    public static int PullFromServerIntervalInMilliseconds = PullFromServerIntervalInMinutes*60*1000;
+    public static boolean PullFromServerTaskRunning = false;
+    public static int LogPurgerIntervalInDays = 1;
     public static int UUIDGenerationIntervalInMinutes = 15;
     public static int UUIDGenerationIntervalInSeconds = UUIDGenerationIntervalInMinutes*60;
     public static int CDCExposureTimeInMinutes = 10;
@@ -114,6 +118,8 @@ public class Constants {
     public static TextView bleDesc;
     public static Switch notifSwitch;
 
+    public static SecretKey secretKey;
+    public static KeyStore keyStore;
     public static int IV_LEN = 12;
     public static int GCM_TLEN = 128;
     public static String CharSet = "UTF-8";
@@ -126,7 +132,7 @@ public class Constants {
     public static int statusSubmitted = -1;
     public static ScheduledFuture uuidGeneartionTask;
     public static ScheduledFuture bluetoothScanTask;
-    public static Timer pullFromServerTask;
+    public static Timer pullFromServerTaskTimer;
     public static ScheduledFuture logPurgerTask;
     public static boolean startingToTrack = false;
     public static String SHARED_PREFENCE_NAME = "preferences";
@@ -152,7 +158,7 @@ public class Constants {
     public static boolean tracking = false;
     public static int NumFilesToDisplay = 14;
     public static int SubmitThresh = 1;
-    public static int InfectionWindowInDays = 28;
+    public static int InfectionWindowInDays = 14;
     public static int DefaultDaysOfLogsToKeep = InfectionWindowInDays;
     public static LocationManager mLocationManager = null;
     public static HashSet<String> scannedUUIDs;

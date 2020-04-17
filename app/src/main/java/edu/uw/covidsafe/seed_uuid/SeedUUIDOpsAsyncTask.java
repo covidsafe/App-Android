@@ -28,8 +28,9 @@ public class SeedUUIDOpsAsyncTask extends AsyncTask<Void, Void, Void> {
         this.op = Constants.UUIDDatabaseOps.BatchInsert;
     }
 
-    public SeedUUIDOpsAsyncTask(Constants.UUIDDatabaseOps ops) {
+    public SeedUUIDOpsAsyncTask(Constants.UUIDDatabaseOps ops, Context context) {
         this.op = ops;
+        this.context = context;
     }
 
     @Override
