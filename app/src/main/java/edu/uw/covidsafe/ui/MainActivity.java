@@ -26,6 +26,7 @@ import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
 import com.example.covidsafe.R;
 
+import edu.uw.covidsafe.utils.RegenerateSeedUponReport;
 import edu.uw.covidsafe.utils.Utils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.microsoft.appcenter.AppCenter;
@@ -68,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
         Constants.DiagnosisTipAdapter = new TipRecyclerViewAdapter(this, this);
         Constants.NotificationAdapter = new NotifRecyclerViewAdapter(this,this);
         Constants.HistoryAdapter = new HistoryRecyclerViewAdapter(this,this);
+
+//        new RegenerateSeedUponReport(this).execute();
     }
 
     @Override
