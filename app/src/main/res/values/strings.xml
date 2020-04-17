@@ -39,7 +39,7 @@
     <string name="symptom_submission_date_pkey">symptom_submission_date_pkey</string>
     <string name="time_of_last_query_pkey">time_of_last_query_pkey</string>
     <string name="notif_id_pkey">notif_id_pkey</string>
-    <string name="purge_frequency_pkey">purge_frequency_pkey</string>
+    <string name="infection_window_in_days_pkeys">infection_window_in_days_pkeys</string>
 
     <string name="phone">911</string>
 

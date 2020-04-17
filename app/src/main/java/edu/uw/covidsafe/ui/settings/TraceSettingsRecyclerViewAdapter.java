@@ -55,7 +55,7 @@ public class TraceSettingsRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
         if (position == 0) {
             SharedPreferences prefs = cxt.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-            int currentDaysOfDataToKeep = prefs.getInt(cxt.getString(R.string.purge_frequency_pkey), Constants.DefaultDaysOfLogsToKeep);
+            int currentDaysOfDataToKeep = prefs.getInt(cxt.getString(R.string.infection_window_in_days_pkeys), Constants.DefaultDaysOfLogsToKeep);
 
             int selectedIndex = 0;
             int j = 0;
@@ -75,7 +75,7 @@ public class TraceSettingsRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                 public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
                     Log.e("setting ", "got " + item);
                     SharedPreferences.Editor editor = cxt.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
-                    editor.putInt(cxt.getString(R.string.purge_frequency_pkey), Integer.parseInt(item));
+                    editor.putInt(cxt.getString(R.string.infection_window_in_days_pkeys), Integer.parseInt(item));
                     editor.commit();
                 }
             });

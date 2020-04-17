@@ -47,7 +47,8 @@ public class PullService extends IntentService {
         }, 0, Constants.PullFromServerIntervalInMilliseconds);
 
         if (Constants.logPurgerTask == null || Constants.logPurgerTask.isDone()) {
-            Constants.logPurgerTask = exec.scheduleWithFixedDelay(new LogPurgerTask(getApplicationContext()), 0, Constants.LogPurgerIntervalInDays, TimeUnit.DAYS);
+            Constants.logPurgerTask = exec.scheduleWithFixedDelay(new LogPurgerTask(getApplicationContext()),
+                    0, Constants.LogPurgerIntervalInDays, TimeUnit.DAYS);
         }
 
         return START_NOT_STICKY;

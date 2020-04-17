@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.text.SpannableStringBuilder;
-import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -23,16 +22,13 @@ import edu.uw.covidsafe.gps.GpsUtils;
 import edu.uw.covidsafe.json.SelfReportRequest;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDDbRecordRepository;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
-import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.ui.health.DiagnosisFragment;
 import edu.uw.covidsafe.utils.Constants;
-import edu.uw.covidsafe.utils.CryptoUtils;
 import edu.uw.covidsafe.utils.RegenerateSeedUponReport;
 import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
 
 import java.util.List;
-import java.util.UUID;
 
 public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
 
@@ -61,7 +57,11 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         // getSeedAtBeginningOfInfectionWindow
         //infectionWindowInMinutes = 20160 . if infection window is 14 days and uuid generation time is 5 minutes
         //seedIndexAtBeginningOfInfectionWindow = 4032
-        int infectionWindowInMilliseconds = 1000*60*60*24*Constants.InfectionWindowInDays;
+
+        SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        int infectionWindowInDays = prefs.getInt(context.getString(R.string.infection_window_in_days_pkeys), Constants.DefaultInfectionWindowInDays);
+
+        int infectionWindowInMilliseconds = 1000*60*60*24*infectionWindowInDays;
         int UUIDGenerationIntervalInMiliseconds = Constants.UUIDGenerationIntervalInMinutes*60*1000;
 
         // find timestamp 14 days ago

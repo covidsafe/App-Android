@@ -50,7 +50,10 @@ public class RegenerateSeedUponReport extends AsyncTask<Void, Void, Void> {
         // generate a new random seed
         // generate seeds for a period of InfectionWindow
         // store all of these to disk
-        int infectionWindowInMilliseconds = 1000*60*60*24*Constants.InfectionWindowInDays;
+        SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        int infectionWindowInDays = prefs.getInt(context.getString(R.string.infection_window_in_days_pkeys), Constants.DefaultInfectionWindowInDays);
+
+        int infectionWindowInMilliseconds = 1000*60*60*24*infectionWindowInDays;
         int UUIDGenerationIntervalInMiliseconds = Constants.UUIDGenerationIntervalInMinutes*60*1000;
 
         int numSeedsToGenerate = infectionWindowInMilliseconds / UUIDGenerationIntervalInMiliseconds;
@@ -96,7 +99,7 @@ public class RegenerateSeedUponReport extends AsyncTask<Void, Void, Void> {
         new SeedUUIDOpsAsyncTask(context, record).execute();
 
         Log.e("crypto","setting new preference time "+generatedSeed+","+ts);
-        SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(context.getString(R.string.most_recent_seed_pkey), record.getSeed());
         editor.putLong(context.getString(R.string.most_recent_seed_timestamp_pkey), curTime);
