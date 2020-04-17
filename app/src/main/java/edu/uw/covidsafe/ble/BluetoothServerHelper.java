@@ -68,12 +68,19 @@ public class BluetoothServerHelper {
                             contactUuidBytes);
                     Log.e("bleserver","status "+status);
                 }
+                Log.e("bleserver","finished read");
             }
 
             @Override
             public void onCharacteristicWriteRequest(BluetoothDevice device, int requestId, BluetoothGattCharacteristic characteristic, boolean preparedWrite, boolean responseNeeded, int offset, byte[] value) {
                 super.onCharacteristicWriteRequest(device, requestId, characteristic, preparedWrite, responseNeeded, offset, value);
                 Log.e("bleserver","write request "+characteristic.getUuid().toString());
+                Log.e("bleserver","preparedwrite "+preparedWrite);
+                Log.e("bleserver","responseNeeded "+responseNeeded);
+
+                if (responseNeeded) {
+                    Constants.gattServer.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, offset, null);
+                }
 
                 if (value != null) {
                     Log.e("bleserver","data len "+value.length);
@@ -109,6 +116,7 @@ public class BluetoothServerHelper {
                 else {
                     Log.e("bleserver","write data is null");
                 }
+                Log.e("bleserver","finished write");
             }
 
             @Override
