@@ -57,8 +57,9 @@ public class OnboardingActivity extends AppCompatActivity {
         if (b || forceOnboard) {
             setContentView(R.layout.activity_onboarding);
             if(AppPreferencesHelper.isOnboardingShownToUser(this)){
+                Constants.pageNumber = 4;
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_onboarding,
-                        Constants.PermissionsFragment).commit();
+                        Constants.PagerFragment).commit();
             } else {
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_onboarding,
                         Constants.PagerFragment).commit();
