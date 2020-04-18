@@ -55,6 +55,8 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... params) {
         SeedUUIDDbRecordRepository seedUUIDRepo = new SeedUUIDDbRecordRepository(context);
+        List<SeedUUIDRecord> allRecords = seedUUIDRepo.getAllSortedRecords();
+        Log.e("senddebug","record size "+allRecords.size());
         // getSeedAtBeginningOfInfectionWindow
         //infectionWindowInMinutes = 20160 . if infection window is 14 days and uuid generation time is 5 minutes
         //seedIndexAtBeginningOfInfectionWindow = 4032
@@ -90,7 +92,6 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         SeedUUIDRecord recordToSend = generatedRecord;
         if (generatedRecord == null) {
             Log.e("demo","get zeroth seed");
-            List<SeedUUIDRecord> allRecords = seedUUIDRepo.getAllSortedRecords();
             if (allRecords.size() == 0) {
                 mkSnack(av, view, "An error occurred. Please try again later.");
                 status = false;
