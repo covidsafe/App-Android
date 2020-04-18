@@ -7,7 +7,7 @@ Video demo
 
 Video demo of current capabilities
 
-https://youtu.be/Y1-c_6CeRbw
+https://www.youtube.com/watch?v=2fPpLJ3MQpc
 
 Rotating Bluetooth IDs in realtime
 
