@@ -45,7 +45,7 @@
     <string name="infection_window_in_days_pkeys">infection_window_in_days_pkeys</string>
 
     <string name="phone">911</string>
-
+    <string name="privacyDisclaimer">Any information collected on CovidSafe is stored securely and locally in your app, and remain private to you.</string>
     <string name="perm_gps_rationale">Without this permission, we will be unable to capture location information. Are you sure you want to deny this permission?</string>
     <string name="perm_gps_ask">We require access to location information when the app is closed. Would you like to open app settings to enable this?</string>
 

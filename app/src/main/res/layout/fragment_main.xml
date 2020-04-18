@@ -94,16 +94,32 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/rel" />
 
+        <include
+            android:id="@+id/dataStorage"
+            layout="@layout/card_data_storage"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/container_header_lyt" />
+
+        <include
+            android:id="@+id/privacyDisclaimer"
+            layout="@layout/card_privacy_disclaimer"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/dataStorage" />
+
         <TextView
             android:id="@+id/lastUpdated"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp"
             android:text="Last updated"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guidelineV10"
-            app:layout_constraintTop_toBottomOf="@+id/container_header_lyt" />
+            app:layout_constraintTop_toBottomOf="@+id/privacyDisclaimer" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineV10"
