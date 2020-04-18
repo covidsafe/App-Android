@@ -18,6 +18,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.covidsafe.R;
 
+import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.utils.Constants;
 
@@ -43,6 +44,23 @@ public class PagerFragment extends Fragment {
         if (Constants.pageNumber != -1) {
             viewPager.setCurrentItem(Constants.pageNumber);
         }
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                    if(position == 3){
+                        AppPreferencesHelper.setOnboardingShownToUser(getActivity());
+                    }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
         return view;
     }
 

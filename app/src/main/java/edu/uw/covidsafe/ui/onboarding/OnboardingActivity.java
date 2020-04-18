@@ -18,6 +18,7 @@ import com.example.covidsafe.R;
 
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.comms.NetworkConstant;
+import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.ui.PermissionLogic;
 import edu.uw.covidsafe.ui.settings.PermUtils;
@@ -55,8 +56,13 @@ public class OnboardingActivity extends AppCompatActivity {
         Log.e("onboarding","should start onboarding? "+b);
         if (b || forceOnboard) {
             setContentView(R.layout.activity_onboarding);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_onboarding,
-                    Constants.PagerFragment).commit();
+            if(AppPreferencesHelper.isOnboardingShownToUser(this)){
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_onboarding,
+                        Constants.PermissionsFragment).commit();
+            } else {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_onboarding,
+                        Constants.PagerFragment).commit();
+            }
         }
         else {
             startActivity(new Intent(OnboardingActivity.this, MainActivity.class));
