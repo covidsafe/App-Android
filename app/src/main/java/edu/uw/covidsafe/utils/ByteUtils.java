@@ -3,6 +3,7 @@ package edu.uw.covidsafe.utils;
 import com.google.protobuf.ByteString;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.UUID;
 
 public class ByteUtils {
@@ -36,6 +37,22 @@ public class ByteUtils {
     public static UUID byte2uuid(byte[] b) {
         ByteBuffer bb = ByteBuffer.wrap(b);
         return new UUID(bb.getLong(),bb.getLong());
+    }
+
+    public static String byte2prefstring(byte[] bb) {
+        return Arrays.toString(bb);
+    }
+
+    public static byte[] prefstring2byte (String stringArray) {
+        if (stringArray != null) {
+            String[] split = stringArray.substring(1, stringArray.length()-1).split(", ");
+            byte[] array = new byte[split.length];
+            for (int i = 0; i < split.length; i++) {
+                array[i] = Byte.parseByte(split[i]);
+            }
+            return array;
+        }
+        return null;
     }
 
     public static byte[] string2byteArray(String s) {

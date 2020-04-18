@@ -1,7 +1,6 @@
 package edu.uw.covidsafe.gps;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -32,15 +31,21 @@ public class GpsRecord {
 
     public GpsRecord(@NonNull long ts, String latEncrypted, String longiEncrypted, String provider) {
         this.ts = ts;
+        this.latEncrypted = latEncrypted;
+        this.longiEncrypted = longiEncrypted;
+        this.provider = provider;
+    }
 
-//        Log.e("gps",ts+","+latEncrypted+","+longiEncrypted+","+provider);
+    // accepts plaintext inputs
+    public GpsRecord(@NonNull long ts, String latEncrypted, String longiEncrypted, String provider, Context cxt) {
+        this.ts = ts;
 
         if (latEncrypted.length() > 0) {
             if (latEncrypted.charAt(latEncrypted.length()-1) == '\n') {
                 this.latEncrypted = latEncrypted;
             }
             else {
-                setLat(Double.parseDouble(latEncrypted));
+                setLat(Double.parseDouble(latEncrypted), cxt);
             }
         }
 
@@ -48,44 +53,77 @@ public class GpsRecord {
             if (longiEncrypted.charAt(longiEncrypted.length() - 1) == '\n') {
                 this.longiEncrypted = longiEncrypted;
             } else {
-                setLongi(Double.parseDouble(longiEncrypted));
+                setLongi(Double.parseDouble(longiEncrypted), cxt);
             }
         }
 
         this.provider = provider;
     }
 
-    public GpsRecord(@NonNull long ts, double lat, double longi, String provider) {
-        this.ts = ts;
-        setLat(lat);
-        setLongi(longi);
+    public GpsRecord(@NonNull long ts, double lat, double longi, String provider, Context cxt) {
+        setTs(ts);
+        setLat(lat, cxt);
+        setLongi(longi, cxt);
         this.provider = provider;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////
+    // get encrypted properties
     public long getTs() {
         return this.ts;
     }
 
-    public String getLatEncrypted() { return this.latEncrypted; }
-
-    public double getLat() { return Double.parseDouble(CryptoUtils.decrypt(this.latEncrypted+"")); }
-
-    public void setLat(double lat) {
-        String s = CryptoUtils.encrypt(lat+"");
-//        Log.e("gps","setting encrypted lat "+lat+"=>"+s);
-        this.latEncrypted = s;
+    public String getRawLat() {
+        return this.latEncrypted;
     }
 
-    public String getLongiEncrypted() { return this.longiEncrypted; }
+    public String getLatEncrypted() {
+        return this.latEncrypted;
+    }
 
-    public double getLongi() { return Double.parseDouble(CryptoUtils.decrypt(this.longiEncrypted+"")); }
+    public String getRawLongi() {
+        return this.longiEncrypted;
+    }
 
-    public void setLongi(double longi) {
-        String s = CryptoUtils.encrypt(longi+"");
-//        Log.e("gps","setting encrypted longi "+longi+"=>"+s);
-        this.longiEncrypted = s;
+    public String getLongiEncrypted() {
+        return this.longiEncrypted;
     }
 
     public String getProvider() { return this.provider; }
 
+    ////////////////////////////////////////////////////////////////////////////////////////
+    // decrypts properties
+    public double getLat(Context cxt) {
+        return Double.parseDouble(CryptoUtils.decrypt(cxt, this.latEncrypted));
+    }
+
+    public double getLongi(Context cxt) {
+        return Double.parseDouble(CryptoUtils.decrypt(cxt, this.longiEncrypted));
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////
+    // sets and encrypts properties
+    public void setLat(double lat, Context cxt) {
+        String s = CryptoUtils.encrypt(cxt, lat+"");
+        this.latEncrypted = s;
+    }
+
+    public void setLongi(double longi, Context cxt) {
+        String s = CryptoUtils.encrypt(cxt, longi+"");
+        this.longiEncrypted = s;
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////
+    // sets pre-encrypted properties
+    public void setTs(long ts) {
+        this.ts = ts;
+    }
+
+    public void setLatEncrypted(String lat) {
+        this.latEncrypted = lat;
+    }
+
+    public void setLonEncrypted(String lon) {
+        this.longiEncrypted = lon;
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////
 }

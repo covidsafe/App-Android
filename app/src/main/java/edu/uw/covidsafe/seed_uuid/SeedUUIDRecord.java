@@ -1,13 +1,11 @@
 package edu.uw.covidsafe.seed_uuid;
 
-import android.util.Log;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
-import org.apache.commons.codec.digest.Crypt;
 
 import edu.uw.covidsafe.utils.CryptoUtils;
 
@@ -29,42 +27,82 @@ public class SeedUUIDRecord {
 
     public SeedUUIDRecord(@NonNull long ts, String seedEncrypted, String uuidEncrypted) {
         this.ts = ts;
+        this.seedEncrypted = seedEncrypted;
+        this.uuidEncrypted = uuidEncrypted;
+    }
+
+    // accepts plaintext inputs
+    public SeedUUIDRecord(@NonNull long ts, String seedEncrypted, String uuidEncrypted, Context cxt) {
+
+        setTs(ts);
 
         if (seedEncrypted.length() > 0 && seedEncrypted.charAt(seedEncrypted.length()-1) == '\n') {
             this.seedEncrypted = seedEncrypted;
         }
         else {
-            setSeed(seedEncrypted);
+            setSeed(seedEncrypted,cxt);
         }
 
         if (uuidEncrypted.length() > 0 && uuidEncrypted.charAt(uuidEncrypted.length()-1) == '\n') {
             this.uuidEncrypted = uuidEncrypted;
         }
         else {
-            setUUID(uuidEncrypted);
+            setUUID(uuidEncrypted,cxt);
         }
     }
 
-    public long getTs() { return this.ts; }
+    ///////////////////////////////////////////////////////////////////////////
+    // get encrypted properties
+    public long getRawTs() {
+        return this.ts;
+    }
+
+    public String getRawSeed() {
+        return this.seedEncrypted;
+    }
 
     public String getSeedEncrypted() {
         return this.seedEncrypted;
     }
 
-    public String getSeed() {
-        return CryptoUtils.decrypt(this.seedEncrypted);
+    public String getRawUUID() {
+        return this.uuidEncrypted;
     }
 
-    public void setSeed(String seed) {
-        this.seedEncrypted = CryptoUtils.encrypt(seed);
+    public String getUuidEncrypted() {
+        return this.uuidEncrypted;
+    }
+    ///////////////////////////////////////////////////////////////////////////
+    // decrypts properties
+    public String getSeed(Context cxt) {
+        return CryptoUtils.decrypt(cxt, this.seedEncrypted);
     }
 
-    public String getUuidEncrypted() { return this.uuidEncrypted; }
+    public String getUUID(Context cxt) {
+        return CryptoUtils.decrypt(cxt, this.uuidEncrypted);
+    }
+    ///////////////////////////////////////////////////////////////////////////
+    // sets and encrypts properties
+    public void setSeed(String seed, Context cxt) {
+        this.seedEncrypted = CryptoUtils.encrypt(cxt, seed);
+    }
 
-    public String getUUID() { return CryptoUtils.decrypt(this.uuidEncrypted); }
+    public void setUUID(String uuid,Context cxt) {
+        this.uuidEncrypted = CryptoUtils.encrypt(cxt, uuid);
+    }
 
-    public void setUUID(String uuid) { this.uuidEncrypted = CryptoUtils.encrypt(uuid); }
+    ///////////////////////////////////////////////////////////////////////////
+    // sets pre-encrypted properties
+    public void setTs(long ts) {
+        this.ts = ts;
+    }
 
-    public void setTs(long ts) {this.ts = ts;}
+    public void setSeedEncrypted(String seed) {
+        this.seedEncrypted = seed;
+    }
 
+    public void setUUIDEncrypted(String uuid) {
+        this.uuidEncrypted = uuid;
+    }
+    ///////////////////////////////////////////////////////////////////////////
 }

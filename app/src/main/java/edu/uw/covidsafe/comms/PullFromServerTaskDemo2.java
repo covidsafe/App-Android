@@ -1,8 +1,10 @@
 package edu.uw.covidsafe.comms;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,6 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Request;
 import com.example.covidsafe.R;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,49 +52,48 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
+// this has fixed gps data
+// this has hard-coded set of seeds to match against with server results
+
+public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
 
     Context context;
+    Activity av;
     View view;
 
-    public PullFromServerTask(Context context, View view) {
+    public PullFromServerTaskDemo2(Context context, Activity av, View view) {
         Constants.PullFromServerTaskRunning = true;
         this.context = context;
+        this.av = av;
         this.view = view;
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        Log.e("refresh","post execute");
         super.onPostExecute(aVoid);
-
+        Log.e("pull","onpostexecute");
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         long ts = TimeUtils.getTime();
         editor.putLong(context.getString(R.string.last_refresh_date_pkey), ts);
         editor.commit();
 
-        if (view != null) {
-            Log.e("refresh","updating ui");
-            SwipeRefreshLayout swipeLayout = view.findViewById(R.id.swiperefresh);
-            swipeLayout.setRefreshing(false);
-            ImageView refresh = view.findViewById(R.id.refresh);
-            refresh.clearAnimation();
-            TextView lastUpdated = view.findViewById(R.id.lastUpdated);
-            SimpleDateFormat format = new SimpleDateFormat("h:mm a");
-            Date dd = new Date(ts);
-            String out = "Last updated: "+format.format(dd);
-            Log.e("refresh",ts+"");
-            Log.e("refresh",out);
-            lastUpdated.setText(out);
-            lastUpdated.setVisibility(View.VISIBLE);
-        }
+        SwipeRefreshLayout swipeLayout = view.findViewById(R.id.swiperefresh);
+        swipeLayout.setRefreshing(false);
+        ImageView refresh = view.findViewById(R.id.refresh);
+        refresh.clearAnimation();
+        TextView lastUpdated = view.findViewById(R.id.lastUpdated);
+        SimpleDateFormat format = new SimpleDateFormat("h:mm a");
+        lastUpdated.setText("Last updated: "+format.format(new Date(ts)));
+        lastUpdated.setVisibility(View.VISIBLE);
         Constants.PullFromServerTaskRunning = false;
+        Log.e("pull","done");
     }
 
     @Override
     protected Void doInBackground(Void... params) {
-        Log.e("uuid", "PULL FROM SERVER");
+        Log.e("pull", "PULL FROM SERVER DEMO");
+
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
 
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -99,37 +101,55 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         //////////////////////////////////////////////////////////////////////////////////////////
         GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
         List<GpsRecord> gpsRecords = gpsRepo.getSortedRecords();
-        if (gpsRecords.size() == 0) {
-            Log.e("pull","no gps locations, returning");
-            Constants.PullServiceRunning = false;
-            return null;
-        }
-        GpsRecord gpsRecord = gpsRecords.get(0);
 
-        int currentGpsPrecision = Constants.MinimumGpsPrecision;
+        double lat = 0;
+        double lon = 0;
+        if (gpsRecords.size() == 0) {
+            if (Utils.hasGpsPermissions(context)) {
+                Location loc = GpsUtils.getLastLocation(context);
+                if (loc != null) {
+                    lat = loc.getLatitude();
+                    lon = loc.getLongitude();
+                }
+            }
+
+            if (lat == 0 && lon == 0) {
+                Log.e("pull", "no gps locations, returning");
+                Constants.PullServiceRunning = false;
+                return null;
+            }
+        }
+        else {
+            GpsRecord gpsRecord = gpsRecords.get(0);
+            lat = gpsRecord.getLat(context);
+            lon = gpsRecord.getLongi(context);
+        }
+
+        int currentGpsPrecision = 4;
 
         int sizeOfPayload = 0;
-        long lastQueryTime = prefs.getLong(context.getString(R.string.time_of_last_query_pkey), 0L);
-        while (currentGpsPrecision < Constants.MaximumGpsPrecision) {
-            double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(context), currentGpsPrecision);
-            double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(context), currentGpsPrecision);
+//        long lastQueryTime = prefs.getLong(context.getString(R.string.time_of_last_query_pkey), 0L);
+        long lastQueryTime = 0;
+//        while (currentGpsPrecision < Constants.MaximumGpsPrecision) {
+        double preciseLat = Utils.getCoarseGpsCoord(lat, currentGpsPrecision);
+        double preciseLong = Utils.getCoarseGpsCoord(lon, currentGpsPrecision);
 
-            try {
-                Log.e("NET ","HOW BIG "+currentGpsPrecision);
-                sizeOfPayload = howBig(preciseLat, preciseLong,
-                        currentGpsPrecision, lastQueryTime);
-                Log.e("NET ","size of payload "+sizeOfPayload);
-            }
-            catch(Exception e) {
-                Log.e("err",e.getMessage());
-            }
-            if (sizeOfPayload > Constants.MaxPayloadSize) {
-                currentGpsPrecision += 1;
-            }
-            else {
-                break;
-            }
+        try {
+            Log.e("pulldemo","HOW BIG "+currentGpsPrecision);
+            sizeOfPayload = howBig(preciseLat, preciseLong,
+                    currentGpsPrecision, lastQueryTime);
+            Log.e("pulldemo","size of payload "+sizeOfPayload);
         }
+        catch(Exception e) {
+            Log.e("err",e.getMessage());
+        }
+//            if (sizeOfPayload > Constants.MaxPayloadSize) {
+//                currentGpsPrecision += 1;
+//            }
+//            else {
+//                break;
+//            }
+//        }
 
         if (sizeOfPayload == 0 || sizeOfPayload > Constants.MaxPayloadSize) {
             // potentially too many messages, set the last query time to now.
@@ -146,15 +166,24 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         //////////////////////////////////////////////////////////////////////////////////////////
         // get list of UUIDs that intersect with our movements and what the server has sent us
         //////////////////////////////////////////////////////////////////////////////////////////
-        double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(context), currentGpsPrecision);
-        double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(context), currentGpsPrecision);
+//        double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(), currentGpsPrecision);
+//        double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(), currentGpsPrecision);
 
-        Log.e("NET ","GET MESSAGES "+sizeOfPayload);
+        Log.e("pulldemo","GET MESSAGES "+sizeOfPayload);
         List<BluetoothMatch> bluetoothMatches = getMessages(preciseLat,preciseLong,
                 currentGpsPrecision, lastQueryTime);
         if (bluetoothMatches == null || bluetoothMatches.size() == 0) {
             Constants.PullServiceRunning = false;
             return null;
+        }
+
+        Set<String> allSeeds = new HashSet<>();
+        for (BluetoothMatch match : bluetoothMatches) {
+            for (BlueToothSeed seed : match.seeds) {
+                if (!allSeeds.contains(seed)) {
+                    allSeeds.add(seed.seed);
+                }
+            }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -166,7 +195,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         List<BleRecord> bleRecords = repo.getAllRecords();
         HashMap<String,List<Long>> scannedBleMap = new HashMap<>();
         for (BleRecord bleRecord : bleRecords) {
-            Log.e("ble",bleRecord.toString());
+//            Log.e("ble",bleRecord.toString());
             if (!scannedBleMap.containsKey(bleRecord.getUuid())) {
                 scannedBleMap.put(bleRecord.getUuid(), new LinkedList<Long>());
             }
@@ -176,6 +205,9 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         //////////////////////////////////////////////////////////////////////////////////////////
         // go through receivedbluetooth matches
         //////////////////////////////////////////////////////////////////////////////////////////
+
+        // this removes deals with duplicate seeds found on the server
+        // to dedup multiple seeds, we look at the seed with the longest sequence end time only
         Set<String> seenSeeds = new HashSet<>();
         Map<String,Long> startTimes = new HashMap<>();
         Map<String,Long> endTimes = new HashMap<>();
@@ -199,13 +231,17 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
             }
         }
 
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm.ss");
         List<String> exposedMessages = new ArrayList<>();
         List<Long> contactStartTimes = new ArrayList<>();
         List<Long> contactEndTimes = new ArrayList<>();
+        Log.e("pulldemo","we have seeds: "+seenSeeds.size());
         for (String seed : seenSeeds) {
-            Log.e("pull","SEED "+seed);
+//            Log.e("pull","SEED "+seed);
             if (seed.equals("c2db5cac-9875-4ad7-acc7-ead49c76d1ec")) {
-                Log.e("pull","got seed");
+                Log.e("pulldemo","got seed");
+                Log.e("pulldemo","start time "+format.format(new Date(startTimes.get(seed))));
+                Log.e("pulldemo","endtime "+format.format(new Date(endTimes.get(seed))));
             }
             long[] exposedStatus = isExposed(seed,
                     startTimes.get(seed),
@@ -226,8 +262,10 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
     // sync blockig op
     public int howBig(double lat, double longi, int precision, long ts) throws JSONException {
         String messageSizeRequest = MessageSizeRequest.toHttpString(lat, longi, precision, ts);
+        Log.e("pulldemo",messageSizeRequest);
         JSONObject jsonResp = NetworkHelper.sendRequest(messageSizeRequest, Request.Method.HEAD, null);
         MessageSizeResponse messageSizeResponse = MessageSizeResponse.parse(jsonResp);
+        Log.e("pulldemo",jsonResp.toString(2));
         return messageSizeResponse.sizeOfQueryResponse;
     }
 
@@ -239,7 +277,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         // (1) send MessageListRequest to get query IDs and timestamps
         /////////////////////////////////////////////////////////////////////////
         String messageListRequest = MessageListRequest.toHttpString(lat, longi, precision, lastQueryTime);
-        Log.e("NET ","SEND MESSAGE LIST REQUEST ");
+        Log.e("pulldemo","SEND MESSAGE LIST REQUEST ");
         JSONObject response = NetworkHelper.sendRequest(messageListRequest, Request.Method.GET,null);
         if (response == null) {
             return null;
@@ -269,8 +307,8 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         }
 
         String messageRequest = MessageRequest.toHttpString();
-        Log.e("NET ","MESSAGE REQUEST num of messages: "+messageListResponse.messageInfo.length);
-        Log.e("NET ","MESSAGE REQUEST payload: "+messageRequestObj.toString());
+        Log.e("pulldemo ","MESSAGE REQUEST num of messages: "+messageListResponse.messageInfo.length);
+        Log.e("pulldemo ","MESSAGE REQUEST payload: "+messageRequestObj.toString());
         response = NetworkHelper.sendRequest(messageRequest, Request.Method.POST, messageRequestObj);
         if (response == null) {
             return null;
@@ -291,6 +329,11 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         if (matchMessages == null || matchMessages.length == 0) {
             return null;
         }
+
+//        for (int i = 0; i < matchMessages.length; i++) {
+//            Log.e("pull ", "area match size: " + matchMessages[i].areaMatches.length);
+//            Log.e("pull ", "bluetooth match size: " + matchMessages[i].bluetoothMatches.length);
+//        }
 
         /////////////////////////////////////////////////////////////////////////
         // (3) update last query time to server
@@ -321,7 +364,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
                     Area[] areas = areaMatch.areas;
                     for (Area area : areas) {
                         if (intersect(area)) {
-                            Log.e("msg", "NARROWCAST USER MESSAGE " + areaMatch.userMessage);
+                            Log.e("pulldemo", "NARROWCAST USER MESSAGE " + areaMatch.userMessage+","+area.beginTime+","+area.endTime);
                             narrowCastMessages.add(areaMatch.userMessage);
                             narrowCastMessageStartTimes.add(area.beginTime);
                             narrowCastMessageEndTimes.add(area.endTime);
@@ -331,7 +374,6 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
                 }
             }
         }
-        Log.e("msg","notify bulk narrowcast "+narrowCastMessages.size());
         notifyBulk(Constants.MessageType.NarrowCast, narrowCastMessages,narrowCastMessageStartTimes,narrowCastMessageEndTimes);
         /////////////////////////////////////////////////////////////////////////
 
@@ -349,15 +391,16 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
         List<GpsRecord> gpsRecords = gpsRepo.getRecordsBetweenTimestamps(area.beginTime, area.endTime);
         if (gpsRecords.size() == 0) {
-            if (Utils.hasGpsPermissions(context)) {
+            if (!Utils.hasGpsPermissions(context)) {
+                mkSnack(av, view, "We need location services enabled to check for announcements. Please enable location services permission.");
+                return false;
+            }
+            else {
                 Location loc = GpsUtils.getLastLocation(context);
                 if (loc == null) {
                     return false;
                 }
                 gpsRecords.add(new GpsRecord(0,loc.getLatitude(),loc.getLongitude(),"", context));
-            }
-            else {
-                return false;
             }
         }
 
@@ -366,8 +409,8 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
             Location.distanceBetween(record.getLat(context), record.getLongi(context), area.location.latitude, area.location.longitude, result);
 
             if ((result.length == 1 && result[0] < area.radiusMeters) ||
-                (result.length == 2 && result[1] < area.radiusMeters) ||
-                (result.length >= 3 && result[2] < area.radiusMeters)) {
+                    (result.length == 2 && result[1] < area.radiusMeters) ||
+                    (result.length >= 3 && result[2] < area.radiusMeters)) {
                 return true;
             }
         }
@@ -387,18 +430,21 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         // determine how many UUIDs to generate from the seed
         // based on time when the seed was generated and now.
         int diffBetweenNowAndTsInMinutes = 0;
-
         if (end_ts == 0 || end_ts < 0) {
             diffBetweenNowAndTsInMinutes = (int) ((TimeUtils.getTime() - start_ts) / 1000 / 60);
         }
         else {
             diffBetweenNowAndTsInMinutes = (int) ((end_ts - start_ts) / 1000 / 60);
         }
-        int numSeedsToGenerate = diffBetweenNowAndTsInMinutes / Constants.UUIDGenerationIntervalInMinutes;
 
+        int temp = (int)(diffBetweenNowAndTsInMinutes / (Constants.UUIDGenerationIntervalInSecondsDebug/60.0));
+        int numSeedsToGenerate = 6*60*24*14;
+        if (temp < numSeedsToGenerate) {
+            numSeedsToGenerate=temp;
+        }
         // if we need to generate too many timestamps, something is wrong, return.
-        int infectionWindowInMinutes = (Constants.DefaultInfectionWindowInDays *24*60);
-        int maxSeedsToGenerate = infectionWindowInMinutes / Constants.UUIDGenerationIntervalInMinutes;
+        int infectionWindowInMinutes = (Constants.DefaultInfectionWindowInDaysDebug *24*60);
+        int maxSeedsToGenerate = (int)(infectionWindowInMinutes / (Constants.UUIDGenerationIntervalInSecondsDebug/60.0));
         if (numSeedsToGenerate > maxSeedsToGenerate) {
             return null;
         }
@@ -411,93 +457,37 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         // user A can broadcast an ID at timestamp t
         // user B may only wake up to scan the ID after BluetoothScanIntervalInMinutes
         List<Long> matches = new ArrayList<>();
-        int bluetoothScanIntervalInMilliseconds = Constants.BluetoothScanIntervalInMinutes*60000;
+        double BluetoothScanIntervalInMinutes = Constants.BluetoothScanIntervalInSecondsDebug/60.0;
+        double bluetoothScanIntervalInMilliseconds = BluetoothScanIntervalInMinutes*60000;
 //        int uuidGenerationIntervalInMillliseconds = Constants.UUIDGenerationIntervalInMinutes*60000;
 
+        List<String>matchDates = new ArrayList<>();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm.ss");
         for (String receivedUUID : receivedUUIDs) {
             if (scannedBleMap.keySet().contains(receivedUUID)) {
                 for (Long localTs : scannedBleMap.get(receivedUUID)) {
                     // check that the timestamps were within the same UUID generation interval
-//                    if (Math.abs(localTs - start_ts) < uuidGenerationIntervalInMillliseconds) {
-                        // record the timestamp when the local scanner picked it up
-                        matches.add(localTs);
+//                    if (Math.abs(localTs - ts) < uuidGenerationIntervalInMillliseconds) {
+                    // record the timestamp when the local scanner picked it up
+                    matches.add(localTs);
+                    String mdate = format.format(new Date(localTs));
+                    matchDates.add(mdate);
 //                    }
                 }
             }
-//            start_ts += uuidGenerationIntervalInMillliseconds;
+//            ts += uuidGenerationIntervalInMillliseconds;
         }
 
-        // calculate how many matches we need to say user is exposed for at least 10 minutes
-        // return false if there simply not enough matches to determine this.
-        // this is 2
-        int numConsecutiveMatchesNeeded = (Constants.CDCExposureTimeInMinutes/Constants.BluetoothScanIntervalInMinutes)+1;
+//        // calculate how many matches we need to say user is exposed for at least 10 minutes
+//        // return false if there simply not enough matches to determine this.
+//        // this is 2
+        int numConsecutiveMatchesNeeded = (int)(Constants.CDCExposureTimeInMinutesDebug/BluetoothScanIntervalInMinutes);
         if (matches.size() < numConsecutiveMatchesNeeded) {
             return null;
         }
         else {
             return new long[]{start_ts,end_ts};
         }
-
-//        // take diff of timestamps when we had a UUID match
-//        List<Integer> diff = new ArrayList<Integer>();
-//        for (int i = 0; i < matches.size()-1; i++) {
-//            int d = (int)(matches.get(i+1)-matches.get(i));
-//            if (d < 0) {
-//                // something is wrong, return
-//                return null;
-//            }
-//            diff.add(d);
-//        }
-//
-//        // counter tracks how many occurrences of
-//        // uuidGenerationIntervalInMillliseconds we have in a row
-//        int streak = 0;
-//
-//        //check that we have at least numConsecutiveMatchesNeeded
-//        //matches of uuidGenerationIntervalInMillliseconds
-//        List<Long> contactTimesStart = new ArrayList<>();
-//        List<Long> contactTimesEnd = new ArrayList<>();
-//        for (int i = 0; i < diff.size(); i++) {
-//            if (Math.abs(diff.get(i)-bluetoothScanIntervalInMilliseconds)
-//                <= Constants.TimestampDeviationInMilliseconds) {
-//                streak += 1;
-//                // add contact time once for the streak
-//                if (streak == numConsecutiveMatchesNeeded) {
-//                    int idx = i-(streak-1);
-//                    contactTimesStart.add(matches.get(idx));
-//                }
-//            }
-//            else {
-//                // a streak just ended
-//                if (contactTimesEnd.size() != contactTimesStart.size()) {
-//                    contactTimesEnd.add(matches.get(streak));
-//                }
-//                streak = 0;
-//            }
-//        }
-//        if (contactTimesEnd.size() != contactTimesStart.size()) {
-//            contactTimesEnd.add(matches.get(streak));
-//        }
-//
-//        if (contactTimesStart.size() == 0) {
-//            return null;
-//        }
-//
-//        long maxContactTime = 0;
-//        int maxContactTimeIdx = -1;
-//        for (int i = 0; i < contactTimesStart.size(); i++) {
-//            if (contactTimesEnd.get(i)-contactTimesStart.get(i) > maxContactTime) {
-//                maxContactTime = contactTimesEnd.get(i)-contactTimesStart.get(i);
-//                maxContactTimeIdx = i;
-//            }
-//        }
-//
-//        if (maxContactTimeIdx == -1) {
-//            return null;
-//        }
-//
-//        return new long[]{contactTimesStart.get(maxContactTimeIdx),
-//                        contactTimesEnd.get(maxContactTimeIdx)};
     }
 
 //    public void notifyUserOfExposure(String msg) {
@@ -515,6 +505,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         for (int i = 0; i < msgs.size(); i++) {
             // add notification to DB
             if (messageType == Constants.MessageType.Exposure) {
+                Log.e("pulldemo","notify exposure");
                 String msg = msgs.get(i);
                 if (msg.isEmpty()) {
                     msg = context.getString(R.string.default_exposed_notif);
@@ -524,22 +515,43 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
                         contactTimesEnd.get(i),
                         msg,
                         messageType.ordinal(),
-                        true));
-                Log.e("notif","notif");
-                Utils.sendNotification(context, "You may have been exposed",msg, R.drawable.warning2);
+                        true)).execute();
+                Utils.sendNotification(context, "You may have been exposed", msg, R.drawable.warning2);
             }
             else {
                 if (!msgs.isEmpty()) {
+                    Log.e("pulldemo","narrowcast exposure");
                     new NotifOpsAsyncTask(context, new NotifRecord(
                             contactTimesStart.get(i),
                             contactTimesEnd.get(i),
                             msgs.get(i),
-                            messageType.ordinal(),
-                            true));
-                    Log.e("notif","notif");
-                    Utils.sendNotification(context, "Announcement",msgs.get(i), R.drawable.ic_info_black_24dp);
+                            Constants.MessageType.NarrowCast.ordinal(),
+                            true)).execute();
+                    Utils.sendNotification(context, "Announcement",msgs.get(i), R.drawable.ic_info_outline_black_24dp);
                 }
             }
         }
+    }
+
+    public static void mkSnack(Activity av, View v, String msg) {
+        av.runOnUiThread(new Runnable() {
+            public void run() {
+                SpannableStringBuilder builder = new SpannableStringBuilder();
+                builder.append(msg);
+                Snackbar snackBar = Snackbar.make(v, builder, Snackbar.LENGTH_LONG);
+
+                snackBar.setAction("Dismiss", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        snackBar.dismiss();
+                    }
+                });
+
+                View snackbarView = snackBar.getView();
+                TextView textView = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
+                textView.setMaxLines(5);
+
+                snackBar.show();
+            }});
     }
 }

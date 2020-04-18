@@ -7,13 +7,17 @@ import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.content.Context;
+import android.os.Handler;
 import android.os.ParcelUuid;
 import android.util.Log;
 
 import edu.uw.covidsafe.utils.ByteUtils;
 import edu.uw.covidsafe.utils.Constants;
+import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -42,7 +46,7 @@ public class BluetoothScanHelper implements Runnable {
 
     @Override
     public void run() {
-        Log.e("ble","mytask-run ");
+        Log.e("bledebug","bluetooth scan helper");
 
         ScanSettings.Builder builder = new ScanSettings.Builder();
         builder.setScanMode(ScanSettings.SCAN_MODE_LOW_POWER);
@@ -55,10 +59,20 @@ public class BluetoothScanHelper implements Runnable {
 
         Constants.scannedUUIDs = new HashSet<String>();
         Constants.scannedUUIDsRSSIs = new HashMap<String,Integer>();
+        Constants.scannedUUIDsTimes = new HashMap<String,Long>();
 
         Constants.blueAdapter.getBluetoothLeScanner().startScan(filters, builder.build(), mLeScanCallback);
+
+        try {
+            Thread.sleep(Constants.BluetoothScanPeriodInSeconds*1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Log.e("bledebug", "STOPPED SCANNING");
+        BluetoothUtils.finishScan(cxt);
     }
 
+    static SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm.ss");
     public static ScanCallback mLeScanCallback =
             new ScanCallback() {
                 @Override
@@ -72,11 +86,17 @@ public class BluetoothScanHelper implements Runnable {
 //                        Log.e("uuid","CONTACT "+contactUuid);
                         int rssi = result.getRssi();
                         if (Constants.scannedUUIDs != null &&
-                            !Constants.scannedUUIDs.contains(contactUuid) &&
                             rssi >= Constants.rssiCutoff) {
+                            if (!Constants.scannedUUIDs.contains(contactUuid)) {
+                                Log.e("bledebug", "found contact uuid " + contactUuid+","+format.format(new Date(TimeUtils.getTime())));
 //                            String[] elts = contactUuid.split("-");
-                            Constants.scannedUUIDs.add(contactUuid);
-                            Constants.scannedUUIDsRSSIs.put(contactUuid, rssi);
+                                Constants.scannedUUIDs.add(contactUuid);
+                                Constants.scannedUUIDsRSSIs.put(contactUuid, rssi);
+                                Constants.scannedUUIDsTimes.put(contactUuid, TimeUtils.getTime());
+                            }
+                            else {
+//                                Log.e("bledebug", "already saw uuid " + contactUuid);
+                            }
                         }
                     }
                 }

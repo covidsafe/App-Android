@@ -25,6 +25,7 @@ public class GpsUtils {
 
         @Override
         public void onLocationChanged(Location location) {
+            Log.e("gps","onlocationchanged");
             Log.e("gps", location.getLatitude()+","+location.getLongitude());
             Utils.gpsLogToDatabase(cxt, location);
         }
@@ -59,19 +60,22 @@ public class GpsUtils {
     }
 
     public static Location getLastLocation(Context cxt) {
+        Log.e("gps","get last known location");
         LocationManager locationManager = (LocationManager) cxt.getSystemService(Context.LOCATION_SERVICE);
         try {
-            Log.e("err","got last known location");
             Location loc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             if (loc != null) {
+                Log.e("gps","got last known location "+loc.getLatitude()+","+loc.getLongitude());
                 return loc;
             }
             loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (loc != null) {
+                Log.e("gps","got last known location "+loc.getLatitude()+","+loc.getLongitude());
                 return loc;
             }
             loc = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
             if (loc != null) {
+                Log.e("gps","got last known location "+loc.getLatitude()+","+loc.getLongitude());
                 return loc;
             }
             return null;
@@ -88,17 +92,34 @@ public class GpsUtils {
 
     public static void startGps(Context cxt) {
         initializeLocationManager(cxt);
+        getLastLocation(cxt);
         try {
-            Log.e("logme", "request");
+            Log.e("gps", "start gps");
 
-            locListeners[0] = new LocationListener(LocationManager.NETWORK_PROVIDER, cxt);
-            Constants.mLocationManager.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER, Constants.GPS_TIME_INTERVAL_IN_MILLISECONDS, Constants.GPS_LOCATION_INTERVAL_IN_METERS,
-                    locListeners[0]);
-            locListeners[1] = new LocationListener(LocationManager.GPS_PROVIDER, cxt);
-            Constants.mLocationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER, Constants.GPS_TIME_INTERVAL_IN_MILLISECONDS, Constants.GPS_LOCATION_INTERVAL_IN_METERS,
-                    locListeners[1]);
+            if (Constants.DEBUG) {
+                Log.e("gps", "start gps "+Constants.GPS_TIME_INTERVAL_IN_MILLISECONDS_DEBUG);
+                Log.e("gps", "start gps "+Constants.GPS_LOCATION_INTERVAL_IN_METERS_DEBUG);
+                locListeners[0] = new LocationListener(LocationManager.NETWORK_PROVIDER, cxt);
+                Constants.mLocationManager.requestLocationUpdates(
+                        LocationManager.NETWORK_PROVIDER, Constants.GPS_TIME_INTERVAL_IN_MILLISECONDS_DEBUG, Constants.GPS_LOCATION_INTERVAL_IN_METERS_DEBUG,
+                        locListeners[0]);
+
+                locListeners[1] = new LocationListener(LocationManager.GPS_PROVIDER, cxt);
+                Constants.mLocationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER, Constants.GPS_TIME_INTERVAL_IN_MILLISECONDS_DEBUG, Constants.GPS_LOCATION_INTERVAL_IN_METERS_DEBUG,
+                        locListeners[1]);
+            }
+            else {
+                locListeners[0] = new LocationListener(LocationManager.NETWORK_PROVIDER, cxt);
+                Constants.mLocationManager.requestLocationUpdates(
+                        LocationManager.NETWORK_PROVIDER, Constants.GPS_TIME_INTERVAL_IN_MILLISECONDS, Constants.GPS_LOCATION_INTERVAL_IN_METERS,
+                        locListeners[0]);
+
+                locListeners[1] = new LocationListener(LocationManager.GPS_PROVIDER, cxt);
+                Constants.mLocationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER, Constants.GPS_TIME_INTERVAL_IN_MILLISECONDS, Constants.GPS_LOCATION_INTERVAL_IN_METERS,
+                        locListeners[1]);
+            }
 
         } catch (java.lang.SecurityException ex) {
             Log.e("logme", "fail to request location update, ignore", ex);

@@ -35,14 +35,9 @@ public class PullService extends IntentService {
         Constants.pullFromServerTaskTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (!Constants.PullFromServerTaskRunning) {
-//                        if (Constants.DEBUG) {
-//                            new PullFromServerTaskDemo(getApplicationContext(), getActivity(), view).execute();
-//                        }
-//                        else {
-                    new PullFromServerTask(getApplicationContext(), null).execute();
-//                        }
-                }
+            if (!Constants.PullFromServerTaskRunning) {
+                new PullFromServerTask(getApplicationContext(), null).execute();
+            }
             }
         }, 0, Constants.PullFromServerIntervalInMilliseconds);
 

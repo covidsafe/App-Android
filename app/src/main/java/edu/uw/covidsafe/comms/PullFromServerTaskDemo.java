@@ -51,6 +51,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+// this has fixed gps data
+// this has hard-coded set of seeds to match against with server results
+
 public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
 
     Context context;
@@ -102,7 +105,7 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
 //            return;
 //        }
 //        GpsRecord gpsRecord = gpsRecords.get(0);
-        GpsRecord gpsRecord = new GpsRecord(TimeUtils.getTime(),47.625,-124.25,"");
+        GpsRecord gpsRecord = new GpsRecord(TimeUtils.getTime(),47.625,-124.25,"", context);
 //        int currentGpsPrecision = Constants.MaximumGpsPrecision;
         int currentGpsPrecision = 4;
 
@@ -110,8 +113,8 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
 //        long lastQueryTime = prefs.getLong(context.getString(R.string.time_of_last_query_pkey), 0L);
         long lastQueryTime = 0;
 //        while (currentGpsPrecision < Constants.MaximumGpsPrecision) {
-            double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(), currentGpsPrecision);
-            double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(), currentGpsPrecision);
+            double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(context), currentGpsPrecision);
+            double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(context), currentGpsPrecision);
 
             try {
                 Log.e("NET ","HOW BIG "+currentGpsPrecision);
@@ -353,13 +356,13 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
                 if (loc == null) {
                     return false;
                 }
-                gpsRecords.add(new GpsRecord(0,loc.getLatitude(),loc.getLongitude(),""));
+                gpsRecords.add(new GpsRecord(0,loc.getLatitude(),loc.getLongitude(),"", context));
             }
         }
 
         for (GpsRecord record : gpsRecords) {
             float[] result = new float[3];
-            Location.distanceBetween(record.getLat(), record.getLongi(), area.location.latitude, area.location.longitude, result);
+            Location.distanceBetween(record.getLat(context), record.getLongi(context), area.location.latitude, area.location.longitude, result);
 
             if ((result.length == 1 && result[0] < area.radiusMeters) ||
                     (result.length == 2 && result[1] < area.radiusMeters) ||
@@ -384,10 +387,17 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
         // based on time when the seed was generated and now.
         int diffBetweenNowAndTsInMinutes = (int)((TimeUtils.getTime() - ts)/1000/60);
         int temp = diffBetweenNowAndTsInMinutes / Constants.UUIDGenerationIntervalInMinutes;
+        if (Constants.DEBUG) {
+            temp = (int)(diffBetweenNowAndTsInMinutes / (Constants.UUIDGenerationIntervalInSecondsDebug/60.0));
+        }
         int numSeedsToGenerate = Math.max(3,temp);
         // if we need to generate too many timestamps, something is wrong, return.
         int infectionWindowInMinutes = (Constants.DefaultInfectionWindowInDays *24*60);
         int maxSeedsToGenerate = infectionWindowInMinutes / Constants.UUIDGenerationIntervalInMinutes;
+        if (Constants.DEBUG) {
+            maxSeedsToGenerate = (int)(infectionWindowInMinutes / (Constants.UUIDGenerationIntervalInSecondsDebug/60.0));
+        }
+
         if (numSeedsToGenerate > maxSeedsToGenerate) {
             return null;
         }

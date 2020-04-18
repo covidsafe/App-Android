@@ -10,11 +10,15 @@ import com.example.covidsafe.R;
 import java.security.DigestException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import edu.uw.covidsafe.crypto.AES256;
+import edu.uw.covidsafe.seed_uuid.SeedUUIDDbRecordRepository;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDOpsAsyncTask;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
 import edu.uw.covidsafe.seed_uuid.UUIDGeneratorTask;
@@ -27,97 +31,100 @@ public class RegenerateSeedUponReport extends AsyncTask<Void, Void, Void> {
         this.context = context;
     }
 
+    int numRecordsToGenerate = -1;
+    long ts_start = -1;
+
+    public RegenerateSeedUponReport(int numRecordsToGenerate, long ts_start) {
+        this.numRecordsToGenerate = numRecordsToGenerate;
+        this.ts_start = ts_start;
+    }
+
     @Override
     protected void onPreExecute() {
-        Log.e("crypto","regenerateSeedUponReport");
         super.onPreExecute();
-        if (Constants.uuidGeneartionTask != null) {
-            Constants.uuidGeneartionTask.cancel(true);
-        }
-        try {
-            new SeedUUIDOpsAsyncTask(Constants.UUIDDatabaseOps.DeleteAll, context).execute().get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
         ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
-        Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(
-                new UUIDGeneratorTask(context), 0, Constants.UUIDGenerationIntervalInSeconds, TimeUnit.SECONDS);
+        if (Constants.DEBUG) {
+            Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(
+                    new UUIDGeneratorTask(context), 0, Constants.UUIDGenerationIntervalInSecondsDebug, TimeUnit.SECONDS);
+        }
+        else {
+            Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(
+                    new UUIDGeneratorTask(context), 0, Constants.UUIDGenerationIntervalInSeconds, TimeUnit.SECONDS);
+        }
     }
 
     @Override
     protected Void doInBackground(Void... voids) {
+        Log.e("regen","regenerateSeedUponReport");
         // disable the current uuid generation task
         // delete all stored seeds and uuids
 
-        Log.e("crypto","done deleting");
+        SeedUUIDDbRecordRepository repo = new SeedUUIDDbRecordRepository(context);
+
+        Constants.EnableUUIDGeneration = false;
+
+        try {
+            List<SeedUUIDRecord> records = repo.getAllSortedRecords();
+            if (records.size() == 0) {
+                return null;
+            }
+            if (this.ts_start == -1) {
+                this.ts_start = records.get(records.size() - 1).getRawTs();
+            }
+            if (this.numRecordsToGenerate == -1) {
+                this.numRecordsToGenerate = records.size();
+            }
+
+            repo.deleteAll();
+
+            List<SeedUUIDRecord> beforeList = new LinkedList<>();
+            for (int i = 0; i < 10; i++) {
+                beforeList = repo.getAllRecords();
+                Log.e("regen", "done with deletes " + beforeList.size());
+                Thread.sleep(1000);
+                if (beforeList.size() == 0) {
+                    break;
+                }
+            }
+
+            if (beforeList.size() == 0) {
+                return null;
+            }
+
+            List<SeedUUIDRecord> afterList = repo.getAllRecords();
+            Log.e("regen","size after deleting "+afterList.size());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Log.e("regen","done deleting");
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm aa");
+        Log.e("regen","generate "+this.numRecordsToGenerate);
+        Log.e("regen","ts_start "+format.format(this.ts_start));
+        CryptoUtils.batchGenerateRecords(context, ts_start, numRecordsToGenerate);
 
-        // generate a new random seed
-        // generate seeds for a period of InfectionWindow
-        // store all of these to disk
-        SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-        int infectionWindowInDays = prefs.getInt(context.getString(R.string.infection_window_in_days_pkeys), Constants.DefaultInfectionWindowInDays);
-
-        int infectionWindowInMilliseconds = 1000*60*60*24*infectionWindowInDays;
-        int UUIDGenerationIntervalInMiliseconds = Constants.UUIDGenerationIntervalInMinutes*60*1000;
-
-        int numSeedsToGenerate = infectionWindowInMilliseconds / UUIDGenerationIntervalInMiliseconds;
-
-        String generatedSeed = "";
-        String generatedUUID = null;
-        // time from 14 days back
-        long curTime = TimeUtils.getTime();
-        long ts = curTime - UUIDGenerationIntervalInMiliseconds;
-
-        String s1 = format.format(new Date(ts));
-        String s2 = format.format(new Date(curTime));
-
-        Log.e("crypto","time "+s1);
-        Log.e("crypto","time "+s2);
-        numSeedsToGenerate = 1000;
-        long time = System.currentTimeMillis();
-        byte[] seed = ByteUtils.uuid2bytes(UUID.randomUUID());
-        for (int i = 0; i < numSeedsToGenerate-1; i++) {
-            if (i%10==0) {
-//                Log.e("crypto ", i + "/" + numSeedsToGenerate);
-                Log.e("time","timing "+i+"-"+(System.currentTimeMillis()-time));
-            }
-            SeedUUIDRecord record = null;
-            try {
-                record = CryptoUtils.generateSeedHelper(seed);
-            } catch (DigestException e) {
-                Log.e("err",e.getMessage());
-            }
-            record.setTs(ts);
-            ts += UUIDGenerationIntervalInMiliseconds;
-            new SeedUUIDOpsAsyncTask(context, record).execute();
-        }
-
-        SeedUUIDRecord record = null;
         try {
-            record = CryptoUtils.generateSeedHelper(seed);
-        } catch (DigestException e) {
+            for (int i = 0; i < 10; i++) {
+                List<SeedUUIDRecord> afterList = repo.getAllRecords();
+                Log.e("regen", "done with inserts " + afterList.size());
+                Thread.sleep(1000);
+                if (afterList.size() >= this.numRecordsToGenerate) {
+                    break;
+                }
+            }
+        }
+        catch(Exception e) {
             Log.e("err",e.getMessage());
         }
-        record.setUUID("");
-        record.setTs(ts);
-        new SeedUUIDOpsAsyncTask(context, record).execute();
 
-        Log.e("crypto","setting new preference time "+generatedSeed+","+ts);
-
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(context.getString(R.string.most_recent_seed_pkey), record.getSeed());
-        editor.putLong(context.getString(R.string.most_recent_seed_timestamp_pkey), curTime);
-        editor.commit();
-        Log.e("crypto","done setting new preference time");
+        Constants.EnableUUIDGeneration = true;
 
         return null;
     }

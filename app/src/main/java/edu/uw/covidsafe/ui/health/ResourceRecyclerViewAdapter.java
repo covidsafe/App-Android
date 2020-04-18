@@ -2,7 +2,9 @@ package edu.uw.covidsafe.ui.health;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,7 +60,8 @@ public class ResourceRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         ((ResourceCard)holder).card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.openPhone(av, links.get(position));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(links.get(position)));
+                av.startActivity(browserIntent);
             }
         });
     }

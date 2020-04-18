@@ -18,7 +18,7 @@ GpsOpsAsyncTask extends AsyncTask<Void, Void, Void> {
     public GpsOpsAsyncTask(Context context, Location loc, long ts) {
         Log.e("gps", "gps ops async task constructor");
         this.context = context;
-        this.record = new GpsRecord(ts, loc.getLatitude(), loc.getLongitude(), loc.getProvider());
+        this.record = new GpsRecord(ts, loc.getLatitude(), loc.getLongitude(), loc.getProvider(), context);
         this.op = Constants.GpsDatabaseOps.Insert;
     }
 

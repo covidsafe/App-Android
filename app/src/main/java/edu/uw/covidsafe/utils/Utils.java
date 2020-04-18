@@ -243,8 +243,9 @@ public class Utils {
                 cxt, Constants.symptomsDirName, Utils.getSymptomsLogName());
     }
 
-    public static void bleLogToDatabase(Context cxt, String id, int rssi) {
-        new BleOpsAsyncTask(cxt, id, rssi).execute();
+    public static void bleLogToDatabase(Context cxt, String id, int rssi, long ts) {
+        Log.e("ble","ble log to database");
+        new BleOpsAsyncTask(cxt, id, rssi, ts).execute();
     }
 
     public static void uuidLogToFile(Context cxt, SeedUUIDRecord rec) {

@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.UUID;
 
 import com.example.covidsafe.R;
-import com.instacart.library.truetime.TrueTime;
 import com.instacart.library.truetime.TrueTimeRx;
 
 public class LogPurgerTask implements Runnable {
@@ -124,7 +123,7 @@ public class LogPurgerTask implements Runnable {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             for (int i = 14; i <= 29; i++) {
                 Date d1 = sdf.parse("2020-03-" + i);
-                gpsRepo.insert(new GpsRecord(d1.getTime(), 100, 100, ""));
+                gpsRepo.insert(new GpsRecord(d1.getTime(), 100, 100, "", context));
             }
 
             Thread.sleep(1000);

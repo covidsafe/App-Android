@@ -15,6 +15,7 @@ public class SeedUUIDOpsAsyncTask extends AsyncTask<Void, Void, Void> {
     private SeedUUIDRecord record;
     private List<SeedUUIDRecord> records;
     private Constants.UUIDDatabaseOps op;
+    public String msg="";
 
     public SeedUUIDOpsAsyncTask(Context context, SeedUUIDRecord record) {
         this.context = context;
@@ -35,16 +36,21 @@ public class SeedUUIDOpsAsyncTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... params) {
-        Log.e("ble","doinbackground uuid "+this.op);
+        Log.e("uuid","doinbackground uuid "+this.op);
         SeedUUIDDbRecordRepository repo = new SeedUUIDDbRecordRepository(context);
         if (this.op == Constants.UUIDDatabaseOps.Insert) {
+            Log.e("uuid","insert "+this.record.getRawTs() + " "+msg);
             repo.insert(this.record);
             if (Constants.WRITE_TO_DISK) {
                 Utils.uuidLogToFile(this.context, this.record);
             }
         }
         else if (this.op == Constants.UUIDDatabaseOps.BatchInsert) {
+            Log.e("uuid","batch insert "+records.size());
+            int counter = 0;
             for (SeedUUIDRecord record : records) {
+                Log.e("uuid","insert "+counter);
+                counter++;
                 repo.insert(record);
                 if (Constants.WRITE_TO_DISK) {
                     Utils.uuidLogToFile(this.context, record);

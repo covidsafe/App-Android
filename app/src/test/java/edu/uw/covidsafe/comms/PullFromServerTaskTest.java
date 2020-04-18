@@ -4,16 +4,45 @@ import android.location.Location;
 
 import org.junit.Test;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 import edu.uw.covidsafe.ble.BleRecord;
+import edu.uw.covidsafe.utils.CryptoUtils;
 
 import static org.junit.Assert.*;
 
 public class PullFromServerTaskTest {
+
+    @Test
+    public void chainGenerate() {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm.ss");
+            String beginTime = "2020/04/17 07:03.30";
+            Date dd = format.parse(beginTime);
+
+            String s = "09bc5287-0def-4a5f-8a85-c5a267e6eadf";
+            List<String> seeds = CryptoUtils.chainGenerateUUIDFromSeed(s, 20);
+//            String a = "abb1c1c8-e179-6dda-4cf2-4f11cacf5726";
+//            int idx = seeds.indexOf(a);
+//            System.out.println(seeds.contains(a) + "," + seeds.indexOf(a));
+//            int idxInMilliseconds = idx*10*1000;
+            for (String ss:seeds) {
+                System.out.println(ss);
+            }
+//            long seenTime = dd.getTime()+idxInMilliseconds;
+//            System.out.println("begin time "+beginTime);
+//            System.out.println("supposedly seen time "+format.format(new Date(seenTime)));
+//            System.out.println("actually seen time 07:49.03");
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 //    0 = "6f6d3cf7-ec31-7a3b-2563-2aab28ec37bb"
 //    1 = "ff268fd5-9ed9-46a4-556d-352936e9f064"
