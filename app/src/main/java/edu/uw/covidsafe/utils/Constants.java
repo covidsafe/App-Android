@@ -169,6 +169,7 @@ public class Constants {
     public static int DefaultInfectionWindowInDays = 14;
     public static int DefaultInfectionWindowInDaysDebug = 1;
     public static int DefaultDaysOfLogsToKeep = DefaultInfectionWindowInDays;
+    public static int DefaultDaysOfLogsToKeepDebug = DefaultInfectionWindowInDaysDebug;
     public static LocationManager mLocationManager = null;
     public static HashSet<String> scannedUUIDs;
     public static HashMap<String,Integer> scannedUUIDsRSSIs;

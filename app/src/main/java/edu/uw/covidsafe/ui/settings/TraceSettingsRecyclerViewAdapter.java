@@ -55,12 +55,18 @@ public class TraceSettingsRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
         if (position == 0) {
             SharedPreferences prefs = cxt.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-            int currentDaysOfDataToKeep = prefs.getInt(cxt.getString(R.string.infection_window_in_days_pkeys), Constants.DefaultDaysOfLogsToKeep);
+            int currentDaysOfDataToKeep = 0;
+            if (Constants.DEBUG) {
+                currentDaysOfDataToKeep = prefs.getInt(cxt.getString(R.string.infection_window_in_days_pkeys), Constants.DefaultDaysOfLogsToKeepDebug);
+            }
+            else {
+                currentDaysOfDataToKeep = prefs.getInt(cxt.getString(R.string.infection_window_in_days_pkeys), Constants.DefaultDaysOfLogsToKeep);
+            }
 
             int selectedIndex = 0;
             int j = 0;
             List<String> ii = new LinkedList<>();
-            for (int i = Constants.DefaultDaysOfLogsToKeep; i >= 1; i--) {
+            for (int i = currentDaysOfDataToKeep; i >= 1; i--) {
                 ii.add(i + "");
                 if (i == currentDaysOfDataToKeep) {
                     selectedIndex = j;
