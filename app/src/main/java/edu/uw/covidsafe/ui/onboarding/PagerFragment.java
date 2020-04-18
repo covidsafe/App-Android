@@ -52,9 +52,10 @@ public class PagerFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                    if(position == 3){
-                        AppPreferencesHelper.setOnboardingShownToUser(getActivity());
-                    }
+                Log.e("pager","pos "+position);
+                if(position == 4){
+                    AppPreferencesHelper.setOnboardingShownToUser(getActivity());
+                }
             }
 
             @Override
