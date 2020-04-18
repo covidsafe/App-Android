@@ -17,6 +17,7 @@ import java.util.List;
 
 import edu.uw.covidsafe.utils.ByteUtils;
 import edu.uw.covidsafe.utils.Constants;
+import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
 
 public class BluetoothServerHelper {
@@ -104,7 +105,7 @@ public class BluetoothServerHelper {
                         if (!Constants.writtenUUIDs.contains(contactUuid) &&
                             rssi > Constants.rssiCutoff) {
                             Constants.writtenUUIDs.add(contactUuid);
-                            Utils.bleLogToDatabase(cxt, contactUuid, rssi);
+                            Utils.bleLogToDatabase(cxt, contactUuid, rssi, TimeUtils.getTime());
                         }
                     }
                     else {

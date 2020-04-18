@@ -45,7 +45,7 @@ public class OnboardingActivity extends AppCompatActivity {
 
         //seed doesn't yet exist
         //generate seed
-        CryptoUtils.generateInitSeed(getApplicationContext());
+        CryptoUtils.generateInitSeed(getApplicationContext(), false);
 
         NetworkConstant.init(this);
         this.registerReceiver(BluetoothUtils.bluetoothReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));

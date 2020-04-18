@@ -68,6 +68,7 @@ public class Constants {
         BatchInsert, Insert,ViewAll,DeleteAll
     }
 
+    public static boolean EnableUUIDGeneration = true;
     public static TipRecyclerViewAdapter MainTipAdapter;
     public static TipRecyclerViewAdapter DiagnosisTipAdapter;
     public static NotifRecyclerViewAdapter NotificationAdapter;
@@ -76,12 +77,13 @@ public class Constants {
     public static boolean LoggingServiceRunning = false;
     public static boolean SuppressSwitchStateCheck = false;
     public static int QuarantineLengthInDays = 14;
-    public static int MaxPayloadSize = 1000;
+    public static int MaxPayloadSize = 10000;
     public static int rssiCutoff = -82;
     public static int MaximumGpsPrecision = 4;
     public static int MinimumGpsPrecision = 0;
     public static int SPLASH_DISPLAY_LENGTH = 1000;
     public static String AnalyticsSecret = "4cd15ae0-9294-40ba-a8b5-a8d77b76783b";
+    public static int BluetoothScanIntervalInSecondsDebug = 10;
     public static int BluetoothScanIntervalInMinutes = 5;
     public static int BluetoothScanPeriodInSeconds = 10;
     public static int PullFromServerIntervalInMinutes = 60;
@@ -89,8 +91,10 @@ public class Constants {
     public static boolean PullFromServerTaskRunning = false;
     public static int LogPurgerIntervalInDays = 1;
     public static int UUIDGenerationIntervalInMinutes = 15;
+    public static int UUIDGenerationIntervalInSecondsDebug = 10;
     public static int UUIDGenerationIntervalInSeconds = UUIDGenerationIntervalInMinutes*60;
     public static int CDCExposureTimeInMinutes = 10;
+    public static double CDCExposureTimeInMinutesDebug = 0.5;
     public static int TimestampDeviationInMilliseconds = 10*1000;
     public static int InfectionWindowIntervalDeviationInMilliseconds = 60*1000;
     public static UUID GATT_SERVICE_UUID = UUID.fromString("8cf0282e-d80f-4eb7-a197-e3e0f965848d");
@@ -104,9 +108,13 @@ public class Constants {
     public static final int GPS_TIME_INTERVAL_IN_MINUTES = 10;
     public static final int GPS_TIME_INTERVAL_IN_MILLISECONDS = 1000*60*GPS_TIME_INTERVAL_IN_MINUTES;
 
+    public static final int GPS_TIME_INTERVAL_IN_SECONDS_DEBUG = 1;
+    public static final int GPS_TIME_INTERVAL_IN_MILLISECONDS_DEBUG = 1000*GPS_TIME_INTERVAL_IN_SECONDS_DEBUG;
+
     // our maximum GPS precision corresponds to ~7km
     // our spatial sampling rate should be 2x less than that
     public static final float GPS_LOCATION_INTERVAL_IN_METERS = 3500;
+    public static final float GPS_LOCATION_INTERVAL_IN_METERS_DEBUG = 1;
 
     public static boolean NOTIFS_ENABLED = false;
     public static boolean GPS_ENABLED = false;
@@ -159,10 +167,12 @@ public class Constants {
     public static int NumFilesToDisplay = 14;
     public static int SubmitThresh = 1;
     public static int DefaultInfectionWindowInDays = 14;
+    public static int DefaultInfectionWindowInDaysDebug = 1;
     public static int DefaultDaysOfLogsToKeep = DefaultInfectionWindowInDays;
     public static LocationManager mLocationManager = null;
     public static HashSet<String> scannedUUIDs;
     public static HashMap<String,Integer> scannedUUIDsRSSIs;
+    public static HashMap<String,Long> scannedUUIDsTimes;
     public static HashSet<String> writtenUUIDs;
     public static int pageNumber = -1;
 

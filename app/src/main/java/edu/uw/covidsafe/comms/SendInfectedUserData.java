@@ -46,7 +46,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        Log.e("regenerate","status "+status);
+        Log.e("senddebug","status "+status);
         if (status) {
             new RegenerateSeedUponReport(context).execute();
         }
@@ -64,6 +64,9 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
 
         int infectionWindowInMilliseconds = 1000*60*60*24*infectionWindowInDays;
         int UUIDGenerationIntervalInMiliseconds = Constants.UUIDGenerationIntervalInMinutes*60*1000;
+        if (Constants.DEBUG) {
+            UUIDGenerationIntervalInMiliseconds = Constants.UUIDGenerationIntervalInSecondsDebug*1000;
+        }
 
         // find timestamp 14 days ago
         long timestampAtBeginningOfInfectionWindow = TimeUtils.getTime() - infectionWindowInMilliseconds;
@@ -87,7 +90,9 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
                 status = false;
                 return null;
             }
-            recordToSend = allRecords.get(0);
+            recordToSend = allRecords.get(allRecords.size()-1);
+            Log.e("demo","allrecords size "+allRecords.size());
+            Log.e("demo","zeroth seed is "+recordToSend.getSeed(context));
         }
 
         //get most recent GPS entry as coarse location and send it
@@ -98,6 +103,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         double longi = 0;
 
         if (sortedGpsRecords.size() == 0) {
+            Log.e("senddebug","need to get last location");
             if (!Utils.hasGpsPermissions(context)) {
                 mkSnack(av, view, "We need location services enabled to send your traces. Please enable location services permission.");
                 status = false;
@@ -115,10 +121,11 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
             }
         }
         else {
+            Log.e("senddebug","getting last gps record");
             GpsRecord gpsRecord = sortedGpsRecords.get(0);
-            lat = gpsRecord.getLat();
-            longi = gpsRecord.getLongi();
-            Log.e("ERR ", gpsRecord.getLat() + "," + gpsRecord.getLongi());
+            lat = gpsRecord.getLat(context);
+            longi = gpsRecord.getLongi(context);
+            Log.e("ERR ", gpsRecord.getLat(context) + "," + gpsRecord.getLongi(context));
         }
 
         int gpsResolution = Constants.MaximumGpsPrecision;
@@ -127,14 +134,22 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
             long ts_start = recordToSend.ts;
             long ts_end = TimeUtils.getTime();
 
-            String seed = recordToSend.getSeed();
+            String seed = recordToSend.getSeed(context);
+            double coarseLat = getCoarseGpsCoord(lat, gpsResolution);
+            double coarseLon = getCoarseGpsCoord(longi, gpsResolution);
+            Log.e("senddebug","seed "+seed);
+            Log.e("senddebug","ts_start "+ts_start);
+            Log.e("senddebug","ts_end "+ts_end);
+            Log.e("senddebug","coarseLat "+coarseLat);
+            Log.e("senddebug","coarseLon "+coarseLon);
+            Log.e("senddebug","preciseLat "+lat);
+            Log.e("senddebug","preciseLon "+longi);
             sendRequest(seed,
                     ts_start, ts_end,
-                    getCoarseGpsCoord(lat, gpsResolution),
-                    getCoarseGpsCoord(longi, gpsResolution),
+                    coarseLat,coarseLon,
                     gpsResolution);
 
-            Log.e("state","trace data submitted");
+            Log.e("senddebug","trace data submitted");
             mkSnack(av, view, "Your report has been submitted.");
 
             DiagnosisFragment.updateSubmissionView(av, context, view, true);
@@ -268,7 +283,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         seedUUIDRepo.deleteAll();
         long[] tss = new long[]{1585724400000L,1585638000000L,1585551600000L,1585465200000L,1585378800000L,1585292400000L,1585206000000L,1585119600000L,1585033200000L,1584946800000L,1584860400000L,1584774000000L,1584687600000L,1584601200000L,1584514800000L,1584428400000L,};
         for (Long l : tss) {
-            seedUUIDRepo.insert(new SeedUUIDRecord(l, "",""));
+            seedUUIDRepo.insert(new SeedUUIDRecord(l, "","", context));
         }
 
         SeedUUIDRecord generatedRecord = seedUUIDRepo.getRecordBetween(

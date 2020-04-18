@@ -37,6 +37,7 @@ import java.util.List;
 
 import edu.uw.covidsafe.comms.PullFromServerTask;
 import edu.uw.covidsafe.comms.PullFromServerTaskDemo;
+import edu.uw.covidsafe.comms.PullFromServerTaskDemo2;
 import edu.uw.covidsafe.hcp.SubmitNarrowcastMessageTask;
 import edu.uw.covidsafe.ui.health.ResourceRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifDbModel;
@@ -184,7 +185,7 @@ public class MainFragment extends Fragment {
         Log.e("refresh","freshtask ");
         if (!Constants.PullFromServerTaskRunning) {
             if (Constants.DEBUG) {
-                new PullFromServerTaskDemo(getContext(), getActivity(), view).execute();
+                new PullFromServerTaskDemo2(getContext(), getActivity(), view).execute();
 //            List<Double> lats = new LinkedList<>();
 //            List<Double> lons = new LinkedList<>();
 //            List<Float> radii = new LinkedList<>();

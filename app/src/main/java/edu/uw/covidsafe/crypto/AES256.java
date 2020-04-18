@@ -1,5 +1,8 @@
 package edu.uw.covidsafe.crypto;
 
+import com.example.covidsafe.R;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
@@ -17,6 +20,7 @@ import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateException;
+import java.util.List;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -28,12 +32,13 @@ import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import edu.uw.covidsafe.utils.ByteUtils;
 import edu.uw.covidsafe.utils.Constants;
 
 public class AES256 {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public static void generateKeyPair() throws NoSuchProviderException, NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+    public static void generateKeyStoreKeys() throws NoSuchProviderException, NoSuchAlgorithmException, InvalidAlgorithmParameterException {
         KeyGenerator keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, Constants.KEY_PROVIDER);
         KeyGenParameterSpec keyGenParameterSpec = new KeyGenParameterSpec.Builder(Constants.KEY_ALIAS,
                 KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
@@ -46,11 +51,10 @@ public class AES256 {
         keyGenerator.generateKey();
     }
 
-    public static String encrypt(String plaintext) throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException, UnrecoverableEntryException, NoSuchPaddingException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+    public static String encryptWithKeyStore(byte[] plainTextMessage) throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException, UnrecoverableEntryException, NoSuchPaddingException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
         // convert string to byte[] for encryption
         long t1 = System.currentTimeMillis();
-        byte[] plainTextMessage = plaintext.getBytes(Constants.CharSet);
-
+//        byte[] plainTextMessage = plaintext.getBytes(Constants.CharSet);
 
         // get key store, generate cipher IV
         // prepend IV to all data we encrypt and store
@@ -94,7 +98,7 @@ public class AES256 {
         return ss;
     }
 
-    public static String decrypt(String encryptedStr) throws NoSuchPaddingException, NoSuchAlgorithmException, KeyStoreException, CertificateException, IOException, UnrecoverableEntryException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, InvalidKeyException {
+    public static byte[] decryptWithKeyStore(String encryptedStr) throws NoSuchPaddingException, NoSuchAlgorithmException, KeyStoreException, CertificateException, IOException, UnrecoverableEntryException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, InvalidKeyException {
         // decode base64 string
         byte[] dataToDecryptWhole = android.util.Base64.decode(encryptedStr,0);
 
@@ -124,25 +128,64 @@ public class AES256 {
         // decrypt and convert back to string
         Cipher cipherDecrypt = Cipher.getInstance(Constants.AES_SETTINGS);
         cipherDecrypt.init(Cipher.DECRYPT_MODE, Constants.secretKey, new GCMParameterSpec(Constants.GCM_TLEN, ivToPass));
-        byte[] decrypted = cipherDecrypt.doFinal(dataToDecrypt);
-        return new String(decrypted, Constants.CharSet);
+        return cipherDecrypt.doFinal(dataToDecrypt);
     }
 
-    public static AESPair generateKeyPairOld() throws NoSuchAlgorithmException {
+    public static void generateKeyPair(Context cxt) throws NoSuchAlgorithmException, CertificateException, InvalidKeyException, KeyStoreException, BadPaddingException, IllegalBlockSizeException, NoSuchPaddingException, UnrecoverableEntryException, IOException {
         KeyGenerator keyGenerator = KeyGenerator.getInstance(Constant.AES);
         keyGenerator.init(256);
 
-        SecretKey key = keyGenerator.generateKey();
+        byte[] key = keyGenerator.generateKey().getEncoded();
         byte[] IV = new byte[16];
         SecureRandom random = new SecureRandom();
         random.nextBytes(IV);
 
-        AESPair response = new AESPair(key, IV);
-        return response;
+        String encryptedKey = encryptWithKeyStore(key);
+        String encryptedIV = encryptWithKeyStore(IV);
+
+        SharedPreferences.Editor editor = cxt.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
+        editor.putString(cxt.getString(R.string.aes_key_pkey), encryptedKey);
+        editor.putString(cxt.getString(R.string.aes_iv_pkey), encryptedIV);
+        editor.commit();
     }
 
-    public static byte[] encrypt(byte[] plainText, SecretKey key, byte[] IV) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+    public static AESPair retrieveSecretKeyFromPrefs(Context cxt) throws IOException, CertificateException, NoSuchAlgorithmException, InvalidKeyException, UnrecoverableEntryException, InvalidAlgorithmParameterException, NoSuchPaddingException, BadPaddingException, KeyStoreException, IllegalBlockSizeException {
+        SharedPreferences prefs = cxt.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        String keyStr = prefs.getString(cxt.getString(R.string.aes_key_pkey), null);
+        String IVStr = prefs.getString(cxt.getString(R.string.aes_iv_pkey), null);
+
+        SecretKey key = deserializeSecretKey(decryptWithKeyStore(keyStr));
+        byte[] IV = decryptWithKeyStore(IVStr);
+
+        return new AESPair(key,IV);
+    }
+
+    public static String encryptWithKey(Context cxt, String plaintext) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, CertificateException, UnrecoverableEntryException, KeyStoreException, IOException {
+        byte[] plainTextMessage = plaintext.getBytes(Constants.CharSet);
+
+        AESPair aesPair = retrieveSecretKeyFromPrefs(cxt);
+
+        byte[] encrypted = encryptWithKeyHelper(plainTextMessage, aesPair.getKey(), aesPair.getIV());
+
+        return android.util.Base64.encodeToString(encrypted,0);
+    }
+
+    public static String[] encryptWithKeyBatch(Context cxt, List<String> plaintexts) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, CertificateException, UnrecoverableEntryException, KeyStoreException, IOException {
+        AESPair aesPair = retrieveSecretKeyFromPrefs(cxt);
+        String[] out = new String[plaintexts.size()];
+        int counter = 0;
+        for (String plaintext : plaintexts) {
+            byte[] plainTextMessage = plaintext.getBytes(Constants.CharSet);
+
+            byte[] encrypted = encryptWithKeyHelper(plainTextMessage, aesPair.getKey(), aesPair.getIV());
+
+            out[counter++] = android.util.Base64.encodeToString(encrypted,0);
+        }
+        return out;
+    }
+
+    private static byte[] encryptWithKeyHelper(byte[] plainText, SecretKey key, byte[] IV) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+        Cipher cipher = Cipher.getInstance(Constants.AES_SETTINGS);
         SecretKeySpec keySpec = new SecretKeySpec(key.getEncoded(), Constant.AES);
         IvParameterSpec ivParameterSpec = new IvParameterSpec(IV);
         cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivParameterSpec);
@@ -150,8 +193,35 @@ public class AES256 {
         return cipherText;
     }
 
-    public static byte[] decrypt(byte[] cipherText, SecretKey key, byte[] IV) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+    public static String decryptWithKey(Context cxt, String encryptedStr) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, CertificateException, UnrecoverableEntryException, KeyStoreException, IOException {
+        byte[] dataToDecrypt = android.util.Base64.decode(encryptedStr,0);
+
+        AESPair aesPair = retrieveSecretKeyFromPrefs(cxt);
+
+        byte[] decrypted = decryptWithKeyHelper(dataToDecrypt, aesPair.getKey(), aesPair.getIV());
+
+        return new String(decrypted, Constants.CharSet);
+    }
+
+    public static String[] decryptWithKeyBatch(Context cxt, List<String> encryptedStrings) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, CertificateException, UnrecoverableEntryException, KeyStoreException, IOException {
+        AESPair aesPair = retrieveSecretKeyFromPrefs(cxt);
+
+        String[] out = new String[encryptedStrings.size()];
+
+        int counter = 0;
+
+        for (String encryptedString : encryptedStrings) {
+            byte[] dataToDecrypt = android.util.Base64.decode(encryptedString,0);
+
+            byte[] decrypted = decryptWithKeyHelper(dataToDecrypt, aesPair.getKey(), aesPair.getIV());
+
+            out[counter++] = new String(decrypted, Constants.CharSet);
+        }
+        return out;
+    }
+
+    private static byte[] decryptWithKeyHelper(byte[] cipherText, SecretKey key, byte[] IV) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+        Cipher cipher = Cipher.getInstance(Constants.AES_SETTINGS);
         SecretKeySpec keySpec = new SecretKeySpec(key.getEncoded(), Constant.AES);
         IvParameterSpec ivSpec = new IvParameterSpec(IV);
         cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
