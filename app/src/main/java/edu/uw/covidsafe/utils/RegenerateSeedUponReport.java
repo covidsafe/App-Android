@@ -47,15 +47,6 @@ public class RegenerateSeedUponReport extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
-        if (Constants.DEBUG) {
-            Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(
-                    new UUIDGeneratorTask(context), 0, Constants.UUIDGenerationIntervalInSecondsDebug, TimeUnit.SECONDS);
-        }
-        else {
-            Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(
-                    new UUIDGeneratorTask(context), 0, Constants.UUIDGenerationIntervalInSeconds, TimeUnit.SECONDS);
-        }
     }
 
     @Override
@@ -92,7 +83,7 @@ public class RegenerateSeedUponReport extends AsyncTask<Void, Void, Void> {
                 }
             }
 
-            if (beforeList.size() == 0) {
+            if (beforeList.size() != 0) {
                 return null;
             }
 
@@ -116,6 +107,7 @@ public class RegenerateSeedUponReport extends AsyncTask<Void, Void, Void> {
                 Log.e("regen", "done with inserts " + afterList.size());
                 Thread.sleep(1000);
                 if (afterList.size() >= this.numRecordsToGenerate) {
+                    Log.e("regen","after list size is good "+afterList.size());
                     break;
                 }
             }
@@ -123,6 +115,8 @@ public class RegenerateSeedUponReport extends AsyncTask<Void, Void, Void> {
         catch(Exception e) {
             Log.e("err",e.getMessage());
         }
+        List<SeedUUIDRecord> afterList = repo.getAllRecords();
+        Log.e("regen","after list size?"+afterList.size());
 
         Constants.EnableUUIDGeneration = true;
 
