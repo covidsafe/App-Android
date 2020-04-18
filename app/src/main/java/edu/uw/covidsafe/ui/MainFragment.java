@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spannable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +33,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.covidsafe.R;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -183,7 +186,50 @@ public class MainFragment extends Fragment {
                 broadcastSwitchLogic(!(gpsEnabled||bleEnabled));
             }
         });
+
+        initDataStorageLengthUI();
+
         return view;
+    }
+
+    public void initDataStorageLengthUI() {
+
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        TextView localDataStorageText = (TextView)view.findViewById(R.id.localDataStorageText);
+        int currentDaysOfDataToKeep = 0;
+        if (Constants.DEBUG) {
+            currentDaysOfDataToKeep = prefs.getInt(getActivity().getString(R.string.infection_window_in_days_pkeys), Constants.DefaultDaysOfLogsToKeepDebug);
+        }
+        else {
+            currentDaysOfDataToKeep = prefs.getInt(getActivity().getString(R.string.infection_window_in_days_pkeys), Constants.DefaultDaysOfLogsToKeep);
+        }
+
+        Date dd = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dd);
+        calendar.add(Calendar.DATE, currentDaysOfDataToKeep);
+        long thresh = calendar.getTime().getTime();
+
+        SimpleDateFormat format = new SimpleDateFormat("MMMM d");
+        String ss = format.format(new Date(thresh));
+
+        String out = "Your data will expire on "+ss+".\n\nOn this date your symptom logs and location data will be removed from the app. This action cannot be undone.\n";
+
+        localDataStorageText.setText(out);
+
+        TextView changeInSettings = (TextView) view.findViewById(R.id.changeInSettings);
+        changeInSettings.setText((Spannable)Html.fromHtml("<u>Change in settings</u>"));
+        changeInSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("mainfragment","onclick");
+                FragmentTransaction tx = getActivity().getSupportFragmentManager().beginTransaction();
+                tx.setCustomAnimations(
+                        R.anim.enter_right_to_left,R.anim.exit_right_to_left,
+                        R.anim.enter_left_to_right,R.anim.exit_left_to_right);
+                tx.replace(R.id.fragment_container, Constants.SettingsFragment).commit();
+            }
+        });
     }
 
     public void refreshTask() {
