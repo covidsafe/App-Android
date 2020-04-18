@@ -40,12 +40,28 @@ public class LoggingService extends IntentService {
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        Log.e("service","create");
+
+        // service running notification
+        Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(getString(R.string.notif_message))
+                .setSmallIcon(R.drawable.logo_purple)
+                .setCategory(Notification.CATEGORY_SERVICE)
+                .build();
+        startForeground(1,notification);
+    }
+
+    @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         Log.e("logme","handle intent");
     }
 
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
+        Log.e("service","start");
 
         Bundle bundle = intent.getExtras();
         Log.e("ex","bundle status "+(bundle==null));
@@ -62,14 +78,6 @@ public class LoggingService extends IntentService {
             GpsUtils.startGps(getApplicationContext());
         }
 
-        // service running notification
-        Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL)
-                .setContentTitle(getString(R.string.app_name))
-                .setContentText(getString(R.string.notif_message))
-                .setSmallIcon(R.drawable.logo_purple)
-                .setCategory(Notification.CATEGORY_SERVICE)
-                .build();
-        startForeground(1,notification);
         //////////////////////////////////////////////////////////////////////////////////////////
 
         return START_NOT_STICKY;
