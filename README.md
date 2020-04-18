@@ -24,7 +24,7 @@ Working commit for demo (7f55e5b405233620b1db0d709ba23fcd23e35e6c)
 
 The following sequence of steps can be executed to produce an end-to-end demo of the functionality of the app:
 1) Install the app on two phones.
-2) Turn on location and Bluetooth. Just leave them within Bluetooth range for about 30 seconds.
+2) Turn on location and Bluetooth. Leave them within Bluetooth range for about 30 seconds.
 3) On phone A, submit a infection report. On phone B, pull down to refresh. You should now observe an exposure notification.
 4) On phone A, pull down to refresh, observe that there are no notifications.
 5) On phone B, submit an infection report.
