@@ -18,12 +18,11 @@ Logging GPS/BLE and sending data to a local server
 https://www.youtube.com/watch?v=0iWl9uaQ5Ds
 
 Working commit for demo (7f55e5b405233620b1db0d709ba23fcd23e35e6c)
-The following sequence of steps can be executed to produce a demo of the functionality of the app:
 
 - The Bluetooth IDs change about once every 10 seconds.
 - The phones need to be in Bluetooth contact for 30 seconds (3 different IDs) for it to count as an exposure.
 
-Here are some steps to reproduce a test sequence I've been trying:
+The following sequence of steps can be executed to produce an end-to-end demo of the functionality of the app:
 1) Install the app on two phones.
 2) Turn on location and Bluetooth. Just leave them within Bluetooth range for about 30 seconds.
 3) On phone A, submit a infection report. On phone B, pull down to refresh. You should now observe an exposure notification.
