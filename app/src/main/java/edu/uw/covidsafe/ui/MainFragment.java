@@ -102,7 +102,12 @@ public class MainFragment extends Fragment {
         });
 
         ImageView xall = (ImageView) view.findViewById(R.id.xall);
-        xall.setAlpha(0f);
+        if (Constants.DEBUG) {
+            xall.setAlpha(1f);
+        }
+        else {
+            xall.setAlpha(0f);
+        }
         xall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
