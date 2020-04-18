@@ -60,7 +60,13 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         //seedIndexAtBeginningOfInfectionWindow = 4032
 
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-        int infectionWindowInDays = prefs.getInt(context.getString(R.string.infection_window_in_days_pkeys), Constants.DefaultInfectionWindowInDays);
+        int infectionWindowInDays = 0;
+        if (Constants.DEBUG) {
+            prefs.getInt(context.getString(R.string.infection_window_in_days_pkeys), Constants.DefaultInfectionWindowInDaysDebug);
+        }
+        else {
+            prefs.getInt(context.getString(R.string.infection_window_in_days_pkeys), Constants.DefaultInfectionWindowInDays);
+        }
 
         int infectionWindowInMilliseconds = 1000*60*60*24*infectionWindowInDays;
         int UUIDGenerationIntervalInMiliseconds = Constants.UUIDGenerationIntervalInMinutes*60*1000;

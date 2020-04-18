@@ -110,6 +110,9 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
 
         int sizeOfPayload = 0;
         long lastQueryTime = prefs.getLong(context.getString(R.string.time_of_last_query_pkey), 0L);
+        if (lastQueryTime == 0) {
+            lastQueryTime = TimeUtils.getTime();
+        }
         while (currentGpsPrecision < Constants.MaximumGpsPrecision) {
             double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(context), currentGpsPrecision);
             double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(context), currentGpsPrecision);
