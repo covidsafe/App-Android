@@ -125,31 +125,31 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
             lon = gpsRecord.getLongi(context);
         }
 
-        int currentGpsPrecision = 4;
+        int currentGpsPrecision = 0;
 
         int sizeOfPayload = 0;
 //        long lastQueryTime = prefs.getLong(context.getString(R.string.time_of_last_query_pkey), 0L);
         long lastQueryTime = 0;
-//        while (currentGpsPrecision < Constants.MaximumGpsPrecision) {
-        double preciseLat = Utils.getCoarseGpsCoord(lat, currentGpsPrecision);
-        double preciseLong = Utils.getCoarseGpsCoord(lon, currentGpsPrecision);
+        while (currentGpsPrecision < Constants.MaximumGpsPrecision) {
+            double preciseLat = Utils.getCoarseGpsCoord(lat, currentGpsPrecision);
+            double preciseLong = Utils.getCoarseGpsCoord(lon, currentGpsPrecision);
 
-        try {
-            Log.e("pulldemo","HOW BIG "+currentGpsPrecision);
-            sizeOfPayload = howBig(preciseLat, preciseLong,
-                    currentGpsPrecision, lastQueryTime);
-            Log.e("pulldemo","size of payload "+sizeOfPayload);
+            try {
+                Log.e("pulldemo","HOW BIG "+currentGpsPrecision);
+                sizeOfPayload = howBig(preciseLat, preciseLong,
+                        currentGpsPrecision, lastQueryTime);
+                Log.e("pulldemo","size of payload "+sizeOfPayload);
+            }
+            catch(Exception e) {
+                Log.e("err",e.getMessage());
+            }
+            if (sizeOfPayload > Constants.MaxPayloadSize) {
+                currentGpsPrecision += 1;
+            }
+            else {
+                break;
+            }
         }
-        catch(Exception e) {
-            Log.e("err",e.getMessage());
-        }
-//            if (sizeOfPayload > Constants.MaxPayloadSize) {
-//                currentGpsPrecision += 1;
-//            }
-//            else {
-//                break;
-//            }
-//        }
 
         if (sizeOfPayload == 0 || sizeOfPayload > Constants.MaxPayloadSize) {
             // potentially too many messages, set the last query time to now.
@@ -166,8 +166,8 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         //////////////////////////////////////////////////////////////////////////////////////////
         // get list of UUIDs that intersect with our movements and what the server has sent us
         //////////////////////////////////////////////////////////////////////////////////////////
-//        double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(), currentGpsPrecision);
-//        double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(), currentGpsPrecision);
+        double preciseLat = Utils.getCoarseGpsCoord(lat, currentGpsPrecision);
+        double preciseLong = Utils.getCoarseGpsCoord(lon, currentGpsPrecision);
 
         Log.e("pulldemo","GET MESSAGES "+sizeOfPayload);
         List<BluetoothMatch> bluetoothMatches = getMessages(preciseLat,preciseLong,
