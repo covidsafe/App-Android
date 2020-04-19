@@ -11,6 +11,7 @@ import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDDbRecordRepository;
 import edu.uw.covidsafe.symptoms.SymptomsDbRecordRepository;
 import edu.uw.covidsafe.utils.Constants;
+import edu.uw.covidsafe.utils.TimeUtils;
 import io.reactivex.schedulers.Schedulers;
 
 import java.text.SimpleDateFormat;
@@ -53,7 +54,7 @@ public class LogPurgerTask implements Runnable {
             SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
             int daysOfLogsToKeep = prefs.getInt(context.getString(R.string.infection_window_in_days_pkeys), Constants.DefaultDaysOfLogsToKeep);
 
-            Date date = new Date();
+            Date date = new Date(TimeUtils.getTime());
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
             calendar.add(Calendar.DATE, -daysOfLogsToKeep);

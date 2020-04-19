@@ -284,7 +284,12 @@ public class Utils {
         Constants.PullServiceRunning = true;
         Utils.createNotificationChannel(av);
         Intent intent = new Intent(av, PullService.class);
-        av.startService(intent);
+        Log.e("service","start pull service");
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            av.startForegroundService(new Intent(av, PullService.class));
+//        } else {
+            av.startService(new Intent(av, PullService.class));
+//        }
     }
 
     public static double getCoarseGpsCoord(double d, int precision) {
@@ -415,7 +420,7 @@ public class Utils {
 
     public static String time() {
         DateFormat dateFormat = new SimpleDateFormat("hh:mm.ss aa");
-        Date date = new Date();
+        Date date = new Date(TimeUtils.getTime());
         return dateFormat.format(date);
     }
 
@@ -433,37 +438,37 @@ public class Utils {
 
     public static String getGpsLogName() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
+        Date date = new Date(TimeUtils.getTime());
         return dateFormat.format(date)+".txt";
     }
 
     public static String getNotifLogName() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
+        Date date = new Date(TimeUtils.getTime());
         return dateFormat.format(date)+".txt";
     }
 
     public static String getBleLogName() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
+        Date date = new Date(TimeUtils.getTime());
         return dateFormat.format(date)+".txt";
     }
 
     public static String getSymptomsLogName() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
+        Date date = new Date(TimeUtils.getTime());
         return dateFormat.format(date)+".txt";
     }
 
     public static String getUuidLogName() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
+        Date date = new Date(TimeUtils.getTime());
         return dateFormat.format(date)+".txt";
     }
 
     public static String getFormRecordName() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        Date date = new Date();
+        Date date = new Date(TimeUtils.getTime());
         return dateFormat.format(date);
     }
 
@@ -496,7 +501,7 @@ public class Utils {
     public static boolean compareDates(Date d1, int submitThresh) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         try {
-            Date d2 = new Date();
+            Date d2 = new Date(TimeUtils.getTime());
 
             int diff = Utils.daysBetween(d2, d1);
             Log.e("logme", "days betweeen " + diff);
