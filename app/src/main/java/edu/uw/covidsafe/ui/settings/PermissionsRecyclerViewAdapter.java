@@ -178,7 +178,7 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                         PermUtils.bleSwitchLogic(av);
                     }
                     else {
-                        AppPreferencesHelper.setBluetoothEnabled(av, false);
+                        AppPreferencesHelper.setBluetoothEnabled(av, Constants.BLUETOOTH_ENABLED);
                         BluetoothUtils.haltBle(av);
                         // ble and gps are turned off, halt
                         if (!Constants.gpsSwitch.isChecked()) {

@@ -32,7 +32,11 @@ public class AppPreferencesHelper {
     }
 
     public static boolean isBluetoothEnabled(Context context) {
-        return getSharedPreferences(context).getBoolean(BLUETOOTH_ENABLED, Constants.BLUETOOTH_ENABLED);
+        return getSharedPreferences(context).getBoolean(BLUETOOTH_ENABLED, false);
+    }
+
+    public static boolean isBluetoothEnabled(Context context, boolean defaultFlag) {
+        return getSharedPreferences(context).getBoolean(BLUETOOTH_ENABLED, defaultFlag);
     }
 
     public static void setBluetoothEnabled(Context context, boolean bleFlagVal) {
