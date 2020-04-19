@@ -15,9 +15,11 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.covidsafe.R;
 import edu.uw.covidsafe.ui.MainActivity;
+import edu.uw.covidsafe.ui.onboarding.OnboardingStateAdapter;
 import edu.uw.covidsafe.utils.Constants;
 import com.google.android.material.tabs.TabLayout;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -33,6 +35,8 @@ import java.util.Date;
 public class HealthFragment extends Fragment {
 
     View view;
+    ViewPager viewPager;
+    HealthPageAdapter adapter;
 
     @SuppressLint("RestrictedApi")
     @Nullable
@@ -54,57 +58,12 @@ public class HealthFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().show();
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(getActivity().getString(R.string.health_header_text)));
 
+        viewPager = view.findViewById(R.id.pager);
+        adapter = new HealthPageAdapter(getChildFragmentManager());
+        viewPager.setAdapter(adapter);
+
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                switch (tab.getPosition()) {
-                    case 0:
-                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_health, Constants.SymptomTrackerFragment).commit();
-                        break;
-                    case 1:
-                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_health, Constants.DiagnosisFragment).commit();
-                        break;
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-
-        MaterialCalendarView cal = view.findViewById(R.id.calendarView);
-
-        /////////////////////////////////////////////////////////////////
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.add(Calendar.DATE, -Constants.DefaultInfectionWindowInDays);
-        /////////////////////////////////////////////////////////////////
-        Log.e("health","minimum "+calendar.get(Calendar.YEAR)+","+(calendar.get(Calendar.MONTH)+1)+","+calendar.get(Calendar.DAY_OF_MONTH));
-        CalendarDay d1 = CalendarDay.from(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH)+1,calendar.get(Calendar.DAY_OF_MONTH));
-        cal.setSelectedDate(CalendarDay.today());
-
-        cal.state().edit()
-                .setFirstDayOfWeek(DayOfWeek.SUNDAY)
-                .setMinimumDate(d1)
-                .setMaximumDate(CalendarDay.today())
-                .setCalendarDisplayMode(CalendarMode.WEEKS)
-                .commit();
-        cal.setOnDateChangedListener(new OnDateSelectedListener() {
-            @Override
-            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                Log.e("health",date.toString());
-
-                //find the date
-//                Constants.symptomRecords =
-            }
-        });
+        tabLayout.setupWithViewPager(viewPager);
 
         return view;
     }
@@ -113,20 +72,21 @@ public class HealthFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Constants.HealthFragment = this;
+        Constants.CurrentFragment = this;
 
         Log.e("health","onresume "+Constants.HealthFragmentState.toString());
-        TabLayout tabLayout = view.findViewById(R.id.tabLayout);
-        if (Constants.HealthFragmentState.toString().toLowerCase().contains("diagnosis")){
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_health,
-                    Constants.DiagnosisFragment).commit();
-            tabLayout.getTabAt(1).select();
-            Log.e("health","select 1");
-        }
-        else if (Constants.HealthFragmentState.toString().toLowerCase().contains("symptom")) {
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_health,
-                    Constants.SymptomTrackerFragment).commit();
-            tabLayout.getTabAt(0).select();
-            Log.e("health","select 0");
-        }
+//        TabLayout tabLayout = view.findViewById(R.id.tabLayout);
+//        if (Constants.HealthFragmentState.toString().toLowerCase().contains("diagnosis")){
+//            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_health,
+//                    Constants.DiagnosisFragment).commit();
+//            tabLayout.getTabAt(1).select();
+//            Log.e("health","select 1");
+//        }
+//        else if (Constants.HealthFragmentState.toString().toLowerCase().contains("symptom")) {
+////            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_health,
+////                    Constants.SymptomTrackerFragment).commit();
+////            tabLayout.getTabAt(0).select();
+//            Log.e("health","select 0");
+//        }
     }
 }

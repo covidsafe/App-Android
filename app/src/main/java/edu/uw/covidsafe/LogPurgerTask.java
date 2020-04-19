@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.example.covidsafe.R;
+import com.instacart.library.truetime.TrueTime;
 import com.instacart.library.truetime.TrueTimeRx;
 
 public class LogPurgerTask implements Runnable {
@@ -39,11 +40,11 @@ public class LogPurgerTask implements Runnable {
                     .initializeRx("time.apple.com")
                     .subscribeOn(Schedulers.io())
                     .subscribe(date -> {
-                        Log.e("truetime", "TrueTime was initialized and we have a time: " + date);
+                        Log.e("truetime", "TrueTime was initialized and we have a time: " + TrueTime.now());
                     }, throwable -> {
                         throwable.printStackTrace();
                     });
-            Log.e("truetime","truetime build");
+            Log.e("truetime","truetime build ");
         }
         catch(Exception e) {
             Log.e("truetime",e.getMessage());

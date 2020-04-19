@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.covidsafe.R;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.MainFragment;
@@ -70,6 +71,7 @@ public class Constants {
         BatchInsert, Insert,ViewAll,DeleteAll
     }
 
+    public static MaterialCalendarView cal;
     public static List<SymptomsRecord> symptomRecords;
     public static boolean EnableUUIDGeneration = true;
     public static TipRecyclerViewAdapter MainTipAdapter;

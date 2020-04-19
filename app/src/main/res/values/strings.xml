@@ -5,6 +5,7 @@
     <string name="history_header_text">History</string>
     <string name="permissions_header_text"><![CDATA[<font color=#000000>Select your preferences</font>]]></string>
     <string name="health_header_text"><![CDATA[<font color=#000000>Health</font>]]></string>
+    <string name="add_symptoms_header_text"><![CDATA[<font color=#000000>Create New Log</font>]]></string>
     <string name="settings_header_text"><![CDATA[<font color=#000000>Settings</font>]]></string>
     <string name="help_header_text"><![CDATA[<font color=#000000>Resources</font>]]></string>
     <string name="warning_header_text"><![CDATA[<font color=#000000>Diagnosis Report</font>]]></string>

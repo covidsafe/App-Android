@@ -49,7 +49,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/todayDate"
+                android:id="@+id/featuredDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -70,7 +70,7 @@
                 android:background="@color/gray"
                 app:layout_constraintEnd_toStartOf="@+id/guidelineV85"
                 app:layout_constraintStart_toStartOf="@+id/guidelineV10"
-                app:layout_constraintTop_toBottomOf="@+id/todayDate" />
+                app:layout_constraintTop_toBottomOf="@+id/featuredDate" />
 
             <ImageView
                 android:id="@+id/amImage"
