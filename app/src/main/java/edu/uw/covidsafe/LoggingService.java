@@ -70,7 +70,7 @@ public class LoggingService extends IntentService {
 
         SharedPreferences prefs = getApplicationContext().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         boolean bleEnabled = AppPreferencesHelper.isBluetoothEnabled(getApplicationContext(), Constants.BLUETOOTH_ENABLED);
-        boolean gpsEnabled = prefs.getBoolean(getApplicationContext().getString(R.string.gps_enabled_pkey), Constants.GPS_ENABLED);
+        boolean gpsEnabled = AppPreferencesHelper.isGPSEnabled(getApplicationContext(), Constants.GPS_ENABLED);
 
         if (bleEnabled) {
             BluetoothUtils.startBle(getApplicationContext());

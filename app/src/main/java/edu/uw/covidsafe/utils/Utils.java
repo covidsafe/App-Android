@@ -84,11 +84,8 @@ public class Utils {
 
         BluetoothUtils.haltBle(av);
 
-        SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean(av.getString(R.string.gps_enabled_pkey), false);
+        AppPreferencesHelper.setGPSEnabled(av, false);
         AppPreferencesHelper.setBluetoothEnabled(av,false);
-        editor.commit();
     }
 
     public static void updateSwitchStates(Activity av) {
@@ -118,8 +115,7 @@ public class Utils {
                 Constants.gpsSwitch.setChecked (false);
 //                Constants.gpsSwitch.setOnCheckedChangeListener (PermUtil.listener);
 
-                editor.putBoolean(av.getString(R.string.gps_enabled_pkey), false);
-                editor.commit();
+                AppPreferencesHelper.setGPSEnabled(av, false);
             }
         }
         if (Constants.bleSwitch != null) {

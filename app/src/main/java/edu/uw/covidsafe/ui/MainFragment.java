@@ -177,8 +177,8 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-                boolean gpsEnabled = prefs.getBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
-                boolean bleEnabled = AppPreferencesHelper.isBluetoothEnabled(getContext());
+                boolean gpsEnabled = AppPreferencesHelper.isGPSEnabled(getActivity());
+                boolean bleEnabled = AppPreferencesHelper.isBluetoothEnabled(getActivity());
 
                 // flip switch to inverse of current broadcasting state
                 broadcastSwitchLogic(!(gpsEnabled||bleEnabled));
@@ -258,16 +258,12 @@ public class MainFragment extends Fragment {
         boolean hasGpsPerms = Utils.hasGpsPermissions(getActivity());
         boolean hasBlePerms = Utils.hasBlePermissions(getActivity());
 
-        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-
-        boolean gpsEnabled = prefs.getBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
+        boolean gpsEnabled = AppPreferencesHelper.isGPSEnabled(getActivity());
         boolean bleEnabled = AppPreferencesHelper.isBluetoothEnabled(getActivity());
 
         if (!hasGpsPerms) {
             Log.e("state","no gps");
-            editor.putBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
-            editor.commit();
+            AppPreferencesHelper.setGPSEnabled(getActivity(), false);
         }
         if (!hasBlePerms) {
             Log.e("state","no ble");
@@ -276,9 +272,8 @@ public class MainFragment extends Fragment {
 
         if ((!hasGpsPerms && !hasBlePerms) || (!gpsEnabled && !bleEnabled)) {
             Log.e("state","no perms");
-            editor.putBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
+            AppPreferencesHelper.setGPSEnabled(getActivity(),  false);
             AppPreferencesHelper.setBluetoothEnabled(getActivity(), false);
-            editor.commit();
 
             if (animate) {
                 Log.e("transition","set to off");

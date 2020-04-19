@@ -90,7 +90,7 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
         } else if (titles.get(position).toLowerCase().contains("location")) {
             Constants.gpsSwitch = ((PermissionCard)holder).sw;
             boolean hasGpsPerms = Utils.hasGpsPermissions(cxt);
-            boolean gpsEnabled = prefs.getBoolean(cxt.getString(R.string.gps_enabled_pkey), Constants.GPS_ENABLED);
+            boolean gpsEnabled = AppPreferencesHelper.isGPSEnabled(cxt, Constants.GPS_ENABLED);
             Log.e("perm","gps get "+hasGpsPerms+","+gpsEnabled);
             if (hasGpsPerms && gpsEnabled) {
 //                ((PermissionCard)holder).sw.setOnCheckedChangeListener (null);
@@ -163,8 +163,7 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                         PermUtils.gpsSwitchLogic(av);
                     }
                     else {
-                        editor.putBoolean(av.getString(R.string.gps_enabled_pkey), false);
-                        editor.commit();
+                        AppPreferencesHelper.setGPSEnabled(av, false);
                         GpsUtils.haltGps();
                         // ble and gps are turned off, halt
                         if (!Constants.bleSwitch.isChecked()) {
