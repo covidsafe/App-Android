@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/parent_layout2"
+    android:background="@color/gray"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineV95"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent=".95" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineV05"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent=".05" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/materialCardView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:foregroundTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="@color/gray"
+        app:strokeWidth="0dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/amImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/symptom_recent"
+                app:layout_constraintStart_toStartOf="@+id/guidelineV10"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/day"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:gravity="center_vertical"
+                android:text="April 14, 2020"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/guidelineV85"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/amImage"
+                app:layout_constraintTop_toTopOf="@+id/amImage" />
+
+            <TextView
+                android:id="@+id/am"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical"
+                android:text="AM:"
+                android:textColor="@color/gray2"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@+id/amImage"
+                app:layout_constraintTop_toBottomOf="@+id/day" />
+
+            <TextView
+                android:id="@+id/amStatus"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical"
+                android:text="Not logged"
+                android:textColor="@color/gray2"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@+id/am"
+                app:layout_constraintTop_toBottomOf="@+id/day" />
+
+            <TextView
+                android:id="@+id/pm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical"
+                android:text="PM:"
+                android:textColor="@color/gray2"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@+id/amImage"
+                app:layout_constraintTop_toBottomOf="@+id/am" />
+
+            <TextView
+                android:id="@+id/pmStatus"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical"
+                android:text="3:41pm ET"
+                android:textColor="@color/gray2"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@+id/pm"
+                app:layout_constraintTop_toBottomOf="@+id/amStatus" />
+
+            <ImageButton
+                android:id="@+id/dayAction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:onClick="showPopup"
+                android:src="@drawable/ic_more_vert_gray_24dp"
+                app:layout_constraintBottom_toBottomOf="@+id/amImage"
+                app:layout_constraintEnd_toStartOf="@+id/guidelineV85"
+                app:layout_constraintTop_toTopOf="@+id/amImage"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <View
+                android:id="@+id/view2"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/gray"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pmStatus" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineV10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="20dp"
+                app:layout_constraintGuide_percent=".05" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineV85"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="20dp"
+                app:layout_constraintGuide_percent=".9" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

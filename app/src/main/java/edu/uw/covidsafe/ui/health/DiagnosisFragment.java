@@ -55,7 +55,7 @@ public class DiagnosisFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getResources().getColor(R.color.white)));
         ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().show();
-        ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         final Drawable upArrow = getActivity().getDrawable(R.drawable.abc_ic_ab_back_material);
         upArrow.setColorFilter(getActivity().getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
@@ -140,8 +140,7 @@ public class DiagnosisFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Constants.CurrentFragment = this;
         Constants.DiagnosisFragment = this;
-        Constants.ReportFragmentState = this;
+        Constants.HealthFragmentState = this;
     }
 }

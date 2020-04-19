@@ -2,6 +2,7 @@ package edu.uw.covidsafe.ui.health;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.text.Spannable;
@@ -109,6 +110,15 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         SimpleDateFormat format = new SimpleDateFormat("MMMM d");
         String ss = format.format(new Date(thresh));
 
+        SharedPreferences prefs = mContext.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mContext.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
+        if (prefs.getString(mContext.getString(R.string.quarantine_end_time_pkey),"").isEmpty()) {
+            editor.putString(mContext.getString(R.string.quarantine_end_time_pkey), ss);
+            editor.commit();
+        }
+        else {
+            ss = prefs.getString(mContext.getString(R.string.quarantine_end_time_pkey),"");
+        }
         return (Spannable) Html.fromHtml(
                 "If you start your self quarantine today, your 14 days will end <b>"+ss+"</b>. Please check with your local Health Authorities for more guidance."
         );
