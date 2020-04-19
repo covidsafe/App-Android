@@ -23,6 +23,7 @@ import com.example.covidsafe.R;
 import edu.uw.covidsafe.ble.BluetoothServerHelper;
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.gps.GpsUtils;
+import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
@@ -67,7 +68,7 @@ public class LoggingService extends IntentService {
         Log.e("ex","bundle status "+(bundle==null));
 
         SharedPreferences prefs = getApplicationContext().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-        boolean bleEnabled = prefs.getBoolean(getApplicationContext().getString(R.string.ble_enabled_pkey), Constants.BLUETOOTH_ENABLED);
+        boolean bleEnabled = AppPreferencesHelper.isBluetoothEnabled(getApplicationContext());
         boolean gpsEnabled = prefs.getBoolean(getApplicationContext().getString(R.string.gps_enabled_pkey), Constants.GPS_ENABLED);
 
         if (bleEnabled) {
