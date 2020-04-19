@@ -108,12 +108,30 @@ public class MainActivity extends AppCompatActivity {
                             R.anim.enter_left_to_right,R.anim.exit_left_to_right);
                     tx.replace(R.id.fragment_container, Constants.HealthFragment).commit();
                 }
-                else if (Constants.CurrentFragment.toString().toLowerCase().contains("addsymptoms")) {
+                else if (Constants.CurrentFragment.toString().toLowerCase().contains("addeditsymptoms")) {
+                    Log.e("menu","back on add symptoms");
                     FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
                     tx.setCustomAnimations(
                             R.anim.enter_left_to_right,R.anim.exit_left_to_right,
                             R.anim.enter_left_to_right,R.anim.exit_left_to_right);
-                    tx.replace(R.id.fragment_container, Constants.HealthFragment).commit();
+                    if (Constants.entryPoint.equals("main")) {
+                        tx.replace(R.id.fragment_container, Constants.MainFragment).commit();
+                    }
+                    else {
+                        tx.replace(R.id.fragment_container, Constants.HealthFragment).commit();
+                    }
+                }
+                else if (Constants.CurrentFragment.toString().toLowerCase().contains("confirm")) {
+                    FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+                    tx.setCustomAnimations(
+                            R.anim.enter_left_to_right,R.anim.exit_left_to_right,
+                            R.anim.enter_left_to_right,R.anim.exit_left_to_right);
+                    if (Constants.entryPoint.equals("main")) {
+                        tx.replace(R.id.fragment_container, Constants.MainFragment).commit();
+                    }
+                    else {
+                        tx.replace(R.id.fragment_container, Constants.HealthFragment).commit();
+                    }
                 }
                 return true;
             default:
@@ -221,8 +239,8 @@ public class MainActivity extends AppCompatActivity {
             !Constants.CurrentFragment.toString().toLowerCase().contains("permission")) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.CurrentFragment).commit();
         } else {
-//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.MainFragment).commit();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.HealthFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.MainFragment).commit();
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.HealthFragment).commit();
         }
     }
 

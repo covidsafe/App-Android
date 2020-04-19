@@ -175,7 +175,7 @@ public class MainFragment extends Fragment {
                 //something in db has changed, update
                 Log.e("mainfragment","symptom list changed");
 
-                SymptomUtils.updateTodaysLogs(view, symptomRecords, getContext(),getActivity(), new Date(TimeUtils.getTime()));
+                SymptomUtils.updateTodaysLogs(view, symptomRecords, getActivity(), getActivity(), new Date(TimeUtils.getTime()), "main");
             }
         });
 
@@ -306,16 +306,6 @@ public class MainFragment extends Fragment {
             lastUpdated.setText("");
             lastUpdated.setVisibility(View.GONE);
         }
-
-        updateSymptomTrackerUI();
-    }
-
-    public void updateSymptomTrackerUI() {
-        ImageView amAction = (ImageView) view.findViewById(R.id.amAction);
-        ImageView pmAction = (ImageView) view.findViewById(R.id.pmAction);
-
-        amAction.setVisibility(View.GONE);
-        pmAction.setVisibility(View.GONE);
     }
 
     public void updateBroadcastUI(boolean animate) {

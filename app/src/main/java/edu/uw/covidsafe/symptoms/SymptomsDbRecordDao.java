@@ -22,6 +22,9 @@ public interface SymptomsDbRecordDao {
     @Query("DELETE FROM symptoms_record_table")
     void deleteAll();
 
+    @Query("DELETE FROM symptoms_record_table WHERE ts == :ts")
+    void delete(long ts);
+
     @Query("DELETE FROM symptoms_record_table WHERE ts <= :ts_thresh")
     void deleteEarlierThan(long ts_thresh);
 

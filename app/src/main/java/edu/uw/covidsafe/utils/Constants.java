@@ -60,7 +60,7 @@ public class Constants {
     }
 
     public enum SymptomsDatabaseOps {
-        Insert,ViewAll,DeleteAll
+        Insert,ViewAll,DeleteAll,Delete
     }
 
     public enum GpsDatabaseOps {
@@ -71,6 +71,7 @@ public class Constants {
         BatchInsert, Insert,ViewAll,DeleteAll
     }
 
+    public static String entryPoint = "";
     public static MaterialCalendarView cal;
     public static List<SymptomsRecord> symptomRecords;
     public static boolean EnableUUIDGeneration = true;

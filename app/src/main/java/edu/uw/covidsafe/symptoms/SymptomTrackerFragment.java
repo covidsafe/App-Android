@@ -53,24 +53,30 @@ public class SymptomTrackerFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(getActivity().getString(R.string.health_header_text)));
 
         RecyclerView rview = view.findViewById(R.id.recyclerViewSymptomHistory);
-        symptomHistoryAdapter = new SymptomHistoryRecyclerViewAdapter(getActivity(),getActivity());
+        symptomHistoryAdapter = new SymptomHistoryRecyclerViewAdapter(getActivity(),getActivity(), view);
         rview.setAdapter(symptomHistoryAdapter);
         rview.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        Log.e("symptom","init constants cal");
+        initCal();
 
         SymptomDbModel smodel = ViewModelProviders.of(getActivity()).get(SymptomDbModel.class);
         smodel.getAllSorted().observe(getActivity(), new Observer<List<SymptomsRecord>>() {
             @Override
             public void onChanged(List<SymptomsRecord> symptomRecords) {
                 //something in db has changed, update
-                Log.e("health","symptom list changed");
+                Log.e("symptom","symptom list changed");
                 Constants.symptomRecords = symptomRecords;
 
                 updateFeaturedDate();
             }
         });
 
-        Constants.cal = view.findViewById(R.id.calendarView);
+        return view;
+    }
 
+    public void initCal() {
+        Constants.cal = view.findViewById(R.id.calendarView);
         /////////////////////////////////////////////////////////////////
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
@@ -89,23 +95,21 @@ public class SymptomTrackerFragment extends Fragment {
         Constants.cal.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                Log.e("health",date.toString());
-
+                Log.e("symptom","on date selected "+date.toString());
                 updateFeaturedDate();
             }
         });
-
-        return view;
     }
 
     public void updateFeaturedDate() {
+        Log.e("symptom","update featured date");
         CalendarDay calDay = Constants.cal.getSelectedDate();
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         try {
             String dateStr = calDay.getYear() + "/" + calDay.getMonth() + "/" + calDay.getDay();
             Date dd = format.parse(dateStr);
-            Log.e("health","updating "+dateStr);
-            SymptomUtils.updateTodaysLogs(view, Constants.symptomRecords, getContext(),getActivity(), dd);
+            Log.e("symptom","updating "+dateStr);
+            SymptomUtils.updateTodaysLogs(view, Constants.symptomRecords, getContext(),getActivity(), dd, "tracker");
             symptomHistoryAdapter.setRecords(Constants.symptomRecords, view);
         }
         catch(Exception e) {
@@ -120,7 +124,7 @@ public class SymptomTrackerFragment extends Fragment {
 
         Constants.SymptomTrackerFragment = this;
         Constants.HealthFragmentState = this;
-        Constants.CurrentFragment = this;
+//        Constants.CurrentFragment = this;
     }
 
     @Override

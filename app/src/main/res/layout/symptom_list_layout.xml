@@ -9,6 +9,12 @@
     android:id="@+id/parent_layout"
     >
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/innerConstraintLayout"
+        app:layout_constraintTop_toTopOf="parent">
+
     <TextView
         android:id="@+id/symptom_name"
         android:layout_width="0dp"
@@ -26,11 +32,11 @@
         android:id="@+id/symptom_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginStart="15dp"
         android:layout_toRightOf="@+id/symptom_name"
-        app:layout_constraintBottom_toTopOf="@+id/guidelineH50"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/symptom_desc"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:useMaterialThemeColors="false" />
 
     <View
@@ -50,20 +56,30 @@
         app:layout_constraintStart_toStartOf="@+id/guidelineV05"
         app:layout_constraintTop_toBottomOf="@+id/symptom_name" />
 
+    <ImageView
+        android:id="@+id/chevron"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_navigate_before_black_24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/symptom_desc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guidelineV80"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineV05"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_begin="20dp"
-        app:layout_constraintGuide_percent="0.05" />
+        app:layout_constraintGuide_percent="0.15" />
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineV80"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_begin="20dp"
-        app:layout_constraintGuide_percent="0.75" />
+        app:layout_constraintGuide_percent="0.85" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineH50"
@@ -72,5 +88,21 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="20dp"
         app:layout_constraintGuide_percent="0.65" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <include
+        android:id="@+id/details"
+        layout="@layout/card_fever"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/innerConstraintLayout" />
+
+    <include
+        android:id="@+id/details2"
+        layout="@layout/card_cough"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/details" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
