@@ -114,8 +114,7 @@ public class OnboardingActivity extends AppCompatActivity {
             if (resultCode == -1) {
                 if (hasBlePerms) {
                     SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
-                    editor.putBoolean(getApplicationContext().getString(R.string.ble_enabled_pkey), true);
-                    editor.commit();
+                    AppPreferencesHelper.setBluetoothEnabled(this);
                     if (!Constants.LoggingServiceRunning) {
                         Utils.startLoggingService(this);
                         Log.e("ble","ble switch logic");

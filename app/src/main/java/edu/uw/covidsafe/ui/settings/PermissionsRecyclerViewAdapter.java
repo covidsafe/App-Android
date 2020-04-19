@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.gps.GpsUtils;
+import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
 
@@ -108,18 +109,16 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             if (!BluetoothUtils.checkBluetoothSupport(av)) {
                 ((PermissionCard)holder).sw.setEnabled(false);
                 ((PermissionCard)holder).desc.setText("Bluetooth is disabled on this device");
-                editor.putBoolean(cxt.getString(R.string.ble_enabled_pkey), false);
-                editor.commit();
+                AppPreferencesHelper.setBluetoothEnabled(av, false);
             }
             else if (!BluetoothUtils.isBluetoothOn(av)) {
                 ((PermissionCard)holder).desc.setText(cxt.getString(R.string.bluetooth_is_off));
-                editor.putBoolean(cxt.getString(R.string.ble_enabled_pkey), false);
-                editor.commit();
+                AppPreferencesHelper.setBluetoothEnabled(av, false);
             }
             else {
                 ((PermissionCard)holder).sw.setEnabled(true);
                 boolean hasBlePerms = Utils.hasBlePermissions(cxt);
-                boolean bleEnabled = prefs.getBoolean(cxt.getString(R.string.ble_enabled_pkey), Constants.BLUETOOTH_ENABLED);
+                boolean bleEnabled = AppPreferencesHelper.isBluetoothEnabled(cxt);
                 Log.e("perm", "ble get " + hasBlePerms + "," + bleEnabled);
                 if (hasBlePerms && bleEnabled) {
 //                ((PermissionCard)holder).sw.setOnCheckedChangeListener (null);
@@ -179,8 +178,7 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                         PermUtils.bleSwitchLogic(av);
                     }
                     else {
-                        editor.putBoolean(av.getString(R.string.ble_enabled_pkey), false);
-                        editor.commit();
+                        AppPreferencesHelper.setBluetoothEnabled(av, false);
                         BluetoothUtils.haltBle(av);
                         // ble and gps are turned off, halt
                         if (!Constants.gpsSwitch.isChecked()) {

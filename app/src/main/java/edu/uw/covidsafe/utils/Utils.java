@@ -46,6 +46,7 @@ import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.gps.GpsOpsAsyncTask;
 import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.gps.GpsUtils;
+import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
 import com.google.android.material.snackbar.Snackbar;
@@ -86,7 +87,7 @@ public class Utils {
         SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean(av.getString(R.string.gps_enabled_pkey), false);
-        editor.putBoolean(av.getString(R.string.ble_enabled_pkey), false);
+        AppPreferencesHelper.setBluetoothEnabled(av,false);
         editor.commit();
     }
 
@@ -130,9 +131,7 @@ public class Utils {
 //                Constants.bleSwitch.setOnCheckedChangeListener (null);
                 Constants.bleSwitch.setChecked (false);
 //                Constants.bleSwitch.setOnCheckedChangeListener (PermUtil.listener);
-
-                editor.putBoolean(av.getString(R.string.ble_enabled_pkey), false);
-                editor.commit();
+                AppPreferencesHelper.setBluetoothEnabled(av, false);
             }
         }
     }

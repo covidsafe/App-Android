@@ -39,6 +39,7 @@ import edu.uw.covidsafe.comms.PullFromServerTask;
 import edu.uw.covidsafe.comms.PullFromServerTaskDemo;
 import edu.uw.covidsafe.comms.PullFromServerTaskDemo2;
 import edu.uw.covidsafe.hcp.SubmitNarrowcastMessageTask;
+import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.ui.health.ResourceRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifDbModel;
 import edu.uw.covidsafe.ui.notif.NotifOpsAsyncTask;
@@ -177,7 +178,7 @@ public class MainFragment extends Fragment {
             public void onClick(View v) {
                 SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
                 boolean gpsEnabled = prefs.getBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
-                boolean bleEnabled = prefs.getBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
+                boolean bleEnabled = AppPreferencesHelper.isBluetoothEnabled(getContext());
 
                 // flip switch to inverse of current broadcasting state
                 broadcastSwitchLogic(!(gpsEnabled||bleEnabled));
@@ -261,7 +262,7 @@ public class MainFragment extends Fragment {
         SharedPreferences.Editor editor = prefs.edit();
 
         boolean gpsEnabled = prefs.getBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
-        boolean bleEnabled = prefs.getBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
+        boolean bleEnabled = AppPreferencesHelper.isBluetoothEnabled(getActivity());
 
         if (!hasGpsPerms) {
             Log.e("state","no gps");
@@ -270,14 +271,13 @@ public class MainFragment extends Fragment {
         }
         if (!hasBlePerms) {
             Log.e("state","no ble");
-            editor.putBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
-            editor.commit();
+            AppPreferencesHelper.setBluetoothEnabled(getActivity(), false);
         }
 
         if ((!hasGpsPerms && !hasBlePerms) || (!gpsEnabled && !bleEnabled)) {
             Log.e("state","no perms");
             editor.putBoolean(getActivity().getString(R.string.gps_enabled_pkey), false);
-            editor.putBoolean(getActivity().getString(R.string.ble_enabled_pkey), false);
+            AppPreferencesHelper.setBluetoothEnabled(getActivity(), false);
             editor.commit();
 
             if (animate) {

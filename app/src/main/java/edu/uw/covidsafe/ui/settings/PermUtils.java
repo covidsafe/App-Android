@@ -24,6 +24,7 @@ import com.example.covidsafe.R;
 
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.gps.GpsUtils;
+import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
 
@@ -69,8 +70,7 @@ public class PermUtils {
         boolean hasBle = Utils.hasBlePermissions(av);
 
         if (hasBle && BluetoothUtils.isBluetoothOn(av)) {
-            editor.putBoolean(av.getString(R.string.ble_enabled_pkey), true);
-            editor.commit();
+            AppPreferencesHelper.setBluetoothEnabled(av);
             if (!Constants.LoggingServiceRunning) {
                 Utils.startLoggingService(av);
                 Log.e("ble","ble switch logic");
