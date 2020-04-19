@@ -26,6 +26,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import edu.uw.covidsafe.utils.Constants;
+import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
 
 public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
@@ -100,7 +101,7 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public Spannable getQuarantineTime() {
-        Date dd = new Date();
+        Date dd = new Date(TimeUtils.getTime());
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(dd);
         calendar.add(Calendar.DATE, Constants.QuarantineLengthInDays);
