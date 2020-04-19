@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/gray"
+    android:layout_height="wrap_content">
+
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,7 +15,7 @@
         android:id="@+id/textView6"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="@string/permissionsHeader"
         android:textSize="15sp"
         app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
@@ -33,7 +39,7 @@
         android:id="@+id/materialCardViewParent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         app:cardElevation="0dp"
         app:layout_constraintStart_toStartOf="@+id/guidelineV5"
         app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
@@ -79,12 +85,13 @@
         style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="@color/purpleLight"
         android:text="next"
         android:textColor="@color/white"
         app:iconGravity="textEnd"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialCardViewParent"
         app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
         app:layout_constraintStart_toStartOf="@+id/guidelineV5" />
 
@@ -109,3 +116,4 @@
         app:layout_constraintTop_toBottomOf="@+id/button4" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
