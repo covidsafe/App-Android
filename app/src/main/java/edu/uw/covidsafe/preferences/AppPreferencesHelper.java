@@ -55,7 +55,7 @@ public class AppPreferencesHelper {
         return getSharedPreferences(context).getBoolean(GPS_ENABLED,defaultValue);
     }
 
-    public static void setGPSEnabled(Context context, boolean bleFlagVal) {
-        getSharedPreferences(context).edit().putBoolean(GPS_ENABLED, bleFlagVal);
+    public static void setGPSEnabled(Context context, boolean gpsFlagVal) {
+        getSharedPreferences(context).edit().putBoolean(GPS_ENABLED, gpsFlagVal);
     }
 }

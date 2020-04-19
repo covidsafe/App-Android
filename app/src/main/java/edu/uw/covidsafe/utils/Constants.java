@@ -223,7 +223,7 @@ public class Constants {
 
         SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         Constants.BLUETOOTH_ENABLED = AppPreferencesHelper.isBluetoothEnabled(av, Constants.BLUETOOTH_ENABLED);
-        Constants.GPS_ENABLED = prefs.getBoolean(av.getString(R.string.gps_enabled_pkey), Constants.GPS_ENABLED);
+        Constants.GPS_ENABLED = AppPreferencesHelper.isGPSEnabled(av, Constants.GPS_ENABLED);
         Constants.NOTIFS_ENABLED = prefs.getBoolean(av.getString(R.string.notifs_enabled_pkey), Constants.NOTIFS_ENABLED);
     }
 }

@@ -94,7 +94,7 @@ public class PermissionFragment extends Fragment {
             public void onClick(View v) {
                 SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
                 boolean s1 = prefs.getBoolean(getString(R.string.notifs_enabled_pkey), false);
-                boolean s2 = prefs.getBoolean(getString(R.string.gps_enabled_pkey), false);
+                boolean s2 = AppPreferencesHelper.isGPSEnabled(getActivity());
                 boolean s3 = AppPreferencesHelper.isBluetoothEnabled(getActivity());
                 Log.e("perms","PERM STATE "+s1+","+s2+","+s3);
             }

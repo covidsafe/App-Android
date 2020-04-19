@@ -37,13 +37,10 @@ public class PermUtils {
     static boolean stopit = true;
 
     public static void gpsSwitchLogic(Activity av) {
-        SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
 
         boolean hasGps = Utils.hasGpsPermissions(av);
         if (hasGps) {
-            editor.putBoolean(av.getString(R.string.gps_enabled_pkey), true);
-            editor.commit();
+            AppPreferencesHelper.setGPSEnabled(av);
             if (!Constants.LoggingServiceRunning) {
                 Utils.startLoggingService(av);
                 GpsUtils.startGps(av);
