@@ -49,6 +49,7 @@ import edu.uw.covidsafe.ui.notif.NotifOpsAsyncTask;
 import edu.uw.covidsafe.ui.notif.NotifRecord;
 import edu.uw.covidsafe.ui.settings.PermUtils;
 import edu.uw.covidsafe.utils.Constants;
+import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
 
 public class MainFragment extends Fragment {
@@ -174,7 +175,7 @@ public class MainFragment extends Fragment {
                 //something in db has changed, update
                 Log.e("mainfragment","symptom list changed");
 
-                SymptomUtils.updateTodaysLogs(view, symptomRecords, getContext(),getActivity());
+                SymptomUtils.updateTodaysLogs(view, symptomRecords, getContext(),getActivity(), new Date(TimeUtils.getTime()));
             }
         });
 
@@ -203,7 +204,6 @@ public class MainFragment extends Fragment {
     }
 
     public void initDataStorageLengthUI() {
-
         SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         TextView localDataStorageText = (TextView)view.findViewById(R.id.localDataStorageText);
         int currentDaysOfDataToKeep = 0;
@@ -316,10 +316,6 @@ public class MainFragment extends Fragment {
 
         amAction.setVisibility(View.GONE);
         pmAction.setVisibility(View.GONE);
-
-        TextView todayDate = (TextView)view.findViewById(R.id.todayDate);
-        SimpleDateFormat format2 = new SimpleDateFormat("EEEE, MMMM dd");
-        todayDate.setText(format2.format(new Date()));
     }
 
     public void updateBroadcastUI(boolean animate) {

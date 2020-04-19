@@ -108,6 +108,13 @@ public class MainActivity extends AppCompatActivity {
                             R.anim.enter_left_to_right,R.anim.exit_left_to_right);
                     tx.replace(R.id.fragment_container, Constants.HealthFragment).commit();
                 }
+                else if (Constants.CurrentFragment.toString().toLowerCase().contains("addsymptoms")) {
+                    FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+                    tx.setCustomAnimations(
+                            R.anim.enter_left_to_right,R.anim.exit_left_to_right,
+                            R.anim.enter_left_to_right,R.anim.exit_left_to_right);
+                    tx.replace(R.id.fragment_container, Constants.HealthFragment).commit();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

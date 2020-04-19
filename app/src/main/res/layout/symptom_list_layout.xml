@@ -5,6 +5,7 @@
     android:layout_width="match_parent" android:layout_height="wrap_content"
     android:paddingTop="5dp"
     android:paddingBottom="5dp"
+    android:background="@color/white"
     android:id="@+id/parent_layout"
     >
 
@@ -13,13 +14,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:text="Cough"
         android:textColor="#000000"
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/guidelineV80"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guidelineV05"
         app:layout_constraintTop_toTopOf="parent" />
 
     <CheckBox
@@ -35,7 +35,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:background="#c0c0c0"
         app:layout_constraintTop_toBottomOf="@+id/symptom_desc"
         tools:layout_editor_absoluteX="0dp" />
@@ -44,14 +44,19 @@
         android:id="@+id/symptom_desc"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
         android:text="A new, continuous cough - this means you've started coughing repeatedly"
         app:layout_constraintEnd_toStartOf="@+id/guidelineV80"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guidelineV05"
         app:layout_constraintTop_toBottomOf="@+id/symptom_name" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineV05"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.05" />
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineV80"
         android:layout_width="wrap_content"

@@ -2,6 +2,7 @@ package edu.uw.covidsafe.symptoms;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,11 +16,10 @@ import java.util.Date;
 import java.util.List;
 
 import edu.uw.covidsafe.ui.MainActivity;
-import edu.uw.covidsafe.utils.Constants;
 
 public class SymptomUtils {
 
-    public static void updateTodaysLogs(View view, List<SymptomsRecord> symptomRecords, Context cxt, Activity av) {
+    public static void updateTodaysLogs(View view, List<SymptomsRecord> symptomRecords, Context cxt, Activity av, Date dateToShow) {
         ImageView amImage  = (ImageView)view.findViewById(R.id.amImage);
         ImageView pmImage  = (ImageView)view.findViewById(R.id.pmImage);
         TextView amStatus  = (TextView)view.findViewById(R.id.amStatus);
@@ -40,20 +40,60 @@ public class SymptomUtils {
         amAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addAction(av);
+                addAction(av, dateToShow, "am");
             }
         });
         pmAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addAction(av);
+                addAction(av, dateToShow, "pm");
             }
         });
 
-        Date d1 = new Date(symptomRecords.get(0).getTs());
-        Date d2 = new Date(symptomRecords.get(1).getTs());
-        symptomSetHelper(d1, view, cxt);
-        symptomSetHelper(d2, view, cxt);
+        TextView featuredDate = (TextView)view.findViewById(R.id.featuredDate);
+        SimpleDateFormat format2 = new SimpleDateFormat("EEEE, MMMM dd");
+        featuredDate.setText(format2.format(dateToShow));
+
+        Log.e("symptomutils","update show for "+format2.format(dateToShow));
+
+        SimpleDateFormat day = new SimpleDateFormat("dd");
+        SimpleDateFormat ampm = new SimpleDateFormat("aa");
+        SimpleDateFormat outformat = new SimpleDateFormat("h:mm aa");
+
+        for (SymptomsRecord record : symptomRecords) {
+            Date symptomDate = new Date(record.getTs());
+            String symptomDay = day.format(symptomDate);
+            String dateToMatch = day.format(dateToShow);
+            if (symptomDay.equals(dateToMatch)) {
+                if (ampm.format(symptomDate).toLowerCase().equals("am")) {
+                    amImage.setImageDrawable(cxt.getDrawable(R.drawable.symptom_done));
+                    amStatus.setText(outformat.format(symptomDate));
+                    amAction.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            editAction();
+                        }
+                    });
+                    amAction.setImageDrawable(cxt.getDrawable(R.drawable.ic_more_vert_gray_24dp));
+                }
+                else if (ampm.format(symptomDate).toLowerCase().equals("pm")) {
+                    pmImage.setImageDrawable(cxt.getDrawable(R.drawable.symptom_done));
+                    pmStatus.setText(outformat.format(symptomDate));
+                    pmAction.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            editAction();
+                        }
+                    });
+                    pmAction.setImageDrawable(cxt.getDrawable(R.drawable.ic_more_vert_gray_24dp));
+                }
+            }
+        }
+
+//        Date d1 = new Date(symptomRecords.get(0).getTs());
+//        Date d2 = new Date(symptomRecords.get(1).getTs());
+//        symptomSetHelper(d1, view, cxt);
+//        symptomSetHelper(d2, view, cxt);
     }
 
     public static void symptomSetHelper(Date d1, View view, Context cxt) {
@@ -98,12 +138,12 @@ public class SymptomUtils {
         }
     }
 
-    public static void addAction(Activity av) {
+    public static void addAction(Activity av, Date date, String ampm) {
         FragmentTransaction tx = ((MainActivity)av).getSupportFragmentManager().beginTransaction();
         tx.setCustomAnimations(
                 R.anim.enter_right_to_left,R.anim.exit_right_to_left,
                 R.anim.enter_left_to_right,R.anim.exit_left_to_right);
-        tx.replace(R.id.fragment_container_health, new AddSymptomsFragment()).commit();
+        tx.replace(R.id.fragment_container, new AddSymptomsFragment(date, ampm)).commit();
 
     }
 
