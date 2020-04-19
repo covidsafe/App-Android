@@ -39,17 +39,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.uw.covidsafe.comms.PullFromServerTask;
-import edu.uw.covidsafe.comms.PullFromServerTaskDemo;
 import edu.uw.covidsafe.comms.PullFromServerTaskDemo2;
-import edu.uw.covidsafe.hcp.SubmitNarrowcastMessageTask;
+import edu.uw.covidsafe.symptoms.SymptomDbModel;
+import edu.uw.covidsafe.symptoms.SymptomUtils;
+import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.health.ResourceRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifDbModel;
 import edu.uw.covidsafe.ui.notif.NotifOpsAsyncTask;
 import edu.uw.covidsafe.ui.notif.NotifRecord;
 import edu.uw.covidsafe.ui.settings.PermUtils;
 import edu.uw.covidsafe.utils.Constants;
-import edu.uw.covidsafe.utils.CryptoUtils;
-import edu.uw.covidsafe.utils.RegenerateSeedUponReport;
 import edu.uw.covidsafe.utils.Utils;
 
 public class MainFragment extends Fragment {
@@ -165,6 +164,17 @@ public class MainFragment extends Fragment {
                 Constants.HistoryAdapter.setRecords(historyNotifs, view);
                 Constants.NotificationAdapter.setRecords(currentNotifs, view);
                 Constants.MainTipAdapter.enableTips(notifRecords.size(), view);
+            }
+        });
+
+        SymptomDbModel smodel = ViewModelProviders.of(getActivity()).get(SymptomDbModel.class);
+        smodel.getAllSorted().observe(getActivity(), new Observer<List<SymptomsRecord>>() {
+            @Override
+            public void onChanged(List<SymptomsRecord> symptomRecords) {
+                //something in db has changed, update
+                Log.e("mainfragment","symptom list changed");
+
+                SymptomUtils.updateTodaysLogs(view, symptomRecords, getContext(),getActivity());
             }
         });
 
@@ -296,6 +306,20 @@ public class MainFragment extends Fragment {
             lastUpdated.setText("");
             lastUpdated.setVisibility(View.GONE);
         }
+
+        updateSymptomTrackerUI();
+    }
+
+    public void updateSymptomTrackerUI() {
+        ImageView amAction = (ImageView) view.findViewById(R.id.amAction);
+        ImageView pmAction = (ImageView) view.findViewById(R.id.pmAction);
+
+        amAction.setVisibility(View.GONE);
+        pmAction.setVisibility(View.GONE);
+
+        TextView todayDate = (TextView)view.findViewById(R.id.todayDate);
+        SimpleDateFormat format2 = new SimpleDateFormat("EEEE, MMMM dd");
+        todayDate.setText(format2.format(new Date()));
     }
 
     public void updateBroadcastUI(boolean animate) {

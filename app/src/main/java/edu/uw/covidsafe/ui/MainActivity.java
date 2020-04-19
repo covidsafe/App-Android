@@ -18,6 +18,8 @@ import android.view.View;
 import androidx.fragment.app.FragmentTransaction;
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.comms.NetworkConstant;
+import edu.uw.covidsafe.symptoms.SymptomsOpsAsyncTask;
+import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.health.TipRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.HistoryRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
@@ -32,6 +34,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -69,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
         Constants.DiagnosisTipAdapter = new TipRecyclerViewAdapter(this, this);
         Constants.NotificationAdapter = new NotifRecyclerViewAdapter(this,this);
         Constants.HistoryAdapter = new HistoryRecyclerViewAdapter(this,this);
+
+        insertDummyData();
     }
 
     @Override
@@ -136,6 +143,34 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void insertDummyData() {
+        Log.e("health","insert dummy data");
+        new SymptomsOpsAsyncTask(Constants.SymptomsDatabaseOps.DeleteAll, this).execute();
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm aa");
+
+        try {
+            Date d0 = format.parse("2020/04/19 1:22 AM");
+            Date d1 = format.parse("2020/04/18 2:22 AM");
+            Date d2 = format.parse("2020/04/16 1:11 AM");
+            Date d3 = format.parse("2020/04/15 3:33 AM");
+            Date d4 = format.parse("2020/04/15 4:44 PM");
+            SymptomsRecord record0 = new SymptomsRecord(d0.getTime(),true,false,false,false,false,false,false);
+            SymptomsRecord record1 = new SymptomsRecord(d1.getTime(),true,false,false,false,false,false,false);
+            SymptomsRecord record2 = new SymptomsRecord(d2.getTime(),false,true,false,false,false,false,false);
+            SymptomsRecord record3 = new SymptomsRecord(d3.getTime(),false,false,true,false,false,false,false);
+            SymptomsRecord record4 = new SymptomsRecord(d4.getTime(),false,false,false,true,false,false,false);
+            new SymptomsOpsAsyncTask(this, record0).execute();
+            new SymptomsOpsAsyncTask(this, record1).execute();
+            new SymptomsOpsAsyncTask(this, record2).execute();
+            new SymptomsOpsAsyncTask(this, record3).execute();
+            new SymptomsOpsAsyncTask(this, record4).execute();
+        }
+        catch(Exception e) {
+            Log.e("err",e.getMessage());
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -179,7 +214,8 @@ public class MainActivity extends AppCompatActivity {
             !Constants.CurrentFragment.toString().toLowerCase().contains("permission")) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.CurrentFragment).commit();
         } else {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.MainFragment).commit();
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.MainFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.HealthFragment).commit();
         }
     }
 
@@ -202,17 +238,11 @@ public class MainActivity extends AppCompatActivity {
                             selectedFragment = Constants.SettingsFragment;
                         }
                         break;
-                    case R.id.action_contact_log:
-                        selectedFragment = Constants.ContactLogFragment;
-                        break;
+//                    case R.id.action_contact_log:
+//                        selectedFragment = Constants.ContactLogFragment;
+//                        break;
                     case R.id.action_report:
-//                        Log.e("STate", "cur fragment "+Constants.CurrentFragment.toString());
-                        if (Constants.ReportFragmentState.toString().toLowerCase().contains("diagnosis")) {
-                            selectedFragment = Constants.DiagnosisFragment;
-                        }
-                        else {
-                            selectedFragment = Constants.HealthFragment;
-                        }
+                        selectedFragment = Constants.HealthFragment;
                         break;
                     case R.id.action_settings:
                         selectedFragment = Constants.FaqFragment;

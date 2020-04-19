@@ -1,4 +1,4 @@
-package unused;
+package edu.uw.covidsafe.symptoms;
 
 import android.app.Activity;
 import android.content.Context;

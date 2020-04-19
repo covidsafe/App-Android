@@ -15,16 +15,18 @@ import androidx.fragment.app.Fragment;
 
 import com.example.covidsafe.R;
 
+import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.MainFragment;
 import edu.uw.covidsafe.ui.health.TipRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.HistoryRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
-import unused.SymptomTrackerFragment;
+import edu.uw.covidsafe.symptoms.SymptomTrackerFragment;
 import edu.uw.covidsafe.ui.health.DiagnosisFragment;
 
 import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Timer;
 import java.util.UUID;
 import java.util.concurrent.ScheduledFuture;
@@ -57,7 +59,7 @@ public class Constants {
     }
 
     public enum SymptomsDatabaseOps {
-        Insert,ViewAll
+        Insert,ViewAll,DeleteAll
     }
 
     public enum GpsDatabaseOps {
@@ -68,6 +70,7 @@ public class Constants {
         BatchInsert, Insert,ViewAll,DeleteAll
     }
 
+    public static List<SymptomsRecord> symptomRecords;
     public static boolean EnableUUIDGeneration = true;
     public static TipRecyclerViewAdapter MainTipAdapter;
     public static TipRecyclerViewAdapter DiagnosisTipAdapter;
@@ -146,7 +149,7 @@ public class Constants {
     public static String SHARED_PREFENCE_NAME = "preferences";
     public static String NOTIFICATION_CHANNEL = "channel";
     public static Fragment MainFragment;
-    public static Fragment ReportFragmentState;
+    public static Fragment HealthFragmentState;
     public static Fragment MainFragmentState;
     public static Fragment HealthFragment;
     public static Fragment SymptomTrackerFragment;
@@ -199,6 +202,7 @@ public class Constants {
     public static void init(Activity av) {
         Log.e("logme","constants init");
         MainFragment = new MainFragment();
+        MainFragmentState = MainFragment;
         SettingsFragment = new SettingsFragment();
 
         ContactLogFragment = new ContactLogFragment();
@@ -212,7 +216,7 @@ public class Constants {
         PagerFragment = new PagerFragment();
 
         SymptomTrackerFragment = new SymptomTrackerFragment();
-        ReportFragmentState = HealthFragment;
+        HealthFragmentState = SymptomTrackerFragment;
         if (!DEBUG) {
             LOG_TO_DISK = false;
         }
