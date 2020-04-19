@@ -285,11 +285,11 @@ public class Utils {
         Utils.createNotificationChannel(av);
         Intent intent = new Intent(av, PullService.class);
         Log.e("service","start pull service");
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            av.startForegroundService(new Intent(av, PullService.class));
-//        } else {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            av.startForegroundService(new Intent(av, PullService.class));
+        } else {
             av.startService(new Intent(av, PullService.class));
-//        }
+        }
     }
 
     public static double getCoarseGpsCoord(double d, int precision) {

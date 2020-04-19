@@ -1,10 +1,14 @@
 package edu.uw.covidsafe;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+
+import com.example.covidsafe.R;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -18,6 +22,19 @@ public class PullService extends IntentService {
 
     public PullService() {
         super("PullService");
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(getString(R.string.notif_message))
+                .setSmallIcon(R.drawable.logo_purple)
+                .setCategory(Notification.CATEGORY_SERVICE)
+                .build();
+        startForeground(2,notification);
     }
 
     @Override
