@@ -10,6 +10,7 @@ public class AppPreferencesHelper {
 
     public static final String ONBOARDING_PAGER_SHOWN = "onboardingshownalready";
     public static final String BLUETOOTH_ENABLED = "bleEnabled";
+    public static final String GPS_ENABLED = "gpsEnabled";
     public static String SHARED_PREFENCE_NAME = "preferences";
 
 
@@ -36,5 +37,21 @@ public class AppPreferencesHelper {
 
     public static void setBluetoothEnabled(Context context, boolean bleFlagVal) {
         getSharedPreferences(context).edit().putBoolean(BLUETOOTH_ENABLED, bleFlagVal);
+    }
+
+    public static void setGPSEnabled(Context context) {
+        setGPSEnabled(context, true);
+    }
+
+    public static boolean isGPSEnabled(Context context) {
+        return getSharedPreferences(context).getBoolean(GPS_ENABLED,false);
+    }
+
+    public static boolean isGPSEnabled(Context context, boolean defaultValue) {
+        return getSharedPreferences(context).getBoolean(GPS_ENABLED,defaultValue);
+    }
+
+    public static void setGPSEnabled(Context context, boolean bleFlagVal) {
+        getSharedPreferences(context).edit().putBoolean(GPS_ENABLED, bleFlagVal);
     }
 }

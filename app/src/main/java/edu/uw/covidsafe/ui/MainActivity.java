@@ -145,8 +145,7 @@ public class MainActivity extends AppCompatActivity {
         initBottomNav();
 
         if (!Constants.LoggingServiceRunning) {
-            SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-            boolean gpsEnabled = prefs.getBoolean(getString(R.string.gps_enabled_pkey), false);
+            boolean gpsEnabled = AppPreferencesHelper.isGPSEnabled(this);
             boolean bleEnabled = AppPreferencesHelper.isBluetoothEnabled(this);
             if (gpsEnabled) {
                 PermUtils.gpsSwitchLogic(this);
