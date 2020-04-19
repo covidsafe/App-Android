@@ -26,4 +26,7 @@
     <color name="colorDarkRed">#ffcc0000</color>
     <color name="colorLightGreen">#4bcf46</color>
     <color name="colorDarkGreen">#33a532</color>
+    <color name="chipGreen">#dff6dd</color>
+    <color name="chipOrange">#fff4ce</color>
+    <color name="chipRed">#fed9cc</color>
 </resources>

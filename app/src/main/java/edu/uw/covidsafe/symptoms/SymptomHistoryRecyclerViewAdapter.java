@@ -2,6 +2,7 @@ package edu.uw.covidsafe.symptoms;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,13 +43,15 @@ public class SymptomHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
     private Context mContext;
     private Activity av;
+    View view;
     int historySize = 0;
     List<SymptomsRecord> records = new LinkedList<SymptomsRecord>();
     Map<Integer, List<SymptomsRecord>> timestampToHistoryIndex = new HashMap<Integer,List<SymptomsRecord>>();
 
-    public SymptomHistoryRecyclerViewAdapter(Context mContext, Activity av) {
+    public SymptomHistoryRecyclerViewAdapter(Context mContext, Activity av, View view) {
         this.mContext = mContext;
         this.av = av;
+        this.view = view;
     }
 
     @NonNull
@@ -66,12 +69,13 @@ public class SymptomHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         SimpleDateFormat outformat = new SimpleDateFormat("h:mm aa");
         SimpleDateFormat outformat2 = new SimpleDateFormat("MMMM dd, YYYY");
 
-        ((SymptomHistoryHolder)holder).dayAction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SymptomUtils.editAction();
-            }
-        });
+//        ((SymptomHistoryHolder)holder).dayAction.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                SymptomUtils.editAction(mContext, av, view, );
+//            }
+//        });
+        ((SymptomHistoryHolder)holder).dayAction.setVisibility(View.GONE);
 
         List<SymptomsRecord> records = timestampToHistoryIndex.get(position);
         ((SymptomHistoryHolder)holder).day.setText(outformat2.format(records.get(0).getTs()));
@@ -119,6 +123,7 @@ public class SymptomHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             }
         }
 
+        Log.e("symptoms","data has changed" +this.historySize);
         notifyDataSetChanged();
     }
 
