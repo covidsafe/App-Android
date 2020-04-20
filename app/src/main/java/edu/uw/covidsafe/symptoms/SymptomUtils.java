@@ -142,6 +142,8 @@ public class SymptomUtils {
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
+                                        SimpleDateFormat outformat = new SimpleDateFormat("MM/dd h:mm aa");
+                                        Log.e("ddebug","delete task "+outformat.format(record.getTs()));
                                         new SymptomsOpsAsyncTask(Constants.SymptomsDatabaseOps.Delete, context, record).execute();
                                     }
                                 })

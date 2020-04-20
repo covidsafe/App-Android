@@ -119,10 +119,10 @@ public class AddEditSymptomsFragment extends Fragment {
 //                        }
                     }
                     else {
-                        SimpleDateFormat format = new SimpleDateFormat("MM/dd");
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
                         String dateStr = format.format(date);
 
-                        SimpleDateFormat format2 = new SimpleDateFormat("MM/dd hh:mm aa");
+                        SimpleDateFormat format2 = new SimpleDateFormat("yyyy/MM/dd hh:mm aa");
                         try {
                             ts = format2.parse(dateStr+" 9:00 "+ampm).getTime();
                         }catch(Exception e){
