@@ -177,7 +177,7 @@ public class ContactLogFragment extends Fragment {
         SimpleDateFormat month = new SimpleDateFormat("MM");
         SimpleDateFormat day = new SimpleDateFormat("dd");
 
-        for (SymptomsRecord record : Constants.symptomRecords) {
+        for (GpsRecord record : changedRecords) {
             Date ts = new Date(record.getTs());
             markedDays.add(CalendarDay.from(Integer.parseInt(year.format(ts)),
                     Integer.parseInt(month.format(ts)),

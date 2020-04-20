@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
             Date day4 = new Date(TimeUtils.getNDaysForward(-4));
 
             Date d0 = format.parse(format2.format(day1)+" 1:22 AM");
-            Date d1 = format.parse(format2.format(day2)+" 2:22 AM");
+            Date d1 = format.parse(format2.format(day1)+" 2:22 AM");
             Date d2 = format.parse(format2.format(day3)+" 1:11 AM");
             Date d3 = format.parse(format2.format(day4)+" 3:33 AM");
             Date d4 = format.parse(format2.format(day4)+" 4:44 PM");
