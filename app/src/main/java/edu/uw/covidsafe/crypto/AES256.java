@@ -211,11 +211,16 @@ public class AES256 {
         int counter = 0;
 
         for (String encryptedString : encryptedStrings) {
-            byte[] dataToDecrypt = android.util.Base64.decode(encryptedString,0);
+            if (encryptedString.endsWith("\n")) {
+                byte[] dataToDecrypt = android.util.Base64.decode(encryptedString, 0);
 
-            byte[] decrypted = decryptWithKeyHelper(dataToDecrypt, aesPair.getKey(), aesPair.getIV());
+                byte[] decrypted = decryptWithKeyHelper(dataToDecrypt, aesPair.getKey(), aesPair.getIV());
 
-            out[counter++] = new String(decrypted, Constants.CharSet);
+                out[counter++] = new String(decrypted, Constants.CharSet);
+            }
+            else {
+                out[counter++] = encryptedString;
+            }
         }
         return out;
     }

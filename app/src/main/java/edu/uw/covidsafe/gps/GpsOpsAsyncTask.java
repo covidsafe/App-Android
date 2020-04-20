@@ -1,6 +1,8 @@
 package edu.uw.covidsafe.gps;
 
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -22,11 +24,32 @@ GpsOpsAsyncTask extends AsyncTask<Void, Void, Void> {
         this.op = Constants.GpsDatabaseOps.Insert;
     }
 
+    public GpsOpsAsyncTask(GpsRecord record, Context cxt) {
+        this.record = record;
+        op = Constants.GpsDatabaseOps.Insert;
+        this.context = cxt;
+    }
+
+    public GpsOpsAsyncTask(Constants.GpsDatabaseOps op, Context cxt) {
+        this.op = op;
+        this.context = cxt;
+    }
+
     @Override
     protected Void doInBackground(Void... params) {
         Log.e("gps","doinbackground gps "+this.op);
         GpsDbRecordRepository repo = new GpsDbRecordRepository(context);
         if (this.op == Constants.GpsDatabaseOps.Insert) {
+            Geocoder gc = new Geocoder(context);
+            if (gc.isPresent()) {
+                try {
+                    List<Address> addresses = gc.getFromLocation(this.record.getLat(context), this.record.getLongi(context), 1);
+                    this.record.setAddress(addresses.get(0).getAddressLine(0), context);
+                }
+                catch(Exception e) {
+                    Log.e("err",e.getMessage());
+                }
+            }
             repo.insert(this.record);
             if (Constants.WRITE_TO_DISK) {
                 Utils.gpsLogToFile(this.context, this.record);
@@ -37,6 +60,9 @@ GpsOpsAsyncTask extends AsyncTask<Void, Void, Void> {
             for (GpsRecord record : records) {
                 Log.e("gps",record.toString());
             }
+        }
+        else if (this.op == Constants.GpsDatabaseOps.DeleteAll) {
+            repo.deleteAll();
         }
         return null;
     }

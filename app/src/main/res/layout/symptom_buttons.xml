@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     android:id="@+id/parent_layout2"
     android:paddingBottom="15dp"
-    android:paddingTop="15dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <CheckBox
@@ -36,7 +35,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight=".0"
-        android:text="Submit"
+        android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
         app:layout_constraintHorizontal_bias="1.0"
@@ -73,16 +72,5 @@
         android:orientation="vertical"
         app:layout_constraintGuide_begin="20dp"
         app:layout_constraintGuide_percent="0.95" />
-
-    <TextView
-        android:id="@+id/lastSubmittedDate"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:text="Last submitted: "
-        app:layout_constraintBottom_toTopOf="@+id/certBoxReport"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
-        app:layout_constraintStart_toStartOf="@+id/guidelineV5"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
