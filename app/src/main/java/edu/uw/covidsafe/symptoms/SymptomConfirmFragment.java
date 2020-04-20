@@ -53,20 +53,20 @@ public class SymptomConfirmFragment extends Fragment {
         SymptomSummaryRecyclerViewAdapter symptomAdapter = new SymptomSummaryRecyclerViewAdapter(getActivity(),getActivity(), view, record);
         tipView.setAdapter(symptomAdapter);
         tipView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
+        format();
         return view;
     }
 
     public void format() {
         SimpleDateFormat format = new SimpleDateFormat("aa");
         TextView ampm = (TextView) view.findViewById(R.id.ampm);
-        ampm.setText(format.format(this.record.getTs()));
+        ampm.setText(format.format(this.record.getTs()).toUpperCase());
 
         TextView dateDetails = (TextView) view.findViewById(R.id.dateDetails);
         SimpleDateFormat format2 = new SimpleDateFormat("MMMM dd, yyyy");
         SimpleDateFormat format3 = new SimpleDateFormat("hh:mm aa");
 
-        dateDetails.setText(format2.format(this.record.getLogTime()) + "|" +
+        dateDetails.setText(format2.format(this.record.getLogTime()) + " | " +
         format3.format(this.record.getLogTime()));
     }
 

@@ -19,6 +19,7 @@
     <color name="gray3">#e1e1e1</color>
     <color name="gray4">#fafafa</color>
     <color name="gray5">#f1f1f1</color>
+    <color name="gray6">#acacac</color>
     <color name="darkGray">#6e6e6e</color>
     <color name="warningRed">#e8685e</color>
 
@@ -29,4 +30,5 @@
     <color name="chipGreen">#dff6dd</color>
     <color name="chipOrange">#fff4ce</color>
     <color name="chipRed">#fed9cc</color>
+
 </resources>

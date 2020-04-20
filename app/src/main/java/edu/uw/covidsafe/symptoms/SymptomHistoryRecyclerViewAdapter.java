@@ -81,12 +81,12 @@ public class SymptomHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         ((SymptomHistoryHolder)holder).day.setText(outformat2.format(records.get(0).getTs()));
         SimpleDateFormat ampm = new SimpleDateFormat("aa");
         for (SymptomsRecord record : records) {
-            Date date = new Date(record.getTs());
+            Date date = new Date(record.getLogTime());
             if (ampm.format(date).toLowerCase().equals("am")) {
-                ((SymptomHistoryHolder)holder).amStatus.setText(outformat.format(date));
+                ((SymptomHistoryHolder)holder).amStatus.setText("Logged: "+outformat.format(date));
             }
             else if (ampm.format(date).toLowerCase().equals("pm")) {
-                ((SymptomHistoryHolder)holder).pmStatus.setText(outformat.format(date));
+                ((SymptomHistoryHolder)holder).pmStatus.setText("Logged: "+outformat.format(date));
             }
         }
     }

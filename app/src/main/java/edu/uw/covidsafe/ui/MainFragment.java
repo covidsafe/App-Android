@@ -177,6 +177,7 @@ public class MainFragment extends Fragment {
                 //something in db has changed, update
                 symptomDbChanged = true;
                 changedRecords = symptomRecords;
+                Constants.symptomRecords = symptomRecords;
                 Log.e("symptom","mainfragment - symptom list changed");
                 if (Constants.CurrentFragment.toString().toLowerCase().contains("mainfragment")) {
                     Log.e("symptom","mainfragment - symptom list changing");

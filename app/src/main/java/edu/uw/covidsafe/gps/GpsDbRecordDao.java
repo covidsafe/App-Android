@@ -1,5 +1,6 @@
 package edu.uw.covidsafe.gps;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -25,7 +26,10 @@ public interface GpsDbRecordDao {
     void deleteEarlierThan(long ts_thresh);
 
     @Query("SELECT * from gps_record_table ORDER BY ts DESC")
-    List<GpsRecord> getSortedRecords();
+    LiveData<List<GpsRecord>> getSortedRecords();
+
+    @Query("SELECT * from gps_record_table ORDER BY ts DESC")
+    List<GpsRecord> getSortedRecordsSync();
 
     @Query("SELECT * from gps_record_table WHERE ts BETWEEN :ts1 AND :ts2")
     List<GpsRecord> getRecordsBetweenTimestamp(long ts1, long ts2);

@@ -8,6 +8,7 @@
     <string name="add_symptoms_header_text"><![CDATA[<font color=#000000>Create New Log</font>]]></string>
     <string name="settings_header_text"><![CDATA[<font color=#000000>Settings</font>]]></string>
     <string name="help_header_text"><![CDATA[<font color=#000000>Resources</font>]]></string>
+    <string name="contact_log_header_text"><![CDATA[<font color=#000000>Contact Log</font>]]></string>
     <string name="warning_header_text"><![CDATA[<font color=#000000>Diagnosis Report</font>]]></string>
     <string name="symptom_help_text">Use this form to provide a daily report of any symptoms you have. You may submit this form once a day.</string>
     <string name="warning_help_text">You\'ve received a positive diagnosis from your healthcare provider. To confirm your diagnosis, please provider your credentials below.</string>

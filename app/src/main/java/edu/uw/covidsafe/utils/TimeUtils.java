@@ -13,7 +13,7 @@ import java.util.List;
 
 public class TimeUtils {
 
-    public static long getNDaysBack(int N) {
+    public static long getNDaysForward(int N) {
         Date dd = new Date(TimeUtils.getTime());
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(dd);
