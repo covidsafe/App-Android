@@ -141,7 +141,7 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
             editor.putLong(context.getString(R.string.time_of_last_query_pkey), lastQueryTime);
             editor.commit();
 
-            Constants.PullServiceRunning = false;
+            //Constants.PullServiceRunning = false;
             return null;
         }
 
@@ -155,7 +155,7 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
         List<BluetoothMatch> bluetoothMatches = getMessages(preciseLat,preciseLong,
                 currentGpsPrecision, lastQueryTime);
         if (bluetoothMatches == null || bluetoothMatches.size() == 0) {
-            Constants.PullServiceRunning = false;
+            //Constants.PullServiceRunning = false;
             return null;
         }
 
