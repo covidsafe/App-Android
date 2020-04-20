@@ -30,6 +30,7 @@ import edu.uw.covidsafe.utils.Constants;
 public class SymptomUtils {
 
     public static void updateTodaysLogs(View view, List<SymptomsRecord> symptomRecords, Context cxt, Activity av, Date dateToShow, String entryPoint) {
+        Log.e("symptom","update todays log "+entryPoint);
         Constants.entryPoint = entryPoint;
         ImageView amImage  = (ImageView)view.findViewById(R.id.amImage);
         ImageView pmImage  = (ImageView)view.findViewById(R.id.pmImage);
@@ -42,9 +43,6 @@ public class SymptomUtils {
         SimpleDateFormat minute = new SimpleDateFormat("mm");
 
         // view elements are null
-        if (amImage==null) {
-            return;
-        }
         Log.e("ddebug ",(cxt==null)+"");
         amImage.setImageDrawable(cxt.getResources().getDrawable(R.drawable.symptom_edit));
         pmImage.setImageDrawable(cxt.getResources().getDrawable(R.drawable.symptom_edit));
@@ -74,16 +72,20 @@ public class SymptomUtils {
 
         SimpleDateFormat day = new SimpleDateFormat("dd");
         SimpleDateFormat ampm = new SimpleDateFormat("aa");
-        SimpleDateFormat outformat = new SimpleDateFormat("h:mm aa");
+        SimpleDateFormat outformat = new SimpleDateFormat("MM/dd h:mm aa");
 
         for (SymptomsRecord record : symptomRecords) {
-            Date symptomDate = new Date(record.getTs());
-            String symptomDay = day.format(symptomDate);
+            Date symptomLogDate = new Date(record.getLogTime());
+            Date symptomActualDate = new Date(record.getTs());
+
+            String symptomDay = day.format(symptomActualDate);
             String dateToMatch = day.format(dateToShow);
+
             if (symptomDay.equals(dateToMatch)) {
-                if (ampm.format(symptomDate).toLowerCase().equals("am")) {
+                if (ampm.format(symptomActualDate).toLowerCase().equals("am")) {
                     amImage.setImageDrawable(cxt.getDrawable(R.drawable.symptom_done));
-                    amStatus.setText(outformat.format(symptomDate));
+                    amStatus.setText("Logged: "+outformat.format(symptomLogDate));
+                    Log.e("symtom","edit am action to "+dateToMatch);
                     amAction.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -92,9 +94,10 @@ public class SymptomUtils {
                     });
                     amAction.setImageDrawable(cxt.getDrawable(R.drawable.ic_more_vert_gray_24dp));
                 }
-                else if (ampm.format(symptomDate).toLowerCase().equals("pm")) {
+                else if (ampm.format(symptomActualDate).toLowerCase().equals("pm")) {
                     pmImage.setImageDrawable(cxt.getDrawable(R.drawable.symptom_done));
-                    pmStatus.setText(outformat.format(symptomDate));
+                    pmStatus.setText("Logged: "+outformat.format(symptomLogDate));
+                    Log.e("symtom","edit pm action to "+dateToMatch);
                     pmAction.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

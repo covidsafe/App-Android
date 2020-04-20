@@ -180,16 +180,16 @@ public class MainActivity extends AppCompatActivity {
             Date d2 = format.parse("2020/04/16 1:11 AM");
             Date d3 = format.parse("2020/04/15 3:33 AM");
             Date d4 = format.parse("2020/04/15 4:44 PM");
-            SymptomsRecord record0 = new SymptomsRecord(d0.getTime(),true,false,false,false,false,false,false);
-            SymptomsRecord record1 = new SymptomsRecord(d1.getTime(),true,false,false,false,false,false,false);
-            SymptomsRecord record2 = new SymptomsRecord(d2.getTime(),false,true,false,false,false,false,false);
-            SymptomsRecord record3 = new SymptomsRecord(d3.getTime(),false,false,true,false,false,false,false);
-            SymptomsRecord record4 = new SymptomsRecord(d4.getTime(),false,false,false,true,false,false,false);
-            new SymptomsOpsAsyncTask(this, record0).execute();
-            new SymptomsOpsAsyncTask(this, record1).execute();
-            new SymptomsOpsAsyncTask(this, record2).execute();
-            new SymptomsOpsAsyncTask(this, record3).execute();
-            new SymptomsOpsAsyncTask(this, record4).execute();
+//            SymptomsRecord record0 = new SymptomsRecord(d0.getTime(),true,false,false,false,false,false,false);
+//            SymptomsRecord record1 = new SymptomsRecord(d1.getTime(),true,false,false,false,false,false,false);
+//            SymptomsRecord record2 = new SymptomsRecord(d2.getTime(),false,true,false,false,false,false,false);
+//            SymptomsRecord record3 = new SymptomsRecord(d3.getTime(),false,false,true,false,false,false,false);
+//            SymptomsRecord record4 = new SymptomsRecord(d4.getTime(),false,false,false,true,false,false,false);
+//            new SymptomsOpsAsyncTask(this, record0).execute();
+//            new SymptomsOpsAsyncTask(this, record1).execute();
+//            new SymptomsOpsAsyncTask(this, record2).execute();
+//            new SymptomsOpsAsyncTask(this, record3).execute();
+//            new SymptomsOpsAsyncTask(this, record4).execute();
         }
         catch(Exception e) {
             Log.e("err",e.getMessage());

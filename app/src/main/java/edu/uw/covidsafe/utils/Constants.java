@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.covidsafe.R;
+import com.google.common.collect.Lists;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import edu.uw.covidsafe.symptoms.SymptomsRecord;
@@ -27,6 +28,7 @@ import edu.uw.covidsafe.ui.health.DiagnosisFragment;
 import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
 import java.util.UUID;
@@ -182,6 +184,30 @@ public class Constants {
     public static HashMap<String,Long> scannedUUIDsTimes;
     public static HashSet<String> writtenUUIDs;
     public static int pageNumber = -1;
+    public static List<String> symptoms = Lists.newArrayList(
+        "Fever",
+        "Abdominal pain",
+        "Chills",
+        "Cough",
+        "Diarrhea",
+        "Difficulty breathing",
+        "Headache",
+        "Chest pains",
+        "Sore throat",
+        "Vomiting"
+    );
+    public static List<String> symptomDesc = Lists.newArrayList(
+        "A high temperature of over 100°F - you feel hot to touch on your chest or back.",
+        "Pain from inside the abdomen or the outer muscle wall, ranging from mild and temporary to severe.",
+        "The feeling of being cold, though not necessarily in a cold environment, often accompanied by shivering or shaking.",
+        "A new, continuous cough - this means you've started coughing repeatedly",
+        "Loose, watery bowel movements that may occur frequently and with a sense of urgency.",
+        "Shortness of breath, or dyspnea, is an uncomfortable condition that makes it difficult to fully get air into your lungs.",
+        "A painful sensation in any part of the head, ranging from sharp to dull, that may occur with other symptoms.",
+        "Chest pain appears in many forms, ranging from a sharp stab to a dull ache. Sometimes chest pain feels crushing or burning. In certain cases, the pain travels up the neck, into the jaw, and then radiates to the back or down one or both arms.",
+        "Pain or irritation in the throat that can occur with or without swallowing, often accompanies infections.",
+        "Forcefully expelling the stomach's contents out of the mouth."
+    );
 
     public static String[] gpsPermissions= {
             Manifest.permission.ACCESS_BACKGROUND_LOCATION,
