@@ -44,6 +44,7 @@ public class SymptomUtils {
 
         // view elements are null
         Log.e("ddebug ",(cxt==null)+"");
+        if (cxt==null) {return;}
         amImage.setImageDrawable(cxt.getResources().getDrawable(R.drawable.symptom_edit));
         pmImage.setImageDrawable(cxt.getResources().getDrawable(R.drawable.symptom_edit));
         amStatus.setText("Not logged");
