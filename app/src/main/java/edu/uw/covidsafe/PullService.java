@@ -39,6 +39,7 @@ public class PullService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
+           Constants.PullServiceRunning = true;
     }
 
     @Override
