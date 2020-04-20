@@ -101,7 +101,8 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         List<GpsRecord> gpsRecords = gpsRepo.getSortedRecords();
         if (gpsRecords.size() == 0) {
             Log.e("pull","no gps locations, returning");
-            Constants.PullServiceRunning = false;
+            // This does not mean that the service is not running, are we intending to stop service?
+            //Constants.PullServiceRunning = false;
             return null;
         }
         GpsRecord gpsRecord = gpsRecords.get(0);
@@ -142,7 +143,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
             editor.putLong(context.getString(R.string.time_of_last_query_pkey), lastQueryTime);
             editor.commit();
 
-            Constants.PullServiceRunning = false;
+            //Constants.PullServiceRunning = false;
             return null;
         }
 
@@ -156,7 +157,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         List<BluetoothMatch> bluetoothMatches = getMessages(preciseLat,preciseLong,
                 currentGpsPrecision, lastQueryTime);
         if (bluetoothMatches == null || bluetoothMatches.size() == 0) {
-            Constants.PullServiceRunning = false;
+            //Constants.PullServiceRunning = false;
             return null;
         }
 
