@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spannable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,22 +33,23 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.covidsafe.R;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import edu.uw.covidsafe.comms.PullFromServerTask;
-import edu.uw.covidsafe.comms.PullFromServerTaskDemo;
 import edu.uw.covidsafe.comms.PullFromServerTaskDemo2;
-import edu.uw.covidsafe.hcp.SubmitNarrowcastMessageTask;
+import edu.uw.covidsafe.symptoms.SymptomDbModel;
+import edu.uw.covidsafe.symptoms.SymptomUtils;
+import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.health.ResourceRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifDbModel;
 import edu.uw.covidsafe.ui.notif.NotifOpsAsyncTask;
 import edu.uw.covidsafe.ui.notif.NotifRecord;
 import edu.uw.covidsafe.ui.settings.PermUtils;
 import edu.uw.covidsafe.utils.Constants;
-import edu.uw.covidsafe.utils.CryptoUtils;
-import edu.uw.covidsafe.utils.RegenerateSeedUponReport;
+import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
 
 public class MainFragment extends Fragment {
@@ -59,6 +62,8 @@ public class MainFragment extends Fragment {
     ImageView refresh;
     SwipeRefreshLayout swipeLayout;
     TextView lastUpdated;
+    boolean symptomDbChanged = false;
+    List<SymptomsRecord> changedRecords;
 
     @SuppressLint("RestrictedApi")
     @Nullable
@@ -165,6 +170,23 @@ public class MainFragment extends Fragment {
             }
         });
 
+        SymptomDbModel smodel = ViewModelProviders.of(getActivity()).get(SymptomDbModel.class);
+        smodel.getAllSorted().observe(getActivity(), new Observer<List<SymptomsRecord>>() {
+            @Override
+            public void onChanged(List<SymptomsRecord> symptomRecords) {
+                //something in db has changed, update
+                symptomDbChanged = true;
+                changedRecords = symptomRecords;
+                Constants.symptomRecords = symptomRecords;
+                Log.e("symptom","mainfragment - symptom list changed");
+                if (Constants.CurrentFragment.toString().toLowerCase().contains("mainfragment")) {
+                    Log.e("symptom","mainfragment - symptom list changing");
+                    SymptomUtils.updateTodaysLogs(view, symptomRecords, getActivity(), getActivity(), new Date(TimeUtils.getTime()), "main");
+                    symptomDbChanged = false;
+                }
+            }
+        });
+
         initTestButtons();
 
         broadcastProp = view.findViewById(R.id.broadcastProp);
@@ -183,7 +205,49 @@ public class MainFragment extends Fragment {
                 broadcastSwitchLogic(!(gpsEnabled||bleEnabled));
             }
         });
+
+        initDataStorageLengthUI();
+
         return view;
+    }
+
+    public void initDataStorageLengthUI() {
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        TextView localDataStorageText = (TextView)view.findViewById(R.id.localDataStorageText);
+        int currentDaysOfDataToKeep = 0;
+        if (Constants.DEBUG) {
+            currentDaysOfDataToKeep = prefs.getInt(getActivity().getString(R.string.infection_window_in_days_pkeys), Constants.DefaultDaysOfLogsToKeepDebug);
+        }
+        else {
+            currentDaysOfDataToKeep = prefs.getInt(getActivity().getString(R.string.infection_window_in_days_pkeys), Constants.DefaultDaysOfLogsToKeep);
+        }
+
+        Date dd = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dd);
+        calendar.add(Calendar.DATE, currentDaysOfDataToKeep);
+        long thresh = calendar.getTime().getTime();
+
+        SimpleDateFormat format = new SimpleDateFormat("MMMM d");
+        String ss = format.format(new Date(thresh));
+
+        String out = "Your data will expire on "+ss+".\n\nOn this date your symptom logs and location data will be removed from the app. This action cannot be undone.\n";
+
+        localDataStorageText.setText(out);
+
+        TextView changeInSettings = (TextView) view.findViewById(R.id.changeInSettings);
+        changeInSettings.setText((Spannable)Html.fromHtml("<u>Change in settings</u>"));
+        changeInSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("mainfragment","onclick");
+                FragmentTransaction tx = getActivity().getSupportFragmentManager().beginTransaction();
+                tx.setCustomAnimations(
+                        R.anim.enter_right_to_left,R.anim.exit_right_to_left,
+                        R.anim.enter_left_to_right,R.anim.exit_left_to_right);
+                tx.replace(R.id.fragment_container, Constants.SettingsFragment).commit();
+            }
+        });
     }
 
     public void refreshTask() {
@@ -249,6 +313,12 @@ public class MainFragment extends Fragment {
         else {
             lastUpdated.setText("");
             lastUpdated.setVisibility(View.GONE);
+        }
+
+        if (symptomDbChanged) {
+            Log.e("symptoms","db changed ");
+            SymptomUtils.updateTodaysLogs(view, changedRecords, getActivity(), getActivity(), new Date(TimeUtils.getTime()), "main");
+            symptomDbChanged = false;
         }
     }
 

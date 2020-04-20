@@ -104,7 +104,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
 
         //get most recent GPS entry as coarse location and send it
         GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
-        List<GpsRecord> sortedGpsRecords = gpsRepo.getSortedRecords();
+        List<GpsRecord> sortedGpsRecords = gpsRepo.getSortedRecordsSync();
 
         double lat = 0;
         double longi = 0;

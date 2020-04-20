@@ -2,6 +2,7 @@
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swiperefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -62,6 +63,15 @@
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
         </RelativeLayout>
 
+        <include
+            android:id="@+id/symptomTracker"
+            layout="@layout/card_symptom_reminder"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
+            app:layout_constraintStart_toStartOf="@+id/guidelineV10"
+            app:layout_constraintTop_toBottomOf="@+id/history" />
+
         <TextView
             android:id="@+id/sick"
             android:layout_width="0dp"
@@ -70,7 +80,7 @@
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/rel"
             app:layout_constraintStart_toStartOf="@+id/guidelineV10"
-            app:layout_constraintTop_toBottomOf="@+id/history" />
+            app:layout_constraintTop_toBottomOf="@+id/symptomTracker" />
 
         <RelativeLayout
             android:id="@+id/rel"
@@ -94,16 +104,32 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/rel" />
 
+        <include
+            android:id="@+id/dataStorage"
+            layout="@layout/card_data_storage"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/container_header_lyt" />
+
+        <include
+            android:id="@+id/privacyDisclaimer"
+            layout="@layout/card_privacy_disclaimer"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/dataStorage" />
+
         <TextView
             android:id="@+id/lastUpdated"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp"
             android:text="Last updated"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guidelineV10"
-            app:layout_constraintTop_toBottomOf="@+id/container_header_lyt" />
+            app:layout_constraintTop_toBottomOf="@+id/privacyDisclaimer" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineV10"
@@ -112,6 +138,13 @@
             android:orientation="vertical"
             app:layout_constraintGuide_begin="20dp"
             app:layout_constraintGuide_percent=".05" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineV95"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="20dp"
+            app:layout_constraintGuide_percent=".95" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

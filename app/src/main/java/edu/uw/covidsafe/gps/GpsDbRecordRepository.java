@@ -2,6 +2,8 @@ package edu.uw.covidsafe.gps;
 
 import android.content.Context;
 
+import androidx.lifecycle.LiveData;
+
 import java.util.List;
 
 public class GpsDbRecordRepository {
@@ -24,8 +26,12 @@ public class GpsDbRecordRepository {
 
     // Room executes all queries on a separate thread.
     // Observed LiveData will notify the observer when the data has changed.
-    public List<GpsRecord> getSortedRecords() {
+    public LiveData<List<GpsRecord>> getSortedRecords() {
         return mRecordDao.getSortedRecords();
+    }
+
+    public List<GpsRecord> getSortedRecordsSync() {
+        return mRecordDao.getSortedRecordsSync();
     }
 
     public List<GpsRecord> getRecordsBetweenTimestamps(long ts1, long ts2) {

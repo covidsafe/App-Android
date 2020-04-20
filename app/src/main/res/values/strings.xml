@@ -4,9 +4,11 @@
     <string name="app_name_one_line">CovidSafe</string>
     <string name="history_header_text">History</string>
     <string name="permissions_header_text"><![CDATA[<font color=#000000>Select your preferences</font>]]></string>
-    <string name="health_header_text"><![CDATA[<font color=#000000>Health Report</font>]]></string>
+    <string name="health_header_text"><![CDATA[<font color=#000000>Health</font>]]></string>
+    <string name="add_symptoms_header_text"><![CDATA[<font color=#000000>Create New Log</font>]]></string>
     <string name="settings_header_text"><![CDATA[<font color=#000000>Settings</font>]]></string>
     <string name="help_header_text"><![CDATA[<font color=#000000>Resources</font>]]></string>
+    <string name="contact_log_header_text"><![CDATA[<font color=#000000>Contact Log</font>]]></string>
     <string name="warning_header_text"><![CDATA[<font color=#000000>Diagnosis Report</font>]]></string>
     <string name="symptom_help_text">Use this form to provide a daily report of any symptoms you have. You may submit this form once a day.</string>
     <string name="warning_help_text">You\'ve received a positive diagnosis from your healthcare provider. To confirm your diagnosis, please provider your credentials below.</string>
@@ -43,9 +45,12 @@
     <string name="aes_key_pkey">aes_key_pkey</string>
     <string name="aes_iv_pkey">aes_iv_pkey</string>
     <string name="infection_window_in_days_pkeys">infection_window_in_days_pkeys</string>
+    <string name="quarantine_end_time_pkey">quarantine_end_time_pkey</string>
+    <string name="last_symptom_update_pkey">last_symptom_update_pkey</string>
 
     <string name="phone">911</string>
-
+    <string name="privacyDisclaimer">Any information collected on CovidSafe is stored securely and locally in your app, and remain private to you.</string>
+    <string name="privacyDisclaimer2">This information is stored securely and locally on your app, and remains private to you.</string>
     <string name="perm_gps_rationale">Without this permission, we will be unable to capture location information. Are you sure you want to deny this permission?</string>
     <string name="perm_gps_ask">We require access to location information when the app is closed. Would you like to open app settings to enable this?</string>
 

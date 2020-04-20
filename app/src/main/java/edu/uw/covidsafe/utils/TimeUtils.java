@@ -6,11 +6,20 @@ import com.instacart.library.truetime.TrueTime;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 public class TimeUtils {
+
+    public static long getNDaysForward(int N) {
+        Date dd = new Date(TimeUtils.getTime());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dd);
+        calendar.add(Calendar.DATE, N);
+        return calendar.getTime().getTime();
+    }
 
     public static long getTime() {
 //        Log.e("truetime","get time "+TrueTime.isInitialized());
