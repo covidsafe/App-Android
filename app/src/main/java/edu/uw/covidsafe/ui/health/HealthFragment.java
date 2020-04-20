@@ -64,6 +64,34 @@ public class HealthFragment extends Fragment {
         adapter = new HealthPageAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
 
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//                Log.e("time","onpagescrolled "+position);
+                if (position == 0) {
+                    Constants.menu.findItem(R.id.mybutton).setVisible(true);
+                }
+                else {
+                    Constants.menu.findItem(R.id.mybutton).setVisible(false);
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+//                Log.e("time","onpageselected "+position);
+                if (position == 0) {
+                    Constants.menu.findItem(R.id.mybutton).setVisible(true);
+                }
+                else {
+                    Constants.menu.findItem(R.id.mybutton).setVisible(false);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+//                Log.e("time","scrollstatechanged "+state);
+            }
+        });
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
 
@@ -77,18 +105,5 @@ public class HealthFragment extends Fragment {
         Constants.CurrentFragment = this;
 
         Log.e("health","onresume "+Constants.HealthFragmentState.toString());
-//        TabLayout tabLayout = view.findViewById(R.id.tabLayout);
-//        if (Constants.HealthFragmentState.toString().toLowerCase().contains("diagnosis")){
-//            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_health,
-//                    Constants.DiagnosisFragment).commit();
-//            tabLayout.getTabAt(1).select();
-//            Log.e("health","select 1");
-//        }
-//        else if (Constants.HealthFragmentState.toString().toLowerCase().contains("symptom")) {
-////            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_health,
-////                    Constants.SymptomTrackerFragment).commit();
-////            tabLayout.getTabAt(0).select();
-//            Log.e("health","select 0");
-//        }
     }
 }

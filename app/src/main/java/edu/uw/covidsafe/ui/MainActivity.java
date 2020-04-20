@@ -285,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
             Log.e("date","contact");
             myCalendar = Constants.contactLogMonthCalendar;
         }
-        else if (Constants.CurrentFragment.toString().toLowerCase().contains("symptom")) {
+        else if (Constants.CurrentFragment.toString().toLowerCase().contains("health")) {
             Log.e("date","symptom");
             myCalendar = Constants.symptomTrackerMonthCalendar;
         }
@@ -301,22 +301,20 @@ public class MainActivity extends AppCompatActivity {
         int yyyy = myCalendar.get(Calendar.YEAR);
         int mm = myCalendar.get(Calendar.MONTH);
         int dd = myCalendar.get(Calendar.DAY_OF_MONTH);
-
+        Log.e("time","setting month "+mm);
+        Log.e("time","setting day "+dd);
         DatePickerDialog dialog = new DatePickerDialog(activity, dateListener,
-                yyyy,mm-1,dd);
+                yyyy,mm,dd);
 
         SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         int days = prefs.getInt(getString(R.string.infection_window_in_days_pkeys), Constants.DefaultInfectionWindowInDays);
 
         Calendar finalMyCalendar = myCalendar;
 
-        dialog.getDatePicker().init(yyyy,mm-1,dd, new DatePicker.OnDateChangedListener() {
+        dialog.getDatePicker().init(yyyy,mm,dd, new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker datePicker, int i, int i2, int i3) {
                 finalMyCalendar.set(i, i2, i3);
-                int year = finalMyCalendar.get(Calendar.YEAR);
-                int month = finalMyCalendar.get(Calendar.MONTH) + 1;
-                int day = finalMyCalendar.get(Calendar.DAY_OF_MONTH);
             }
         });
         dialog.getDatePicker().setMinDate(TimeUtils.getNDaysForward(-days));
@@ -340,7 +338,7 @@ public class MainActivity extends AppCompatActivity {
                     ContactLogFragment.updateLocationView(CalendarDay.from(year,month,day),
                             getApplicationContext());
                 }
-                else if (Constants.CurrentFragment.toString().toLowerCase().contains("symptom")) {
+                else if (Constants.CurrentFragment.toString().toLowerCase().contains("health")) {
                     SymptomTrackerFragment.updateFeaturedDate(CalendarDay.from(year,month,day),
                             getApplicationContext(), activity);
                 }
