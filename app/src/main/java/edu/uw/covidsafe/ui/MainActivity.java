@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -92,52 +93,68 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        if (!menuLogic()) {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (Constants.CurrentFragment.toString().toLowerCase().contains("settings")) {
-                    FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
-                    tx.setCustomAnimations(
-                            R.anim.enter_left_to_right,R.anim.exit_left_to_right,
-                            R.anim.enter_left_to_right,R.anim.exit_left_to_right);
-                    tx.replace(R.id.fragment_container, Constants.MainFragment).commit();
-                }
-                else if (Constants.CurrentFragment.toString().toLowerCase().contains("diagnosis")) {
-                    FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
-                    tx.setCustomAnimations(
-                            R.anim.enter_left_to_right,R.anim.exit_left_to_right,
-                            R.anim.enter_left_to_right,R.anim.exit_left_to_right);
-                    tx.replace(R.id.fragment_container, Constants.HealthFragment).commit();
-                }
-                else if (Constants.CurrentFragment.toString().toLowerCase().contains("addeditsymptoms")) {
-                    Log.e("menu","back on add symptoms");
-                    FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
-                    tx.setCustomAnimations(
-                            R.anim.enter_left_to_right,R.anim.exit_left_to_right,
-                            R.anim.enter_left_to_right,R.anim.exit_left_to_right);
-                    if (Constants.entryPoint.equals("main")) {
-                        tx.replace(R.id.fragment_container, Constants.MainFragment).commit();
-                    }
-                    else {
-                        tx.replace(R.id.fragment_container, Constants.HealthFragment).commit();
-                    }
-                }
-                else if (Constants.CurrentFragment.toString().toLowerCase().contains("confirm")) {
-                    FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
-                    tx.setCustomAnimations(
-                            R.anim.enter_left_to_right,R.anim.exit_left_to_right,
-                            R.anim.enter_left_to_right,R.anim.exit_left_to_right);
-                    if (Constants.entryPoint.equals("main")) {
-                        tx.replace(R.id.fragment_container, Constants.MainFragment).commit();
-                    }
-                    else {
-                        tx.replace(R.id.fragment_container, Constants.HealthFragment).commit();
-                    }
-                }
+                menuLogic();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public boolean menuLogic() {
+        if (Constants.CurrentFragment.toString().toLowerCase().contains("settings")) {
+            FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+            tx.setCustomAnimations(
+                    R.anim.enter_left_to_right,R.anim.exit_left_to_right,
+                    R.anim.enter_left_to_right,R.anim.exit_left_to_right);
+            tx.replace(R.id.fragment_container, Constants.MainFragment).commit();
+            return true;
+        }
+        else if (Constants.CurrentFragment.toString().toLowerCase().contains("diagnosis")) {
+            FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+            tx.setCustomAnimations(
+                    R.anim.enter_left_to_right,R.anim.exit_left_to_right,
+                    R.anim.enter_left_to_right,R.anim.exit_left_to_right);
+            tx.replace(R.id.fragment_container, Constants.HealthFragment).commit();
+            return true;
+        }
+        else if (Constants.CurrentFragment.toString().toLowerCase().contains("addeditsymptoms")) {
+            Log.e("menu","back on add symptoms");
+            FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+            tx.setCustomAnimations(
+                    R.anim.enter_left_to_right,R.anim.exit_left_to_right,
+                    R.anim.enter_left_to_right,R.anim.exit_left_to_right);
+            if (Constants.entryPoint.equals("main")) {
+                tx.replace(R.id.fragment_container, Constants.MainFragment).commit();
+            }
+            else {
+                tx.replace(R.id.fragment_container, Constants.HealthFragment).commit();
+            }
+            return true;
+        }
+        else if (Constants.CurrentFragment.toString().toLowerCase().contains("confirm")) {
+            FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+            tx.setCustomAnimations(
+                    R.anim.enter_left_to_right,R.anim.exit_left_to_right,
+                    R.anim.enter_left_to_right,R.anim.exit_left_to_right);
+            if (Constants.entryPoint.equals("main")) {
+                tx.replace(R.id.fragment_container, Constants.MainFragment).commit();
+            }
+            else {
+                tx.replace(R.id.fragment_container, Constants.HealthFragment).commit();
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -233,6 +250,15 @@ public class MainActivity extends AppCompatActivity {
             Log.e("err",e.getMessage());
         }
     }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // R.menu.mymenu is a reference to an xml file named mymenu.xml which should be inside your res/menu directory.
+//        // If you don't have res/menu, just create a directory named "menu" inside res
+//        Log.e("menu","oncreate menu");
+//        getMenuInflater().inflate(R.menu.mymenu, menu);
+//        return super.onCreateOptionsMenu(menu);
+//    }
 
     @Override
     protected void onResume() {
