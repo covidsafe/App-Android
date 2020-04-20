@@ -125,12 +125,13 @@ public class ContactLogFragment extends Fragment {
                 .setMaximumDate(CalendarDay.today())
                 .setCalendarDisplayMode(CalendarMode.WEEKS)
                 .commit();
+
         cal.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 Log.e("contact","on date selected "+date.toString());
                 Log.e("contact","on date selected "+date.getYear()+","+date.getMonth()+","+date.getDay());
-                Constants.contactLogMonthCalendar.set(date.getYear(),date.getMonth(),date.getDay());
+                Constants.contactLogMonthCalendar.set(date.getYear(),date.getMonth()-1,date.getDay());
                 updateLocationView(date, getContext());
             }
         });
