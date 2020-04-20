@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import com.google.android.material.card.MaterialCardView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 import edu.uw.covidsafe.utils.Constants;
@@ -102,7 +100,7 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public Spannable getQuarantineTime() {
-        long thresh = TimeUtils.getNDaysBack(Constants.QuarantineLengthInDays);
+        long thresh = TimeUtils.getNDaysForward(Constants.QuarantineLengthInDays);
 
         SimpleDateFormat format = new SimpleDateFormat("MMMM d");
         String ss = format.format(new Date(thresh));

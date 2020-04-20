@@ -66,7 +66,7 @@ public class Constants {
     }
 
     public enum GpsDatabaseOps {
-        Insert,ViewAll
+        Insert,ViewAll,DeleteAll
     }
 
     public enum UUIDDatabaseOps {
@@ -74,7 +74,6 @@ public class Constants {
     }
 
     public static String entryPoint = "";
-    public static MaterialCalendarView cal;
     public static List<SymptomsRecord> symptomRecords;
     public static boolean EnableUUIDGeneration = true;
     public static TipRecyclerViewAdapter MainTipAdapter;

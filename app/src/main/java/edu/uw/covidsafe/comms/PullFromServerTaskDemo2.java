@@ -100,7 +100,7 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         // send coarse -> finer grained gps locations, find size of seeds on server
         //////////////////////////////////////////////////////////////////////////////////////////
         GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
-        List<GpsRecord> gpsRecords = gpsRepo.getSortedRecords();
+        List<GpsRecord> gpsRecords = gpsRepo.getSortedRecordsSync();
 
         double lat = 0;
         double lon = 0;

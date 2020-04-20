@@ -25,14 +25,20 @@ import edu.uw.covidsafe.utils.TimeUtils;
 import com.example.covidsafe.R;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
+import com.prolificinteractive.materialcalendarview.DayViewDecorator;
+import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+import com.prolificinteractive.materialcalendarview.spans.DotSpan;
 
 import org.threeten.bp.DayOfWeek;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 public class SymptomTrackerFragment extends Fragment {
@@ -41,6 +47,8 @@ public class SymptomTrackerFragment extends Fragment {
     SymptomHistoryRecyclerViewAdapter symptomHistoryAdapter;
     boolean symptomDbChanged = false;
     List<SymptomsRecord> changedRecords;
+    List<CalendarDay> markedDays = new LinkedList<>();
+    MaterialCalendarView cal;
 
     @SuppressLint("RestrictedApi")
     @Nullable
@@ -70,6 +78,8 @@ public class SymptomTrackerFragment extends Fragment {
                 //something in db has changed, update
                 symptomDbChanged = true;
                 changedRecords = symptomRecords;
+                Constants.symptomRecords = symptomRecords;
+                markDays();
                 Log.e("symptom", "symptomtracker - symptom list changed");
                 if (Constants.CurrentFragment.toString().toLowerCase().contains("symptom")) {
                     Log.e("symptom", "symptomtracker - symptom list changing");
@@ -83,7 +93,7 @@ public class SymptomTrackerFragment extends Fragment {
     }
 
     public void initCal() {
-        Constants.cal = view.findViewById(R.id.calendarView);
+        cal = view.findViewById(R.id.calendarView);
         /////////////////////////////////////////////////////////////////
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
@@ -91,15 +101,15 @@ public class SymptomTrackerFragment extends Fragment {
         /////////////////////////////////////////////////////////////////
         Log.e("health","minimum "+calendar.get(Calendar.YEAR)+","+(calendar.get(Calendar.MONTH)+1)+","+calendar.get(Calendar.DAY_OF_MONTH));
         CalendarDay d1 = CalendarDay.from(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH)+1,calendar.get(Calendar.DAY_OF_MONTH));
-        Constants.cal.setSelectedDate(CalendarDay.today());
+        cal.setSelectedDate(CalendarDay.today());
 
-        Constants.cal.state().edit()
+        cal.state().edit()
                 .setFirstDayOfWeek(DayOfWeek.SUNDAY)
                 .setMinimumDate(d1)
                 .setMaximumDate(CalendarDay.today())
                 .setCalendarDisplayMode(CalendarMode.WEEKS)
                 .commit();
-        Constants.cal.setOnDateChangedListener(new OnDateSelectedListener() {
+        cal.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 Log.e("symptom","on date selected "+date.toString());
@@ -108,9 +118,48 @@ public class SymptomTrackerFragment extends Fragment {
         });
     }
 
+    public void markDays() {
+        Log.e("symptoms","update days");
+        markedDays.clear();
+        SimpleDateFormat year = new SimpleDateFormat("yyyy");
+        SimpleDateFormat month = new SimpleDateFormat("MM");
+        SimpleDateFormat day = new SimpleDateFormat("dd");
+
+        for (SymptomsRecord record : Constants.symptomRecords) {
+            Date ts = new Date(record.getTs());
+            markedDays.add(CalendarDay.from(Integer.parseInt(year.format(ts)),
+                    Integer.parseInt(month.format(ts)),
+                    Integer.parseInt(day.format(ts))));
+        }
+        Log.e("symptoms","marked days "+markedDays.size());
+        cal.addDecorators(new EventDecorator(getContext().getColor(R.color.purpleDark),
+                markedDays));
+    }
+
+    private class EventDecorator implements DayViewDecorator {
+
+        private final int color;
+        private final HashSet<CalendarDay> dates;
+
+        public EventDecorator(int color, Collection<CalendarDay> dates) {
+            this.color = color;
+            this.dates = new HashSet<>(dates);
+        }
+
+        @Override
+        public boolean shouldDecorate(CalendarDay day) {
+            return dates.contains(day);
+        }
+
+        @Override
+        public void decorate(DayViewFacade view) {
+            view.addSpan(new DotSpan(5, color));
+        }
+    }
+
     public void updateFeaturedDate() {
         Log.e("symptom","update featured date");
-        CalendarDay calDay = Constants.cal.getSelectedDate();
+        CalendarDay calDay = cal.getSelectedDate();
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         try {
             String dateStr = calDay.getYear() + "/" + calDay.getMonth() + "/" + calDay.getDay();
