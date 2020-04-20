@@ -120,6 +120,9 @@ dependencies {
 
     implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
+    
+    implementation 'com.parse.bolts:bolts-tasks:1.4.0'
+    implementation 'com.parse.bolts:bolts-applinks:1.4.0'
 }
 
 protobuf {
