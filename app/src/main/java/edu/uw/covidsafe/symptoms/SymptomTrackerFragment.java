@@ -1,6 +1,9 @@
 package edu.uw.covidsafe.symptoms;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Html;
@@ -43,12 +46,12 @@ import java.util.List;
 
 public class SymptomTrackerFragment extends Fragment {
 
-    View view;
-    SymptomHistoryRecyclerViewAdapter symptomHistoryAdapter;
+    static View view;
+    static SymptomHistoryRecyclerViewAdapter symptomHistoryAdapter;
     boolean symptomDbChanged = false;
-    List<SymptomsRecord> changedRecords;
+    static List<SymptomsRecord> changedRecords;
     List<CalendarDay> markedDays = new LinkedList<>();
-    MaterialCalendarView cal;
+    static MaterialCalendarView cal;
 
     @SuppressLint("RestrictedApi")
     @Nullable
@@ -57,6 +60,7 @@ public class SymptomTrackerFragment extends Fragment {
         Log.e("health","symptom tracker fragment oncreate");
         view = inflater.inflate(R.layout.health_symptom_tracker, container, false);
 
+        Constants.menu.findItem(R.id.mybutton).setVisible(true);
         ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getResources().getColor(R.color.white)));
         ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -83,7 +87,7 @@ public class SymptomTrackerFragment extends Fragment {
                 Log.e("symptom", "symptomtracker - symptom list changed");
                 if (Constants.CurrentFragment.toString().toLowerCase().contains("symptom")) {
                     Log.e("symptom", "symptomtracker - symptom list changing");
-                    updateFeaturedDate();
+                    updateFeaturedDate(cal.getSelectedDate(), getContext(), getActivity());
                     symptomDbChanged = false;
                 }
             }
@@ -97,7 +101,9 @@ public class SymptomTrackerFragment extends Fragment {
         /////////////////////////////////////////////////////////////////
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-        calendar.add(Calendar.DATE, -Constants.DefaultInfectionWindowInDays);
+        SharedPreferences prefs = getContext().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        int days = prefs.getInt(getContext().getString(R.string.infection_window_in_days_pkeys), Constants.DefaultInfectionWindowInDays);
+        calendar.add(Calendar.DATE, -days);
         /////////////////////////////////////////////////////////////////
         Log.e("health","minimum "+calendar.get(Calendar.YEAR)+","+(calendar.get(Calendar.MONTH)+1)+","+calendar.get(Calendar.DAY_OF_MONTH));
         CalendarDay d1 = CalendarDay.from(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH)+1,calendar.get(Calendar.DAY_OF_MONTH));
@@ -113,7 +119,8 @@ public class SymptomTrackerFragment extends Fragment {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 Log.e("symptom","on date selected "+date.toString());
-                updateFeaturedDate();
+                Constants.symptomTrackerMonthCalendar.set(date.getYear(),date.getMonth(),date.getDay());
+                updateFeaturedDate(date, getContext(), getActivity());
             }
         });
     }
@@ -157,15 +164,16 @@ public class SymptomTrackerFragment extends Fragment {
         }
     }
 
-    public void updateFeaturedDate() {
+    public static void updateFeaturedDate(CalendarDay calDay, Context cxt, Activity av) {
+        cal.setSelectedDate(calDay);
+        cal.setCurrentDate(calDay);
         Log.e("symptom","update featured date");
-        CalendarDay calDay = cal.getSelectedDate();
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         try {
             String dateStr = calDay.getYear() + "/" + calDay.getMonth() + "/" + calDay.getDay();
             Date dd = format.parse(dateStr);
             Log.e("symptom","updating "+dateStr);
-            SymptomUtils.updateTodaysLogs(view, changedRecords, getContext(),getActivity(), dd, "tracker");
+            SymptomUtils.updateTodaysLogs(view, changedRecords, cxt,av, dd, "tracker");
             symptomHistoryAdapter.setRecords(changedRecords, view);
         }
         catch(Exception e) {
@@ -183,7 +191,7 @@ public class SymptomTrackerFragment extends Fragment {
 //        Constants.CurrentFragment = this;
         if (symptomDbChanged) {
             Log.e("symptoms","db changed ");
-            updateFeaturedDate();
+            updateFeaturedDate(cal.getSelectedDate(), getContext(), getActivity());
             symptomDbChanged = false;
         }
     }
