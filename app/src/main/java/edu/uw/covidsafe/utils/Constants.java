@@ -220,10 +220,8 @@ public class Constants {
         else {
             LOG_TO_DISK = true;
         }
-
-        SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         Constants.BLUETOOTH_ENABLED = AppPreferencesHelper.isBluetoothEnabled(av, Constants.BLUETOOTH_ENABLED);
         Constants.GPS_ENABLED = AppPreferencesHelper.isGPSEnabled(av, Constants.GPS_ENABLED);
-        Constants.NOTIFS_ENABLED = prefs.getBoolean(av.getString(R.string.notifs_enabled_pkey), Constants.NOTIFS_ENABLED);
+        Constants.NOTIFS_ENABLED = AppPreferencesHelper.areNotificationsEnabled(av, Constants.NOTIFS_ENABLED);
     }
 }

@@ -101,9 +101,7 @@ public class Utils {
 //                Constants.notifSwitch.setOnCheckedChangeListener (null);
                 Constants.notifSwitch.setChecked (false);
 //                Constants.notifSwitch.setOnCheckedChangeListener (PermUtil.listener);
-
-                editor.putBoolean(av.getString(R.string.notifs_enabled_pkey), false);
-                editor.commit();
+                AppPreferencesHelper.setNotificationEnabled(av, false);
             }
         }
         if (Constants.gpsSwitch != null) {
@@ -149,7 +147,7 @@ public class Utils {
     public static void sendNotification(Context mContext, String title, String message, int icon) {
         SharedPreferences prefs = mContext.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = mContext.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
-        if (prefs.getBoolean(mContext.getString(R.string.notifs_enabled_pkey), Constants.NOTIFS_ENABLED)) {
+        if (AppPreferencesHelper.areNotificationsEnabled(mContext, Constants.NOTIFS_ENABLED)) {
             Log.e("notif","notif");
             NotificationManager mNotificationManager;
 
