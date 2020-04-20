@@ -181,7 +181,8 @@ public class MainFragment extends Fragment {
                 Log.e("symptom","mainfragment - symptom list changed");
                 if (Constants.CurrentFragment.toString().toLowerCase().contains("mainfragment")) {
                     Log.e("symptom","mainfragment - symptom list changing");
-                    SymptomUtils.updateTodaysLogs(view, symptomRecords, getActivity(), getActivity(), new Date(TimeUtils.getTime()), "main");
+                    SymptomUtils.updateTodaysLogs(view, symptomRecords, getContext(), getActivity(),
+                            new Date(TimeUtils.getTime()), "main");
                     symptomDbChanged = false;
                 }
             }
@@ -317,7 +318,8 @@ public class MainFragment extends Fragment {
 
         if (symptomDbChanged) {
             Log.e("symptoms","db changed ");
-            SymptomUtils.updateTodaysLogs(view, changedRecords, getActivity(), getActivity(), new Date(TimeUtils.getTime()), "main");
+            SymptomUtils.updateTodaysLogs(view, changedRecords, getContext(),
+                    getActivity(), new Date(TimeUtils.getTime()), "main");
             symptomDbChanged = false;
         }
     }
