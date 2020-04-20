@@ -28,6 +28,7 @@ public class PullService extends IntentService {
     public void onCreate() {
         super.onCreate();
 
+        Log.e("service", "pull onCreate");
         Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(getString(R.string.notif_message))
@@ -39,14 +40,15 @@ public class PullService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-           Constants.PullServiceRunning = true;
+        Log.e("service", "pull onHandleIntent");
+       Constants.PullServiceRunning = true;
     }
 
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
+        Log.e("state","pull service onStartCommand");
         Constants.PullServiceRunning = true;
-        Log.e("state","pull service started");
         ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
 
         Constants.pullFromServerTaskTimer = new Timer();
