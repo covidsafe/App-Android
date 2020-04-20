@@ -9,6 +9,10 @@ Video demo of current capabilities
 
 https://www.youtube.com/watch?v=2fPpLJ3MQpc
 
+Symptom tracker and location log
+
+https://www.youtube.com/watch?v=Pr1YNAiKmFg
+
 Rotating Bluetooth IDs in realtime
 
 https://www.youtube.com/watch?v=9EkTWEod3Bk
