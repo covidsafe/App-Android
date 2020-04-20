@@ -62,6 +62,8 @@ public class MainFragment extends Fragment {
     ImageView refresh;
     SwipeRefreshLayout swipeLayout;
     TextView lastUpdated;
+    boolean symptomDbChanged = false;
+    List<SymptomsRecord> changedRecords;
 
     @SuppressLint("RestrictedApi")
     @Nullable
@@ -173,9 +175,14 @@ public class MainFragment extends Fragment {
             @Override
             public void onChanged(List<SymptomsRecord> symptomRecords) {
                 //something in db has changed, update
-                Log.e("mainfragment","symptom list changed");
-
-                SymptomUtils.updateTodaysLogs(view, symptomRecords, getActivity(), getActivity(), new Date(TimeUtils.getTime()), "main");
+                symptomDbChanged = true;
+                changedRecords = symptomRecords;
+                Log.e("symptom","mainfragment - symptom list changed");
+                if (Constants.CurrentFragment.toString().toLowerCase().contains("mainfragment")) {
+                    Log.e("symptom","mainfragment - symptom list changing");
+                    SymptomUtils.updateTodaysLogs(view, symptomRecords, getActivity(), getActivity(), new Date(TimeUtils.getTime()), "main");
+                    symptomDbChanged = false;
+                }
             }
         });
 
@@ -305,6 +312,12 @@ public class MainFragment extends Fragment {
         else {
             lastUpdated.setText("");
             lastUpdated.setVisibility(View.GONE);
+        }
+
+        if (symptomDbChanged) {
+            Log.e("symptoms","db changed ");
+            SymptomUtils.updateTodaysLogs(view, changedRecords, getActivity(), getActivity(), new Date(TimeUtils.getTime()), "main");
+            symptomDbChanged = false;
         }
     }
 

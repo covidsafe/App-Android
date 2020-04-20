@@ -92,8 +92,6 @@
                 android:text="AM"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/guidelineV85"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/amImage"
                 app:layout_constraintTop_toBottomOf="@+id/view" />
 
@@ -107,15 +105,13 @@
                 android:text="Saved 8:03am"
                 android:textColor="@color/darkGray"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/guidelineV85"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/amImage"
                 app:layout_constraintTop_toBottomOf="@+id/am" />
 
             <ImageButton
                 android:id="@+id/amAction"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="@color/white"
                 android:onClick="showPopup"
                 android:src="@drawable/ic_more_vert_gray_24dp"
@@ -154,8 +150,6 @@
                 android:text="PM"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/guidelineV85"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/pmImage"
                 app:layout_constraintTop_toBottomOf="@+id/view2" />
 
@@ -171,15 +165,13 @@
                 android:textColor="@color/darkGray"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/guidelineV85"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/pmImage"
                 app:layout_constraintTop_toBottomOf="@+id/pm" />
 
             <ImageButton
                 android:id="@+id/pmAction"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="@color/white"
                 android:onClick="showPopup"
                 android:src="@drawable/ic_add_gray_24dp"

@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.covidsafe.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,6 +35,7 @@ import java.util.List;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.ui.onboarding.OnboardingActivity;
 import edu.uw.covidsafe.utils.Constants;
+import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
 
 public class AddEditSymptomsFragment extends Fragment {
@@ -103,64 +105,47 @@ public class AddEditSymptomsFragment extends Fragment {
                     dialog.show();
                 }
                 else {
-                    // edit and replace
+                    long ts = 0;
                     if (record != null) {
-                        Utils.mkSnack(getActivity(), view, "Symptom log updated");
-                        FragmentTransaction tx = ((MainActivity) getActivity()).getSupportFragmentManager().beginTransaction();
-                        tx.setCustomAnimations(
-                                R.anim.enter_right_to_left, R.anim.exit_right_to_left,
-                                R.anim.enter_left_to_right, R.anim.exit_left_to_right);
-                        SymptomsRecord newRecord = new SymptomsRecord(
-                                record.getTs(),
-                                symptomAdapter.statesOut.get(0),
-                                symptomAdapter.statesOut.get(1),
-                                symptomAdapter.statesOut.get(2),
-                                symptomAdapter.statesOut.get(3),
-                                symptomAdapter.statesOut.get(4),
-                                symptomAdapter.statesOut.get(5),
-                                symptomAdapter.statesOut.get(6)
-                        );
-                        new SymptomsOpsAsyncTask(getContext(), newRecord).execute();
-                        tx.replace(R.id.fragment_container, new SymptomConfirmFragment(newRecord)).commit();
+                        // edit and replace
+                        // put dummy timestamp for an edit operation
+                        ts = record.getTs();
+//                        if (ampm.equals("am")) {
+//                            ts += 3600000 * 9;
+//                        }
+//                        else if (ampm.equals("pm")) {
+//                            ts += 3600000 * 21;
+//                        }
                     }
                     else {
-                        long ts = date.getTime();
-                        if (ampm.equals("am")) {
-                            ts += 3600000 * 9;
+                        SimpleDateFormat format = new SimpleDateFormat("MM/dd");
+                        String dateStr = format.format(date);
+
+                        SimpleDateFormat format2 = new SimpleDateFormat("MM/dd hh:mm aa");
+                        try {
+                            ts = format2.parse(dateStr+" 9:00 "+ampm).getTime();
+                        }catch(Exception e){
+                            Log.e("err",e.getMessage());
                         }
-                        else if (ampm.equals("pm")) {
-                            ts += 3600000 * 21;
-                        }
-                        SymptomsRecord newRecord = new SymptomsRecord(
-                                ts,
-                                symptomAdapter.statesOut.get(0),
-                                symptomAdapter.statesOut.get(1),
-                                symptomAdapter.statesOut.get(2),
-                                symptomAdapter.statesOut.get(3),
-                                symptomAdapter.statesOut.get(4),
-                                symptomAdapter.statesOut.get(5),
-                                symptomAdapter.statesOut.get(6)
-                        );
-                        new SymptomsOpsAsyncTask(getContext(), newRecord).execute();
-                        Utils.mkSnack(getActivity(), view, "Symptom log updated");
-                        FragmentTransaction tx = ((MainActivity) getActivity()).getSupportFragmentManager().beginTransaction();
-                        tx.setCustomAnimations(
-                                R.anim.enter_right_to_left, R.anim.exit_right_to_left,
-                                R.anim.enter_left_to_right, R.anim.exit_left_to_right);
-                        tx.replace(R.id.fragment_container, new SymptomConfirmFragment(newRecord)).commit();
                     }
 
+                    Utils.mkSnack(getActivity(), view, "Symptom log updated");
+                    FragmentTransaction tx = ((MainActivity) getActivity()).getSupportFragmentManager().beginTransaction();
+                    tx.setCustomAnimations(
+                            R.anim.enter_right_to_left, R.anim.exit_right_to_left,
+                            R.anim.enter_left_to_right, R.anim.exit_left_to_right);
+                    SymptomsRecord newRecord = symptomAdapter.dataOut;
+                    newRecord.setTs(ts);
+                    newRecord.setLogTime(TimeUtils.getTime());
+                    tx.replace(R.id.fragment_container, new SymptomConfirmFragment(newRecord)).commit();
+                    new SymptomsOpsAsyncTask(getContext(), newRecord).execute();
                 }
             }
         });
         submitClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<Boolean> states = new LinkedList<>();
-                for (int i = 0; i < symptomAdapter.symptoms.size(); i++) {
-                    states.add(false);
-                }
-                symptomAdapter.updateContent(states);
+                symptomAdapter.updateContent(new SymptomsRecord());
             }
         });
 
@@ -168,15 +153,7 @@ public class AddEditSymptomsFragment extends Fragment {
     }
 
     public void updateState() {
-        List<Boolean> states = new LinkedList<>();
-        states.add(record.getFever());
-        states.add(record.getCough());
-        states.add(record.getShortnessOfBreath());
-        states.add(record.getTroubleBreathing());
-        states.add(record.getChestPain());
-        states.add(record.getConfusion());
-        states.add(record.getBlue());
-        symptomAdapter.updateContent(states);
+        symptomAdapter.updateContent(record);
     }
 
     @Override

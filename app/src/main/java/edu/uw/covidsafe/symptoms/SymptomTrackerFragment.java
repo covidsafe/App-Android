@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.utils.Constants;
+import edu.uw.covidsafe.utils.TimeUtils;
 
 import com.example.covidsafe.R;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -38,6 +39,8 @@ public class SymptomTrackerFragment extends Fragment {
 
     View view;
     SymptomHistoryRecyclerViewAdapter symptomHistoryAdapter;
+    boolean symptomDbChanged = false;
+    List<SymptomsRecord> changedRecords;
 
     @SuppressLint("RestrictedApi")
     @Nullable
@@ -65,10 +68,14 @@ public class SymptomTrackerFragment extends Fragment {
             @Override
             public void onChanged(List<SymptomsRecord> symptomRecords) {
                 //something in db has changed, update
-                Log.e("symptom","symptom list changed");
-                Constants.symptomRecords = symptomRecords;
-
-                updateFeaturedDate();
+                symptomDbChanged = true;
+                changedRecords = symptomRecords;
+                Log.e("symptom", "symptomtracker - symptom list changed");
+                if (Constants.CurrentFragment.toString().toLowerCase().contains("symptom")) {
+                    Log.e("symptom", "symptomtracker - symptom list changing");
+                    updateFeaturedDate();
+                    symptomDbChanged = false;
+                }
             }
         });
 
@@ -109,8 +116,8 @@ public class SymptomTrackerFragment extends Fragment {
             String dateStr = calDay.getYear() + "/" + calDay.getMonth() + "/" + calDay.getDay();
             Date dd = format.parse(dateStr);
             Log.e("symptom","updating "+dateStr);
-            SymptomUtils.updateTodaysLogs(view, Constants.symptomRecords, getContext(),getActivity(), dd, "tracker");
-            symptomHistoryAdapter.setRecords(Constants.symptomRecords, view);
+            SymptomUtils.updateTodaysLogs(view, changedRecords, getContext(),getActivity(), dd, "tracker");
+            symptomHistoryAdapter.setRecords(changedRecords, view);
         }
         catch(Exception e) {
             Log.e("err",e.getMessage());
@@ -125,6 +132,11 @@ public class SymptomTrackerFragment extends Fragment {
         Constants.SymptomTrackerFragment = this;
         Constants.HealthFragmentState = this;
 //        Constants.CurrentFragment = this;
+        if (symptomDbChanged) {
+            Log.e("symptoms","db changed ");
+            updateFeaturedDate();
+            symptomDbChanged = false;
+        }
     }
 
     @Override
