@@ -9,16 +9,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.RemoteException;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.TextPaint;
@@ -29,36 +22,27 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import edu.uw.covidsafe.LoggingService;
 import com.example.covidsafe.R;
+import com.google.android.material.snackbar.Snackbar;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import edu.uw.covidsafe.LoggingService;
 import edu.uw.covidsafe.PullService;
 import edu.uw.covidsafe.ble.BleOpsAsyncTask;
 import edu.uw.covidsafe.ble.BleRecord;
-import edu.uw.covidsafe.ble.BluetoothScanHelper;
-import edu.uw.covidsafe.ble.BluetoothServerHelper;
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.gps.GpsOpsAsyncTask;
 import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.gps.GpsUtils;
-import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
-import com.google.android.material.snackbar.Snackbar;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.BitSet;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
-
+import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.ui.notif.NotifRecord;
 
@@ -75,9 +59,9 @@ public class Utils {
             Utils.mkSnack(av, view, "Logging is now turned off.");
         }
 
-        Constants.LoggingServiceRunning = false;
         Log.e("logme", "stop service");
-        av.stopService(new Intent(av, LoggingService.class));
+        if (Constants.LoggingServiceRunning)
+            av.stopService(new Intent(av, LoggingService.class));
 
         GpsUtils.haltGps();
 
@@ -270,14 +254,15 @@ public class Utils {
     }
 
     public static void startLoggingService(Activity av) {
-        Constants.LoggingServiceRunning = true;
         Utils.createNotificationChannel(av);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            av.startForegroundService(new Intent(av, LoggingService.class));
-        } else {
-            av.startService(new Intent(av, LoggingService.class));
+        if(!Constants.LoggingServiceRunning) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                av.startForegroundService(new Intent(av, LoggingService.class));
+            } else {
+                av.startService(new Intent(av, LoggingService.class));
+            }
         }
+
     }
 
     public static void startPullService(Activity av) {
