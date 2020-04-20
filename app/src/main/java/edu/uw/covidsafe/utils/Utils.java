@@ -9,16 +9,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.RemoteException;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.TextPaint;
@@ -29,36 +22,27 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import edu.uw.covidsafe.LoggingService;
 import com.example.covidsafe.R;
+import com.google.android.material.snackbar.Snackbar;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import edu.uw.covidsafe.LoggingService;
 import edu.uw.covidsafe.PullService;
 import edu.uw.covidsafe.ble.BleOpsAsyncTask;
 import edu.uw.covidsafe.ble.BleRecord;
-import edu.uw.covidsafe.ble.BluetoothScanHelper;
-import edu.uw.covidsafe.ble.BluetoothServerHelper;
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.gps.GpsOpsAsyncTask;
 import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.gps.GpsUtils;
-import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
-import com.google.android.material.snackbar.Snackbar;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.BitSet;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
-
+import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.ui.notif.NotifRecord;
 
@@ -75,9 +59,11 @@ public class Utils {
             Utils.mkSnack(av, view, "Logging is now turned off.");
         }
 
-        Constants.LoggingServiceRunning = false;
         Log.e("logme", "stop service");
-        av.stopService(new Intent(av, LoggingService.class));
+        if (Constants.LoggingServiceRunning) {
+            av.stopService(new Intent(av, LoggingService.class));
+            Constants.LoggingServiceRunning = false;
+        }
 
         GpsUtils.haltGps();
 
@@ -270,21 +256,25 @@ public class Utils {
     }
 
     public static void startLoggingService(Activity av) {
-        Constants.LoggingServiceRunning = true;
         Utils.createNotificationChannel(av);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            av.startForegroundService(new Intent(av, LoggingService.class));
-        } else {
-            av.startService(new Intent(av, LoggingService.class));
+        Log.e("service","logging service -- utils start");
+        if(!Constants.LoggingServiceRunning) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                av.startForegroundService(new Intent(av, LoggingService.class));
+            } else {
+                av.startService(new Intent(av, LoggingService.class));
+            }
         }
     }
 
     public static void startPullService(Activity av) {
-        Constants.PullServiceRunning = true;
         Utils.createNotificationChannel(av);
-        Intent intent = new Intent(av, PullService.class);
-        av.startService(intent);
+        Log.e("service","pull service -- utils start");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            av.startForegroundService(new Intent(av, PullService.class));
+        } else {
+            av.startService(new Intent(av, PullService.class));
+        }
     }
 
     public static double getCoarseGpsCoord(double d, int precision) {
@@ -415,7 +405,7 @@ public class Utils {
 
     public static String time() {
         DateFormat dateFormat = new SimpleDateFormat("hh:mm.ss aa");
-        Date date = new Date();
+        Date date = new Date(TimeUtils.getTime());
         return dateFormat.format(date);
     }
 
@@ -433,37 +423,37 @@ public class Utils {
 
     public static String getGpsLogName() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
+        Date date = new Date(TimeUtils.getTime());
         return dateFormat.format(date)+".txt";
     }
 
     public static String getNotifLogName() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
+        Date date = new Date(TimeUtils.getTime());
         return dateFormat.format(date)+".txt";
     }
 
     public static String getBleLogName() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
+        Date date = new Date(TimeUtils.getTime());
         return dateFormat.format(date)+".txt";
     }
 
     public static String getSymptomsLogName() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
+        Date date = new Date(TimeUtils.getTime());
         return dateFormat.format(date)+".txt";
     }
 
     public static String getUuidLogName() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
+        Date date = new Date(TimeUtils.getTime());
         return dateFormat.format(date)+".txt";
     }
 
     public static String getFormRecordName() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        Date date = new Date();
+        Date date = new Date(TimeUtils.getTime());
         return dateFormat.format(date);
     }
 
@@ -496,7 +486,7 @@ public class Utils {
     public static boolean compareDates(Date d1, int submitThresh) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         try {
-            Date d2 = new Date();
+            Date d2 = new Date(TimeUtils.getTime());
 
             int diff = Utils.daysBetween(d2, d1);
             Log.e("logme", "days betweeen " + diff);
