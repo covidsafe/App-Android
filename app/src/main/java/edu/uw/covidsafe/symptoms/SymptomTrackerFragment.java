@@ -83,9 +83,9 @@ public class SymptomTrackerFragment extends Fragment {
                 symptomDbChanged = true;
                 changedRecords = symptomRecords;
                 Constants.symptomRecords = symptomRecords;
-                markDays();
                 Log.e("symptom", "symptomtracker - symptom list changed");
-                if (Constants.CurrentFragment.toString().toLowerCase().contains("symptom")) {
+                if (Constants.CurrentFragment.toString().toLowerCase().contains("health")) {
+                    markDays();
                     Log.e("symptom", "symptomtracker - symptom list changing");
                     updateFeaturedDate(cal.getSelectedDate(), getContext(), getActivity());
                     symptomDbChanged = false;
