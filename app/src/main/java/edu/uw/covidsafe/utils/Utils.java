@@ -60,8 +60,10 @@ public class Utils {
         }
 
         Log.e("logme", "stop service");
-        if (Constants.LoggingServiceRunning)
+        if (Constants.LoggingServiceRunning) {
             av.stopService(new Intent(av, LoggingService.class));
+            Constants.LoggingServiceRunning = false;
+        }
 
         GpsUtils.haltGps();
 
@@ -255,6 +257,7 @@ public class Utils {
 
     public static void startLoggingService(Activity av) {
         Utils.createNotificationChannel(av);
+        Log.e("service","start logging service");
         if(!Constants.LoggingServiceRunning) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 av.startForegroundService(new Intent(av, LoggingService.class));
@@ -262,7 +265,6 @@ public class Utils {
                 av.startService(new Intent(av, LoggingService.class));
             }
         }
-
     }
 
     public static void startPullService(Activity av) {

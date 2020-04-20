@@ -43,17 +43,17 @@ public class LoggingService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-
-        Log.e("logme", "handle intent");
+        Log.e("service", "handle intent");
         Constants.LoggingServiceRunning = true;
     }
 
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
         Log.e("service", "start");
+        Constants.LoggingServiceRunning = true;
 
         Bundle bundle = intent.getExtras();
-        Log.e("ex", "bundle status " + (bundle == null));
+        Log.e("service", "bundle status " + (bundle == null));
 
         SharedPreferences prefs = getApplicationContext().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         boolean bleEnabled = prefs.getBoolean(getApplicationContext().getString(R.string.ble_enabled_pkey), Constants.BLUETOOTH_ENABLED);
@@ -72,27 +72,11 @@ public class LoggingService extends IntentService {
         return START_NOT_STICKY;
     }
 
-    private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = ("name");
-            String description = ("desc");
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("123", name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
-
     //this call is not guaranteed by android system
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.e("logme", "service destroyed");
+        Log.e("service", "service destroyed");
         Constants.LoggingServiceRunning = false;
     }
 
