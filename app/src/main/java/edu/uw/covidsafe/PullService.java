@@ -39,12 +39,12 @@ public class PullService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-
     }
 
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
+        Constants.LoggingServiceRunning = true;
         Log.e("state","pull service started");
         ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
 
