@@ -1,16 +1,12 @@
 package edu.uw.covidsafe;
+
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,18 +16,9 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.covidsafe.R;
 
-import edu.uw.covidsafe.ble.BluetoothServerHelper;
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.gps.GpsUtils;
-import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.utils.Constants;
-import edu.uw.covidsafe.utils.Utils;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 public class LoggingService extends IntentService {
 
@@ -42,7 +29,7 @@ public class LoggingService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.e("service","create");
+        Log.e("service", "create");
 
         // service running notification
         Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL)
@@ -51,20 +38,22 @@ public class LoggingService extends IntentService {
                 .setSmallIcon(R.drawable.logo_purple)
                 .setCategory(Notification.CATEGORY_SERVICE)
                 .build();
-        startForeground(1,notification);
+        startForeground(1, notification);
     }
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        Log.e("logme","handle intent");
+
+        Log.e("logme", "handle intent");
+        Constants.LoggingServiceRunning = true;
     }
 
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
-        Log.e("service","start");
+        Log.e("service", "start");
 
         Bundle bundle = intent.getExtras();
-        Log.e("ex","bundle status "+(bundle==null));
+        Log.e("ex", "bundle status " + (bundle == null));
 
         SharedPreferences prefs = getApplicationContext().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         boolean bleEnabled = prefs.getBoolean(getApplicationContext().getString(R.string.ble_enabled_pkey), Constants.BLUETOOTH_ENABLED);
@@ -104,6 +93,7 @@ public class LoggingService extends IntentService {
     public void onDestroy() {
         super.onDestroy();
         Log.e("logme", "service destroyed");
+        Constants.LoggingServiceRunning = false;
     }
 
 }
