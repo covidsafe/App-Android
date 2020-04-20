@@ -212,17 +212,18 @@ public class MainActivity extends AppCompatActivity {
             Date day4 = new Date(TimeUtils.getNDaysForward(-4));
 
             Date d0 = format.parse(format2.format(day1)+" 1:22 AM");
-            Date d1 = format.parse(format2.format(day1)+" 2:22 AM");
+            Date d1 = format.parse(format2.format(day1)+" 2:22 PM");
             Date d2 = format.parse(format2.format(day3)+" 1:11 AM");
             Date d3 = format.parse(format2.format(day4)+" 3:33 AM");
             Date d4 = format.parse(format2.format(day4)+" 4:44 PM");
+//            Date d5 = format.parse(format2.format(day1)+" 2:22 PM");
             SymptomsRecord record0 = new SymptomsRecord();
             SymptomsRecord record1 = new SymptomsRecord();
             SymptomsRecord record2 = new SymptomsRecord();
             SymptomsRecord record3 = new SymptomsRecord();
             SymptomsRecord record4 = new SymptomsRecord();
             record0.setTs(d0.getTime());
-            record1.setTs(d1.getTime());
+//            record1.setTs(d5.getTime());
             record2.setTs(d2.getTime());
             record3.setTs(d3.getTime());
             record4.setTs(d4.getTime());

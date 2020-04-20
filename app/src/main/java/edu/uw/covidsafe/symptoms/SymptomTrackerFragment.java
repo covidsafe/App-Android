@@ -138,7 +138,7 @@ public class SymptomTrackerFragment extends Fragment {
                     Integer.parseInt(month.format(ts)),
                     Integer.parseInt(day.format(ts))));
         }
-        Log.e("symptoms","marked days "+markedDays.size());
+        Log.e("mark","marked days "+markedDays.size());
         cal.addDecorators(new EventDecorator(getContext().getColor(R.color.purpleDark),
                 markedDays));
     }
