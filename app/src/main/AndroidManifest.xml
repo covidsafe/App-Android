@@ -49,8 +49,12 @@
             >
         </activity>
 
-        <service android:name="edu.uw.covidsafe.LoggingService"></service>
-        <service android:name="edu.uw.covidsafe.PullService"></service>
+        <service android:name="edu.uw.covidsafe.LoggingService">
+        </service>
+
+        <service android:name="edu.uw.covidsafe.PullService">
+        </service>
+
     </application>
 
 </manifest>

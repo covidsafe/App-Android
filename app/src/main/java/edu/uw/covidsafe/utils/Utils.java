@@ -257,7 +257,7 @@ public class Utils {
 
     public static void startLoggingService(Activity av) {
         Utils.createNotificationChannel(av);
-        Log.e("service","start logging service");
+        Log.e("service","logging service -- utils start");
         if(!Constants.LoggingServiceRunning) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 av.startForegroundService(new Intent(av, LoggingService.class));
@@ -269,8 +269,7 @@ public class Utils {
 
     public static void startPullService(Activity av) {
         Utils.createNotificationChannel(av);
-        Intent intent = new Intent(av, PullService.class);
-        Log.e("service","start pull service");
+        Log.e("service","pull service -- utils start");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             av.startForegroundService(new Intent(av, PullService.class));
         } else {
