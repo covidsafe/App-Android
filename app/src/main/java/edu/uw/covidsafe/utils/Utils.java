@@ -268,7 +268,6 @@ public class Utils {
     }
 
     public static void startPullService(Activity av) {
-        //Constants.PullServiceRunning = true;
         Utils.createNotificationChannel(av);
         Intent intent = new Intent(av, PullService.class);
         Log.e("service","start pull service");

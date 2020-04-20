@@ -101,7 +101,6 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
 //        List<GpsRecord> gpsRecords = gpsRepo.getSortedRecords();
 //        if (gpsRecords.size() == 0) {
 //            Log.e("pull","no gps locations, returning");
-//            Constants.PullServiceRunning = false;
 //            return;
 //        }
 //        GpsRecord gpsRecord = gpsRecords.get(0);
@@ -140,8 +139,6 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putLong(context.getString(R.string.time_of_last_query_pkey), lastQueryTime);
             editor.commit();
-
-            //Constants.PullServiceRunning = false;
             return null;
         }
 
@@ -155,7 +152,6 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
         List<BluetoothMatch> bluetoothMatches = getMessages(preciseLat,preciseLong,
                 currentGpsPrecision, lastQueryTime);
         if (bluetoothMatches == null || bluetoothMatches.size() == 0) {
-            //Constants.PullServiceRunning = false;
             return null;
         }
 
