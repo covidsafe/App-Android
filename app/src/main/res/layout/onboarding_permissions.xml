@@ -7,21 +7,9 @@
     android:background="@color/gray"
     android:layout_height="wrap_content">
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:background="@color/gray"
-    android:layout_height="wrap_content">
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="@string/permissionsHeader"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
-        app:layout_constraintStart_toStartOf="@+id/guidelineV5"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/textView6"
@@ -34,17 +22,18 @@
             app:layout_constraintStart_toStartOf="@+id/guidelineV5"
             app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/materialCardViewParent"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:cardElevation="0dp"
-        app:layout_constraintStart_toStartOf="@+id/guidelineV5"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
-        app:layout_constraintTop_toBottomOf="@+id/privacyText"
-        app:strokeColor="@color/gray"
-        app:strokeWidth="1dp">
+        <TextView
+            android:id="@+id/privacyText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/privacyText"
+            android:textColor="@color/purpleLight"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
+            app:layout_constraintStart_toStartOf="@+id/guidelineV5"
+            app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/materialCardViewParent"
@@ -83,20 +72,13 @@
             app:layout_constraintGuide_begin="20dp"
             app:layout_constraintGuide_percent=".05" />
 
-    <Button
-        android:id="@+id/nextButton"
-        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp"
-        android:backgroundTint="@color/purpleLight"
-        android:text="next"
-        android:textColor="@color/white"
-        app:iconGravity="textEnd"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardViewParent"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
-        app:layout_constraintStart_toStartOf="@+id/guidelineV5" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineV95"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="20dp"
+            app:layout_constraintGuide_percent=".95" />
 
         <Button
             android:id="@+id/nextButton"
@@ -133,5 +115,5 @@
             app:layout_constraintEnd_toEndOf="@+id/button4"
             app:layout_constraintTop_toBottomOf="@+id/button4" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

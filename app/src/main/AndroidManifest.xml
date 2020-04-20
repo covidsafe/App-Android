@@ -45,6 +45,8 @@
             android:launchMode="singleTop">
         </activity>
         <activity
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:name="edu.uw.covidsafe.ui.onboarding.OnboardingActivity"
             >
         </activity>
