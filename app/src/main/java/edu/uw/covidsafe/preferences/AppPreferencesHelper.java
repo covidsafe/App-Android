@@ -11,6 +11,7 @@ public class AppPreferencesHelper {
     public static final String ONBOARDING_PAGER_SHOWN = "onboardingshownalready";
     public static final String BLUETOOTH_ENABLED = "bleEnabled";
     public static final String GPS_ENABLED = "gpsEnabled";
+    public static final String NOTIFICATION_ENABLED = "prefs_notifs";
     public static String SHARED_PREFENCE_NAME = "preferences";
 
 
@@ -40,7 +41,7 @@ public class AppPreferencesHelper {
     }
 
     public static void setBluetoothEnabled(Context context, boolean bleFlagVal) {
-        getSharedPreferences(context).edit().putBoolean(BLUETOOTH_ENABLED, bleFlagVal);
+        getSharedPreferences(context).edit().putBoolean(BLUETOOTH_ENABLED, bleFlagVal).apply();
     }
 
     public static void setGPSEnabled(Context context) {
@@ -56,6 +57,22 @@ public class AppPreferencesHelper {
     }
 
     public static void setGPSEnabled(Context context, boolean gpsFlagVal) {
-        getSharedPreferences(context).edit().putBoolean(GPS_ENABLED, gpsFlagVal);
+        getSharedPreferences(context).edit().putBoolean(GPS_ENABLED, gpsFlagVal).apply();
+    }
+
+    public static void setNotificationEnabled(Context context) {
+        setNotificationEnabled(context, true);
+    }
+
+    public static boolean areNotificationsEnabled(Context context) {
+        return getSharedPreferences(context).getBoolean(NOTIFICATION_ENABLED,false);
+    }
+
+    public static boolean areNotificationsEnabled(Context context, boolean defaultValue) {
+        return getSharedPreferences(context).getBoolean(NOTIFICATION_ENABLED,defaultValue);
+    }
+
+    public static void setNotificationEnabled(Context context, boolean notificationFlagVal) {
+        getSharedPreferences(context).edit().putBoolean(NOTIFICATION_ENABLED, notificationFlagVal).apply();
     }
 }

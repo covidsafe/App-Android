@@ -79,7 +79,7 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
         if (titles.get(position).toLowerCase().contains("notification")) {
             Constants.notifSwitch = ((PermissionCard)holder).sw;
             boolean hasNotifPerms = NotificationManagerCompat.from(cxt).areNotificationsEnabled();
-            boolean notifEnabled = prefs.getBoolean(cxt.getString(R.string.notifs_enabled_pkey), Constants.NOTIFS_ENABLED);
+            boolean notifEnabled =  AppPreferencesHelper.areNotificationsEnabled(av, Constants.NOTIFS_ENABLED);
             Log.e("perm","notif get "+hasNotifPerms+","+notifEnabled);
             if (hasNotifPerms && notifEnabled) {
                 ((PermissionCard) holder).sw.setChecked(true);
@@ -141,18 +141,15 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                 if (titles.get(position).toLowerCase().contains("notification")) {
                     boolean hasNotifPerms = NotificationManagerCompat.from(cxt).areNotificationsEnabled();
                     if (hasNotifPerms) {
-                        editor.putBoolean(cxt.getString(R.string.notifs_enabled_pkey), isChecked);
+                        AppPreferencesHelper.setNotificationEnabled(cxt, isChecked);
                         Log.e("perm", "notif set " + isChecked);
-                        editor.commit();
                     }
                     else {
                         if (isChecked) {
                             // need to open settings for this
                             // preemptively add the permission
-                            editor.putBoolean(cxt.getString(R.string.notifs_enabled_pkey), isChecked);
+                            AppPreferencesHelper.setNotificationEnabled(cxt, isChecked);
                             Log.e("perm", "notif set " + isChecked);
-                            editor.commit();
-
                             makeOpenSettingsDialog();
                         }
                     }
@@ -199,9 +196,7 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 //                                Constants.notifSwitch.setOnCheckedChangeListener (null);
                             Constants.notifSwitch.setChecked (false);
 //                                Constants.notifSwitch.setOnCheckedChangeListener (PermUtil.listener);
-                            SharedPreferences.Editor editor = cxt.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
-                            editor.putBoolean(cxt.getString(R.string.notifs_enabled_pkey), false);
-                            editor.commit();
+                            AppPreferencesHelper.setNotificationEnabled(cxt, false);
                         }
                     }})
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
