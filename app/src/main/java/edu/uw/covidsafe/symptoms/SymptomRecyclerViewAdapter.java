@@ -330,6 +330,11 @@ public class SymptomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             dialog = new DatePickerDialog(mContext, date, myCalendar
                     .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                     myCalendar.get(Calendar.DAY_OF_MONTH));
+
+            SharedPreferences prefs = mContext.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+            int days = prefs.getInt(mContext.getString(R.string.infection_window_in_days_pkeys), Constants.DefaultInfectionWindowInDays);
+
+            dialog.getDatePicker().setMinDate(TimeUtils.getNDaysForward(-days));
             dialog.getDatePicker().setMaxDate(new Date(TimeUtils.getTime()).getTime());
             dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface d, int which) {

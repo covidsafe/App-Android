@@ -1,6 +1,8 @@
 package edu.uw.covidsafe.ui.contact_log;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,23 +44,19 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.uw.covidsafe.gps.GpsDbModel;
-import edu.uw.covidsafe.gps.GpsDbRecordRepository;
 import edu.uw.covidsafe.gps.GpsHistoryRecyclerViewAdapter;
 import edu.uw.covidsafe.gps.GpsRecord;
-import edu.uw.covidsafe.symptoms.SymptomDbModel;
-import edu.uw.covidsafe.symptoms.SymptomHistoryRecyclerViewAdapter;
-import edu.uw.covidsafe.symptoms.SymptomTrackerFragment;
 import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.utils.Constants;
 
 public class ContactLogFragment extends Fragment {
 
-    View view;
+    static View view;
     boolean gpsDbChanged = false;
-    List<GpsRecord> changedRecords;
-    GpsHistoryRecyclerViewAdapter gpsHistoryAdapter;
-    MaterialCalendarView cal;
+    static List<GpsRecord> changedRecords;
+    static GpsHistoryRecyclerViewAdapter gpsHistoryAdapter;
+    static MaterialCalendarView cal;
 
     @SuppressLint("RestrictedApi")
     @Nullable
@@ -73,6 +71,7 @@ public class ContactLogFragment extends Fragment {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(getActivity().getResources().getColor(R.color.white));
         }
+        Constants.menu.findItem(R.id.mybutton).setVisible(true);
 
         ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getResources().getColor(R.color.white)));
         ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
@@ -97,7 +96,7 @@ public class ContactLogFragment extends Fragment {
                 Log.e("contact","db on changed "+(changedRecords.size()));
                 if (Constants.CurrentFragment.toString().toLowerCase().contains("contact")) {
                     Log.e("contact","db on changing");
-                    updateLocationView(cal.getSelectedDate());
+                    updateLocationView(cal.getSelectedDate(), getContext());
                     gpsDbChanged = false;
                 }
             }
@@ -106,12 +105,15 @@ public class ContactLogFragment extends Fragment {
         return view;
     }
 
+
     public void initCal() {
         cal = view.findViewById(R.id.calendarView);
         /////////////////////////////////////////////////////////////////
+        SharedPreferences prefs = getContext().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        int days = prefs.getInt(getContext().getString(R.string.infection_window_in_days_pkeys), Constants.DefaultInfectionWindowInDays);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-        calendar.add(Calendar.DATE, -Constants.DefaultInfectionWindowInDays);
+        calendar.add(Calendar.DATE, -days);
         /////////////////////////////////////////////////////////////////
         Log.e("health","minimum "+calendar.get(Calendar.YEAR)+","+(calendar.get(Calendar.MONTH)+1)+","+calendar.get(Calendar.DAY_OF_MONTH));
         CalendarDay d1 = CalendarDay.from(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH)+1,calendar.get(Calendar.DAY_OF_MONTH));
@@ -126,13 +128,18 @@ public class ContactLogFragment extends Fragment {
         cal.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                Log.e("symptom","on date selected "+date.toString());
-                updateLocationView(date);
+                Log.e("contact","on date selected "+date.toString());
+                Log.e("contact","on date selected "+date.getYear()+","+date.getMonth()+","+date.getDay());
+                Constants.contactLogMonthCalendar.set(date.getYear(),date.getMonth(),date.getDay());
+                updateLocationView(date, getContext());
             }
         });
     }
 
-    public void updateLocationView(CalendarDay dd) {
+    public static void updateLocationView(CalendarDay dd, Context cxt) {
+        cal.setCurrentDate(dd);
+        cal.setSelectedDate(dd);
+
         try {
             SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
             SimpleDateFormat month = new SimpleDateFormat("MM");
@@ -155,7 +162,7 @@ public class ContactLogFragment extends Fragment {
                     break;
                 }
             }
-            gpsHistoryAdapter.setRecords(filtRecords, getContext());
+            gpsHistoryAdapter.setRecords(filtRecords, cxt);
         }
         catch(Exception e) {
             Log.e("err",e.getMessage());
@@ -209,7 +216,7 @@ public class ContactLogFragment extends Fragment {
 
         if (gpsDbChanged) {
             Log.e("contact","db changed ");
-            updateLocationView(cal.getSelectedDate());
+            updateLocationView(cal.getSelectedDate(), getContext());
             gpsDbChanged = false;
         }
     }

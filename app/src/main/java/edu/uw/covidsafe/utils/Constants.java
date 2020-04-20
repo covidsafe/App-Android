@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.util.Log;
+import android.view.Menu;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ import edu.uw.covidsafe.symptoms.SymptomTrackerFragment;
 import edu.uw.covidsafe.ui.health.DiagnosisFragment;
 
 import java.security.KeyStore;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -49,6 +51,7 @@ public class Constants {
     public enum MessageType {
         Exposure,NarrowCast
     }
+    public static Menu menu;
 
     public static boolean WRITE_TO_DISK = false;
     public static boolean DEBUG = true;
@@ -183,6 +186,8 @@ public class Constants {
     public static HashMap<String,Long> scannedUUIDsTimes;
     public static HashSet<String> writtenUUIDs;
     public static int pageNumber = -1;
+    public static Calendar contactLogMonthCalendar = Calendar.getInstance();
+    public static Calendar symptomTrackerMonthCalendar = Calendar.getInstance();
     public static List<String> symptoms = Lists.newArrayList(
         "Fever",
         "Abdominal pain",
