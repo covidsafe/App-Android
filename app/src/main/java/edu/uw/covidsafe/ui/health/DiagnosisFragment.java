@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -69,6 +70,7 @@ public class DiagnosisFragment extends Fragment {
         rview.setLayoutManager(new LinearLayoutManager(getActivity()));
         Constants.DiagnosisTipAdapter.enableTips(1,view);
 
+        CheckBox certBox =(CheckBox) view.findViewById(R.id.certBoxReport);
         Button uploadButton = (Button)view.findViewById(R.id.uploadButton);
         if (uploadButton != null) {
             uploadButton.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +80,17 @@ public class DiagnosisFragment extends Fragment {
                         Utils.mkSnack(getActivity(),view,"Network not available. Please try again.");
                     }
                     else {
-                        new SendInfectedUserData(getContext(), getActivity(), view).execute();
+                        if (!certBox.isChecked()) {
+                            AlertDialog dialog = new MaterialAlertDialogBuilder(getActivity())
+                                    .setTitle("Please confirm this information is accurate")
+                                    .setNegativeButton("Cancel",null)
+                                    .setPositiveButton("Ok",null)
+                                    .setCancelable(true).create();
+                            dialog.show();
+                        }
+                        else {
+                            new SendInfectedUserData(getContext(), getActivity(), view).execute();
+                        }
                     }
                 }
             });

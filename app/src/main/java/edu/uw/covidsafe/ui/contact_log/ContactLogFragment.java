@@ -94,7 +94,6 @@ public class ContactLogFragment extends Fragment {
                 changedRecords = gpsRecords;
                 Log.e("contact","db on changed "+(changedRecords.size()));
                 if (Constants.CurrentFragment.toString().toLowerCase().contains("contact")) {
-                    markDays();
                     Log.e("contact","db on changing");
                     updateLocationView(cal.getSelectedDate(), getContext());
                     gpsDbChanged = false;
@@ -141,6 +140,7 @@ public class ContactLogFragment extends Fragment {
         cal.setCurrentDate(dd);
         cal.setSelectedDate(dd);
 
+        markDays(cxt);
         try {
             SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
             SimpleDateFormat month = new SimpleDateFormat("MM");
@@ -170,7 +170,7 @@ public class ContactLogFragment extends Fragment {
         }
     }
 
-    public void markDays() {
+    public static void markDays(Context cxt) {
         Log.e("symptoms","update days");
         List<CalendarDay> markedDays = new LinkedList<>();
         SimpleDateFormat year = new SimpleDateFormat("yyyy");
@@ -184,11 +184,11 @@ public class ContactLogFragment extends Fragment {
                     Integer.parseInt(day.format(ts))));
         }
 
-        cal.addDecorators(new ContactLogFragment.EventDecorator(getContext().getColor(R.color.purpleDark),
+        cal.addDecorators(new ContactLogFragment.EventDecorator(cxt.getColor(R.color.purpleDark),
                 markedDays));
     }
 
-    private class EventDecorator implements DayViewDecorator {
+    private static class EventDecorator implements DayViewDecorator {
 
         private final int color;
         private final HashSet<CalendarDay> dates;
