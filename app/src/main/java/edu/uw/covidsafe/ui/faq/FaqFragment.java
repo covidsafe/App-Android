@@ -140,41 +140,30 @@ public class FaqFragment extends Fragment {
                     }
                 });
 
-//                setExpandableListViewHeight(lv2, -1);
-//                lv2.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-//                    @Override
-//                    public boolean onGroupClick(ExpandableListView parent, View v, int position, long id) {
-//                        setExpandableListViewHeight(parent, position);
-//                        return false;
-//                    }
-//                });
-//
-//                setExpandableListViewHeight(lv3, -1);
-//                lv3.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-//                    @Override
-//                    public boolean onGroupClick(ExpandableListView parent, View v, int position, long id) {
-//                        setExpandableListViewHeight(parent, position);
-//                        return false;
-//                    }
-//                });
-//
-//                setExpandableListViewHeight(lv4, -1);
-//                lv4.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-//                    @Override
-//                    public boolean onGroupClick(ExpandableListView parent, View v, int position, long id) {
-//                        setExpandableListViewHeight(parent, position);
-//                        return false;
-//                    }
-//                });
+                setExpandableListViewHeight(lv2, -1);
+                lv2.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+                    @Override
+                    public boolean onGroupClick(ExpandableListView parent, View v, int position, long id) {
+                        setExpandableListViewHeight(parent, position);
+                        return false;
+                    }
+                });
+
+                setExpandableListViewHeight(lv3, -1);
+                lv3.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+                    @Override
+                    public boolean onGroupClick(ExpandableListView parent, View v, int position, long id) {
+                        setExpandableListViewHeight(parent, position);
+                        return false;
+                    }
+                });
 
                 lv1.setIndicatorBoundsRelative(lv1.getWidth() - GetDipsFromPixel(50),
                         lv1.getWidth() - GetDipsFromPixel(10));
-//                lv2.setIndicatorBoundsRelative(lv2.getWidth() - GetDipsFromPixel(50),
-//                        lv2.getWidth() - GetDipsFromPixel(10));
-//                lv3.setIndicatorBoundsRelative(lv3.getWidth() - GetDipsFromPixel(50),
-//                        lv3.getWidth() - GetDipsFromPixel(10));
-//                lv4.setIndicatorBoundsRelative(lv4.getWidth() - GetDipsFromPixel(50),
-//                        lv4.getWidth() - GetDipsFromPixel(10));
+                lv2.setIndicatorBoundsRelative(lv2.getWidth() - GetDipsFromPixel(50),
+                        lv2.getWidth() - GetDipsFromPixel(10));
+                lv3.setIndicatorBoundsRelative(lv3.getWidth() - GetDipsFromPixel(50),
+                        lv3.getWidth() - GetDipsFromPixel(10));
             }
         });
 
