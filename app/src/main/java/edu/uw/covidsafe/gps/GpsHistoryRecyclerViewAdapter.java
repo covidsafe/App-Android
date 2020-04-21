@@ -90,6 +90,7 @@ public class GpsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     }
 
     public void setRecords(List<GpsRecord> records, Context cxt) {
+
         Log.e("contact","set records");
         List<String> lats = new LinkedList<>();
         List<String> lons = new LinkedList<>();
@@ -104,15 +105,23 @@ public class GpsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         String[] decryptedLons = CryptoUtils.decryptBatch(cxt, lons);
         String[] decryptedAddresses = CryptoUtils.decryptBatch(cxt, addresses);
 
+        Set<String> seenAddresses = new HashSet<>();
+
+        List<GpsRecord> filtRecords = new LinkedList<>();
         int counter = 0;
-        for(GpsRecord record : records) {
-            record.setRawLat(decryptedLats[counter]);
-            record.setRawLongi(decryptedLons[counter]);
-            record.setRawAddress(decryptedAddresses[counter++]);
+        for(int i = 0; i <decryptedAddresses.length; i++) {
+            if (!seenAddresses.contains(decryptedAddresses[i])) {
+                GpsRecord newRec = new GpsRecord();
+                newRec.setRawLat(decryptedLats[i]);
+                newRec.setRawLongi(decryptedLons[i]);
+                newRec.setRawAddress(decryptedAddresses[i]);
+                filtRecords.add(newRec);
+                seenAddresses.add(decryptedAddresses[i]);
+            }
         }
 
-        Collections.reverse(records);
-        this.records = records;
+        Collections.reverse(filtRecords);
+        this.records = filtRecords;
 
         notifyDataSetChanged();
     }
