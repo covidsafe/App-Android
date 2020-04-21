@@ -256,16 +256,8 @@ public class MainFragment extends Fragment {
         if (!Constants.PullFromServerTaskRunning) {
             if (Constants.DEBUG) {
                 new PullFromServerTaskDemo2(getContext(), getActivity(), view).execute();
-//            List<Double> lats = new LinkedList<>();
-//            List<Double> lons = new LinkedList<>();
-//            List<Float> radii = new LinkedList<>();
-//            lats.add(74.12345);
-//            lons.add(-39.12345);
-//            radii.add(100f);
-//            String msg = "stay home";
-//            new SubmitNarrowcastMessageTask(getActivity(),view,lats,lons,radii,msg).execute();
             } else {
-                new PullFromServerTask(getContext(), view).execute();
+                new PullFromServerTask(getContext(), getActivity(), view).execute();
             }
         }
 
