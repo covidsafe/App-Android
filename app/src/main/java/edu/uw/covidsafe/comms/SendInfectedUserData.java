@@ -46,7 +46,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        Log.e("senddebug","status "+status);
+        Log.e("sendbug","status "+status);
         if (status) {
             new RegenerateSeedUponReport(context).execute();
         }
@@ -56,7 +56,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... params) {
         SeedUUIDDbRecordRepository seedUUIDRepo = new SeedUUIDDbRecordRepository(context);
         List<SeedUUIDRecord> allRecords = seedUUIDRepo.getAllSortedRecords();
-        Log.e("senddebug","record size "+allRecords.size());
+        Log.e("sendbug","record size "+allRecords.size());
         // getSeedAtBeginningOfInfectionWindow
         //infectionWindowInMinutes = 20160 . if infection window is 14 days and uuid generation time is 5 minutes
         //seedIndexAtBeginningOfInfectionWindow = 4032
@@ -110,7 +110,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         double longi = 0;
 
         if (sortedGpsRecords.size() == 0) {
-            Log.e("senddebug","need to get last location");
+            Log.e("sendbug","need to get last location");
             if (!Utils.hasGpsPermissions(context)) {
                 mkSnack(av, view, "We need location services enabled to send your traces. Please enable location services permission.");
                 status = false;
@@ -128,7 +128,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
             }
         }
         else {
-            Log.e("senddebug","getting last gps record");
+            Log.e("sendbug","getting last gps record");
             GpsRecord gpsRecord = sortedGpsRecords.get(0);
             lat = gpsRecord.getLat(context);
             longi = gpsRecord.getLongi(context);
@@ -144,19 +144,19 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
             String seed = recordToSend.getSeed(context);
             double coarseLat = getCoarseGpsCoord(lat, gpsResolution);
             double coarseLon = getCoarseGpsCoord(longi, gpsResolution);
-            Log.e("senddebug","seed "+seed);
-            Log.e("senddebug","ts_start "+ts_start);
-            Log.e("senddebug","ts_end "+ts_end);
-            Log.e("senddebug","coarseLat "+coarseLat);
-            Log.e("senddebug","coarseLon "+coarseLon);
-            Log.e("senddebug","preciseLat "+lat);
-            Log.e("senddebug","preciseLon "+longi);
+            Log.e("sendbug","seed "+seed);
+            Log.e("sendbug","ts_start "+ts_start);
+            Log.e("sendbug","ts_end "+ts_end);
+            Log.e("sendbug","coarseLat "+coarseLat);
+            Log.e("sendbug","coarseLon "+coarseLon);
+            Log.e("sendbug","preciseLat "+lat);
+            Log.e("sendbug","preciseLon "+longi);
             sendRequest(seed,
                     ts_start, ts_end,
                     coarseLat,coarseLon,
                     gpsResolution);
 
-            Log.e("senddebug","trace data submitted");
+            Log.e("sendbug","trace data submitted");
             mkSnack(av, view, "Your report has been submitted.");
 
             DiagnosisFragment.updateSubmissionView(av, context, view, true);

@@ -78,16 +78,17 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         editor.putLong(context.getString(R.string.last_refresh_date_pkey), ts);
         editor.commit();
 
-        SwipeRefreshLayout swipeLayout = view.findViewById(R.id.swiperefresh);
-        swipeLayout.setRefreshing(false);
-        ImageView refresh = view.findViewById(R.id.refresh);
-        refresh.clearAnimation();
-        TextView lastUpdated = view.findViewById(R.id.lastUpdated);
-        SimpleDateFormat format = new SimpleDateFormat("h:mm a");
-        lastUpdated.setText("Last updated: "+format.format(new Date(ts)));
-        lastUpdated.setVisibility(View.VISIBLE);
+        if (view != null) {
+            SwipeRefreshLayout swipeLayout = view.findViewById(R.id.swiperefresh);
+            swipeLayout.setRefreshing(false);
+            ImageView refresh = view.findViewById(R.id.refresh);
+            refresh.clearAnimation();
+            TextView lastUpdated = view.findViewById(R.id.lastUpdated);
+            SimpleDateFormat format = new SimpleDateFormat("h:mm a");
+            lastUpdated.setText("Last updated: " + format.format(new Date(ts)));
+            lastUpdated.setVisibility(View.VISIBLE);
+        }
         Constants.PullFromServerTaskRunning = false;
-        Log.e("pull","done");
     }
 
     @Override
@@ -172,15 +173,6 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
                 currentGpsPrecision, lastQueryTime);
         if (bluetoothMatches == null || bluetoothMatches.size() == 0) {
             return null;
-        }
-
-        Set<String> allSeeds = new HashSet<>();
-        for (BluetoothMatch match : bluetoothMatches) {
-            for (BlueToothSeed seed : match.seeds) {
-                if (!allSeeds.contains(seed)) {
-                    allSeeds.add(seed.seed);
-                }
-            }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -389,7 +381,9 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         List<GpsRecord> gpsRecords = gpsRepo.getRecordsBetweenTimestamps(area.beginTime, area.endTime);
         if (gpsRecords.size() == 0) {
             if (!Utils.hasGpsPermissions(context)) {
-                mkSnack(av, view, "We need location services enabled to check for announcements. Please enable location services permission.");
+                if (view != null) {
+                    mkSnack(av, view, "We need location services enabled to check for announcements. Please enable location services permission.");
+                }
                 return false;
             }
             else {

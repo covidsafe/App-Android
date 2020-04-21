@@ -43,7 +43,6 @@ public class SymptomUtils {
         SimpleDateFormat minute = new SimpleDateFormat("mm");
 
         // view elements are null
-        Log.e("ddebug ",(cxt==null)+"");
         if (cxt==null) {return;}
         amImage.setImageDrawable(cxt.getResources().getDrawable(R.drawable.symptom_edit));
         pmImage.setImageDrawable(cxt.getResources().getDrawable(R.drawable.symptom_edit));
@@ -144,7 +143,6 @@ public class SymptomUtils {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         SimpleDateFormat outformat = new SimpleDateFormat("MM/dd h:mm aa");
-                                        Log.e("ddebug","delete task "+outformat.format(record.getTs()));
                                         new SymptomsOpsAsyncTask(Constants.SymptomsDatabaseOps.Delete, context, record).execute();
                                     }
                                 })

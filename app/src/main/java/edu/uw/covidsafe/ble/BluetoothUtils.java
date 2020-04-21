@@ -94,7 +94,7 @@ public class BluetoothUtils {
 
     public static void startBluetoothScan(Context context) {
         if (Constants.bluetoothScanTask == null || Constants.bluetoothScanTask.isDone()) {
-            Log.e("bledebug","start bluetooth scan ");
+            Log.e("blebug","start bluetooth scan ");
             ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
             if (Constants.DEBUG) {
                 Constants.bluetoothScanTask = exec.scheduleWithFixedDelay(new BluetoothScanHelper(context),
@@ -103,8 +103,6 @@ public class BluetoothUtils {
             else {
                 Constants.bluetoothScanTask = exec.scheduleWithFixedDelay(new BluetoothScanHelper(context),
                         0, Constants.BluetoothScanIntervalInMinutes, TimeUnit.MINUTES);
-//                Constants.bluetoothFinishScanTask = exec.scheduleWithFixedDelay(new BluetoothScanHelper(context),
-//                        0, Constants.BluetoothScanPeriodInSeconds, TimeUnit.SECONDS);
             }
         }
     }
@@ -113,11 +111,11 @@ public class BluetoothUtils {
         if (Constants.blueAdapter != null && Constants.blueAdapter.getBluetoothLeScanner() != null) {
             Constants.blueAdapter.getBluetoothLeScanner().stopScan(BluetoothScanHelper.mLeScanCallback);
         }
-        Log.e("bledebug","finish scan");
-        Log.e("bledebug",(Constants.scannedUUIDs==null)+","+(Constants.scannedUUIDsRSSIs==null)+","+(Constants.scannedUUIDsTimes==null));
+        Log.e("blebug","finish scan");
+        Log.e("blebug",(Constants.scannedUUIDs==null)+","+(Constants.scannedUUIDsRSSIs==null)+","+(Constants.scannedUUIDsTimes==null));
         if (Constants.scannedUUIDs != null && Constants.scannedUUIDsRSSIs != null &&
                 Constants.scannedUUIDsTimes != null) {
-            Log.e("bledebug",(Constants.scannedUUIDs.size())+","+(Constants.scannedUUIDsRSSIs.keySet().size())+","+(Constants.scannedUUIDsTimes.keySet().size()));
+            Log.e("blebug",(Constants.scannedUUIDs.size())+","+(Constants.scannedUUIDsRSSIs.keySet().size())+","+(Constants.scannedUUIDsTimes.keySet().size()));
             for (String uuid : Constants.scannedUUIDs) {
                 if (Constants.scannedUUIDsRSSIs.containsKey(uuid) &&
                     Constants.scannedUUIDsTimes.containsKey(uuid)) {
@@ -167,7 +165,7 @@ public class BluetoothUtils {
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         boolean bleEnabled = prefs.getBoolean(context.getString(R.string.ble_enabled_pkey), false);
         Log.e("ble","mkbeacon "+bleEnabled);
-        Log.e("bledebug","mkbeacon contactUUID "+Constants.contactUUID);
+        Log.e("blebug","mkbeacon contactUUID "+Constants.contactUUID);
         if (bleEnabled) {
             AdvertiseSettings settings = new AdvertiseSettings.Builder()
                     .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
