@@ -17,7 +17,6 @@ Our tool is built upon the following white paper:
 
 PACT: Privacy Sensitive Protocols and Mechanisms for Mobile Contact Tracing<br/>
 Justin Chan, Dean Foster*, Shyam Gollakota, Eric Horvitz*, Joseph Jaeger*, Sham Kakade*, Tadayoshi Kohno, John Langford*, Jonathan Larson, Sudheesh Singanamalla, Jacob Sunshine, Stefano Tessaro*
-* Corresponding authors
 
 Our tool sends out Bluetooth IDs that are randomized every 15 minutes<br/>
 https://www.youtube.com/watch?v=9EkTWEod3Bk
