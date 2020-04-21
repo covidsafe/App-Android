@@ -28,6 +28,8 @@
         android:networkSecurityConfig="@xml/network_security_config">
 
         <activity
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:name="edu.uw.covidsafe.ui.Splash"
             >
         <intent-filter>
@@ -37,16 +39,24 @@
         </activity>
 
         <activity
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:name="edu.uw.covidsafe.ui.MainActivity"
             android:launchMode="singleTop">
         </activity>
         <activity
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:name="edu.uw.covidsafe.ui.onboarding.OnboardingActivity"
             >
         </activity>
 
-        <service android:name="edu.uw.covidsafe.LoggingService"></service>
-        <service android:name="edu.uw.covidsafe.PullService"></service>
+        <service android:name="edu.uw.covidsafe.LoggingService">
+        </service>
+
+        <service android:name="edu.uw.covidsafe.PullService">
+        </service>
+
     </application>
 
 </manifest>

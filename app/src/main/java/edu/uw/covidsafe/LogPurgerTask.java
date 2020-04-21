@@ -11,6 +11,7 @@ import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDDbRecordRepository;
 import edu.uw.covidsafe.symptoms.SymptomsDbRecordRepository;
 import edu.uw.covidsafe.utils.Constants;
+import edu.uw.covidsafe.utils.TimeUtils;
 import io.reactivex.schedulers.Schedulers;
 
 import java.text.SimpleDateFormat;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.example.covidsafe.R;
+import com.instacart.library.truetime.TrueTime;
 import com.instacart.library.truetime.TrueTimeRx;
 
 public class LogPurgerTask implements Runnable {
@@ -39,11 +41,11 @@ public class LogPurgerTask implements Runnable {
                     .initializeRx("time.apple.com")
                     .subscribeOn(Schedulers.io())
                     .subscribe(date -> {
-                        Log.e("truetime", "TrueTime was initialized and we have a time: " + date);
+                        Log.e("truetime", "TrueTime was initialized and we have a time: " + TrueTime.now());
                     }, throwable -> {
                         throwable.printStackTrace();
                     });
-            Log.e("truetime","truetime build");
+            Log.e("truetime","truetime build ");
         }
         catch(Exception e) {
             Log.e("truetime",e.getMessage());
@@ -53,7 +55,7 @@ public class LogPurgerTask implements Runnable {
             SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
             int daysOfLogsToKeep = prefs.getInt(context.getString(R.string.infection_window_in_days_pkeys), Constants.DefaultDaysOfLogsToKeep);
 
-            Date date = new Date();
+            Date date = new Date(TimeUtils.getTime());
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
             calendar.add(Calendar.DATE, -daysOfLogsToKeep);

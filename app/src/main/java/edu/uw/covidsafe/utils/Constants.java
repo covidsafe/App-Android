@@ -8,24 +8,32 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.util.Log;
+import android.view.Menu;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.covidsafe.R;
+import com.google.common.collect.Lists;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+
 
 import edu.uw.covidsafe.preferences.AppPreferencesHelper;
+import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.MainFragment;
 import edu.uw.covidsafe.ui.health.TipRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.HistoryRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
-import unused.SymptomTrackerFragment;
+import edu.uw.covidsafe.symptoms.SymptomTrackerFragment;
 import edu.uw.covidsafe.ui.health.DiagnosisFragment;
 
 import java.security.KeyStore;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Timer;
 import java.util.UUID;
 import java.util.concurrent.ScheduledFuture;
@@ -45,9 +53,10 @@ public class Constants {
     public enum MessageType {
         Exposure,NarrowCast
     }
+    public static Menu menu;
 
     public static boolean WRITE_TO_DISK = false;
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
 
     public enum BleDatabaseOps {
         Insert,ViewAll
@@ -58,17 +67,19 @@ public class Constants {
     }
 
     public enum SymptomsDatabaseOps {
-        Insert,ViewAll
+        Insert,ViewAll,DeleteAll,Delete
     }
 
     public enum GpsDatabaseOps {
-        Insert,ViewAll
+        Insert,ViewAll,DeleteAll
     }
 
     public enum UUIDDatabaseOps {
         BatchInsert, Insert,ViewAll,DeleteAll
     }
 
+    public static String entryPoint = "";
+    public static List<SymptomsRecord> symptomRecords;
     public static boolean EnableUUIDGeneration = true;
     public static TipRecyclerViewAdapter MainTipAdapter;
     public static TipRecyclerViewAdapter DiagnosisTipAdapter;
@@ -147,7 +158,7 @@ public class Constants {
     public static String SHARED_PREFENCE_NAME = "preferences";
     public static String NOTIFICATION_CHANNEL = "channel";
     public static Fragment MainFragment;
-    public static Fragment ReportFragmentState;
+    public static Fragment HealthFragmentState;
     public static Fragment MainFragmentState;
     public static Fragment HealthFragment;
     public static Fragment SymptomTrackerFragment;
@@ -177,6 +188,32 @@ public class Constants {
     public static HashMap<String,Long> scannedUUIDsTimes;
     public static HashSet<String> writtenUUIDs;
     public static int pageNumber = -1;
+    public static Calendar contactLogMonthCalendar = Calendar.getInstance();
+    public static Calendar symptomTrackerMonthCalendar = Calendar.getInstance();
+    public static List<String> symptoms = Lists.newArrayList(
+        "Fever",
+        "Abdominal pain",
+        "Chills",
+        "Cough",
+        "Diarrhea",
+        "Difficulty breathing",
+        "Headache",
+        "Chest pains",
+        "Sore throat",
+        "Vomiting"
+    );
+    public static List<String> symptomDesc = Lists.newArrayList(
+        "A high temperature of over 100°F - you feel hot to touch on your chest or back.",
+        "Pain from inside the abdomen or the outer muscle wall, ranging from mild and temporary to severe.",
+        "The feeling of being cold, though not necessarily in a cold environment, often accompanied by shivering or shaking.",
+        "A new, continuous cough - this means you've started coughing repeatedly",
+        "Loose, watery bowel movements that may occur frequently and with a sense of urgency.",
+        "Shortness of breath, or dyspnea, is an uncomfortable condition that makes it difficult to fully get air into your lungs.",
+        "A painful sensation in any part of the head, ranging from sharp to dull, that may occur with other symptoms.",
+        "Chest pain appears in many forms, ranging from a sharp stab to a dull ache. Sometimes chest pain feels crushing or burning. In certain cases, the pain travels up the neck, into the jaw, and then radiates to the back or down one or both arms.",
+        "Pain or irritation in the throat that can occur with or without swallowing, often accompanies infections.",
+        "Forcefully expelling the stomach's contents out of the mouth."
+    );
 
     public static String[] gpsPermissions= {
             Manifest.permission.ACCESS_BACKGROUND_LOCATION,
@@ -200,6 +237,7 @@ public class Constants {
     public static void init(Activity av) {
         Log.e("logme","constants init");
         MainFragment = new MainFragment();
+        MainFragmentState = MainFragment;
         SettingsFragment = new SettingsFragment();
 
         ContactLogFragment = new ContactLogFragment();
@@ -213,7 +251,7 @@ public class Constants {
         PagerFragment = new PagerFragment();
 
         SymptomTrackerFragment = new SymptomTrackerFragment();
-        ReportFragmentState = HealthFragment;
+        HealthFragmentState = SymptomTrackerFragment;
         if (!DEBUG) {
             LOG_TO_DISK = false;
         }

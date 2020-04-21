@@ -1,10 +1,14 @@
 package edu.uw.covidsafe;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+
+import com.example.covidsafe.R;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -21,14 +25,30 @@ public class PullService extends IntentService {
     }
 
     @Override
-    protected void onHandleIntent(@Nullable Intent intent) {
+    public void onCreate() {
+        super.onCreate();
 
+        Log.e("service", "pull onCreate");
+        Notification notification = new NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(getString(R.string.notif_message))
+                .setSmallIcon(R.drawable.logo_purple)
+                .setCategory(Notification.CATEGORY_SERVICE)
+                .build();
+        startForeground(2,notification);
+    }
+
+    @Override
+    protected void onHandleIntent(@Nullable Intent intent) {
+        Log.e("service", "pull onHandleIntent");
+       Constants.PullServiceRunning = true;
     }
 
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
-        Log.e("state","pull service started");
+        Log.e("state","pull service onStartCommand");
+        Constants.PullServiceRunning = true;
         ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
 
         Constants.pullFromServerTaskTimer = new Timer();
@@ -36,7 +56,7 @@ public class PullService extends IntentService {
             @Override
             public void run() {
             if (!Constants.PullFromServerTaskRunning) {
-                new PullFromServerTask(getApplicationContext(), null).execute();
+                new PullFromServerTask(getApplicationContext(), null, null).execute();
             }
             }
         }, 0, Constants.PullFromServerIntervalInMilliseconds);

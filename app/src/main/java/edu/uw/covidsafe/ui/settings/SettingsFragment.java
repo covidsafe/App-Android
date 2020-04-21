@@ -55,9 +55,8 @@ public class SettingsFragment extends Fragment {
             window.setStatusBarColor(getActivity().getResources().getColor(R.color.white));
         }
 
-        final Drawable upArrow = getActivity().getDrawable(R.drawable.abc_ic_ab_back_material);
-        upArrow.setColorFilter(getActivity().getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
-        ((MainActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        Constants.menu.findItem(R.id.mybutton).setVisible(false);
+        ((MainActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(getActivity().getDrawable(R.drawable.ic_close_black_24dp));
 
         ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getResources().getColor(R.color.white)));
         ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
@@ -80,10 +79,10 @@ public class SettingsFragment extends Fragment {
         rviewMore.setAdapter(adapter4);
         rviewMore.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        RecyclerView rviewMisc = view.findViewById(R.id.recyclerViewMisc);
-        MiscRecyclerViewAdapter adapter5 = new MiscRecyclerViewAdapter(getContext(),getActivity());
-        rviewMisc.setAdapter(adapter5);
-        rviewMisc.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        RecyclerView rviewMisc = view.findViewById(R.id.recyclerViewMisc);
+//        MiscRecyclerViewAdapter adapter5 = new MiscRecyclerViewAdapter(getContext(),getActivity());
+//        rviewMisc.setAdapter(adapter5);
+//        rviewMisc.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         return view;
     }

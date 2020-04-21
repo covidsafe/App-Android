@@ -8,4 +8,10 @@
         <item name="colorAccent">@color/purpleDark</item>
     </style>
 
+    <style name="CustomTextAppearance" parent="TextAppearance.MaterialCalendarWidget.Date"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+        <item name="android:textColor">@color/purpleDark</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
 </resources>

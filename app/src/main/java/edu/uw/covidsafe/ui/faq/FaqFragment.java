@@ -35,6 +35,8 @@ public class FaqFragment extends Fragment {
 
     ExpandableListView lv1;
     ExpandableListView lv2;
+    ExpandableListView lv3;
+    ExpandableListView lv4;
 
     @SuppressLint("RestrictedApi")
     @Nullable
@@ -51,6 +53,7 @@ public class FaqFragment extends Fragment {
             window.setStatusBarColor(getActivity().getResources().getColor(R.color.white));
         }
 
+        Constants.menu.findItem(R.id.mybutton).setVisible(false);
         ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getResources().getColor(R.color.white)));
         ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -61,31 +64,61 @@ public class FaqFragment extends Fragment {
 
         List<String> questions = new ArrayList<>();
         List<String> answers = new ArrayList<>();
-        questions.add(getString(R.string.lipsum5));
-        answers.add(getString(R.string.lipsum4));
-        questions.add(getString(R.string.lipsum5));
-        answers.add(getString(R.string.lipsum4));
-        questions.add(getString(R.string.lipsum6));
-        answers.add(getString(R.string.lipsum4));
+        questions.add(getString(R.string.q1));
+        answers.add(getString(R.string.a1));
+        questions.add(getString(R.string.q2));
+        answers.add(getString(R.string.a2));
+        questions.add(getString(R.string.q3));
+        answers.add(getString(R.string.a3));
+        questions.add(getString(R.string.q4));
+        answers.add(getString(R.string.a4));
+        questions.add(getString(R.string.q5));
+        answers.add(getString(R.string.a5));
+        questions.add(getString(R.string.q6));
+        answers.add(getString(R.string.a6));
+        questions.add(getString(R.string.q7));
+        answers.add(getString(R.string.a7));
 
         FaqListAdapter adapter = new FaqListAdapter(questions, answers);
         lv1.setAdapter(adapter);
 
         //////////////////////////////////////////////////////////////////
-
         lv2 = view.findViewById(R.id.faq2);
 
         List<String> questions2 = new ArrayList<>();
         List<String> answers2 = new ArrayList<>();
-        questions2.add(getString(R.string.lipsum5));
-        answers2.add(getString(R.string.lipsum4));
-        questions2.add(getString(R.string.lipsum5));
-        answers2.add(getString(R.string.lipsum4));
-        questions2.add(getString(R.string.lipsum6));
-        answers2.add(getString(R.string.lipsum4));
+        questions2.add(getString(R.string.pq1));
+        answers2.add(getString(R.string.pa1));
+        questions2.add(getString(R.string.pq2));
+        answers2.add(getString(R.string.pa2));
+        questions2.add(getString(R.string.pq3));
+        answers2.add(getString(R.string.pa3));
+        questions2.add(getString(R.string.pq4));
+        answers2.add(getString(R.string.pa4));
+        questions2.add(getString(R.string.pq5));
+        answers2.add(getString(R.string.pa5));
+        questions2.add(getString(R.string.pq6));
+        answers2.add(getString(R.string.pa6));
+        questions2.add(getString(R.string.pq7));
+        answers2.add(getString(R.string.pa7));
+        questions2.add(getString(R.string.pq8));
+        answers2.add(getString(R.string.pa8));
 
         FaqListAdapter adapter2 = new FaqListAdapter(questions2, answers2);
         lv2.setAdapter(adapter2);
+        //////////////////////////////////////////////////////////////////
+        lv3 = view.findViewById(R.id.faq3);
+
+        List<String> questions3 = new ArrayList<>();
+        List<String> answers3 = new ArrayList<>();
+        questions3.add(getString(R.string.aq1));
+        answers3.add(getString(R.string.aa1));
+        questions3.add(getString(R.string.aq2));
+        answers3.add(getString(R.string.aa2));
+
+        FaqListAdapter adapter3 = new FaqListAdapter(questions3, answers3);
+        lv3.setAdapter(adapter3);
+        //////////////////////////////////////////////////////////////////
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerViewResources);
         ResourceRecyclerViewAdapter resAdapter = new ResourceRecyclerViewAdapter(getContext(),getActivity());
@@ -106,6 +139,7 @@ public class FaqFragment extends Fragment {
                         return false;
                     }
                 });
+
                 setExpandableListViewHeight(lv2, -1);
                 lv2.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
                     @Override
@@ -114,10 +148,22 @@ public class FaqFragment extends Fragment {
                         return false;
                     }
                 });
+
+                setExpandableListViewHeight(lv3, -1);
+                lv3.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+                    @Override
+                    public boolean onGroupClick(ExpandableListView parent, View v, int position, long id) {
+                        setExpandableListViewHeight(parent, position);
+                        return false;
+                    }
+                });
+
                 lv1.setIndicatorBoundsRelative(lv1.getWidth() - GetDipsFromPixel(50),
                         lv1.getWidth() - GetDipsFromPixel(10));
                 lv2.setIndicatorBoundsRelative(lv2.getWidth() - GetDipsFromPixel(50),
                         lv2.getWidth() - GetDipsFromPixel(10));
+                lv3.setIndicatorBoundsRelative(lv3.getWidth() - GetDipsFromPixel(50),
+                        lv3.getWidth() - GetDipsFromPixel(10));
             }
         });
 
