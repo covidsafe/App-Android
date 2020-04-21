@@ -54,6 +54,16 @@
                 app:layout_constraintStart_toStartOf="@+id/guidelineV15"
                 app:layout_constraintTop_toBottomOf="@+id/pos" />
 
+            <CheckBox
+                android:id="@+id/certBoxReport"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/certText"
+                app:layout_constraintEnd_toStartOf="@+id/guidelineV75"
+                app:layout_constraintStart_toStartOf="@+id/guidelineV15"
+                app:layout_constraintTop_toBottomOf="@+id/date" />
+
             <Button
                 android:id="@+id/uploadButton"
                 android:layout_width="0dp"
@@ -65,7 +75,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/guidelineV85"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guidelineV15"
-                app:layout_constraintTop_toBottomOf="@+id/date" />
+                app:layout_constraintTop_toBottomOf="@+id/certBoxReport" />
 
             <Button
                 android:id="@+id/whatHappens"
