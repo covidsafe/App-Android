@@ -6,7 +6,7 @@ CovidSafe is a tool built by doctors and researchers at the University of Washin
 
 Here is a [video](https://www.youtube.com/watch?v=2fPpLJ3MQpc) demonstrating how users are notified of potential exposures and announcements<br/>
 
-Our app also has a [symptom tracker and location log](https://www.youtube.com/watch?v=Pr1YNAiKmFg) which is useful aggregating information for public health officials and contact tracers<br/>
+Our app also has a [symptom tracker and location log](https://www.youtube.com/watch?v=Pr1YNAiKmFg) which are useful for aggregating information for public health officials and contact tracers<br/>
 
 Health care workers and public health officials can send broadcast messages to bounded geographic regions using Google Sheets. [Video](https://www.youtube.com/watch?v=mweXe470Mrs)<br/>
 For more details for how to do this, check out this [repo](https://github.com/covidsafe/hcp-tools)
