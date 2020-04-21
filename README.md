@@ -15,4 +15,5 @@ To run an end-to-end demo of the app on your own phone, please refer to [these i
 Our tool is built upon the following white paper:<br/>
 **PACT: Privacy Sensitive Protocols and Mechanisms for Mobile Contact Tracing<br/>**
 *Justin Chan, Dean Foster\*, Shyam Gollakota, Eric Horvitz\*, Joseph Jaeger\*, Sham Kakade\*, Tadayoshi Kohno, John Langford\*, Jonathan Larson, Sudheesh Singanamalla, Jacob Sunshine, Stefano Tessaro\**
+
 \* Corresponding authors
