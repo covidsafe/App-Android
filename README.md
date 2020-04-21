@@ -10,7 +10,7 @@ Our app also has a [symptom tracker and location log](https://www.youtube.com/wa
 
 Health care workers and public health officials can send broadcast messages to bounded geographic regions using Google Sheets., here is a [video](https://www.youtube.com/watch?v=mweXe470Mrs) (0:40). For more details for how to do this, check out this [repo](https://github.com/covidsafe/hcp-tools)
 
-To run an end-to-end demo of the app, please refer to [these instructions](https://github.com/covidsafe/App-Android/wiki/Running-the-app) in our wiki.
+To run an end-to-end demo of the app on your own phone, please refer to [these instructions](https://github.com/covidsafe/App-Android/wiki/Running-the-app) in our wiki.
 
 Our tool is built upon the following white paper:<br/>
 **PACT: Privacy Sensitive Protocols and Mechanisms for Mobile Contact Tracing<br/>**
