@@ -90,7 +90,6 @@ public class GpsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     }
 
     public void setRecords(List<GpsRecord> records, Context cxt) {
-
         Log.e("contact","set records");
         List<String> lats = new LinkedList<>();
         List<String> lons = new LinkedList<>();
@@ -108,7 +107,6 @@ public class GpsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         Set<String> seenAddresses = new HashSet<>();
 
         List<GpsRecord> filtRecords = new LinkedList<>();
-        int counter = 0;
         for(int i = 0; i <decryptedAddresses.length; i++) {
             if (!seenAddresses.contains(decryptedAddresses[i])) {
                 GpsRecord newRec = new GpsRecord();
