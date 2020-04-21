@@ -64,9 +64,74 @@
 
 <!--    privacy-->
     <string name="pq1">
+        If I test positive and I disclose it via CovidSafe, what information is revealed to others?
     </string>
     <string name="pa1">
+        Any other person who’s been exposed is notified, along with the time the exposure occurred. No other information will be revealed.
     </string>
+    <string name="pq2">
+        If I test negative, can a malicious person get access to my phone’s broadcasts and report me as being positive?
+    </string>
+    <string name="pa2">
+        No, this isn’t possible. The app is encrypted to prevent it from happening using similar security technology used for other purposes, such as online banking.
+    </string>
+    <string name="pq3">
+        If someone else obtains data used to alert people who have been exposed, what can they learn?
+    </string>
+    <string name="pa3">
+        They\'ll see a sequence of random identifiers that have been broadcast over time near people who have tested positive for coronavirus. They could assume the location of the person who tested positive if the random identifiers were collected at specific locations. Otherwise, the person remains anonymous. The security of the system relies on the fact this data can be made public without compromising privacy.
+    </string>
+    <string name="pq4">
+        If I receive a message that I have been exposed, what is disclosed to the public?
+    </string>
+    <string name="pa4">
+        Nothing about your identity will be disclosed to the public.
+    </string>
+    <string name="pq5">
+        Can the identity of a person who chooses to report they’ve tested positive be guessed by others?
+    </string>
+    <string name="pa5">
+        Possibly. A person who was near someone who has tested positive may be able to guess the infected person\'s identity. If there are two or more people who were near someone who has tested positive, the process of identifying the infected person may be easier. However, the person\'s identity will never be broadcast directly. People’s identities aren\’t stored in the data. Only the infected person\’s random broadcast is stored.
+    </string>
+    <string name="pq6">
+        What data is stored on my phone? What data about me is stored publicly?
+    </string>
+    <string name="pa6">
+        Each phone broadcasts a random signal (using Bluetooth) to other nearby phones. All phones remember the signals they send and receive for two weeks. These broadcast signals can be thought of as non-identifying random numbers. The signal each phone broadcasts changes, so the signals remain anonymous and can’t be linked to a specific person. If someone tests positive and chooses to disclose this information to help others, they would be disclosing only their phone\'s broadcasts for the past two weeks. This lets other people using CovidSafe check if they were near the infected person to determine if they were exposed, based on their own phones\' broadcasts.
+    </string>
+    <string name="pq7">
+        How does location tracking work?
+    </string>
+    <string name="pa7">
+        See the Bluetooth section in the PACT white paper on our website.
+    </string>
+    <string name="pq8">
+        Will this information be shared with government agencies?
+    </string>
+    <string name="pa8">
+        The tool won\'t alert government agencies about your identity if you\'re exposed. You might want to notify public health authorities yourself because alerting them could give you access to testing or other care.
+    </string>
+    <string name="pq9">
+        Will people who are alerted about my illness know my identity?
+    </string>
+    <string name="pa9">
+        As with traditional contact tracing done by public health services, the alert mechanism has a secure implementation to ensure that positive diagnoses remain anonymous to the general public, and that the alerts people who have been exposed are sent in a secure manner.
+    </string>
+<!---->
+
+    <string name="aq1">
+        What is contact tracing?
+    </string>
+    <string name="aa1">
+Contact tracing is a process that helps identify all the people who may have come into contact with a person who is ill. Traditionally, contact tracing is accomplished by public health workers interviewing the person who is ill to learn about people they’ve been in contact with and locations they\'ve recently visited within a specific period of time, such as the past two weeks. With CovidSafe, tracing is done through the app instead of in person.
+    </string>
+    <string name="aq2">
+        Why should I report my illness?
+    </string>
+    <string name="aa2">
+        If you become ill, you can use the app to improve the efficiency and completeness of manual contact tracing interviews. Your privacy is maximized by ensuring that all the data remains on your device, except for what you voluntarily reveal to healthcare authorities to enable contact tracing.
+    </string>
+
 
     <string name="certError">Please check the box to certify that all the information in this form is correct.</string>
     <string name="noneCheckedError">Please check at least one symptom.</string>
