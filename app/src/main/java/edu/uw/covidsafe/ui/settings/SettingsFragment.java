@@ -79,10 +79,10 @@ public class SettingsFragment extends Fragment {
         rviewMore.setAdapter(adapter4);
         rviewMore.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        RecyclerView rviewMisc = view.findViewById(R.id.recyclerViewMisc);
-        MiscRecyclerViewAdapter adapter5 = new MiscRecyclerViewAdapter(getContext(),getActivity());
-        rviewMisc.setAdapter(adapter5);
-        rviewMisc.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        RecyclerView rviewMisc = view.findViewById(R.id.recyclerViewMisc);
+//        MiscRecyclerViewAdapter adapter5 = new MiscRecyclerViewAdapter(getContext(),getActivity());
+//        rviewMisc.setAdapter(adapter5);
+//        rviewMisc.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         return view;
     }
