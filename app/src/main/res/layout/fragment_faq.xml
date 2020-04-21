@@ -49,38 +49,90 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/view" />
 
-        <Button
-            android:id="@+id/button2"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:padding="0dp"
-            android:text="Privacy and security"
-            app:layout_constraintStart_toStartOf="@+id/guidelineV05"
-            app:layout_constraintTop_toBottomOf="@+id/faq" />
+<!--        <Button-->
+<!--            android:id="@+id/button2"-->
+<!--            style="@style/Widget.MaterialComponents.Button.TextButton"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:clickable="false"-->
+<!--            android:padding="0dp"-->
+<!--            android:text="Coronavirus"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/guidelineV05"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/faq" />-->
+
+<!--        <View-->
+<!--            android:id="@+id/view2"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0.5dp"-->
+<!--            android:background="@color/gray2"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/button2"-->
+<!--            tools:layout_editor_absoluteX="0dp" />-->
+
+<!--        <ExpandableListView-->
+<!--            android:id="@+id/faq2"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/view2"-->
+<!--            tools:layout_editor_absoluteX="0dp" />-->
+
+<!--        <Button-->
+<!--            android:id="@+id/button3"-->
+<!--            style="@style/Widget.MaterialComponents.Button.TextButton"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:clickable="false"-->
+<!--            android:padding="0dp"-->
+<!--            android:text="Privacy and security"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/guidelineV05"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/faq2" />-->
+
+<!--        <View-->
+<!--            android:id="@+id/view3"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0.5dp"-->
+<!--            android:background="@color/gray2"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/button3"-->
+<!--            tools:layout_editor_absoluteX="0dp" />-->
+
+<!--        <ExpandableListView-->
+<!--            android:id="@+id/faq3"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/view3"-->
+<!--            tools:layout_editor_absoluteX="0dp" />-->
+
+<!--        <Button-->
+<!--            android:id="@+id/button4"-->
+<!--            style="@style/Widget.MaterialComponents.Button.TextButton"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:clickable="false"-->
+<!--            android:padding="0dp"-->
+<!--            android:text="About contact tracing"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/guidelineV05"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/faq3" />-->
+
+<!--        <View-->
+<!--            android:id="@+id/view4"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0.5dp"-->
+<!--            android:background="@color/gray2"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/button4"-->
+<!--            tools:layout_editor_absoluteX="0dp" />-->
+
+<!--        <ExpandableListView-->
+<!--            android:id="@+id/faq4"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/view4"-->
+<!--            tools:layout_editor_absoluteX="0dp" />-->
 
         <View
-            android:id="@+id/view2"
+            android:id="@+id/view5"
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@color/gray2"
-            app:layout_constraintTop_toBottomOf="@+id/button2"
-            tools:layout_editor_absoluteX="0dp" />
-
-        <ExpandableListView
-            android:id="@+id/faq2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/view2"
-            tools:layout_editor_absoluteX="0dp" />
-
-        <View
-            android:id="@+id/view3"
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/gray2"
-            app:layout_constraintTop_toBottomOf="@+id/faq2"
+            app:layout_constraintTop_toBottomOf="@+id/faq"
             tools:layout_editor_absoluteX="0dp" />
 
         <include
@@ -89,7 +141,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view3" />
+            app:layout_constraintTop_toBottomOf="@+id/view5" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineV05"

@@ -17,6 +17,57 @@
     <string name="default_exposed_notif">Based on your location history, we believe you might have been in the same place as people infected with COVID-19.</string>
     <string name="exposed_notif2">Please contact your healthcare professional.</string>
 
+    <string name="q1">
+        What is the purpose of this app?
+    </string>
+    <string name="a1">
+        CovidSafe is an app that seeks to reduce the spread of coronavirus by helping people learn if they\'ve been exposed and take care of themselves if they become ill. CovidSafe also reduces the burden on medical providers by offering people who have been positively diagnosed a safe, private, and fast way to report locations they\'ve visited recently, as well as self-care tips for those well enough to isolate at home.
+    </string>
+    <string name="q2">
+        How does this app benefit me?
+    </string>
+    <string name="a2">
+        CovidSafe offers several features to protect both you and your community:\n
+        •	Get notified about possible exposure. You may be notified if someone who was near you within the last two weeks has come down with symptoms of COVID-19 shares information.  The measure of ‘near’ is not as precise as the medical definition (within 6 feet for more than 10 minutes), but it is accurate up to a few meters.\n
+        •	Track your symptoms. The symptoms you track will stay on your phone unless you decide to share them so others can be alerted that they may have been exposed. You can learn how to manage your symptoms, get help from a healthcare professional, and know when it\'s time to head to a healthcare facility. You can also get reliable info about the virus, why it\'s so dangerous, and how it spreads.
+    </string>
+    <string name="q3">
+        Who can use CovidSafe?
+    </string>
+    <string name="a3">
+        CovidSafe is free, and anyone can use it.
+    </string>
+    <string name="q4">
+        Do I need to have health insurance to use this app?
+    </string>
+    <string name="a4">
+        No, you don’t need health insurance to use CovidSafe. CovidSafe doesn’t provide medical care. You will be responsible for all your medical expenses.
+    </string>
+    <string name="q5">
+        What are the advantages of knowing I was exposed?
+    </string>
+    <string name="a5">
+        It may be helpful so you can let others know. For example, if you’re exposed, alerting public health authorities could give you access to testing or other care.
+    </string>
+    <string name="q6">
+        Who else benefits from my participation with this app?
+    </string>
+    <string name="a6">
+        CovidSafe alerts people who have been in areas where coronavirus is active which may initiate discussion with healthcare authorities about who has been exposed as well as how the virus is spreading. If you test positive for coronavirus, you\'ll also be able to anonymously notify others you may have been in contact with over the past two weeks to alert them that they may have been exposed.
+    </string>
+    <string name="q7">
+        How does CovidSafe help healthcare providers?
+    </string>
+    <string name="a7">
+        Traditional contact tracing interviews done by public health services are complicated and often miss important contacts because patients forget to mention them. CovidSafe helps people who have tested positive remember locations they’ve visited recently, which they can then share with the healthcare organization performing their contact tracing interview. This streamlines the interview process.
+    </string>
+
+<!--    privacy-->
+    <string name="pq1">
+    </string>
+    <string name="pa1">
+    </string>
+
     <string name="certError">Please check the box to certify that all the information in this form is correct.</string>
     <string name="noneCheckedError">Please check at least one symptom.</string>
     <string name="addressError">The address you have entered is invalid. Please try again.</string>

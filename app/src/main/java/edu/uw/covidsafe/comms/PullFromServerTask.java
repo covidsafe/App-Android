@@ -561,24 +561,27 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
     }
 
     public static void mkSnack(Activity av, View v, String msg) {
-        av.runOnUiThread(new Runnable() {
-            public void run() {
-                SpannableStringBuilder builder = new SpannableStringBuilder();
-                builder.append(msg);
-                Snackbar snackBar = Snackbar.make(v, builder, Snackbar.LENGTH_LONG);
+        if (av != null) {
+            av.runOnUiThread(new Runnable() {
+                public void run() {
+                    SpannableStringBuilder builder = new SpannableStringBuilder();
+                    builder.append(msg);
+                    Snackbar snackBar = Snackbar.make(v, builder, Snackbar.LENGTH_LONG);
 
-                snackBar.setAction("Dismiss", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        snackBar.dismiss();
-                    }
-                });
+                    snackBar.setAction("Dismiss", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            snackBar.dismiss();
+                        }
+                    });
 
-                View snackbarView = snackBar.getView();
-                TextView textView = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
-                textView.setMaxLines(5);
+                    View snackbarView = snackBar.getView();
+                    TextView textView = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
+                    textView.setMaxLines(5);
 
-                snackBar.show();
-            }});
+                    snackBar.show();
+                }
+            });
+        }
     }
 }
