@@ -49,6 +49,14 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/view" />
 
+        <View
+            android:id="@+id/viewa"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/gray2"
+            app:layout_constraintTop_toBottomOf="@+id/faq"
+            tools:layout_editor_absoluteX="0dp" />
+
         <Button
             android:id="@+id/button2"
             style="@style/Widget.MaterialComponents.Button.TextButton"
@@ -58,7 +66,7 @@
             android:padding="0dp"
             android:text="Privacy and security"
             app:layout_constraintStart_toStartOf="@+id/guidelineV05"
-            app:layout_constraintTop_toBottomOf="@+id/faq" />
+            app:layout_constraintTop_toBottomOf="@+id/viewa" />
 
         <View
             android:id="@+id/view2"
@@ -76,11 +84,45 @@
             tools:layout_editor_absoluteX="0dp" />
 
         <View
-            android:id="@+id/view3"
+            android:id="@+id/viewb"
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@color/gray2"
             app:layout_constraintTop_toBottomOf="@+id/faq2"
+            tools:layout_editor_absoluteX="0dp" />
+
+        <Button
+            android:id="@+id/button3"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:padding="0dp"
+            android:text="About contact tracing"
+            app:layout_constraintStart_toStartOf="@+id/guidelineV05"
+            app:layout_constraintTop_toBottomOf="@+id/viewb" />
+
+        <View
+            android:id="@+id/view3"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/gray2"
+            app:layout_constraintTop_toBottomOf="@+id/button3"
+            tools:layout_editor_absoluteX="0dp" />
+
+        <ExpandableListView
+            android:id="@+id/faq3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/view3"
+            tools:layout_editor_absoluteX="0dp" />
+
+        <View
+            android:id="@+id/view5"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/gray2"
+            app:layout_constraintTop_toBottomOf="@+id/faq3"
             tools:layout_editor_absoluteX="0dp" />
 
         <include
@@ -89,7 +131,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view3" />
+            app:layout_constraintTop_toBottomOf="@+id/view5" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineV05"

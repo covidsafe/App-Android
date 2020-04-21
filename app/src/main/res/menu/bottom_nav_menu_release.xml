@@ -10,6 +10,13 @@
         app:showAsAction="always|withText" />
 
     <item
+        android:id="@+id/action_contact_log"
+        android:enabled="true"
+        android:icon="@drawable/contact"
+        android:title="Contact Log"
+        app:showAsAction="always|withText" />
+
+    <item
         android:id="@+id/action_report"
         android:enabled="true"
         android:icon="@drawable/nav2"

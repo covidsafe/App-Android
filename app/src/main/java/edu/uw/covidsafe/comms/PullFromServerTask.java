@@ -1,8 +1,10 @@
 package edu.uw.covidsafe.comms;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,6 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Request;
 import com.example.covidsafe.R;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,11 +55,13 @@ import java.util.Set;
 public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
 
     Context context;
+    Activity av;
     View view;
 
-    public PullFromServerTask(Context context, View view) {
+    public PullFromServerTask(Context context, Activity av, View view) {
         Constants.PullFromServerTaskRunning = true;
         this.context = context;
+        this.av = av;
         this.view = view;
     }
 
@@ -64,7 +69,6 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         Log.e("refresh","post execute");
         super.onPostExecute(aVoid);
-
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         long ts = TimeUtils.getTime();
@@ -72,18 +76,13 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         editor.commit();
 
         if (view != null) {
-            Log.e("refresh","updating ui");
             SwipeRefreshLayout swipeLayout = view.findViewById(R.id.swiperefresh);
             swipeLayout.setRefreshing(false);
             ImageView refresh = view.findViewById(R.id.refresh);
             refresh.clearAnimation();
             TextView lastUpdated = view.findViewById(R.id.lastUpdated);
             SimpleDateFormat format = new SimpleDateFormat("h:mm a");
-            Date dd = new Date(ts);
-            String out = "Last updated: "+format.format(dd);
-            Log.e("refresh",ts+"");
-            Log.e("refresh",out);
-            lastUpdated.setText(out);
+            lastUpdated.setText("Last updated: " + format.format(new Date(ts)));
             lastUpdated.setVisibility(View.VISIBLE);
         }
         Constants.PullFromServerTaskRunning = false;
@@ -91,20 +90,36 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... params) {
-        Log.e("uuid", "PULL FROM SERVER");
+        Log.e("pull", "PULL FROM SERVER");
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
 
         //////////////////////////////////////////////////////////////////////////////////////////
         // send coarse -> finer grained gps locations, find size of seeds on server
         //////////////////////////////////////////////////////////////////////////////////////////
         GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
-        List<GpsRecord> gpsRecords = gpsRepo.getSortedRecords();
+        List<GpsRecord> gpsRecords = gpsRepo.getSortedRecordsSync();
+
+        double lat = 0;
+        double lon = 0;
         if (gpsRecords.size() == 0) {
-            Log.e("pull","no gps locations, returning");
-            Constants.PullServiceRunning = false;
-            return null;
+            if (Utils.hasGpsPermissions(context)) {
+                Location loc = GpsUtils.getLastLocation(context);
+                if (loc != null) {
+                    lat = loc.getLatitude();
+                    lon = loc.getLongitude();
+                }
+            }
+
+            if (lat == 0 && lon == 0) {
+                Log.e("pull", "no gps locations, returning");
+                return null;
+            }
         }
-        GpsRecord gpsRecord = gpsRecords.get(0);
+        else {
+            GpsRecord gpsRecord = gpsRecords.get(0);
+            lat = gpsRecord.getLat(context);
+            lon = gpsRecord.getLongi(context);
+        }
 
         int currentGpsPrecision = Constants.MinimumGpsPrecision;
 
@@ -114,14 +129,14 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
             lastQueryTime = TimeUtils.getTime();
         }
         while (currentGpsPrecision < Constants.MaximumGpsPrecision) {
-            double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(context), currentGpsPrecision);
-            double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(context), currentGpsPrecision);
+            double preciseLat = Utils.getCoarseGpsCoord(lat, currentGpsPrecision);
+            double preciseLong = Utils.getCoarseGpsCoord(lon, currentGpsPrecision);
 
             try {
-                Log.e("NET ","HOW BIG "+currentGpsPrecision);
+                Log.e("pull ","HOW BIG "+currentGpsPrecision);
                 sizeOfPayload = howBig(preciseLat, preciseLong,
                         currentGpsPrecision, lastQueryTime);
-                Log.e("NET ","size of payload "+sizeOfPayload);
+                Log.e("pull ","size of payload "+sizeOfPayload);
             }
             catch(Exception e) {
                 Log.e("err",e.getMessage());
@@ -142,21 +157,19 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
             editor.putLong(context.getString(R.string.time_of_last_query_pkey), lastQueryTime);
             editor.commit();
 
-            Constants.PullServiceRunning = false;
             return null;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////
         // get list of UUIDs that intersect with our movements and what the server has sent us
         //////////////////////////////////////////////////////////////////////////////////////////
-        double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(context), currentGpsPrecision);
-        double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(context), currentGpsPrecision);
+        double preciseLat = Utils.getCoarseGpsCoord(lat, currentGpsPrecision);
+        double preciseLong = Utils.getCoarseGpsCoord(lon, currentGpsPrecision);
 
-        Log.e("NET ","GET MESSAGES "+sizeOfPayload);
+        Log.e("pull ","GET MESSAGES "+sizeOfPayload);
         List<BluetoothMatch> bluetoothMatches = getMessages(preciseLat,preciseLong,
                 currentGpsPrecision, lastQueryTime);
         if (bluetoothMatches == null || bluetoothMatches.size() == 0) {
-            Constants.PullServiceRunning = false;
             return null;
         }
 
@@ -352,15 +365,18 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         GpsDbRecordRepository gpsRepo = new GpsDbRecordRepository(context);
         List<GpsRecord> gpsRecords = gpsRepo.getRecordsBetweenTimestamps(area.beginTime, area.endTime);
         if (gpsRecords.size() == 0) {
-            if (Utils.hasGpsPermissions(context)) {
+            if (!Utils.hasGpsPermissions(context)) {
+                if (view != null) {
+                    mkSnack(av, view, "We need location services enabled to check for announcements. Please enable location services permission.");
+                }
+                return false;
+            }
+            else {
                 Location loc = GpsUtils.getLastLocation(context);
                 if (loc == null) {
                     return false;
                 }
                 gpsRecords.add(new GpsRecord(0,loc.getLatitude(),loc.getLongitude(),"", context));
-            }
-            else {
-                return false;
             }
         }
 
@@ -433,7 +449,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         // calculate how many matches we need to say user is exposed for at least 10 minutes
         // return false if there simply not enough matches to determine this.
         // this is 2
-        int numConsecutiveMatchesNeeded = (Constants.CDCExposureTimeInMinutes/Constants.BluetoothScanIntervalInMinutes)+1;
+        int numConsecutiveMatchesNeeded = (Constants.CDCExposureTimeInMinutes/Constants.BluetoothScanIntervalInMinutes);
         if (matches.size() < numConsecutiveMatchesNeeded) {
             return null;
         }
@@ -527,8 +543,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
                         contactTimesEnd.get(i),
                         msg,
                         messageType.ordinal(),
-                        true));
-                Log.e("notif","notif");
+                        true)).execute();
                 Utils.sendNotification(context, "You may have been exposed",msg, R.drawable.warning2);
             }
             else {
@@ -538,11 +553,35 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
                             contactTimesEnd.get(i),
                             msgs.get(i),
                             messageType.ordinal(),
-                            true));
-                    Log.e("notif","notif");
-                    Utils.sendNotification(context, "Announcement",msgs.get(i), R.drawable.ic_info_black_24dp);
+                            true)).execute();
+                    Utils.sendNotification(context, "Announcement",msgs.get(i), R.drawable.ic_info_outline_black_24dp);
                 }
             }
+        }
+    }
+
+    public static void mkSnack(Activity av, View v, String msg) {
+        if (av != null) {
+            av.runOnUiThread(new Runnable() {
+                public void run() {
+                    SpannableStringBuilder builder = new SpannableStringBuilder();
+                    builder.append(msg);
+                    Snackbar snackBar = Snackbar.make(v, builder, Snackbar.LENGTH_LONG);
+
+                    snackBar.setAction("Dismiss", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            snackBar.dismiss();
+                        }
+                    });
+
+                    View snackbarView = snackBar.getView();
+                    TextView textView = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
+                    textView.setMaxLines(5);
+
+                    snackBar.show();
+                }
+            });
         }
     }
 }

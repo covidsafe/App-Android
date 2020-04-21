@@ -2,39 +2,17 @@
 
 [![CircleCI](https://circleci.com/gh/covidsafe/App-Android.svg?style=svg)](https://circleci.com/gh/covidsafe/App-Android)
 
-Video demo
-=======
+CovidSafe is a tool built by doctors and researchers at the University of Washington with Microsoft volunteers to alert you about highly relevant public health announcements, exposure to COVID-19, and to assist contact tracing without compromising your personal privacy.
 
-Video demo of current capabilities
+Here is an [overview video](https://www.youtube.com/watch?v=2fPpLJ3MQpc) (1:17) demonstrating how users are notified of potential exposures and announcements<br/>
 
-https://www.youtube.com/watch?v=2fPpLJ3MQpc
+Our app also has a [symptom tracker and location log](https://www.youtube.com/watch?v=Pr1YNAiKmFg) (1:13) which are useful for aggregating information for public health officials and contact tracers<br/>
 
-Rotating Bluetooth IDs in realtime
+Health care workers and public health officials can send public service announcements to bounded geographic regions using Google Forms, here is a [video](https://www.youtube.com/watch?v=mweXe470Mrs) (0:40). For more details for how to do this, check out this [repo](https://github.com/covidsafe/hcp-tools)
 
-https://www.youtube.com/watch?v=9EkTWEod3Bk
+To run an end-to-end demo of the app on your own phone, please refer to [these instructions](https://github.com/covidsafe/App-Android/wiki/Running-the-app) in our wiki.
 
-Logging GPS/BLE and sending data to a local server
-
-https://www.youtube.com/watch?v=0iWl9uaQ5Ds
-
-Working commit for demo (7f55e5b405233620b1db0d709ba23fcd23e35e6c)
-
-- The Bluetooth IDs change about once every 10 seconds.
-- The phones need to be in Bluetooth contact for 30 seconds (3 different IDs) for it to count as an exposure.
-
-The following sequence of steps can be executed to produce an end-to-end demo of the functionality of the app:
-1) Install the app on two phones.
-2) Turn on location and Bluetooth. Leave them within Bluetooth range for about 30 seconds.
-3) On phone A, submit a infection report. On phone B, pull down to refresh. You should now observe an exposure notification.
-4) On phone A, pull down to refresh, observe that there are no notifications.
-5) On phone B, submit an infection report.
-6) On phone A, pull down to refresh, and observe that there is now an exposure notification.
-
-A few key parameters:
-
-- NetworkConstant.java contains the base URL for the backend endpoint you would want to change this.
-- Constants.java encodes
-- CDCExposureTimeInMinutesDebug: indicates 30 seconds is the threshold for exposure
-- UUIDGenerationIntervalInSecondsDebug: indicates how frequently Bluetooth IDs are generated
-- BluetoothScanIntervalInSecondsDebug: indicates how frequently the device scans for Bluetooth IDs (should be the same as UUIDGenerationIntervalInSecondsDebug)
-- DEBUG can be set to true or false. The DEBUG mode uses the aforementioned parameters, and can be used for showing a demo. When DEBUG mode is false, the above parameters are altered. For example exposure time is defined as 10 minutes and IDs are generation every 15 minutes.
+Our tool is built upon the following white paper:<br/>
+**PACT: Privacy Sensitive Protocols and Mechanisms for Mobile Contact Tracing<br/>**
+*Justin Chan, Dean Foster\*, Shyam Gollakota, Eric Horvitz\*, Joseph Jaeger\*, Sham Kakade\*, Tadayoshi Kohno, John Langford\*, Jonathan Larson, Sudheesh Singanamalla, Jacob Sunshine, Stefano Tessaro\**<br/>
+\* Corresponding authors

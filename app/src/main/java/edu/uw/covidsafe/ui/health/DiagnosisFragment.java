@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -38,12 +41,14 @@ import edu.uw.covidsafe.utils.Utils;
 
 public class DiagnosisFragment extends Fragment {
 
+    Context cxt;
+
     @SuppressLint("RestrictedApi")
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.health_diagnosis, container, false);
-
+        this.cxt = getContext();
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getActivity().getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -52,10 +57,11 @@ public class DiagnosisFragment extends Fragment {
             window.setStatusBarColor(getActivity().getResources().getColor(R.color.white));
         }
 
+        Constants.menu.findItem(R.id.mybutton).setVisible(true);
         ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getResources().getColor(R.color.white)));
         ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().show();
-        ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         final Drawable upArrow = getActivity().getDrawable(R.drawable.abc_ic_ab_back_material);
         upArrow.setColorFilter(getActivity().getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
@@ -68,6 +74,7 @@ public class DiagnosisFragment extends Fragment {
         rview.setLayoutManager(new LinearLayoutManager(getActivity()));
         Constants.DiagnosisTipAdapter.enableTips(1,view);
 
+        CheckBox certBox =(CheckBox) view.findViewById(R.id.certBoxReport);
         Button uploadButton = (Button)view.findViewById(R.id.uploadButton);
         if (uploadButton != null) {
             uploadButton.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +84,45 @@ public class DiagnosisFragment extends Fragment {
                         Utils.mkSnack(getActivity(),view,"Network not available. Please try again.");
                     }
                     else {
-                        new SendInfectedUserData(getContext(), getActivity(), view).execute();
+                        if (!certBox.isChecked()) {
+                            AlertDialog dialog = new MaterialAlertDialogBuilder(getActivity())
+                                    .setMessage("Please check the box to confirm this information is accurate")
+                                    .setNegativeButton("Cancel",null)
+                                    .setPositiveButton("Ok",null)
+                                    .setCancelable(true).create();
+                            dialog.show();
+                        }
+                        else {
+                            final EditText input = new EditText(getContext());
+
+                            input.setInputType(InputType.TYPE_CLASS_TEXT);
+
+                            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity())
+                                    .setMessage("Reporting a positive diagnosis cannot be undone. Please be certain. Please enter the phrase \"I confirm\" in the box below to confirm that you have been officially diagnosed with COVID-19")
+                                    .setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Utils.mkSnack(getActivity(),view,"Diagnosis not submitted");
+                                        }
+                                    })
+                                    .setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            String txt = input.getText().toString();
+                                            if (txt.trim().equals("I confirm")) {
+                                                new SendInfectedUserData(getContext(), getActivity(), view).execute();
+                                            }
+                                            else {
+                                                Utils.mkSnack(getActivity(),view,"Diagnosis not submitted");
+                                            }
+                                        }
+                                    })
+                                    .setCancelable(true);
+
+                            builder.setView(input);
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+                        }
                     }
                 }
             });
@@ -140,8 +185,7 @@ public class DiagnosisFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Constants.CurrentFragment = this;
         Constants.DiagnosisFragment = this;
-        Constants.ReportFragmentState = this;
+        Constants.HealthFragmentState = this;
     }
 }

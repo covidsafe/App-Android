@@ -2,11 +2,11 @@ package edu.uw.covidsafe.ui.health;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +22,10 @@ import com.google.android.material.card.MaterialCardView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 import edu.uw.covidsafe.utils.Constants;
+import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
 
 public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
@@ -100,15 +100,20 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public Spannable getQuarantineTime() {
-        Date dd = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(dd);
-        calendar.add(Calendar.DATE, Constants.QuarantineLengthInDays);
-        long thresh = calendar.getTime().getTime();
+        long thresh = TimeUtils.getNDaysForward(Constants.QuarantineLengthInDays);
 
         SimpleDateFormat format = new SimpleDateFormat("MMMM d");
         String ss = format.format(new Date(thresh));
 
+        SharedPreferences prefs = mContext.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mContext.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
+        if (prefs.getString(mContext.getString(R.string.quarantine_end_time_pkey),"").isEmpty()) {
+            editor.putString(mContext.getString(R.string.quarantine_end_time_pkey), ss);
+            editor.commit();
+        }
+        else {
+            ss = prefs.getString(mContext.getString(R.string.quarantine_end_time_pkey),"");
+        }
         return (Spannable) Html.fromHtml(
                 "If you start your self quarantine today, your 14 days will end <b>"+ss+"</b>. Please check with your local Health Authorities for more guidance."
         );

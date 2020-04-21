@@ -1,5 +1,6 @@
 package edu.uw.covidsafe.symptoms;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -21,10 +22,13 @@ public interface SymptomsDbRecordDao {
     @Query("DELETE FROM symptoms_record_table")
     void deleteAll();
 
+    @Query("DELETE FROM symptoms_record_table WHERE ts == :ts")
+    void delete(long ts);
+
     @Query("DELETE FROM symptoms_record_table WHERE ts <= :ts_thresh")
     void deleteEarlierThan(long ts_thresh);
 
     @Query("SELECT * FROM symptoms_record_table ORDER BY ts DESC")
-    List<SymptomsRecord> getSortedRecordsByTimestamp();
+    LiveData<List<SymptomsRecord>> getSortedRecordsByTimestamp();
 
 }

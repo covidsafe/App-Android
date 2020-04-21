@@ -9,6 +9,8 @@
 
     <color name="orange">#fff2c8</color>
     <color name="orange2">#f5c53d</color>
+    <color name="orange3">#745300</color>
+    <color name="orange4">#fff2c8</color>
     <color name="white">#ffffff</color>
     <color name="warningViolet">#e3008c</color>
     <color name="black">#000000</color>
@@ -16,6 +18,8 @@
     <color name="gray2">#b3b3b3</color>
     <color name="gray3">#e1e1e1</color>
     <color name="gray4">#fafafa</color>
+    <color name="gray5">#f1f1f1</color>
+    <color name="gray6">#acacac</color>
     <color name="darkGray">#6e6e6e</color>
     <color name="warningRed">#e8685e</color>
 
@@ -23,4 +27,8 @@
     <color name="colorDarkRed">#ffcc0000</color>
     <color name="colorLightGreen">#4bcf46</color>
     <color name="colorDarkGreen">#33a532</color>
+    <color name="chipGreen">#dff6dd</color>
+    <color name="chipOrange">#fff4ce</color>
+    <color name="chipRed">#fed9cc</color>
+
 </resources>

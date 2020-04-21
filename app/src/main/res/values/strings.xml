@@ -4,9 +4,11 @@
     <string name="app_name_one_line">CovidSafe</string>
     <string name="history_header_text">History</string>
     <string name="permissions_header_text"><![CDATA[<font color=#000000>Select your preferences</font>]]></string>
-    <string name="health_header_text"><![CDATA[<font color=#000000>Health Report</font>]]></string>
+    <string name="health_header_text"><![CDATA[<font color=#000000>Health</font>]]></string>
+    <string name="add_symptoms_header_text"><![CDATA[<font color=#000000>Create New Log</font>]]></string>
     <string name="settings_header_text"><![CDATA[<font color=#000000>Settings</font>]]></string>
     <string name="help_header_text"><![CDATA[<font color=#000000>Resources</font>]]></string>
+    <string name="contact_log_header_text"><![CDATA[<font color=#000000>Contact Log</font>]]></string>
     <string name="warning_header_text"><![CDATA[<font color=#000000>Diagnosis Report</font>]]></string>
     <string name="symptom_help_text">Use this form to provide a daily report of any symptoms you have. You may submit this form once a day.</string>
     <string name="warning_help_text">You\'ve received a positive diagnosis from your healthcare provider. To confirm your diagnosis, please provider your credentials below.</string>
@@ -14,6 +16,122 @@
     <string name="notif_message">We are currently logging your location.</string>
     <string name="default_exposed_notif">Based on your location history, we believe you might have been in the same place as people infected with COVID-19.</string>
     <string name="exposed_notif2">Please contact your healthcare professional.</string>
+
+    <string name="q1">
+        What is the purpose of this app?
+    </string>
+    <string name="a1">
+        CovidSafe is an app that seeks to reduce the spread of coronavirus by helping people learn if they\'ve been exposed and take care of themselves if they become ill. CovidSafe also reduces the burden on medical providers by offering people who have been positively diagnosed a safe, private, and fast way to report locations they\'ve visited recently, as well as self-care tips for those well enough to isolate at home.
+    </string>
+    <string name="q2">
+        How does this app benefit me?
+    </string>
+    <string name="a2">
+        CovidSafe offers several features to protect both you and your community:\n
+        •	Get notified about possible exposure. You may be notified if someone who was near you within the last two weeks has come down with symptoms of COVID-19 shares information.  The measure of ‘near’ is not as precise as the medical definition (within 6 feet for more than 10 minutes), but it is accurate up to a few meters.\n
+        •	Track your symptoms. The symptoms you track will stay on your phone unless you decide to share them so others can be alerted that they may have been exposed. You can learn how to manage your symptoms, get help from a healthcare professional, and know when it\'s time to head to a healthcare facility. You can also get reliable info about the virus, why it\'s so dangerous, and how it spreads.
+    </string>
+    <string name="q3">
+        Who can use CovidSafe?
+    </string>
+    <string name="a3">
+        CovidSafe is free, and anyone can use it.
+    </string>
+    <string name="q4">
+        Do I need to have health insurance to use this app?
+    </string>
+    <string name="a4">
+        No, you don’t need health insurance to use CovidSafe. CovidSafe doesn’t provide medical care. You will be responsible for all your medical expenses.
+    </string>
+    <string name="q5">
+        What are the advantages of knowing I was exposed?
+    </string>
+    <string name="a5">
+        It may be helpful so you can let others know. For example, if you’re exposed, alerting public health authorities could give you access to testing or other care.
+    </string>
+    <string name="q6">
+        Who else benefits from my participation with this app?
+    </string>
+    <string name="a6">
+        CovidSafe alerts people who have been in areas where coronavirus is active which may initiate discussion with healthcare authorities about who has been exposed as well as how the virus is spreading. If you test positive for coronavirus, you\'ll also be able to anonymously notify others you may have been in contact with over the past two weeks to alert them that they may have been exposed.
+    </string>
+    <string name="q7">
+        How does CovidSafe help healthcare providers?
+    </string>
+    <string name="a7">
+        Traditional contact tracing interviews done by public health services are complicated and often miss important contacts because patients forget to mention them. CovidSafe helps people who have tested positive remember locations they’ve visited recently, which they can then share with the healthcare organization performing their contact tracing interview. This streamlines the interview process.
+    </string>
+
+<!--    privacy-->
+    <string name="pq1">
+        If I test positive and I disclose it via CovidSafe, what information is revealed to others?
+    </string>
+    <string name="pa1">
+        Any other person who’s been exposed is notified, along with the time the exposure occurred. No other information will be revealed.
+    </string>
+    <string name="pq2">
+        If I test negative, can a malicious person get access to my phone’s broadcasts and report me as being positive?
+    </string>
+    <string name="pa2">
+        No, this isn’t possible. The app is encrypted to prevent it from happening using similar security technology used for other purposes, such as online banking.
+    </string>
+    <string name="pq3">
+        If someone else obtains data used to alert people who have been exposed, what can they learn?
+    </string>
+    <string name="pa3">
+        They\'ll see a sequence of random identifiers that have been broadcast over time near people who have tested positive for coronavirus. They could assume the location of the person who tested positive if the random identifiers were collected at specific locations. Otherwise, the person remains anonymous. The security of the system relies on the fact this data can be made public without compromising privacy.
+    </string>
+    <string name="pq4">
+        If I receive a message that I have been exposed, what is disclosed to the public?
+    </string>
+    <string name="pa4">
+        Nothing about your identity will be disclosed to the public.
+    </string>
+    <string name="pq5">
+        Can the identity of a person who chooses to report they’ve tested positive be guessed by others?
+    </string>
+    <string name="pa5">
+        Possibly. A person who was near someone who has tested positive may be able to guess the infected person\'s identity. If there are two or more people who were near someone who has tested positive, the process of identifying the infected person may be easier. However, the person\'s identity will never be broadcast directly. People’s identities aren\’t stored in the data. Only the infected person\’s random broadcast is stored.
+    </string>
+    <string name="pq6">
+        What data is stored on my phone? What data about me is stored publicly?
+    </string>
+    <string name="pa6">
+        Each phone broadcasts a random signal (using Bluetooth) to other nearby phones. All phones remember the signals they send and receive for two weeks. These broadcast signals can be thought of as non-identifying random numbers. The signal each phone broadcasts changes, so the signals remain anonymous and can’t be linked to a specific person. If someone tests positive and chooses to disclose this information to help others, they would be disclosing only their phone\'s broadcasts for the past two weeks. This lets other people using CovidSafe check if they were near the infected person to determine if they were exposed, based on their own phones\' broadcasts.
+    </string>
+    <string name="pq7">
+        How does location tracking work?
+    </string>
+    <string name="pa7">
+        See the Bluetooth section in the PACT white paper on our website.
+    </string>
+    <string name="pq8">
+        Will this information be shared with government agencies?
+    </string>
+    <string name="pa8">
+        The tool won\'t alert government agencies about your identity if you\'re exposed. You might want to notify public health authorities yourself because alerting them could give you access to testing or other care.
+    </string>
+    <string name="pq9">
+        Will people who are alerted about my illness know my identity?
+    </string>
+    <string name="pa9">
+        As with traditional contact tracing done by public health services, the alert mechanism has a secure implementation to ensure that positive diagnoses remain anonymous to the general public, and that the alerts people who have been exposed are sent in a secure manner.
+    </string>
+<!---->
+
+    <string name="aq1">
+        What is contact tracing?
+    </string>
+    <string name="aa1">
+Contact tracing is a process that helps identify all the people who may have come into contact with a person who is ill. Traditionally, contact tracing is accomplished by public health workers interviewing the person who is ill to learn about people they’ve been in contact with and locations they\'ve recently visited within a specific period of time, such as the past two weeks. With CovidSafe, tracing is done through the app instead of in person.
+    </string>
+    <string name="aq2">
+        Why should I report my illness?
+    </string>
+    <string name="aa2">
+        If you become ill, you can use the app to improve the efficiency and completeness of manual contact tracing interviews. Your privacy is maximized by ensuring that all the data remains on your device, except for what you voluntarily reveal to healthcare authorities to enable contact tracing.
+    </string>
+
 
     <string name="certError">Please check the box to certify that all the information in this form is correct.</string>
     <string name="noneCheckedError">Please check at least one symptom.</string>
@@ -43,9 +161,12 @@
     <string name="aes_key_pkey">aes_key_pkey</string>
     <string name="aes_iv_pkey">aes_iv_pkey</string>
     <string name="infection_window_in_days_pkeys">infection_window_in_days_pkeys</string>
+    <string name="quarantine_end_time_pkey">quarantine_end_time_pkey</string>
+    <string name="last_symptom_update_pkey">last_symptom_update_pkey</string>
 
     <string name="phone">911</string>
-
+    <string name="privacyDisclaimer">Any information collected on CovidSafe is stored securely and locally in your app, and remain private to you.</string>
+    <string name="privacyDisclaimer2">This information is stored securely and locally on your app, and remains private to you.</string>
     <string name="perm_gps_rationale">Without this permission, we will be unable to capture location information. Are you sure you want to deny this permission?</string>
     <string name="perm_gps_ask">We require access to location information when the app is closed. Would you like to open app settings to enable this?</string>
 
@@ -74,6 +195,7 @@
     <string name="stopping">Turn broadcasting on to improve the accuracy of your notifications. <![CDATA[<font color=#8d55e9><br/><b><a href="https://covidsafe.cs.washington.edu/">Learn More</a></b></font>]]></string>
 
     <string name="covidSiteLink">https://covidsafe.cs.washington.edu/</string>
+    <string name="covidSiteFaqLink">https://covidsafe.cs.washington.edu/#faq</string>
     <string name="privacyLink1"><![CDATA[<font color=#8d55e9><a href="https://covidsafe.cs.washington.edu/">Learn more.</a></font>]]></string>
     <string name="privacy_link"><![CDATA[<font color=#FFFFFF><a href="http://www.uw.edu">Privacy  |  </a></font>]]></string>
     <string name="terms_link"><![CDATA[<font color=#FFFFFF><a href="http://www.uw.edu">Terms and Conditions</a></font>]]></string>

@@ -38,9 +38,9 @@ public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         titles.add("Share");
         titles.add("About CovidSafe");
         titles.add("FAQ");
-        desc.add("Share a link of this app");
-        desc.add("subtitle");
-        desc.add("subtitle");
+//        desc.add("Share a link of this app");
+//        desc.add("Learn more about the ");
+//        desc.add("subtitle");
         icons.add(cxt.getDrawable(R.drawable.icon_share2));
         icons.add(cxt.getDrawable(R.drawable.logo2));
         icons.add(cxt.getDrawable(R.drawable.icon_faq2));
@@ -56,7 +56,7 @@ public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ((MoreCard)holder).title.setText(titles.get(position));
-        ((MoreCard)holder).desc.setText(desc.get(position));
+//        ((MoreCard)holder).desc.setText(desc.get(position));
         ((MoreCard)holder).icon.setImageDrawable(icons.get(position));
         if (titles.get(position).equals("Share")) {
             ((MoreCard)holder).card.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +80,15 @@ public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 }
             });
         }
+        else if (titles.get(position).toLowerCase().contains("faq")) {
+            ((MoreCard)holder).card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(av.getString(R.string.covidSiteFaqLink)));
+                    av.startActivity(browserIntent);
+                }
+            });
+        }
     }
 
     @Override
@@ -90,7 +99,7 @@ public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     public class MoreCard extends RecyclerView.ViewHolder {
         ImageView icon;
         TextView title;
-        TextView desc;
+//        TextView desc;
         MaterialCardView card;
 
         MoreCard(@NonNull View itemView) {
@@ -98,7 +107,7 @@ public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
             this.card = itemView.findViewById(R.id.materialCardView);
             this.icon = itemView.findViewById(R.id.imageView11);
             this.title = itemView.findViewById(R.id.share);
-            this.desc = itemView.findViewById(R.id.perm1desc);
+//            this.desc = itemView.findViewById(R.id.perm1desc);
         }
     }
 }

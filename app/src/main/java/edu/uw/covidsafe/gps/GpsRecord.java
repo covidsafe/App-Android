@@ -29,11 +29,20 @@ public class GpsRecord {
     @ColumnInfo(name = "provider")
     private String provider;
 
-    public GpsRecord(@NonNull long ts, String latEncrypted, String longiEncrypted, String provider) {
+    @NonNull
+    @ColumnInfo(name = "address")
+    private String addressEncrypted;
+
+    public GpsRecord() {
+
+    }
+
+    public GpsRecord(@NonNull long ts, String latEncrypted, String longiEncrypted, String provider, String addressEncrypted) {
         this.ts = ts;
         this.latEncrypted = latEncrypted;
         this.longiEncrypted = longiEncrypted;
         this.provider = provider;
+        this.addressEncrypted = addressEncrypted;
     }
 
     // accepts plaintext inputs
@@ -91,6 +100,9 @@ public class GpsRecord {
 
     public String getProvider() { return this.provider; }
 
+    public String getAddressEncrypted() { return this.addressEncrypted; }
+
+    public String getRawAddress() { return this.addressEncrypted; }
     ////////////////////////////////////////////////////////////////////////////////////////
     // decrypts properties
     public double getLat(Context cxt) {
@@ -101,6 +113,7 @@ public class GpsRecord {
         return Double.parseDouble(CryptoUtils.decrypt(cxt, this.longiEncrypted));
     }
 
+    public String getAddress(Context cxt) { return CryptoUtils.decrypt(cxt, this.addressEncrypted); }
     ////////////////////////////////////////////////////////////////////////////////////////
     // sets and encrypts properties
     public void setLat(double lat, Context cxt) {
@@ -112,18 +125,33 @@ public class GpsRecord {
         String s = CryptoUtils.encrypt(cxt, longi+"");
         this.longiEncrypted = s;
     }
+    public void setAddress(String address, Context cxt) {
+        this.addressEncrypted = CryptoUtils.encrypt(cxt, address);
+    }
     ////////////////////////////////////////////////////////////////////////////////////////
     // sets pre-encrypted properties
     public void setTs(long ts) {
         this.ts = ts;
     }
 
-    public void setLatEncrypted(String lat) {
+    public void setRawLat(String lat) {
         this.latEncrypted = lat;
     }
 
-    public void setLonEncrypted(String lon) {
-        this.longiEncrypted = lon;
+    public void setRawLongi(String lon) { this.longiEncrypted = lon; }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
     }
+
+    public void setRawAddress(String address) {
+        this.addressEncrypted = address;
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////
+    public void setLatEncrypted(String lat) { this.latEncrypted = lat; }
+
+    public void setLongiEncrypted(String lon) { this.longiEncrypted = lon; }
+
+    public void setAddressEncrypted(String address) { this.addressEncrypted = address; }
     ////////////////////////////////////////////////////////////////////////////////////////
 }

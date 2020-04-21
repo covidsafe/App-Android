@@ -2,7 +2,11 @@ package edu.uw.covidsafe.symptoms;
 
 import android.content.Context;
 
+import androidx.lifecycle.LiveData;
+
 import java.util.List;
+
+import edu.uw.covidsafe.ui.notif.NotifRecord;
 
 public class SymptomsDbRecordRepository {
     private SymptomsDbRecordDao mRecordDao;
@@ -19,7 +23,8 @@ public class SymptomsDbRecordRepository {
 
     // Room executes all queries on a separate thread.
     // Observed LiveData will notify the observer when the data has changed.
-    public List<SymptomsRecord> getAllRecords() {
+
+    public LiveData<List<SymptomsRecord>> getSortedRecords() {
         return mRecordDao.getSortedRecordsByTimestamp();
     }
 
@@ -33,6 +38,10 @@ public class SymptomsDbRecordRepository {
 
     public void deleteAll() {
         mRecordDao.deleteAll();
+    }
+
+    public void delete(long ts) {
+        mRecordDao.delete(ts);
     }
 
     public void deleteEarlierThan(long ts_thresh) {
