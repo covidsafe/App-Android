@@ -17,8 +17,7 @@ Details for how to do this can be found in the wiki
 
 Our tool is built upon the following white paper:
 
-PACT: Privacy Sensitive Protocols and Mechanisms for Mobile Contact Tracing
-
+PACT: Privacy Sensitive Protocols and Mechanisms for Mobile Contact Tracing<br/>
 Justin Chan, Dean Foster*, Shyam Gollakota, Eric Horvitz*, Joseph Jaeger*, Sham Kakade*, Tadayoshi Kohno, John Langford*, Jonathan Larson, Sudheesh Singanamalla, Jacob Sunshine, Stefano Tessaro*
 * Corresponding authors
 
