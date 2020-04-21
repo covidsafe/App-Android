@@ -56,7 +56,7 @@ public class PullService extends IntentService {
             @Override
             public void run() {
             if (!Constants.PullFromServerTaskRunning) {
-                new PullFromServerTask(getApplicationContext(), null).execute();
+                new PullFromServerTask(getApplicationContext(), null, null).execute();
             }
             }
         }, 0, Constants.PullFromServerIntervalInMilliseconds);

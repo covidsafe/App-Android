@@ -35,6 +35,8 @@ public class FaqFragment extends Fragment {
 
     ExpandableListView lv1;
     ExpandableListView lv2;
+    ExpandableListView lv3;
+    ExpandableListView lv4;
 
     @SuppressLint("RestrictedApi")
     @Nullable
@@ -62,31 +64,49 @@ public class FaqFragment extends Fragment {
 
         List<String> questions = new ArrayList<>();
         List<String> answers = new ArrayList<>();
-        questions.add(getString(R.string.lipsum5));
-        answers.add(getString(R.string.lipsum4));
-        questions.add(getString(R.string.lipsum5));
-        answers.add(getString(R.string.lipsum4));
-        questions.add(getString(R.string.lipsum6));
-        answers.add(getString(R.string.lipsum4));
+        questions.add(getString(R.string.q1));
+        answers.add(getString(R.string.a1));
+        questions.add(getString(R.string.q2));
+        answers.add(getString(R.string.a2));
+        questions.add(getString(R.string.q3));
+        answers.add(getString(R.string.a3));
+        questions.add(getString(R.string.q4));
+        answers.add(getString(R.string.a4));
+        questions.add(getString(R.string.q5));
+        answers.add(getString(R.string.a5));
+        questions.add(getString(R.string.q6));
+        answers.add(getString(R.string.a6));
+        questions.add(getString(R.string.q7));
+        answers.add(getString(R.string.a7));
 
         FaqListAdapter adapter = new FaqListAdapter(questions, answers);
         lv1.setAdapter(adapter);
 
         //////////////////////////////////////////////////////////////////
-
-        lv2 = view.findViewById(R.id.faq2);
-
-        List<String> questions2 = new ArrayList<>();
-        List<String> answers2 = new ArrayList<>();
-        questions2.add(getString(R.string.lipsum5));
-        answers2.add(getString(R.string.lipsum4));
-        questions2.add(getString(R.string.lipsum5));
-        answers2.add(getString(R.string.lipsum4));
-        questions2.add(getString(R.string.lipsum6));
-        answers2.add(getString(R.string.lipsum4));
-
-        FaqListAdapter adapter2 = new FaqListAdapter(questions2, answers2);
-        lv2.setAdapter(adapter2);
+//        lv2 = view.findViewById(R.id.faq2);
+//
+//        List<String> questions2 = new ArrayList<>();
+//        List<String> answers2 = new ArrayList<>();
+//
+//        FaqListAdapter adapter2 = new FaqListAdapter(questions2, answers2);
+//        lv2.setAdapter(adapter2);
+        //////////////////////////////////////////////////////////////////
+//        lv3 = view.findViewById(R.id.faq3);
+//
+//        List<String> questions3 = new ArrayList<>();
+//        List<String> answers3 = new ArrayList<>();
+//
+//        FaqListAdapter adapter3 = new FaqListAdapter(questions3, answers3);
+//        lv3.setAdapter(adapter3);
+        //////////////////////////////////////////////////////////////////
+//        lv4 = view.findViewById(R.id.faq4);
+//
+//        List<String> questions4 = new ArrayList<>();
+//        List<String> answers4 = new ArrayList<>();
+//
+//        FaqListAdapter adapter4 = new FaqListAdapter(questions4, answers4);
+//        lv4.setAdapter(adapter4);
+        //////////////////////////////////////////////////////////////////
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerViewResources);
         ResourceRecyclerViewAdapter resAdapter = new ResourceRecyclerViewAdapter(getContext(),getActivity());
@@ -107,18 +127,42 @@ public class FaqFragment extends Fragment {
                         return false;
                     }
                 });
-                setExpandableListViewHeight(lv2, -1);
-                lv2.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-                    @Override
-                    public boolean onGroupClick(ExpandableListView parent, View v, int position, long id) {
-                        setExpandableListViewHeight(parent, position);
-                        return false;
-                    }
-                });
+
+//                setExpandableListViewHeight(lv2, -1);
+//                lv2.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+//                    @Override
+//                    public boolean onGroupClick(ExpandableListView parent, View v, int position, long id) {
+//                        setExpandableListViewHeight(parent, position);
+//                        return false;
+//                    }
+//                });
+//
+//                setExpandableListViewHeight(lv3, -1);
+//                lv3.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+//                    @Override
+//                    public boolean onGroupClick(ExpandableListView parent, View v, int position, long id) {
+//                        setExpandableListViewHeight(parent, position);
+//                        return false;
+//                    }
+//                });
+//
+//                setExpandableListViewHeight(lv4, -1);
+//                lv4.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+//                    @Override
+//                    public boolean onGroupClick(ExpandableListView parent, View v, int position, long id) {
+//                        setExpandableListViewHeight(parent, position);
+//                        return false;
+//                    }
+//                });
+
                 lv1.setIndicatorBoundsRelative(lv1.getWidth() - GetDipsFromPixel(50),
                         lv1.getWidth() - GetDipsFromPixel(10));
-                lv2.setIndicatorBoundsRelative(lv2.getWidth() - GetDipsFromPixel(50),
-                        lv2.getWidth() - GetDipsFromPixel(10));
+//                lv2.setIndicatorBoundsRelative(lv2.getWidth() - GetDipsFromPixel(50),
+//                        lv2.getWidth() - GetDipsFromPixel(10));
+//                lv3.setIndicatorBoundsRelative(lv3.getWidth() - GetDipsFromPixel(50),
+//                        lv3.getWidth() - GetDipsFromPixel(10));
+//                lv4.setIndicatorBoundsRelative(lv4.getWidth() - GetDipsFromPixel(50),
+//                        lv4.getWidth() - GetDipsFromPixel(10));
             }
         });
 
