@@ -83,29 +83,41 @@ public class FaqFragment extends Fragment {
         lv1.setAdapter(adapter);
 
         //////////////////////////////////////////////////////////////////
-//        lv2 = view.findViewById(R.id.faq2);
-//
-//        List<String> questions2 = new ArrayList<>();
-//        List<String> answers2 = new ArrayList<>();
-//
-//        FaqListAdapter adapter2 = new FaqListAdapter(questions2, answers2);
-//        lv2.setAdapter(adapter2);
+        lv2 = view.findViewById(R.id.faq2);
+
+        List<String> questions2 = new ArrayList<>();
+        List<String> answers2 = new ArrayList<>();
+        questions2.add(getString(R.string.pq1));
+        answers2.add(getString(R.string.pa1));
+        questions2.add(getString(R.string.pq2));
+        answers2.add(getString(R.string.pa2));
+        questions2.add(getString(R.string.pq3));
+        answers2.add(getString(R.string.pa3));
+        questions2.add(getString(R.string.pq4));
+        answers2.add(getString(R.string.pa4));
+        questions2.add(getString(R.string.pq5));
+        answers2.add(getString(R.string.pa5));
+        questions2.add(getString(R.string.pq6));
+        answers2.add(getString(R.string.pa6));
+        questions2.add(getString(R.string.pq7));
+        answers2.add(getString(R.string.pa7));
+        questions2.add(getString(R.string.pq8));
+        answers2.add(getString(R.string.pa8));
+
+        FaqListAdapter adapter2 = new FaqListAdapter(questions2, answers2);
+        lv2.setAdapter(adapter2);
         //////////////////////////////////////////////////////////////////
-//        lv3 = view.findViewById(R.id.faq3);
-//
-//        List<String> questions3 = new ArrayList<>();
-//        List<String> answers3 = new ArrayList<>();
-//
-//        FaqListAdapter adapter3 = new FaqListAdapter(questions3, answers3);
-//        lv3.setAdapter(adapter3);
-        //////////////////////////////////////////////////////////////////
-//        lv4 = view.findViewById(R.id.faq4);
-//
-//        List<String> questions4 = new ArrayList<>();
-//        List<String> answers4 = new ArrayList<>();
-//
-//        FaqListAdapter adapter4 = new FaqListAdapter(questions4, answers4);
-//        lv4.setAdapter(adapter4);
+        lv3 = view.findViewById(R.id.faq3);
+
+        List<String> questions3 = new ArrayList<>();
+        List<String> answers3 = new ArrayList<>();
+        questions3.add(getString(R.string.aq1));
+        answers3.add(getString(R.string.aa1));
+        questions3.add(getString(R.string.aq2));
+        answers3.add(getString(R.string.aa2));
+
+        FaqListAdapter adapter3 = new FaqListAdapter(questions3, answers3);
+        lv3.setAdapter(adapter3);
         //////////////////////////////////////////////////////////////////
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerViewResources);
