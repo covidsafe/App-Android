@@ -8,16 +8,22 @@ Here is a video demonstrating how users are notified of potential exposures and 
 https://www.youtube.com/watch?v=2fPpLJ3MQpc
 
 Our app also has a symptom tracker and location log which is useful aggregating information for public health officials and contact tracers:
+
 https://www.youtube.com/watch?v=Pr1YNAiKmFg
 
 
 Our tool is built upon the following white paper:
+
 PACT: Privacy Sensitive Protocols and Mechanisms for Mobile Contact Tracing
+
 Justin Chan, Dean Foster*, Shyam Gollakota, Eric Horvitz*, Joseph Jaeger*, Sham Kakade*, Tadayoshi Kohno, John Langford*, Jonathan Larson, Sudheesh Singanamalla, Jacob Sunshine, Stefano Tessaro*
 * Corresponding authors
 
 Our tool sends out Bluetooth IDs that are randomized every 15 minutes:
+
 https://www.youtube.com/watch?v=9EkTWEod3Bk
 
-This video demonstrates an initial prototype logging GPS and Bluetooth and sending data to a local server
+This video demonstrates an initial prototype logging GPS and Bluetooth and sending data to a local server:
+
 https://www.youtube.com/watch?v=0iWl9uaQ5Ds
+
