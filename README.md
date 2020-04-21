@@ -11,6 +11,9 @@ Our app also has a symptom tracker and location log which is useful aggregating 
 
 https://www.youtube.com/watch?v=Pr1YNAiKmFg
 
+Health care workers and public health officials can send broadcast messages to bounded geographic regions using Google Sheets like so:
+https://www.youtube.com/watch?v=mweXe470Mrs
+Details for how to do this can be found in the wiki
 
 Our tool is built upon the following white paper:
 
