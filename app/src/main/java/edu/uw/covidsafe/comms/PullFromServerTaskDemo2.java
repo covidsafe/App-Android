@@ -52,8 +52,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-// this has fixed gps data
-// this has hard-coded set of seeds to match against with server results
+// this is a demo file, but the only difference is that it uses 30 seconds as exposure time
+// and has some other debug logging statements
 
 public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
 
