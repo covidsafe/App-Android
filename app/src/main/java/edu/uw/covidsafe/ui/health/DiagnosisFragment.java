@@ -167,6 +167,39 @@ public class DiagnosisFragment extends Fragment {
             });
         }
 
+        Button prepForInterview = (Button)view.findViewById(R.id.prep);
+        if (prepForInterview != null) {
+            prepForInterview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Constants.PUBLIC_DEMO) {
+                        AlertDialog dialog = new MaterialAlertDialogBuilder(getActivity())
+                                .setMessage("This function is disabled in the demo version of the app.")
+                                .setPositiveButton("Ok",null)
+                                .setCancelable(true).create();
+                        dialog.show();
+                        return;
+                    }
+                }
+            });
+        }
+        Button learnMore = (Button)view.findViewById(R.id.learnMore);
+        if (learnMore != null) {
+            learnMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Constants.PUBLIC_DEMO) {
+                        AlertDialog dialog = new MaterialAlertDialogBuilder(getActivity())
+                                .setMessage("This function is disabled in the demo version of the app.")
+                                .setPositiveButton("Ok",null)
+                                .setCancelable(true).create();
+                        dialog.show();
+                        return;
+                    }
+                }
+            });
+        }
+
         RecyclerView rview2 = view.findViewById(R.id.recyclerViewResources);
         ResourceRecyclerViewAdapter adapter2 = new ResourceRecyclerViewAdapter(getContext(),getActivity());
         rview2.setAdapter(adapter2);
