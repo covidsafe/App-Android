@@ -49,6 +49,7 @@ public class CryptoUtils {
             Log.e("uuid", "ts " + record.getRawTs() + "");
             Log.e("uuid", "seed " + record.getSeed(cxt));
             Log.e("uuid", "uuid " + record.getUUID(cxt));
+            new SeedUUIDOpsAsyncTask(cxt, record).execute();
         } else {
             Log.e("crypto", "init seed already exists");
         }

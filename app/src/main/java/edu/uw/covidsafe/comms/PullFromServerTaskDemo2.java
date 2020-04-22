@@ -128,8 +128,10 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         int currentGpsPrecision = 0;
 
         int sizeOfPayload = 0;
-//        long lastQueryTime = prefs.getLong(context.getString(R.string.time_of_last_query_pkey), 0L);
         long lastQueryTime = 0;
+        if (Constants.USE_LAST_QUERY_TIME) {
+            lastQueryTime = prefs.getLong(context.getString(R.string.time_of_last_query_pkey), 0L);
+        }
         while (currentGpsPrecision < Constants.MaximumGpsPrecision) {
             double preciseLat = Utils.getCoarseGpsCoord(lat, currentGpsPrecision);
             double preciseLong = Utils.getCoarseGpsCoord(lon, currentGpsPrecision);
@@ -344,26 +346,28 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         /////////////////////////////////////////////////////////////////////////
         // (4) narrowcast messages: check for area intersection and record matched messages
         /////////////////////////////////////////////////////////////////////////
-        List<String> narrowCastMessages = new ArrayList<String>();
-        List<Long> narrowCastMessageStartTimes = new ArrayList<>();
-        List<Long> narrowCastMessageEndTimes = new ArrayList<>();
-        for (int i = 0; i < matchMessages.length; i++) {
-            if (matchMessages[i].areaMatches != null) {
-                for (AreaMatch areaMatch : matchMessages[i].areaMatches) {
-                    Area[] areas = areaMatch.areas;
-                    for (Area area : areas) {
-                        if (intersect(area)) {
-                            Log.e("pulldemo", "NARROWCAST USER MESSAGE " + areaMatch.userMessage+","+area.beginTime+","+area.endTime);
-                            narrowCastMessages.add(areaMatch.userMessage);
-                            narrowCastMessageStartTimes.add(area.beginTime);
-                            narrowCastMessageEndTimes.add(area.endTime);
-                            break;
+        if (Constants.NARROWCAST_ENABLE) {
+            List<String> narrowCastMessages = new ArrayList<String>();
+            List<Long> narrowCastMessageStartTimes = new ArrayList<>();
+            List<Long> narrowCastMessageEndTimes = new ArrayList<>();
+            for (int i = 0; i < matchMessages.length; i++) {
+                if (matchMessages[i].areaMatches != null) {
+                    for (AreaMatch areaMatch : matchMessages[i].areaMatches) {
+                        Area[] areas = areaMatch.areas;
+                        for (Area area : areas) {
+                            if (intersect(area)) {
+                                Log.e("pulldemo", "NARROWCAST USER MESSAGE " + areaMatch.userMessage+","+area.beginTime+","+area.endTime);
+                                narrowCastMessages.add(areaMatch.userMessage);
+                                narrowCastMessageStartTimes.add(area.beginTime);
+                                narrowCastMessageEndTimes.add(area.endTime);
+                                break;
+                            }
                         }
                     }
                 }
             }
+            notifyBulk(Constants.MessageType.NarrowCast, narrowCastMessages, narrowCastMessageStartTimes, narrowCastMessageEndTimes);
         }
-        notifyBulk(Constants.MessageType.NarrowCast, narrowCastMessages,narrowCastMessageStartTimes,narrowCastMessageEndTimes);
         /////////////////////////////////////////////////////////////////////////
 
         List<BluetoothMatch> bluetoothMatches = new ArrayList<>();
