@@ -58,7 +58,12 @@ public class FaqFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().show();
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(getActivity().getString(R.string.help_header_text)));
+
+        String header_str = getActivity().getString(R.string.help_header_text);
+        if (Constants.PUBLIC_DEMO) {
+            header_str = getActivity().getString(R.string.help_header_text_demo);
+        }
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(header_str));
 
          lv1 = view.findViewById(R.id.faq);
 

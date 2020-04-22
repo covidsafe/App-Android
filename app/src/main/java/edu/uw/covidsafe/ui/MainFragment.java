@@ -260,16 +260,20 @@ public class MainFragment extends Fragment {
                 } else {
                     new PullFromServerTask(getContext(), getActivity(), view).execute();
                 }
+
+                RotateAnimation rotate = new RotateAnimation(0,360,
+                        Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                rotate.setDuration(1000);
+                rotate.setRepeatCount(Animation.INFINITE);
+                rotate.setRepeatMode(Animation.INFINITE);
+                rotate.setInterpolator(new LinearInterpolator());
+                refresh.startAnimation(rotate);
+            }
+            else {
+                swipeLayout.setRefreshing(false);
+                refresh.clearAnimation();
             }
         }
-
-        RotateAnimation rotate = new RotateAnimation(0,360,
-                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        rotate.setDuration(1000);
-        rotate.setRepeatCount(Animation.INFINITE);
-        rotate.setRepeatMode(Animation.INFINITE);
-        rotate.setInterpolator(new LinearInterpolator());
-        refresh.startAnimation(rotate);
     }
 
     public void broadcastSwitchLogic(boolean isChecked) {
