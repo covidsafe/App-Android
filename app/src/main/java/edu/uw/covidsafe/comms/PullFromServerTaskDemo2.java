@@ -228,7 +228,7 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         List<Long> contactEndTimes = new ArrayList<>();
         Log.e("pulldemo","we have seeds: "+seenSeeds.size());
         for (String seed : seenSeeds) {
-//            Log.e("pull","SEED "+seed);
+            Log.e("pull","SEED "+seed);
             if (seed.equals("c2db5cac-9875-4ad7-acc7-ead49c76d1ec")) {
                 Log.e("pulldemo","got seed");
                 Log.e("pulldemo","start time "+format.format(new Date(startTimes.get(seed))));
@@ -456,6 +456,7 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         double bluetoothScanIntervalInMilliseconds = BluetoothScanIntervalInMinutes*60000;
 //        int uuidGenerationIntervalInMillliseconds = Constants.UUIDGenerationIntervalInMinutes*60000;
 
+        List<String>matchSeeds = new ArrayList<>();
         List<String>matchDates = new ArrayList<>();
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm.ss");
         for (String receivedUUID : receivedUUIDs) {
@@ -467,10 +468,20 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
                     matches.add(localTs);
                     String mdate = format.format(new Date(localTs));
                     matchDates.add(mdate);
+                    matchSeeds.add(receivedUUID);
 //                    }
                 }
             }
 //            ts += uuidGenerationIntervalInMillliseconds;
+        }
+
+        if (matchSeeds.size()>0) {
+            Log.e("matches", "0 >>> " + seed);
+            int counter = 1;
+            for (String s : matchSeeds) {
+                Log.e("matches", counter + " >>> " + s);
+                counter++;
+            }
         }
 
 //        // calculate how many matches we need to say user is exposed for at least 10 minutes
