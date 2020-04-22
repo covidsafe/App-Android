@@ -7,7 +7,7 @@
 
 CovidSafe is a tool built by doctors and researchers at the University of Washington with Microsoft volunteers to alert you about highly relevant public health announcements, exposure to COVID-19, and to assist contact tracing without compromising your personal privacy.
 
-Here is an [overview video](https://www.youtube.com/watch?v=MHqM-dj3hM4) (2:01) of our app.
+Here is an [overview video](https://www.youtube.com/watch?v=MHqM-dj3hM4) (2:01) of our app.<br/>
 CovidSafe has the following features:
 * Users are notified of potential exposures to other users who have been positively identified with COVID-19. [Live demo](https://www.youtube.com/watch?v=9CKtu6zpkNs) (0:56)
 * Users can receive public service announcements sent by health care officials
