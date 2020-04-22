@@ -14,11 +14,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.covidsafe.R;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -147,7 +149,16 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             ((CallCard)holder).card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Utils.openPhone(av, mContext.getString(R.string.phone));
+                    if (Constants.PUBLIC_DEMO) {
+                        AlertDialog dialog = new MaterialAlertDialogBuilder(av)
+                                .setMessage("This function is disabled in the demo version of the app.")
+                                .setPositiveButton("Ok",null)
+                                .setCancelable(true).create();
+                        dialog.show();
+                    }
+                    else {
+                        Utils.openPhone(av, mContext.getString(R.string.phone));
+                    }
                 }
             });
         }

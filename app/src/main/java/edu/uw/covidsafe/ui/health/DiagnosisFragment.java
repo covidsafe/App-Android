@@ -80,6 +80,15 @@ public class DiagnosisFragment extends Fragment {
             uploadButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (Constants.PUBLIC_DEMO) {
+                        AlertDialog dialog = new MaterialAlertDialogBuilder(getActivity())
+                                .setMessage("This function is disabled in the demo version of the app.")
+                                .setPositiveButton("Ok",null)
+                                .setCancelable(true).create();
+                        dialog.show();
+                        return;
+                    }
+
                     if (!NetworkHelper.isNetworkAvailable(getActivity())) {
                         Utils.mkSnack(getActivity(),view,"Network not available. Please try again.");
                     }

@@ -172,19 +172,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
     public static void mkSnack(Activity av, View v, String msg) {
         av.runOnUiThread(new Runnable() {
             public void run() {
-
-                //        SpannableStringBuilder builder = new SpannableStringBuilder();
-                //        builder.append("My message ").append(" ");
-                //        builder.setSpan(new ImageSpan(MainActivity.this, R.drawable.ic_launcher), builder.length() - 1, builder.length(), 0);
-                //        builder.append(" next message");
-                //        Snackbar.make(parent view, builder, Snackbar.LENGTH_LONG).show();]
-
-                //        TextView textView = (TextView)snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
-                //        textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.check, 0, 0, 0);
-                //        textView.setCompoundDrawablePadding(av.getResources().getDimensionPixelOffset(R.dimen.ic));
-
                 SpannableStringBuilder builder = new SpannableStringBuilder();
-//                builder.setSpan(new ImageSpan(av, R.drawable.check), builder.length() - 1, builder.length(), 0);
                 builder.append(msg);
                 Snackbar snackBar = Snackbar.make(v, builder, Snackbar.LENGTH_LONG);
 
@@ -208,9 +196,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
     }
 
     public double getCoarseGpsCoord(double d, int precision) {
-//        Log.e("ERR ",d+","+precision);
         long bits = Double.doubleToLongBits(d);
-//        Log.e("ERR ",d+","+precision);
 
         long negative = bits & (1L << 63);
         int exponent = (int)((bits >> 52) & 0x7ffL);
@@ -275,14 +261,6 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
             status = false;
             return;
         }
-
-//        edu.uw.covidsafe.json.Status status = null;
-//        try {
-//            status = edu.uw.covidsafe.json.Status.parse(resp);
-//        }
-//        catch(Exception e) {
-//            Log.e("err",e.getMessage());
-//        }
     }
 
     public void testDatabase() {

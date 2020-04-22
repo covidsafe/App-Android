@@ -19,6 +19,11 @@ public class BleOpsAsyncTask extends AsyncTask<Void, Void, Void> {
         this.op = Constants.BleDatabaseOps.Insert;
     }
 
+    public BleOpsAsyncTask(Context cxt, Constants.BleDatabaseOps op) {
+        this.context = cxt;
+        this.op = op;
+    }
+
     @Override
     protected Void doInBackground(Void... params) {
         Log.e("ble","doinbackground ble "+this.op);
@@ -34,6 +39,9 @@ public class BleOpsAsyncTask extends AsyncTask<Void, Void, Void> {
             for (BleRecord record : records) {
                 Log.e("ble",record.toString());
             }
+        }
+        else if (this.op == Constants.BleDatabaseOps.DeleteAll) {
+            repo.deleteAll();
         }
         return null;
     }
