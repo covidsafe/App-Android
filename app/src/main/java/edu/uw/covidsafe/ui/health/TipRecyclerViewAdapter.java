@@ -2,14 +2,18 @@ package edu.uw.covidsafe.ui.health;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,6 +29,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.TimeUtils;
@@ -35,6 +40,7 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private ArrayList<String> titles = new ArrayList<>();
     private ArrayList<Object> desc = new ArrayList<>();
     private ArrayList<Drawable> icons = new ArrayList<>();
+    private List<String> links = new ArrayList<>();
 
     private Context mContext;
     private Activity av;
@@ -44,27 +50,60 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         this.av = av;
     }
 
-    public void enableTips(int size, View view) {
+    public void enableTips(int size, View view, boolean diagnosis) {
 //        Log.e("tip","enabletips");
         TextView tv = view.findViewById(R.id.sick);
         if (size>=1 && titles.size()==0) {
 
-            titles.add("");
-            desc.add("Call 911 immediately if you are having a medical emergency.");
-            icons.add(mContext.getDrawable(R.drawable.icon_phone3));
+            // for the diagnosed
+            if (diagnosis) {
+                titles.add("");
+                desc.add("Call 911 immediately if you are having a medical emergency.");
+                icons.add(mContext.getDrawable(R.drawable.icon_phone3));
+                links.add("");
 
-            titles.add("Self-quarantine for 14 days");
-            desc.add(getQuarantineTime());
-            icons.add(mContext.getDrawable(R.drawable.icon_quarantine));
+                titles.add("Isolation order");
+//                desc.add(getQuarantineTime());
+//                desc.add(mContext.getString(R.string.tip_desc_1));
+                Spannable ss = (Spannable)Html.fromHtml("Every who has tested positive for COVID-19 shall remain in isolation until no longer infectious. <b>Do not leave your home or recovery facility, except to receive medical care.</b>");
+                desc.add(ss);
+                icons.add(mContext.getDrawable(R.drawable.icon_quarantine));
+                links.add("https://www.kingcounty.gov/depts/health/communicable-diseases/disease-control/novel-coronavirus/quarantine.aspx");
 
-            titles.add("Monitor Your Symptoms");
-            desc.add("If you think you have been exposed to COVID-19 and develop a fever and symptoms, such as cough or difficulty breathing, call your healthcare provider for medical advice.");
-            icons.add(mContext.getDrawable(R.drawable.icon_symptoms));
+                titles.add("Monitor Your Symptoms");
+                Spannable ss2 = (Spannable)Html.fromHtml(
+                        "If you have symptoms like cough, fever, or other respiratory problems, contact your regular doctor first. <b>Do not go to the emergency room.</b> Emergency rooms need to be able to serve those with the most critical needs. If you have difficulty breathing, it doesn’t mean you have novel coronavirus, but you should call 911."
+                );
+                desc.add(ss2);
+                icons.add(mContext.getDrawable(R.drawable.icon_symptoms));
+                links.add("https://kingcounty.gov/depts/health/communicable-diseases/disease-control/novel-coronavirus/FAQ.aspx");
+            }
+            else {
+                // for the exposed
+                titles.add("");
+                desc.add("Call 911 immediately if you are having a medical emergency.");
+                icons.add(mContext.getDrawable(R.drawable.icon_phone3));
+                links.add("");
 
-            titles.add("Request a test");
-            desc.add("If you have symptoms of COVID-19 and want to get tested, try calling your state or local health department or a medical provider.");
-            icons.add(mContext.getDrawable(R.drawable.icon_test));
-//
+                titles.add("Quarantine directive");
+//                desc.add(getQuarantineTime());
+                desc.add("Everyone with COVID-19 symptoms who has a test result pending shall remain in quarantine while waiting for the test results.");
+                icons.add(mContext.getDrawable(R.drawable.icon_quarantine));
+                links.add("https://www.kingcounty.gov/depts/health/communicable-diseases/disease-control/novel-coronavirus/quarantine.aspx");
+
+                titles.add("Monitor Your Symptoms");
+                Spannable ss = (Spannable)Html.fromHtml(
+                        "If you have symptoms like cough, fever, or other respiratory problems, contact your regular doctor first. <b>Do not go to the emergency room.</b> Emergency rooms need to be able to serve those with the most critical needs. If you have difficulty breathing, it doesn’t mean you have novel coronavirus, but you should call 911."
+                );
+                desc.add(ss);
+                icons.add(mContext.getDrawable(R.drawable.icon_symptoms));
+                links.add("https://kingcounty.gov/depts/health/communicable-diseases/disease-control/novel-coronavirus/FAQ.aspx");
+
+                titles.add("Request a test");
+                desc.add(mContext.getString(R.string.tip_desc_2));
+                icons.add(mContext.getDrawable(R.drawable.icon_test));
+                links.add("https://kingcounty.gov/depts/health/communicable-diseases/disease-control/novel-coronavirus/FAQ.aspx");
+            }
 //            titles.add("Contact your healthcare professional");
 //            desc.add("Please contact your healthcare professional for next steps.");
 //            icons.add(mContext.getDrawable(R.drawable.icon_phone2));
@@ -142,7 +181,6 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-//        Log.e("tip","oncreateviewholder "+position);
         if (titles.get(position).isEmpty()) {
             ((CallCard) holder).desc.setText((String)desc.get(position));
             ((CallCard)holder).icon.setImageDrawable(icons.get(position));
@@ -164,13 +202,28 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
         else {
             ((ActionCard)holder).title.setText(titles.get(position));
-            if (titles.get(position).equals("Self-quarantine for 14 days")) {
+            if (desc.get(position).getClass().toString().toLowerCase().contains("spannable")) {
+                Log.e("spannable",desc.get(position).toString());
                 ((ActionCard) holder).desc.setText((Spannable) desc.get(position));
             }
             else {
                 ((ActionCard) holder).desc.setText((String) desc.get(position));
             }
             ((ActionCard)holder).icon.setImageDrawable(icons.get(position));
+
+            if (!links.get(position).isEmpty()) {
+                ((ActionCard) holder).whatHappens.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(links.get(position)));
+                        av.startActivity(i);
+                    }
+                });
+            }
+            else {
+                ((ActionCard) holder).whatHappens.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -193,6 +246,7 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         ImageView icon;
         TextView title;
         TextView desc;
+        Button whatHappens;
         ConstraintLayout parentLayout;
         MaterialCardView card;
 
@@ -202,6 +256,7 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             this.title = itemView.findViewById(R.id.textView7);
             this.title.setMovementMethod(LinkMovementMethod.getInstance());
             this.desc = itemView.findViewById(R.id.textView5);
+            this.whatHappens = itemView.findViewById(R.id.whatHappens);
             this.parentLayout = itemView.findViewById(R.id.parent_layout2);
             this.card = itemView.findViewById(R.id.materialCardView);
         }

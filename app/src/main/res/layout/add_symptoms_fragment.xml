@@ -14,12 +14,14 @@
     android:layout_marginBottom="100dp">
 
     <TextView
-        android:id="@+id/selectSymptoms"
+        android:id="@+id/emergency"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:textSize="20sp"
-        android:text="Select your symptoms:"
+        android:text="@string/emergency"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
         app:layout_constraintStart_toStartOf="@+id/guidelineV05"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,7 +32,7 @@
         android:layout_marginTop="20dp"
         android:background="#c0c0c0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selectSymptoms" />
+        app:layout_constraintTop_toBottomOf="@+id/emergency" />
 
     <RelativeLayout
         android:id="@+id/rel"
@@ -38,14 +40,12 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/divider">
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewSymptomBoxes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
     </RelativeLayout>
 
     <include
@@ -75,5 +75,12 @@
         android:orientation="vertical"
         app:layout_constraintGuide_begin="20dp"
         app:layout_constraintGuide_percent="0.05" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineV95"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.95" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

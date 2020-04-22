@@ -2,6 +2,7 @@ package edu.uw.covidsafe.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 
@@ -25,41 +26,38 @@ import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
 public class CryptoUtils {
 
     // make very first seed
-    public static SeedUUIDRecord generateInitSeed(Context context, boolean forceUpdate) {
-        Log.e("crypto","generate init seed");
+    public static void generateInitSeed(Context cxt, boolean forceUpdate) {
+        Log.e("crypto", "generate init seed");
         String initSeed = UUID.randomUUID().toString();
 
-        SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences prefs = cxt.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
-        boolean initSeedExists = prefs.getBoolean(context.getString(R.string.init_key_exists_pkey), false);
+        boolean initSeedExists = prefs.getBoolean(cxt.getString(R.string.init_key_exists_pkey), false);
         if (!initSeedExists || forceUpdate) {
             long ts = TimeUtils.getTime();
-            editor.putLong(context.getString(R.string.most_recent_seed_timestamp_pkey), ts);
+            editor.putLong(cxt.getString(R.string.most_recent_seed_timestamp_pkey), ts);
             editor.commit();
 
-            editor.putBoolean(context.getString(R.string.init_key_exists_pkey), true);
+            editor.putBoolean(cxt.getString(R.string.init_key_exists_pkey), true);
             editor.commit();
 
             // add record with timestamp and empty uuid
             SeedUUIDRecord record = new SeedUUIDRecord(ts,
-                    initSeed, "", context);
-            Log.e("uuid","generate initial seed");
-            Log.e("uuid","ts "+record.getRawTs()+"");
-            Log.e("uuid","seed "+record.getSeed(context));
-            Log.e("uuid","uuid "+record.getUUID(context));
-            new SeedUUIDOpsAsyncTask(context, record).execute();
-            return record;
+                    initSeed, "", cxt);
+            Log.e("uuid", "generate initial seed");
+            Log.e("uuid", "ts " + record.getRawTs() + "");
+            Log.e("uuid", "seed " + record.getSeed(cxt));
+            Log.e("uuid", "uuid " + record.getUUID(cxt));
+        } else {
+            Log.e("crypto", "init seed already exists");
         }
-        else {
-            Log.e("crypto","init seed already exists");
-        }
-        return null;
     }
 
     // this is used by uuid generator
     // it generates enough UUIDs to fill the gap between the last time this method was called and now
     public static UUID generateSeedHelper(Context context, long mostRecentSeedTimestamp) {
+        Log.e("crypto","generate seed helper");
         int UUIDGenerationIntervalInMiliseconds = Constants.UUIDGenerationIntervalInMinutes*60*1000;
 
         if (Constants.DEBUG) {
@@ -184,6 +182,9 @@ public class CryptoUtils {
 
         try {
             for (int i = 0; i < numSeedsToGenerate; i++) {
+                if (i%20==0) {
+                    Log.e("regen", "gen " + i + "/" + numSeedsToGenerate);
+                }
                 SeedUUIDRecord dummyRecord = generateSeedHelper(seed);
 
                 // update the existing record

@@ -88,10 +88,6 @@ public class MainActivity extends AppCompatActivity {
         Constants.DiagnosisTipAdapter = new TipRecyclerViewAdapter(this, this);
         Constants.NotificationAdapter = new NotifRecyclerViewAdapter(this,this);
         Constants.HistoryAdapter = new HistoryRecyclerViewAdapter(this,this);
-
-        if (Constants.DEBUG) {
-            insertDummyData();
-        }
     }
 
     @Override
@@ -197,74 +193,6 @@ public class MainActivity extends AppCompatActivity {
             else if (resultCode == 0) {
                 Utils.updateSwitchStates(this);
             }
-        }
-    }
-
-    public void insertDummyData() {
-        Log.e("health","insert dummy data");
-        new SymptomsOpsAsyncTask(Constants.SymptomsDatabaseOps.DeleteAll, this).execute();
-        new GpsOpsAsyncTask(Constants.GpsDatabaseOps.DeleteAll, this).execute();
-        new SeedUUIDOpsAsyncTask(Constants.UUIDDatabaseOps.DeleteAll, this).execute();
-        new BleOpsAsyncTask(this, Constants.BleDatabaseOps.DeleteAll).execute();
-
-        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm aa");
-        SimpleDateFormat format2 = new SimpleDateFormat("yyyy/MM/dd");
-
-        try {
-            Date day1 = new Date(TimeUtils.getNDaysForward(0));
-            Date day2 = new Date(TimeUtils.getNDaysForward(-1));
-            Date day3 = new Date(TimeUtils.getNDaysForward(-3));
-            Date day4 = new Date(TimeUtils.getNDaysForward(-4));
-
-            Date d0 = format.parse(format2.format(day1)+" 1:22 AM");
-            Date d1 = format.parse(format2.format(day1)+" 2:22 PM");
-            Date d2 = format.parse(format2.format(day3)+" 1:11 AM");
-            Date d3 = format.parse(format2.format(day4)+" 3:33 AM");
-            Date d4 = format.parse(format2.format(day4)+" 4:44 PM");
-//            Date d5 = format.parse(format2.format(day1)+" 2:22 PM");
-            SymptomsRecord record0 = new SymptomsRecord();
-            SymptomsRecord record1 = new SymptomsRecord();
-            SymptomsRecord record2 = new SymptomsRecord();
-            SymptomsRecord record3 = new SymptomsRecord();
-            SymptomsRecord record4 = new SymptomsRecord();
-            record0.setTs(d0.getTime());
-//            record1.setTs(d5.getTime());
-            record2.setTs(d2.getTime());
-            record3.setTs(d3.getTime());
-            record4.setTs(d4.getTime());
-
-            record0.setFever(true);
-            record1.setCough(true);
-            record1.setVomiting(true);
-            record2.setHeadache(true);
-            record3.setTroubleBreathing(true);
-            record4.setDiarrhea(true);
-            new SymptomsOpsAsyncTask(this, record0).execute();
-            new SymptomsOpsAsyncTask(this, record1).execute();
-            new SymptomsOpsAsyncTask(this, record2).execute();
-            new SymptomsOpsAsyncTask(this, record3).execute();
-            new SymptomsOpsAsyncTask(this, record4).execute();
-            double[] lats = new double[]{47.6537211,47.6536759,47.6358822,47.6306149,47.6221534};
-            double[] lons = new double[]{-122.3080918,-122.3155732,-122.2954408,-122.2982472,-122.2793301};
-
-            new GpsOpsAsyncTask(new GpsRecord(
-                    d0.getTime(), lats[0],lons[0],"",this
-            ), this).execute();
-            new GpsOpsAsyncTask(new GpsRecord(
-                    d1.getTime(), lats[1],lons[1],"",this
-            ), this).execute();
-            new GpsOpsAsyncTask(new GpsRecord(
-                    d2.getTime(), lats[2],lons[2],"",this
-            ), this).execute();
-            new GpsOpsAsyncTask(new GpsRecord(
-                    d3.getTime(), lats[3],lons[3],"",this
-            ), this).execute();
-            new GpsOpsAsyncTask(new GpsRecord(
-                    d4.getTime(), lats[4],lons[4],"",this
-            ), this).execute();
-        }
-        catch(Exception e) {
-            Log.e("err",e.getMessage());
         }
     }
 
