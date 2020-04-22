@@ -53,6 +53,7 @@ import java.util.Set;
 
 // this has fixed gps data
 // this has hard-coded set of seeds to match against with server results
+// if you use this file, the home screen will show one exposure notification and one PSA message
 
 public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
 

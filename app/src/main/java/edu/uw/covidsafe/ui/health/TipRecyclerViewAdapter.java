@@ -65,7 +65,7 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 titles.add("Isolation order");
 //                desc.add(getQuarantineTime());
 //                desc.add(mContext.getString(R.string.tip_desc_1));
-                Spannable ss = (Spannable)Html.fromHtml("Every who has tested positive for COVID-19 shall remain in isolation until no longer infectious. <b>Do not leave your home or recovery facility, except to receive medical care.</b>");
+                Spannable ss = (Spannable)Html.fromHtml("Everyone who has tested positive for COVID-19 shall remain in isolation until no longer infectious. <b>Do not leave your home or recovery facility, except to receive medical care.</b>");
                 desc.add(ss);
                 icons.add(mContext.getDrawable(R.drawable.icon_quarantine));
                 links.add("https://www.kingcounty.gov/depts/health/communicable-diseases/disease-control/novel-coronavirus/quarantine.aspx");

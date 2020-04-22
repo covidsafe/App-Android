@@ -39,6 +39,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.uw.covidsafe.comms.PullFromServerTask;
+import edu.uw.covidsafe.comms.PullFromServerTaskDemo;
 import edu.uw.covidsafe.comms.PullFromServerTaskDemo2;
 import edu.uw.covidsafe.symptoms.SymptomDbModel;
 import edu.uw.covidsafe.symptoms.SymptomUtils;
@@ -256,7 +257,7 @@ public class MainFragment extends Fragment {
         if (!Constants.PullFromServerTaskRunning) {
             if (!Constants.PUBLIC_DEMO) {
                 if (Constants.DEBUG) {
-                    new PullFromServerTaskDemo2(getContext(), getActivity(), view).execute();
+                    new PullFromServerTaskDemo(getContext(), getActivity(), view).execute();
                 } else {
                     new PullFromServerTask(getContext(), getActivity(), view).execute();
                 }
