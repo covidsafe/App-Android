@@ -1,14 +1,18 @@
+
+<img src="https://github.com/covidsafe/App-Android/blob/master/imgs/logo-big.png" width=100px>
+
 # CovidSafe
 
 [![CircleCI](https://circleci.com/gh/covidsafe/App-Android.svg?style=svg)](https://circleci.com/gh/covidsafe/App-Android)
 
 CovidSafe is a tool built by doctors and researchers at the University of Washington with Microsoft volunteers to alert you about highly relevant public health announcements, exposure to COVID-19, and to assist contact tracing without compromising your personal privacy.
 
-Here is an [overview video](https://www.youtube.com/watch?v=2fPpLJ3MQpc) (1:17) demonstrating how users are notified of potential exposures and announcements<br/>
-
-Our app also has a [symptom tracker and location log](https://www.youtube.com/watch?v=Pr1YNAiKmFg) (1:13) which are useful for aggregating information for public health officials and contact tracers<br/>
-
-Health care workers and public health officials can send public service announcements to bounded geographic regions using Google Forms, here is a [video](https://www.youtube.com/watch?v=mweXe470Mrs) (0:40). For more details for how to do this, check out this [repo](https://github.com/covidsafe/hcp-tools)
+Here is an [overview video](https://www.youtube.com/watch?v=MHqM-dj3hM4) (2:01) of our app.
+CovidSafe has the following features:
+* Users are notified of potential exposures to other users who have been positively identified with COVID-19. [Live demo](https://www.youtube.com/watch?v=9CKtu6zpkNs) (0:56)
+* Users can receive public service announcements sent by health care officials
+* Public health officials can send messages to individual neighborhoods using Google Forms [Video](https://www.youtube.com/watch?v=sdu5YkUmRB8) (0:47). For more details for how to do this, check out this [repo](https://github.com/covidsafe/hcp-tools)
+* Users can log symptoms with our [symptom tracker], automatically log their location with our private location log. These logs are useful for aggregating information that can be useful for interviews with public health officials and contact tracers
 
 To run an end-to-end demo of the app on your own phone, please refer to [these instructions](https://github.com/covidsafe/App-Android/wiki/Running-the-app) in our wiki.
 
