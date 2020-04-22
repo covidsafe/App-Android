@@ -6,6 +6,8 @@
     <string name="permissions_header_text"><![CDATA[<font color=#000000>Select your preferences</font>]]></string>
     <string name="health_header_text"><![CDATA[<font color=#000000>Health</font>]]></string>
     <string name="health_header_text_demo"><![CDATA[<font color=#000000>Health [DEMO]</font>]]></string>
+    <string name="contact_header_text"><![CDATA[<font color=#000000>Interview Preparation</font>]]></string>
+    <string name="contact_header_text_demo"><![CDATA[<font color=#000000>Interview Preparation [DEMO]</font>]]></string>
     <string name="add_symptoms_header_text"><![CDATA[<font color=#000000>Create New Log</font>]]></string>
     <string name="settings_header_text"><![CDATA[<font color=#000000>Settings</font>]]></string>
     <string name="help_header_text"><![CDATA[<font color=#000000>Resources</font>]]></string>
@@ -20,11 +22,36 @@
     <string name="default_exposed_notif">Based on your location history, we believe you might have been in the same place as people infected with COVID-19.</string>
     <string name="exposed_notif2">Please contact your healthcare professional.</string>
 
+    <string name="contact_title_1">
+        Review which symptoms you would like to include.
+    </string>
+    <string name="contact_title_2">
+        Review your location history from the last 14 days.
+    </string>
+    <string name="contact_title_3">
+        Review the people you’ve been in contact with recently.
+    </string>
+    <string name="contact_title_4">
+        Save this list for reference during your interview.
+    </string>
+    <string name="contact_desc_1">
+        We’ve detected severe symptoms in your recent reports, and collected them below.
+    </string>
+    <string name="contact_desc_2">
+        Below are locations you’ve recently visited for 10 minutes or more. This helps us track locations that might be high-risk for exposure.
+    </string>
+    <string name="contact_desc_3">
+        Below is a list of people you’ve been in close contact with (10km)  for 10 or more minutes in the last 14 days.
+    </string>
+    <string name="contact_desc_4">
+        Please review the information below and save your list. Don’t worry, you can always come back to edit this list later.
+    </string>
+
     <string name="q1">
         What is the purpose of this app?
     </string>
     <string name="a1">
-        CovidSafe is an app that seeks to reduce the spread of coronavirus in the community, specifically by helping people learn if they\'ve been exposed, connecting them to the appropriate public health guidance, and by enabling effective contact tracing. CovidSafe also reduces the burden on public health systems by offering people who have been positively diagnosed and their potential exposures, a safe, private, and fast way to communicate this information to the people who need it --- public health authorities and their contact tracing teams — public health authorities and their contact tracing teams.
+        CovidSafe is an app that seeks to reduce the spread of coronavirus in the community, specifically by helping people learn if they\'ve been exposed, connecting them to the appropriate public health guidance, and by enabling effective contact tracing. CovidSafe also reduces the burden on public health systems by offering people who have been positively diagnosed and their potential exposures, a safe, private, and fast way to communicate this information to the people who need it — public health authorities and their contact tracing teams.
     </string>
     <string name="q2">
         How does this app benefit me?
