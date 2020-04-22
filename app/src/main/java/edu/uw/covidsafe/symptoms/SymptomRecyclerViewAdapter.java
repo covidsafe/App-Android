@@ -120,10 +120,6 @@ public class SymptomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             if (cb != null) { cb.setChecked(dataIn.isHeadache()); }
             else { dataOut.setHeadache(isChecked); }
         }
-        else if (symptom.contains("chest pains")) {
-            if (cb != null) { cb.setChecked(dataIn.isChestPain()); }
-            else { dataOut.setChestPain(isChecked); }
-        }
         else if (symptom.contains("sore throat")) {
             if (cb != null) { cb.setChecked(dataIn.isSoreThroat()); }
             else { dataOut.setSoreThroat(isChecked); }
@@ -260,6 +256,11 @@ public class SymptomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             @Override
             public void afterTextChanged(Editable s) { }
         });
+
+        ((SymptomHolder) holder).chip1.setVisibility(View.GONE);
+        ((SymptomHolder) holder).chip2.setVisibility(View.GONE);
+        ((SymptomHolder) holder).chip3.setVisibility(View.GONE);
+        ((SymptomHolder) holder).cg.setVisibility(View.GONE);
 
         ((SymptomHolder) holder).chip1.setChecked(false);
         ((SymptomHolder) holder).chip2.setChecked(false);

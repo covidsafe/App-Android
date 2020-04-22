@@ -53,6 +53,7 @@ public class Constants {
     }
     public static Menu menu;
 
+    public static boolean UI_AUTH = false;
     public static boolean WRITE_TO_DISK = false;
     public static boolean DEBUG = true;
     public static boolean PUBLIC_DEMO = true;
@@ -195,9 +196,8 @@ public class Constants {
         "Chills",
         "Cough",
         "Diarrhea",
-        "Difficulty breathing",
+        "Difficulty breathing (not severe)",
         "Headache",
-        "Chest pains",
         "Sore throat",
         "Vomiting"
     );
@@ -205,11 +205,10 @@ public class Constants {
         "A high temperature of over 100°F - you feel hot to touch on your chest or back.",
         "Pain from inside the abdomen or the outer muscle wall, ranging from mild and temporary to severe.",
         "The feeling of being cold, though not necessarily in a cold environment, often accompanied by shivering or shaking.",
-        "A new, continuous cough - this means you've started coughing repeatedly",
+        "A sudden, forceful hacking sound to release air and clear an irritation in the throat or airway.",
         "Loose, watery bowel movements that may occur frequently and with a sense of urgency.",
         "Shortness of breath, or dyspnea, is an uncomfortable condition that makes it difficult to fully get air into your lungs.",
         "A painful sensation in any part of the head, ranging from sharp to dull, that may occur with other symptoms.",
-        "Chest pain appears in many forms, ranging from a sharp stab to a dull ache. Sometimes chest pain feels crushing or burning. In certain cases, the pain travels up the neck, into the jaw, and then radiates to the back or down one or both arms.",
         "Pain or irritation in the throat that can occur with or without swallowing, often accompanies infections.",
         "Forcefully expelling the stomach's contents out of the mouth."
     );

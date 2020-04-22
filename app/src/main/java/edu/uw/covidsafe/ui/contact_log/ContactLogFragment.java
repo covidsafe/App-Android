@@ -109,7 +109,6 @@ public class ContactLogFragment extends Fragment {
         return view;
     }
 
-
     public void initCal() {
         cal = view.findViewById(R.id.calendarView);
         /////////////////////////////////////////////////////////////////
@@ -189,8 +188,10 @@ public class ContactLogFragment extends Fragment {
                     Integer.parseInt(day.format(ts))));
         }
 
-        cal.addDecorators(new ContactLogFragment.EventDecorator(cxt.getColor(R.color.purpleDark),
-                markedDays));
+        if (cxt != null) {
+            cal.addDecorators(new ContactLogFragment.EventDecorator(cxt.getColor(R.color.purpleDark),
+                    markedDays));
+        }
     }
 
     private static class EventDecorator implements DayViewDecorator {

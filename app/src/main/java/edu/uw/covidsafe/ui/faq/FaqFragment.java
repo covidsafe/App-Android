@@ -79,10 +79,6 @@ public class FaqFragment extends Fragment {
         answers.add(getString(R.string.a4));
         questions.add(getString(R.string.q5));
         answers.add(getString(R.string.a5));
-        questions.add(getString(R.string.q6));
-        answers.add(getString(R.string.a6));
-        questions.add(getString(R.string.q7));
-        answers.add(getString(R.string.a7));
 
         FaqListAdapter adapter = new FaqListAdapter(questions, answers);
         lv1.setAdapter(adapter);
@@ -111,18 +107,6 @@ public class FaqFragment extends Fragment {
 
         FaqListAdapter adapter2 = new FaqListAdapter(questions2, answers2);
         lv2.setAdapter(adapter2);
-        //////////////////////////////////////////////////////////////////
-        lv3 = view.findViewById(R.id.faq3);
-
-        List<String> questions3 = new ArrayList<>();
-        List<String> answers3 = new ArrayList<>();
-        questions3.add(getString(R.string.aq1));
-        answers3.add(getString(R.string.aa1));
-        questions3.add(getString(R.string.aq2));
-        answers3.add(getString(R.string.aa2));
-
-        FaqListAdapter adapter3 = new FaqListAdapter(questions3, answers3);
-        lv3.setAdapter(adapter3);
         //////////////////////////////////////////////////////////////////
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerViewResources);
@@ -154,21 +138,10 @@ public class FaqFragment extends Fragment {
                     }
                 });
 
-                setExpandableListViewHeight(lv3, -1);
-                lv3.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-                    @Override
-                    public boolean onGroupClick(ExpandableListView parent, View v, int position, long id) {
-                        setExpandableListViewHeight(parent, position);
-                        return false;
-                    }
-                });
-
                 lv1.setIndicatorBoundsRelative(lv1.getWidth() - GetDipsFromPixel(50),
                         lv1.getWidth() - GetDipsFromPixel(10));
                 lv2.setIndicatorBoundsRelative(lv2.getWidth() - GetDipsFromPixel(50),
                         lv2.getWidth() - GetDipsFromPixel(10));
-                lv3.setIndicatorBoundsRelative(lv3.getWidth() - GetDipsFromPixel(50),
-                        lv3.getWidth() - GetDipsFromPixel(10));
             }
         });
 

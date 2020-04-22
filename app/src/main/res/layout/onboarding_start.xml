@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent=".1"
+        app:layout_constraintGuide_percent=".05"
         app:layout_constraintGuide_begin="20dp" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent=".9"
+        app:layout_constraintGuide_percent=".95"
         app:layout_constraintGuide_begin="20dp" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -49,10 +49,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:text="Privacy | Terms and Conditions"
+        android:text="Learn about how we protect your privacy"
         android:textAllCaps="false"
         app:cornerRadius="20dp"
-        android:textSize="13sp"
+        android:textSize="12sp"
         app:icon="@drawable/ic_lock_black_24dp"
         app:layout_constraintBottom_toBottomOf="@+id/storyImageView"
         app:layout_constraintEnd_toStartOf="@+id/guidelineV80"

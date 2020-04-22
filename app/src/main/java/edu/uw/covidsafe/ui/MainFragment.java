@@ -166,7 +166,7 @@ public class MainFragment extends Fragment {
 
                 Constants.HistoryAdapter.setRecords(historyNotifs, view);
                 Constants.NotificationAdapter.setRecords(currentNotifs, view);
-                Constants.MainTipAdapter.enableTips(notifRecords.size(), view);
+                Constants.MainTipAdapter.enableTips(notifRecords.size(), view, false);
             }
         });
 
