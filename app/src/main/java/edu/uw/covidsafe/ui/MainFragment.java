@@ -254,10 +254,12 @@ public class MainFragment extends Fragment {
     public void refreshTask() {
         Log.e("refresh","freshtask ");
         if (!Constants.PullFromServerTaskRunning) {
-            if (Constants.DEBUG) {
-                new PullFromServerTaskDemo2(getContext(), getActivity(), view).execute();
-            } else {
-                new PullFromServerTask(getContext(), getActivity(), view).execute();
+            if (!Constants.PUBLIC_DEMO) {
+                if (Constants.DEBUG) {
+                    new PullFromServerTaskDemo2(getContext(), getActivity(), view).execute();
+                } else {
+                    new PullFromServerTask(getContext(), getActivity(), view).execute();
+                }
             }
         }
 

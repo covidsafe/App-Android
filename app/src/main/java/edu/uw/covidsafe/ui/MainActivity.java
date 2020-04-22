@@ -19,9 +19,12 @@ import android.widget.Button;
 import android.widget.DatePicker;
 
 import androidx.fragment.app.FragmentTransaction;
+
+import edu.uw.covidsafe.ble.BleOpsAsyncTask;
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.gps.GpsOpsAsyncTask;
 import edu.uw.covidsafe.gps.GpsRecord;
+import edu.uw.covidsafe.seed_uuid.SeedUUIDOpsAsyncTask;
 import edu.uw.covidsafe.symptoms.SymptomTrackerFragment;
 import edu.uw.covidsafe.symptoms.SymptomsOpsAsyncTask;
 import edu.uw.covidsafe.symptoms.SymptomsRecord;
@@ -201,6 +204,8 @@ public class MainActivity extends AppCompatActivity {
         Log.e("health","insert dummy data");
         new SymptomsOpsAsyncTask(Constants.SymptomsDatabaseOps.DeleteAll, this).execute();
         new GpsOpsAsyncTask(Constants.GpsDatabaseOps.DeleteAll, this).execute();
+        new SeedUUIDOpsAsyncTask(Constants.UUIDDatabaseOps.DeleteAll, this).execute();
+        new BleOpsAsyncTask(this, Constants.BleDatabaseOps.DeleteAll).execute();
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm aa");
         SimpleDateFormat format2 = new SimpleDateFormat("yyyy/MM/dd");

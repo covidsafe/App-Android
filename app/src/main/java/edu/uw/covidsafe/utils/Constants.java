@@ -54,10 +54,11 @@ public class Constants {
     public static Menu menu;
 
     public static boolean WRITE_TO_DISK = false;
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = true;
+    public static boolean PUBLIC_DEMO = true;
 
     public enum BleDatabaseOps {
-        Insert,ViewAll
+        Insert,ViewAll,DeleteAll
     }
 
     public enum NotifDatabaseOps {
