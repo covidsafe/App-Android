@@ -9,10 +9,10 @@ CovidSafe is a tool built by doctors and researchers at the University of Washin
 
 Here is an [overview video](https://www.youtube.com/watch?v=MHqM-dj3hM4) (2:01) of our app.<br/>
 CovidSafe has the following features:
-* Users are notified of potential exposures to other users who have been positively identified with COVID-19. [Live demo](https://www.youtube.com/watch?v=9CKtu6zpkNs) (0:56)
-* Users can receive public service announcements sent by health care officials
+* You are notified of potential exposures to other users who have been positively identified with COVID-19. This is achieved with a privacy-preserving Bluetooth protocol. [Live demo](https://www.youtube.com/watch?v=9CKtu6zpkNs) (0:56)
+* You can receive public service announcements sent by health care officials to your neighborhood
 * Public health officials can send messages to individual neighborhoods using Google Forms [Video](https://www.youtube.com/watch?v=sdu5YkUmRB8) (0:47). For more details for how to do this, check out this [repo](https://github.com/covidsafe/hcp-tools)
-* Users can log symptoms with our [symptom tracker], automatically log their location with our private location log. These logs are useful for aggregating information that can be useful for interviews with public health officials and contact tracers
+* Users can log symptoms with our symptom tracker and automatically log their location with our private location log. These logs are useful for aggregating information that can be useful for interviews with public health officials and contact tracers
 
 To run an end-to-end demo of the app on your own phone, please refer to [these instructions](https://github.com/covidsafe/App-Android/wiki/Running-the-app) in our wiki.
 
