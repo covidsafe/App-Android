@@ -251,10 +251,10 @@ Contact tracing is a process that helps identify all the people who may have com
         CovidSafe notifies you if you may have been exposed to coronavirus and helps keep you and your community safer.
     </string>
     <string name="story2">
-        Learn if you might have been exposed. If you\'ve recently been in close contact with someone recently diagnosed with COVID-19. You\'ll get notification.
+        Learn if you might have been exposed. If you\'ve recently been in close contact with someone recently diagnosed with COVID-19. You\'ll get a notification.
     </string>
     <string name="story3">
-        Take care of yourself and others. Get self-care tips, connect with the appropriate health guidance professional if you\'ve experienced symptoms. And log locations you recently visited to protect others.
+        Take care of yourself and others. Get self-care tips, connect with the appropriate public health guidance if you\'ve experienced symptoms. And log locations you recently visited to protect others.
     </string>
     <string name="story4">
         Any information you contribute is protected. Learn more about how your information is used and protected on the Privacy page in Settings.
