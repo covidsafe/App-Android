@@ -44,7 +44,7 @@
         Below is a list of people you’ve been in close contact with (10km)  for 10 or more minutes in the last 14 days.
     </string>
     <string name="contact_desc_4">
-        Please review the information below and save your list. Don’t worry, you can always come back to edit this list later.
+        Don’t worry, you can always come back to edit this list later.
     </string>
 
     <string name="q1">
@@ -191,6 +191,8 @@ Contact tracing is a process that helps identify all the people who may have com
     <string name="perm_ble_rationale">Without this permission, we will be unable to capture Bluetooth information of users around you. Are you sure you want to deny this permission?</string>
     <string name="perm_ble_ask">We require access to Bluetooth information when the app is closed. Would you like to open app settings to enable this?</string>
 
+    <string name="perm_contacts_rationale">Without this permission, we will be unable to add contacts to the app. Are you sure you want to deny this permission?</string>
+
     <string name="perm_notifs_rationale">Without this permission, we will be unable to send you notifications. Are you sure you want to deny this permission?</string>
     <string name="perm_notifs_ask">We require push notifications to be enabled. Would you like to open app settings to enable this?</string>
 
@@ -225,6 +227,7 @@ Contact tracing is a process that helps identify all the people who may have com
     <string name="logging">Limited trace data is being collected. We keep your identity anonymous.<![CDATA[<font color=#8d55e9><br/><b><a href="https://covidsafe.cs.washington.edu/">Learn More</a></b></font>]]></string>
     <string name="stopping">Turn broadcasting on to improve the accuracy of your notifications. <![CDATA[<font color=#8d55e9><br/><b><a href="https://covidsafe.cs.washington.edu/">Learn More</a></b></font>]]></string>
 
+    <string name="kingCountyLink">https://kingcounty.gov/depts/health/communicable-diseases/disease-control/novel-coronavirus.aspx</string>
     <string name="covidSiteLink">https://covidsafe.cs.washington.edu/</string>
     <string name="covidSiteFaqLink">https://covidsafe.cs.washington.edu/#faq</string>
     <string name="privacyLink1"><![CDATA[<font color=#8d55e9><a href="https://covidsafe.cs.washington.edu/">Learn more.</a></font>]]></string>

@@ -36,7 +36,6 @@ import java.util.Date;
 public class HealthFragment extends Fragment {
 
     View view;
-    ViewPager viewPager;
     HealthPageAdapter adapter;
 
     @SuppressLint("RestrictedApi")
@@ -65,11 +64,11 @@ public class HealthFragment extends Fragment {
         }
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(header_str));
 
-        viewPager = view.findViewById(R.id.pager);
+        Constants.healthViewPager = view.findViewById(R.id.pager);
         adapter = new HealthPageAdapter(getChildFragmentManager());
-        viewPager.setAdapter(adapter);
+        Constants.healthViewPager.setAdapter(adapter);
 
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        Constants.healthViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 //                Log.e("time","onpagescrolled "+position);
@@ -98,7 +97,7 @@ public class HealthFragment extends Fragment {
             }
         });
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);
-        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setupWithViewPager(Constants.healthViewPager);
 
         return view;
     }

@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -46,7 +45,6 @@ import java.util.List;
 import edu.uw.covidsafe.gps.GpsDbModel;
 import edu.uw.covidsafe.gps.GpsHistoryRecyclerViewAdapter;
 import edu.uw.covidsafe.gps.GpsRecord;
-import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.utils.Constants;
 
@@ -98,7 +96,7 @@ public class ContactLogFragment extends Fragment {
                 gpsDbChanged = true;
                 changedRecords = gpsRecords;
                 Log.e("contact","db on changed "+(changedRecords.size()));
-                if (Constants.CurrentFragment.toString().toLowerCase().contains("contact")) {
+                if (Constants.CurrentFragment.toString().toLowerCase().contains("contactlog")) {
                     Log.e("contact","db on changing");
                     updateLocationView(cal.getSelectedDate(), getContext());
                     gpsDbChanged = false;
