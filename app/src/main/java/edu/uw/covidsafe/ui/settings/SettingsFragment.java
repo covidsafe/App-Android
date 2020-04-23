@@ -55,7 +55,9 @@ public class SettingsFragment extends Fragment {
             window.setStatusBarColor(getActivity().getResources().getColor(R.color.white));
         }
 
-        Constants.menu.findItem(R.id.mybutton).setVisible(false);
+        if (Constants.menu.findItem(R.id.mybutton) != null) {
+            Constants.menu.findItem(R.id.mybutton).setVisible(false);
+        }
         ((MainActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(getActivity().getDrawable(R.drawable.ic_close_black_24dp));
 
         ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getResources().getColor(R.color.white)));
