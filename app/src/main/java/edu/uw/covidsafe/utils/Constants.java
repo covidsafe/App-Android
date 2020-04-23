@@ -13,11 +13,12 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.covidsafe.R;
 import com.google.common.collect.Lists;
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
+import edu.uw.covidsafe.contact_trace.NonSwipeableViewPager;
 import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.MainFragment;
 import edu.uw.covidsafe.ui.health.TipRecyclerViewAdapter;
@@ -30,7 +31,6 @@ import java.security.KeyStore;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
 import java.util.UUID;
@@ -42,6 +42,7 @@ import edu.uw.covidsafe.ui.faq.FaqFragment;
 import edu.uw.covidsafe.ui.health.HealthFragment;
 import edu.uw.covidsafe.ui.settings.SettingsFragment;
 import edu.uw.covidsafe.ui.contact_log.ContactLogFragment;
+import edu.uw.covidsafe.contact_trace.ContactTraceFragment;
 
 import edu.uw.covidsafe.ui.onboarding.PermissionFragment;
 import edu.uw.covidsafe.ui.onboarding.PagerFragment;
@@ -64,6 +65,10 @@ public class Constants {
         Insert,ViewAll,DeleteAll
     }
 
+    public enum HumanDatabaseOps {
+        Insert,Delete
+    }
+
     public enum NotifDatabaseOps {
         Insert,ViewAll,DeleteAll
     }
@@ -80,6 +85,7 @@ public class Constants {
         BatchInsert, Insert,ViewAll,DeleteAll
     }
 
+    public static int ContactPageNumber;
     public static String entryPoint = "";
     public static List<SymptomsRecord> symptomRecords;
     public static boolean EnableUUIDGeneration = true;
@@ -140,6 +146,7 @@ public class Constants {
     public static TextView bleDesc;
     public static Switch notifSwitch;
 
+    public static ViewPager contactViewPager;
     public static SecretKey secretKey;
     public static KeyStore keyStore;
     public static int IV_LEN = 12;
@@ -171,6 +178,7 @@ public class Constants {
     public static Fragment CurrentFragment;
     public static Fragment PermissionsFragment;
     public static Fragment PagerFragment;
+    public static Fragment ContactTraceFragment;
     public static String notifDirName = "notif";
     public static String gpsDirName = "gps";
     public static String bleDirName = "ble";
@@ -190,6 +198,7 @@ public class Constants {
     public static HashMap<String,Long> scannedUUIDsTimes;
     public static HashSet<String> writtenUUIDs;
     public static int pageNumber = -1;
+    public static ViewPager healthViewPager;
     public static Calendar contactLogMonthCalendar = Calendar.getInstance();
     public static Calendar symptomTrackerMonthCalendar = Calendar.getInstance();
     public static List<String> symptoms = Lists.newArrayList(
@@ -252,6 +261,9 @@ public class Constants {
 
         SymptomTrackerFragment = new SymptomTrackerFragment();
         HealthFragmentState = SymptomTrackerFragment;
+
+        ContactTraceFragment = new ContactTraceFragment();
+
         if (!DEBUG) {
             LOG_TO_DISK = false;
         }

@@ -38,7 +38,19 @@ public class PermissionLogic {
 
         SharedPreferences.Editor editor = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
 
-        // for Q, the only permission is GPS
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && permissions[0].equals(Manifest.permission.READ_CONTACTS) &&
+            ActivityCompat.checkSelfPermission(av, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            boolean shouldAsk;
+            shouldAsk = ActivityCompat.shouldShowRequestPermissionRationale(av, Manifest.permission.READ_CONTACTS);
+            if (shouldAsk) {
+                makeRationaleDialog(av, requestCode, Manifest.permission.READ_CONTACTS);
+            } else if (!shouldAsk) {
+                makeOpenSettingsDialog(av, Manifest.permission.READ_CONTACTS, requestCode);
+            }
+        }
+
+
+            // for Q, the only permission is GPS
         // for below Q, the permission can be for BLE (1) or GPS (2)
         if (androidSDKVersion >= Build.VERSION_CODES.Q) {
             if (backgroundResult == PackageManager.PERMISSION_DENIED) {
@@ -151,9 +163,17 @@ public class PermissionLogic {
         SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
+        String msg;
+        if (perm.equals(Manifest.permission.READ_CONTACTS)) {
+            msg = av.getString(R.string.perm_ble_rationale);
+        }
+        else {
+            msg = av.getString(R.string.perm_ble_rationale);
+        }
+
         AlertDialog dialog = new MaterialAlertDialogBuilder(av)
                 .setTitle("Permission denied")
-                .setMessage(av.getString(R.string.perm_ble_rationale))
+                .setMessage(msg)
                 .setNegativeButton(R.string.retry, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         ActivityCompat.requestPermissions(av, new String[]{perm}, 2);
