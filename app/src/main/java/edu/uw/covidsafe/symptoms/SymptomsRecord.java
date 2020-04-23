@@ -331,4 +331,55 @@ public class SymptomsRecord {
         }
         return values;
     }
+
+    public String toString() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm");
+        SimpleDateFormat format2 = new SimpleDateFormat("MM/dd");
+        String ts = format.format(this.getTs());
+        String rep = ts+" - ";
+        if (this.fever) {
+            rep += "Fever";
+            if (this.getFeverTemp() != 0) {
+                rep += " ("+this.getFeverTemp()+"°"+this.getFeverUnit()+")\n";
+            }
+            if (this.getFeverOnset() != 0) {
+                rep += "Onset date: "+format2.format(this.feverOnset)+"\n";
+            }
+            if (this.getFeverDaysExperienced() != 0) {
+                rep += "Days experienced: "+this.feverDaysExperienced+"\n";
+            }
+            rep += "\n";
+        }
+        if (this.abdominalPain) {
+            rep += "Abdominal pain\n";
+        }
+        if (this.chills) {
+            rep += "Chills\n";
+        }
+        if (this.cough) {
+            rep += "Cough";
+            if (this.getCoughOnset() != 0) {
+                rep += "Onset date: "+format2.format(this.coughOnset)+"\n";
+            }
+            if (this.getCoughDaysExperienced() != 0) {
+                rep += "Days experienced: "+this.coughDaysExperienced+"\n";
+            }
+        }
+        if (this.diarrhea) {
+            rep += "Diarrhea\n";
+        }
+        if (this.troubleBreathing) {
+            rep += "Difficulty breathing (not severe)\n";
+        }
+        if (this.headache) {
+            rep += "Headache\n";
+        }
+        if (this.soreThroat) {
+            rep += "Sore throat\n";
+        }
+        if (this.vomiting) {
+            rep += "Vomitting\n";
+        }
+        return rep;
+    }
 }
