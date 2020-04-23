@@ -96,7 +96,7 @@ public class ContactLogFragment extends Fragment {
                 gpsDbChanged = true;
                 changedRecords = gpsRecords;
                 Log.e("contact","db on changed "+(changedRecords.size()));
-                if (Constants.CurrentFragment.toString().toLowerCase().contains("contact")) {
+                if (Constants.CurrentFragment.toString().toLowerCase().contains("contactlog")) {
                     Log.e("contact","db on changing");
                     updateLocationView(cal.getSelectedDate(), getContext());
                     gpsDbChanged = false;

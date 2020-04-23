@@ -11,6 +11,30 @@
     android:layout_height="match_parent"
     android:paddingBottom="20dp">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineV25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".25"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineV50"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".5"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineV75"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".75"
+        app:layout_constraintGuide_begin="20dp" />
+
     <ImageView
         android:id="@+id/page1"
         android:layout_width="24dp"
@@ -18,7 +42,8 @@
         android:layout_marginTop="20dp"
         android:adjustViewBounds="true"
         android:src="@drawable/current_1"
-        app:layout_constraintStart_toStartOf="@+id/guidelineV1"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineV25"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -39,7 +64,8 @@
         android:layout_marginTop="20dp"
         android:adjustViewBounds="true"
         android:src="@drawable/todo_2"
-        app:layout_constraintStart_toStartOf="@+id/guidelineV2"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineV50"
+        app:layout_constraintStart_toStartOf="@+id/guidelineV25"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -49,7 +75,7 @@
         android:text="Location"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@+id/page2"
-        app:layout_constraintStart_toStartOf="@+id/guidelineV2"
+        app:layout_constraintStart_toStartOf="@+id/page2"
         app:layout_constraintTop_toBottomOf="@+id/page2" />
 
     <ImageView
@@ -59,7 +85,8 @@
         android:layout_marginTop="20dp"
         android:adjustViewBounds="true"
         android:src="@drawable/todo_3"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineV3"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineV75"
+        app:layout_constraintStart_toStartOf="@+id/guidelineV50"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -80,7 +107,8 @@
         android:layout_marginTop="20dp"
         android:adjustViewBounds="true"
         android:src="@drawable/todo_4"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineV4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guidelineV75"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView

@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
         Log.e("date","cal setup");
         Calendar myCalendar = Calendar.getInstance();
 
-        if (Constants.CurrentFragment.toString().toLowerCase().contains("contact")) {
+        if (Constants.CurrentFragment.toString().toLowerCase().contains("contactlog")) {
             Log.e("date","contact");
             myCalendar = Constants.contactLogMonthCalendar;
         }
@@ -295,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
                 int month = finalMyCalendar.get(Calendar.MONTH)+1;
                 int day = finalMyCalendar.get(Calendar.DAY_OF_MONTH);
                 Log.e("date","ok "+year+","+month+","+day);
-                if (Constants.CurrentFragment.toString().toLowerCase().contains("contact")) {
+                if (Constants.CurrentFragment.toString().toLowerCase().contains("contactlog")) {
                     ContactLogFragment.updateLocationView(CalendarDay.from(year,month,day),
                             getApplicationContext());
                 }
@@ -384,16 +384,16 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.action_report:
                         selectedFragment = Constants.HealthFragment;
+                        if (Constants.CurrentFragment.toString().toLowerCase().contains("contactstep")) {
+                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.HealthFragment).commit();
+                            return true;
+                        }
                         break;
                     case R.id.action_settings:
                         selectedFragment = Constants.FaqFragment;
                         break;
                 }
 
-                if (Constants.CurrentFragment.toString().toLowerCase().contains("contactstep")) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.HealthFragment).commit();
-                    return true;
-                }
                 if (selectedFragment != null) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
                 }
