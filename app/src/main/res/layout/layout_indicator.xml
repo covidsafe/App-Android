@@ -18,7 +18,7 @@
         android:id="@+id/dot2"
         android:layout_width="7dp"
         android:layout_height="7dp"
-        android:layout_marginStart="2dp"
+        android:layout_marginStart="5dp"
         android:adjustViewBounds="true"
         android:foregroundGravity="center_horizontal"
         android:src="@drawable/deactive" />
@@ -27,7 +27,7 @@
         android:id="@+id/dot3"
         android:layout_width="7dp"
         android:layout_height="7dp"
-        android:layout_marginStart="2dp"
+        android:layout_marginStart="5dp"
         android:adjustViewBounds="true"
         android:foregroundGravity="center_horizontal"
         android:src="@drawable/deactive" />
@@ -36,7 +36,7 @@
         android:id="@+id/dot4"
         android:layout_width="7dp"
         android:layout_height="7dp"
-        android:layout_marginStart="2dp"
+        android:layout_marginStart="5dp"
         android:adjustViewBounds="true"
         android:foregroundGravity="center_horizontal"
         android:src="@drawable/deactive" />
@@ -45,7 +45,7 @@
         android:id="@+id/dot5"
         android:layout_width="7dp"
         android:layout_height="7dp"
-        android:layout_marginStart="2dp"
+        android:layout_marginStart="5dp"
         android:adjustViewBounds="true"
         android:foregroundGravity="center_horizontal"
         android:src="@drawable/deactive" />
