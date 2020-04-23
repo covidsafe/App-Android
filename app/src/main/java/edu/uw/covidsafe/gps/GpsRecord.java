@@ -7,6 +7,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.text.SimpleDateFormat;
+
 import edu.uw.covidsafe.utils.CryptoUtils;
 
 @Entity(tableName = "gps_record_table")
@@ -154,4 +156,9 @@ public class GpsRecord {
 
     public void setAddressEncrypted(String address) { this.addressEncrypted = address; }
     ////////////////////////////////////////////////////////////////////////////////////////
+    public String toString() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm");
+        String ts = format.format(this.getTs());
+        return ts+" - "+this.getRawAddress()+" ("+this.getRawLat()+", "+this.getRawLongi()+")\n";
+    }
 }

@@ -54,4 +54,8 @@ public class HumanRecord {
         this.name = name;
         this.imgUri = imgUri;
     }
+
+    public String toString() {
+        return this.name + " ("+this.phoneNumber+")\n";
+    }
 }

@@ -104,7 +104,7 @@ public class GpsHistoryRecyclerViewAdapter2 extends RecyclerView.Adapter<Recycle
     }
 
     public void setRecords(List<GpsRecord> records, Context cxt) {
-        Log.e("contact","set records");
+        Log.e("gpsset","set records");
         List<String> lats = new LinkedList<>();
         List<String> lons = new LinkedList<>();
         List<String> addresses = new LinkedList<>();
