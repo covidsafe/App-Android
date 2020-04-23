@@ -27,6 +27,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -180,6 +181,14 @@ public class DiagnosisFragment extends Fragment {
                         dialog.show();
                         return;
                     }
+                    else {
+                        FragmentTransaction tx = getActivity().getSupportFragmentManager().beginTransaction();
+                        tx.setCustomAnimations(
+                                R.anim.enter_right_to_left, R.anim.exit_right_to_left,
+                                R.anim.enter_left_to_right, R.anim.exit_left_to_right);
+                        Constants.ContactPageNumber = 0;
+                        tx.replace(R.id.fragment_container, Constants.ContactTraceFragment).commit();
+                    }
                 }
             });
         }
@@ -195,6 +204,10 @@ public class DiagnosisFragment extends Fragment {
                                 .setCancelable(true).create();
                         dialog.show();
                         return;
+                    }
+                    else {
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.kingCountyLink)));
+                        startActivity(browserIntent);
                     }
                 }
             });
