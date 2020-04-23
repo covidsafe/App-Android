@@ -41,7 +41,7 @@
         Below are locations you’ve recently visited for 10 minutes or more. This helps us track locations that might be high-risk for exposure.
     </string>
     <string name="contact_desc_3">
-        Below you can add a list of people you’ve been in close contact with (10km) for 10 or more minutes in the last 14 days.
+        Below you can add a list of people you’ve been in close contact with (6m) for 10 or more minutes in the last 14 days.
     </string>
     <string name="contact_desc_4">
         Don’t worry, you can always come back to edit this list later. You can export this information into an email record for yourself.
