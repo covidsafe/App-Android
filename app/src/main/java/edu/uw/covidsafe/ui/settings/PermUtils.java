@@ -24,6 +24,7 @@ import com.example.covidsafe.R;
 
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.gps.GpsUtils;
+import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
 
@@ -36,13 +37,10 @@ public class PermUtils {
     static boolean stopit = true;
 
     public static void gpsSwitchLogic(Activity av) {
-        SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
 
         boolean hasGps = Utils.hasGpsPermissions(av);
         if (hasGps) {
-            editor.putBoolean(av.getString(R.string.gps_enabled_pkey), true);
-            editor.commit();
+            AppPreferencesHelper.setGPSEnabled(av);
             if (!Constants.LoggingServiceRunning) {
                 Utils.startLoggingService(av);
                 GpsUtils.startGps(av);
@@ -69,8 +67,7 @@ public class PermUtils {
         boolean hasBle = Utils.hasBlePermissions(av);
 
         if (hasBle && BluetoothUtils.isBluetoothOn(av)) {
-            editor.putBoolean(av.getString(R.string.ble_enabled_pkey), true);
-            editor.commit();
+            AppPreferencesHelper.setBluetoothEnabled(av);
             if (!Constants.LoggingServiceRunning) {
                 Utils.startLoggingService(av);
                 Log.e("ble","ble switch logic");

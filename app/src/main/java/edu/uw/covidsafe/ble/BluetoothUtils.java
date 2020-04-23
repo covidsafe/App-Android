@@ -17,6 +17,7 @@ import android.util.Log;
 
 import com.example.covidsafe.R;
 
+import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.seed_uuid.UUIDGeneratorTask;
 import edu.uw.covidsafe.utils.ByteUtils;
 import edu.uw.covidsafe.utils.Constants;
@@ -57,8 +58,7 @@ public class BluetoothUtils {
                     if (Constants.LoggingServiceRunning) {
                         BluetoothUtils.haltBle(context);
                     }
-                    editor.putBoolean(context.getString(R.string.ble_enabled_pkey), false);
-                    editor.commit();
+                    AppPreferencesHelper.setBluetoothEnabled(context,false);
                     if (Constants.bleSwitch != null) {
                         Constants.bleSwitch.setChecked(false);
                     }
@@ -77,8 +77,7 @@ public class BluetoothUtils {
                     }
 
                     if (Utils.hasBlePermissions(context)){
-                        editor.putBoolean(context.getString(R.string.ble_enabled_pkey), true);
-                        editor.commit();
+                        AppPreferencesHelper.setBluetoothEnabled(context);
                         if (Constants.bleSwitch != null) {
                             Constants.bleSwitch.setChecked(true);
                         }
@@ -163,7 +162,7 @@ public class BluetoothUtils {
 
     public static void mkBeacon(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-        boolean bleEnabled = prefs.getBoolean(context.getString(R.string.ble_enabled_pkey), false);
+        boolean bleEnabled = AppPreferencesHelper.isBluetoothEnabled(context);
         Log.e("ble","mkbeacon "+bleEnabled);
         Log.e("blebug","mkbeacon contactUUID "+Constants.contactUUID);
         if (bleEnabled) {

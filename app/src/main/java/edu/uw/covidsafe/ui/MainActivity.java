@@ -26,6 +26,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import edu.uw.covidsafe.ble.BleOpsAsyncTask;
 import edu.uw.covidsafe.ble.BluetoothUtils;
+import edu.uw.covidsafe.comms.NetworkConstant;
+import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.contact_trace.HumanOpsAsyncTask;
 import edu.uw.covidsafe.gps.GpsOpsAsyncTask;
 import edu.uw.covidsafe.gps.GpsRecord;
@@ -189,9 +191,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 0) {
             if (resultCode == -1) {
                 if (hasBlePerms) {
-                    SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
-                    editor.putBoolean(getApplicationContext().getString(R.string.ble_enabled_pkey), true);
-                    editor.commit();
+                    AppPreferencesHelper.setBluetoothEnabled(this);
                     if (!Constants.LoggingServiceRunning) {
                         Utils.startLoggingService(this);
                         Log.e("ble","ble switch logic");
@@ -318,9 +318,8 @@ public class MainActivity extends AppCompatActivity {
         initBottomNav();
 
         if (!Constants.LoggingServiceRunning) {
-            SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-            boolean gpsEnabled = prefs.getBoolean(getString(R.string.gps_enabled_pkey), false);
-            boolean bleEnabled = prefs.getBoolean(getString(R.string.ble_enabled_pkey), false);
+            boolean gpsEnabled = AppPreferencesHelper.isGPSEnabled(this);
+            boolean bleEnabled = AppPreferencesHelper.isBluetoothEnabled(this);
             if (gpsEnabled) {
                 PermUtils.gpsSwitchLogic(this);
             }

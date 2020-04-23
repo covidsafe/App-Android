@@ -41,6 +41,8 @@ import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.gps.GpsOpsAsyncTask;
 import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.gps.GpsUtils;
+import edu.uw.covidsafe.preferences.AppPreferencesHelper;
+import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
 import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.MainActivity;
@@ -69,11 +71,8 @@ public class Utils {
 
         BluetoothUtils.haltBle(av);
 
-        SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean(av.getString(R.string.gps_enabled_pkey), false);
-        editor.putBoolean(av.getString(R.string.ble_enabled_pkey), false);
-        editor.commit();
+        AppPreferencesHelper.setGPSEnabled(av, false);
+        AppPreferencesHelper.setBluetoothEnabled(av,false);
     }
 
     public static void updateSwitchStates(Activity av) {
@@ -89,9 +88,7 @@ public class Utils {
 //                Constants.notifSwitch.setOnCheckedChangeListener (null);
                 Constants.notifSwitch.setChecked (false);
 //                Constants.notifSwitch.setOnCheckedChangeListener (PermUtil.listener);
-
-                editor.putBoolean(av.getString(R.string.notifs_enabled_pkey), false);
-                editor.commit();
+                AppPreferencesHelper.setNotificationEnabled(av, false);
             }
         }
         if (Constants.gpsSwitch != null) {
@@ -103,8 +100,7 @@ public class Utils {
                 Constants.gpsSwitch.setChecked (false);
 //                Constants.gpsSwitch.setOnCheckedChangeListener (PermUtil.listener);
 
-                editor.putBoolean(av.getString(R.string.gps_enabled_pkey), false);
-                editor.commit();
+                AppPreferencesHelper.setGPSEnabled(av, false);
             }
         }
         if (Constants.bleSwitch != null) {
@@ -116,9 +112,7 @@ public class Utils {
 //                Constants.bleSwitch.setOnCheckedChangeListener (null);
                 Constants.bleSwitch.setChecked (false);
 //                Constants.bleSwitch.setOnCheckedChangeListener (PermUtil.listener);
-
-                editor.putBoolean(av.getString(R.string.ble_enabled_pkey), false);
-                editor.commit();
+                AppPreferencesHelper.setBluetoothEnabled(av, false);
             }
         }
     }
@@ -140,7 +134,7 @@ public class Utils {
     public static void sendNotification(Context mContext, String title, String message, int icon) {
         SharedPreferences prefs = mContext.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = mContext.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
-        if (prefs.getBoolean(mContext.getString(R.string.notifs_enabled_pkey), Constants.NOTIFS_ENABLED)) {
+        if (AppPreferencesHelper.areNotificationsEnabled(mContext, Constants.NOTIFS_ENABLED)) {
             Log.e("notif","notif");
             NotificationManager mNotificationManager;
 

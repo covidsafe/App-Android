@@ -18,6 +18,8 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.covidsafe.R;
 import com.google.common.collect.Lists;
 
+
+import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.contact_trace.GpsHistoryRecyclerViewAdapter2;
 import edu.uw.covidsafe.contact_trace.HumanRecord;
 import edu.uw.covidsafe.contact_trace.NonSwipeableViewPager;
@@ -279,10 +281,8 @@ public class Constants {
         else {
             LOG_TO_DISK = true;
         }
-
-        SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-        Constants.BLUETOOTH_ENABLED = prefs.getBoolean(av.getString(R.string.ble_enabled_pkey), Constants.BLUETOOTH_ENABLED);
-        Constants.GPS_ENABLED = prefs.getBoolean(av.getString(R.string.gps_enabled_pkey), Constants.GPS_ENABLED);
-        Constants.NOTIFS_ENABLED = prefs.getBoolean(av.getString(R.string.notifs_enabled_pkey), Constants.NOTIFS_ENABLED);
+        Constants.BLUETOOTH_ENABLED = AppPreferencesHelper.isBluetoothEnabled(av, Constants.BLUETOOTH_ENABLED);
+        Constants.GPS_ENABLED = AppPreferencesHelper.isGPSEnabled(av, Constants.GPS_ENABLED);
+        Constants.NOTIFS_ENABLED = AppPreferencesHelper.areNotificationsEnabled(av, Constants.NOTIFS_ENABLED);
     }
 }
