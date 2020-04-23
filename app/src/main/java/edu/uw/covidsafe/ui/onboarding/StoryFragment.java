@@ -45,11 +45,12 @@ public class StoryFragment extends Fragment {
             view = inflater.inflate(R.layout.onboarding_start, container, false);
         }
 
-        ImageView dot1 = view.findViewById(R.id.dot1);
-        ImageView dot2 = view.findViewById(R.id.dot2);
-        ImageView dot3 = view.findViewById(R.id.dot3);
-        ImageView dot4 = view.findViewById(R.id.dot4);
-        ImageView dot5 = view.findViewById(R.id.dot5);
+        View ll = view.findViewById(R.id.layout_indicator_ll);
+        ImageView dot1 = ll.findViewById(R.id.dot1);
+        ImageView dot2 = ll.findViewById(R.id.dot2);
+        ImageView dot3 = ll.findViewById(R.id.dot3);
+        ImageView dot4 = ll.findViewById(R.id.dot4);
+        ImageView dot5 = ll.findViewById(R.id.dot5);
         int pos = getArguments().getInt("pos");
         dot1.setImageDrawable(getActivity().getDrawable(R.drawable.deactive));
         dot2.setImageDrawable(getActivity().getDrawable(R.drawable.deactive));

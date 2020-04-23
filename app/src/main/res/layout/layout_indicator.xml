@@ -1,0 +1,53 @@
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="30dp"
+    android:layout_marginBottom="20dp"
+    android:gravity="center_horizontal|bottom"
+    android:orientation="horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageView
+        android:id="@+id/dot1"
+        android:layout_width="7dp"
+        android:layout_height="7dp"
+        android:layout_marginStart="2dp"
+        android:adjustViewBounds="true"
+        android:foregroundGravity="center_horizontal"
+        android:src="@drawable/active" />
+
+    <ImageView
+        android:id="@+id/dot2"
+        android:layout_width="7dp"
+        android:layout_height="7dp"
+        android:layout_marginStart="5dp"
+        android:adjustViewBounds="true"
+        android:foregroundGravity="center_horizontal"
+        android:src="@drawable/deactive" />
+
+    <ImageView
+        android:id="@+id/dot3"
+        android:layout_width="7dp"
+        android:layout_height="7dp"
+        android:layout_marginStart="5dp"
+        android:adjustViewBounds="true"
+        android:foregroundGravity="center_horizontal"
+        android:src="@drawable/deactive" />
+
+    <ImageView
+        android:id="@+id/dot4"
+        android:layout_width="7dp"
+        android:layout_height="7dp"
+        android:layout_marginStart="5dp"
+        android:adjustViewBounds="true"
+        android:foregroundGravity="center_horizontal"
+        android:src="@drawable/deactive" />
+
+    <ImageView
+        android:id="@+id/dot5"
+        android:layout_width="7dp"
+        android:layout_height="7dp"
+        android:layout_marginStart="5dp"
+        android:adjustViewBounds="true"
+        android:foregroundGravity="center_horizontal"
+        android:src="@drawable/deactive" />
+
+</LinearLayout>
