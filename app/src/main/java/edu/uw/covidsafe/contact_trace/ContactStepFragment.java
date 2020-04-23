@@ -179,7 +179,7 @@ public class ContactStepFragment extends Fragment {
                         gpsDbChanged = true;
                         changedGpsRecords = gpsRecords;
                         Log.e("contact","db on changed "+(changedGpsRecords.size()));
-                        if (Constants.CurrentFragment.toString().toLowerCase().contains("contact")) {
+                        if (Constants.CurrentFragment.toString().toLowerCase().contains("contactstep")) {
                             Log.e("contact","db on changing");
                             adapter.setRecords(changedGpsRecords, getContext());
                             gpsDbChanged = false;
@@ -246,7 +246,6 @@ public class ContactStepFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Constants.CurrentFragment = this;
-        Constants.ContactLogFragment = this;
 
         if (gpsDbChanged) {
             adapter.setRecords(changedGpsRecords, getContext());
