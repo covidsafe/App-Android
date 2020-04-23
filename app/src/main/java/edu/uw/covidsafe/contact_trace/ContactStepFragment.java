@@ -55,10 +55,6 @@ public class ContactStepFragment extends Fragment {
             Log.e("state", "key "+k);
         }
 
-        if (Constants.menu.findItem(R.id.mybutton) != null) {
-            Constants.menu.findItem(R.id.mybutton).setVisible(false);
-        }
-
         int pgnum = getArguments().getInt("pgnum");
         Constants.ContactPageNumber = pgnum-1;
         if (pgnum == 0) {
@@ -271,6 +267,9 @@ public class ContactStepFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (Constants.menu != null && Constants.menu.findItem(R.id.mybutton) != null) {
+            Constants.menu.findItem(R.id.mybutton).setVisible(false);
+        }
         Constants.CurrentFragment = this;
 
         if (gpsDbChanged) {
