@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.gps.GpsUtils;
+import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
 
@@ -78,7 +79,7 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
         if (titles.get(position).toLowerCase().contains("notification")) {
             Constants.notifSwitch = ((PermissionCard)holder).sw;
             boolean hasNotifPerms = NotificationManagerCompat.from(cxt).areNotificationsEnabled();
-            boolean notifEnabled = prefs.getBoolean(cxt.getString(R.string.notifs_enabled_pkey), Constants.NOTIFS_ENABLED);
+            boolean notifEnabled =  AppPreferencesHelper.areNotificationsEnabled(av, Constants.NOTIFS_ENABLED);
             Log.e("perm","notif get "+hasNotifPerms+","+notifEnabled);
             if (hasNotifPerms && notifEnabled) {
                 ((PermissionCard) holder).sw.setChecked(true);
@@ -89,7 +90,7 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
         } else if (titles.get(position).toLowerCase().contains("location")) {
             Constants.gpsSwitch = ((PermissionCard)holder).sw;
             boolean hasGpsPerms = Utils.hasGpsPermissions(cxt);
-            boolean gpsEnabled = prefs.getBoolean(cxt.getString(R.string.gps_enabled_pkey), Constants.GPS_ENABLED);
+            boolean gpsEnabled = AppPreferencesHelper.isGPSEnabled(cxt, Constants.GPS_ENABLED);
             Log.e("perm","gps get "+hasGpsPerms+","+gpsEnabled);
             if (hasGpsPerms && gpsEnabled) {
 //                ((PermissionCard)holder).sw.setOnCheckedChangeListener (null);
@@ -108,18 +109,16 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             if (!BluetoothUtils.checkBluetoothSupport(av)) {
                 ((PermissionCard)holder).sw.setEnabled(false);
                 ((PermissionCard)holder).desc.setText("Bluetooth is disabled on this device");
-                editor.putBoolean(cxt.getString(R.string.ble_enabled_pkey), false);
-                editor.commit();
+                AppPreferencesHelper.setBluetoothEnabled(av, false);
             }
             else if (!BluetoothUtils.isBluetoothOn(av)) {
                 ((PermissionCard)holder).desc.setText(cxt.getString(R.string.bluetooth_is_off));
-                editor.putBoolean(cxt.getString(R.string.ble_enabled_pkey), false);
-                editor.commit();
+                AppPreferencesHelper.setBluetoothEnabled(av, false);
             }
             else {
                 ((PermissionCard)holder).sw.setEnabled(true);
                 boolean hasBlePerms = Utils.hasBlePermissions(cxt);
-                boolean bleEnabled = prefs.getBoolean(cxt.getString(R.string.ble_enabled_pkey), Constants.BLUETOOTH_ENABLED);
+                boolean bleEnabled = AppPreferencesHelper.isBluetoothEnabled(cxt);
                 Log.e("perm", "ble get " + hasBlePerms + "," + bleEnabled);
                 if (hasBlePerms && bleEnabled) {
 //                ((PermissionCard)holder).sw.setOnCheckedChangeListener (null);
@@ -142,18 +141,15 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                 if (titles.get(position).toLowerCase().contains("notification")) {
                     boolean hasNotifPerms = NotificationManagerCompat.from(cxt).areNotificationsEnabled();
                     if (hasNotifPerms) {
-                        editor.putBoolean(cxt.getString(R.string.notifs_enabled_pkey), isChecked);
+                        AppPreferencesHelper.setNotificationEnabled(cxt, isChecked);
                         Log.e("perm", "notif set " + isChecked);
-                        editor.commit();
                     }
                     else {
                         if (isChecked) {
                             // need to open settings for this
                             // preemptively add the permission
-                            editor.putBoolean(cxt.getString(R.string.notifs_enabled_pkey), isChecked);
+                            AppPreferencesHelper.setNotificationEnabled(cxt, isChecked);
                             Log.e("perm", "notif set " + isChecked);
-                            editor.commit();
-
                             makeOpenSettingsDialog();
                         }
                     }
@@ -164,8 +160,7 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                         PermUtils.gpsSwitchLogic(av);
                     }
                     else {
-                        editor.putBoolean(av.getString(R.string.gps_enabled_pkey), false);
-                        editor.commit();
+                        AppPreferencesHelper.setGPSEnabled(av, false);
                         GpsUtils.haltGps();
                         // ble and gps are turned off, halt
                         if (!Constants.bleSwitch.isChecked()) {
@@ -179,8 +174,7 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                         PermUtils.bleSwitchLogic(av);
                     }
                     else {
-                        editor.putBoolean(av.getString(R.string.ble_enabled_pkey), false);
-                        editor.commit();
+                        AppPreferencesHelper.setBluetoothEnabled(av, Constants.BLUETOOTH_ENABLED);
                         BluetoothUtils.haltBle(av);
                         // ble and gps are turned off, halt
                         if (!Constants.gpsSwitch.isChecked()) {
@@ -202,9 +196,7 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 //                                Constants.notifSwitch.setOnCheckedChangeListener (null);
                             Constants.notifSwitch.setChecked (false);
 //                                Constants.notifSwitch.setOnCheckedChangeListener (PermUtil.listener);
-                            SharedPreferences.Editor editor = cxt.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
-                            editor.putBoolean(cxt.getString(R.string.notifs_enabled_pkey), false);
-                            editor.commit();
+                            AppPreferencesHelper.setNotificationEnabled(cxt, false);
                         }
                     }})
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {

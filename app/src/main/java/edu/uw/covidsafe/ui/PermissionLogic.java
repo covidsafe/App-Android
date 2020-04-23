@@ -20,6 +20,7 @@ import androidx.core.app.ActivityCompat;
 import com.example.covidsafe.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.ui.settings.PermissionsRecyclerViewAdapter;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
@@ -61,15 +62,13 @@ public class PermissionLogic {
                 } else if (!shouldAsk) {
                     // preemptively add it
                     Constants.SuppressSwitchStateCheck = true;
-                    editor.putBoolean(av.getString(R.string.gps_enabled_pkey), true);
+                    AppPreferencesHelper.setGPSEnabled(av);
                     Log.e("perm", "gps preemptive set " +true);
-                    editor.commit();
                     makeOpenSettingsDialog(av, Manifest.permission.ACCESS_BACKGROUND_LOCATION, requestCode);
                 }
             }
             else if (backgroundResult == PackageManager.PERMISSION_GRANTED) {
-                editor.putBoolean(av.getString(R.string.gps_enabled_pkey), true);
-                editor.commit();
+                AppPreferencesHelper.setGPSEnabled(av);
                 Log.e("perms","gps enabled");
             }
         } else if (androidSDKVersion < Build.VERSION_CODES.Q) {
@@ -81,14 +80,12 @@ public class PermissionLogic {
                 } else if (!shouldAsk) {
                     // preemptively add it
                     if (requestCode == 1) {
-                        editor.putBoolean(av.getString(R.string.ble_enabled_pkey), true);
+                        AppPreferencesHelper.setBluetoothEnabled(av);
                         Log.e("perm", "ble preemptive set " +true);
-                        editor.commit();
                     }
                     else if (requestCode == 2) {
-                        editor.putBoolean(av.getString(R.string.gps_enabled_pkey), true);
+                        AppPreferencesHelper.setGPSEnabled(av);
                         Log.e("perm", "gps preemptive set " +true);
-                        editor.commit();
                     }
                     Constants.SuppressSwitchStateCheck = true;
                     makeOpenSettingsDialog(av, Manifest.permission.ACCESS_FINE_LOCATION, requestCode);
@@ -96,11 +93,10 @@ public class PermissionLogic {
             }
             else if (fineResult == PackageManager.PERMISSION_GRANTED) {
                 if (requestCode == 2) {
-                    editor.putBoolean(av.getString(R.string.gps_enabled_pkey), true);
-                    Log.e("perms","gps enabled");
+                    AppPreferencesHelper.setGPSEnabled(av);
                 }
                 else if (requestCode == 1) {
-                    editor.putBoolean(av.getString(R.string.ble_enabled_pkey), true);
+                    AppPreferencesHelper.setBluetoothEnabled(av);
                     Log.e("perms","ble enabled");
                 }
                 editor.commit();
@@ -132,8 +128,7 @@ public class PermissionLogic {
                                 Constants.gpsSwitch.setChecked (false);
 //                                Constants.gpsSwitch.setOnCheckedChangeListener (PermUtil.listener);
                                 Log.e("perms","gps set false");
-                                editor.putBoolean(av.getString(R.string.gps_enabled_pkey), false);
-                                editor.commit();
+                                AppPreferencesHelper.setGPSEnabled(av, false);
                             }
                         }
                         if (requestCode == 1) {
@@ -142,8 +137,7 @@ public class PermissionLogic {
                                 Constants.bleSwitch.setChecked (false);
 //                                Constants.bleSwitch.setOnCheckedChangeListener (PermUtil.listener);
                                 Log.e("perms","ble set false");
-                                editor.putBoolean(av.getString(R.string.ble_enabled_pkey), false);
-                                editor.commit();
+                                AppPreferencesHelper.setBluetoothEnabled(av, false);
                             }
                         }
                     }})
@@ -187,8 +181,7 @@ public class PermissionLogic {
 //                                Constants.gpsSwitch.setOnCheckedChangeListener (null);
                                 Constants.gpsSwitch.setChecked (false);
 //                                Constants.gpsSwitch.setOnCheckedChangeListener (PermUtil.listener);
-                                editor.putBoolean(av.getString(R.string.gps_enabled_pkey), false);
-                                editor.commit();
+                                AppPreferencesHelper.setGPSEnabled(av, false);
                             }
                         }
                         if (requestCode == 1) {
@@ -196,8 +189,7 @@ public class PermissionLogic {
 //                                Constants.bleSwitch.setOnCheckedChangeListener (null);
                                 Constants.bleSwitch.setChecked (false);
 //                                Constants.bleSwitch.setOnCheckedChangeListener (PermUtil.listener);
-                                editor.putBoolean(av.getString(R.string.ble_enabled_pkey), false);
-                                editor.commit();
+                                AppPreferencesHelper.setBluetoothEnabled(av, false);
                             }
                         }
                     }
