@@ -9,19 +9,24 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.Toast;
 
 import androidx.fragment.app.FragmentTransaction;
 
 import edu.uw.covidsafe.ble.BleOpsAsyncTask;
 import edu.uw.covidsafe.ble.BluetoothUtils;
+import edu.uw.covidsafe.contact_trace.HumanOpsAsyncTask;
 import edu.uw.covidsafe.gps.GpsOpsAsyncTask;
 import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDOpsAsyncTask;
@@ -121,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean menuLogic() {
+        Log.e("menu","menu "+Constants.CurrentFragment.toString());
         if (Constants.CurrentFragment.toString().toLowerCase().contains("settings")) {
             FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
             tx.setCustomAnimations(
@@ -164,6 +170,14 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         }
+        else if (Constants.CurrentFragment.toString().toLowerCase().contains("contactstep")) {
+            FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+            tx.setCustomAnimations(
+                    R.anim.enter_left_to_right,R.anim.exit_left_to_right,
+                    R.anim.enter_left_to_right,R.anim.exit_left_to_right);
+            tx.replace(R.id.fragment_container, Constants.HealthFragment).commit();
+            return true;
+        }
         return false;
     }
 
@@ -192,6 +206,18 @@ public class MainActivity extends AppCompatActivity {
             }
             else if (resultCode == 0) {
                 Utils.updateSwitchStates(this);
+            }
+        }
+        else if(requestCode == 2) {
+            if (data != null) {
+                Uri contactData = data.getData();
+                Cursor c = getContentResolver().query(contactData, null, null, null, null);
+                if (c.moveToFirst()) {
+                    String phone = c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                    String name = c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                    String photo = c.getString(c.getColumnIndex(ContactsContract.Contacts.PHOTO_URI));
+                    new HumanOpsAsyncTask(this, phone, name, photo).execute();
+                }
             }
         }
     }
@@ -322,9 +348,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void initView() {
         if (Constants.CurrentFragment != null &&
-            !Constants.CurrentFragment.toString().toLowerCase().contains("permission")) {
+            !Constants.CurrentFragment.toString().toLowerCase().contains("permission") &&
+            !Constants.CurrentFragment.toString().toLowerCase().contains("contactstep")) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.CurrentFragment).commit();
-        } else {
+        } else if (Constants.CurrentFragment != null&&Constants.CurrentFragment.toString().toLowerCase().contains("contactstep")) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.ContactTraceFragment).commit();
+        }
+        else {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.MainFragment).commit();
 //            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.HealthFragment).commit();
         }
@@ -342,12 +372,12 @@ public class MainActivity extends AppCompatActivity {
                 Fragment selectedFragment = null;
                 switch (item.getItemId()) {
                     case R.id.action_track:
-                        if (Constants.MainFragmentState.toString().toLowerCase().contains("main")) {
+//                        if (Constants.MainFragmentState.toString().toLowerCase().contains("main")) {
                             selectedFragment = Constants.MainFragment;
-                        }
-                        else if (Constants.MainFragmentState.toString().toLowerCase().contains("settings")) {
-                            selectedFragment = Constants.SettingsFragment;
-                        }
+//                        }
+//                        else if (Constants.MainFragmentState.toString().toLowerCase().contains("settings")) {
+//                            selectedFragment = Constants.SettingsFragment;
+//                        }
                         break;
                     case R.id.action_contact_log:
                         selectedFragment = Constants.ContactLogFragment;
@@ -360,6 +390,10 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
 
+                if (Constants.CurrentFragment.toString().toLowerCase().contains("contactstep")) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.HealthFragment).commit();
+                    return true;
+                }
                 if (selectedFragment != null) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
                 }
