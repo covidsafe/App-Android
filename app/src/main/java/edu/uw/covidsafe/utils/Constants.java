@@ -13,13 +13,17 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.covidsafe.R;
 import com.google.common.collect.Lists;
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 
 import edu.uw.covidsafe.preferences.AppPreferencesHelper;
+import edu.uw.covidsafe.contact_trace.GpsHistoryRecyclerViewAdapter2;
+import edu.uw.covidsafe.contact_trace.HumanRecord;
+import edu.uw.covidsafe.contact_trace.NonSwipeableViewPager;
+import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.MainFragment;
 import edu.uw.covidsafe.ui.health.TipRecyclerViewAdapter;
@@ -32,7 +36,6 @@ import java.security.KeyStore;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
 import java.util.UUID;
@@ -44,6 +47,7 @@ import edu.uw.covidsafe.ui.faq.FaqFragment;
 import edu.uw.covidsafe.ui.health.HealthFragment;
 import edu.uw.covidsafe.ui.settings.SettingsFragment;
 import edu.uw.covidsafe.ui.contact_log.ContactLogFragment;
+import edu.uw.covidsafe.contact_trace.ContactTraceFragment;
 
 import edu.uw.covidsafe.ui.onboarding.PermissionFragment;
 import edu.uw.covidsafe.ui.onboarding.PagerFragment;
@@ -55,11 +59,19 @@ public class Constants {
     }
     public static Menu menu;
 
+    public static boolean UI_AUTH = false;
     public static boolean WRITE_TO_DISK = false;
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = true;
+    public static boolean PUBLIC_DEMO = true;
+    public static boolean NARROWCAST_ENABLE = true;
+    public static boolean USE_LAST_QUERY_TIME = true;
 
     public enum BleDatabaseOps {
-        Insert,ViewAll
+        Insert,ViewAll,DeleteAll
+    }
+
+    public enum HumanDatabaseOps {
+        Insert,Delete
     }
 
     public enum NotifDatabaseOps {
@@ -78,6 +90,7 @@ public class Constants {
         BatchInsert, Insert,ViewAll,DeleteAll
     }
 
+    public static int ContactPageNumber;
     public static String entryPoint = "";
     public static List<SymptomsRecord> symptomRecords;
     public static boolean EnableUUIDGeneration = true;
@@ -138,6 +151,7 @@ public class Constants {
     public static TextView bleDesc;
     public static Switch notifSwitch;
 
+    public static ViewPager contactViewPager;
     public static SecretKey secretKey;
     public static KeyStore keyStore;
     public static int IV_LEN = 12;
@@ -169,6 +183,7 @@ public class Constants {
     public static Fragment CurrentFragment;
     public static Fragment PermissionsFragment;
     public static Fragment PagerFragment;
+    public static Fragment ContactTraceFragment;
     public static String notifDirName = "notif";
     public static String gpsDirName = "gps";
     public static String bleDirName = "ble";
@@ -188,17 +203,23 @@ public class Constants {
     public static HashMap<String,Long> scannedUUIDsTimes;
     public static HashSet<String> writtenUUIDs;
     public static int pageNumber = -1;
+    public static ViewPager healthViewPager;
     public static Calendar contactLogMonthCalendar = Calendar.getInstance();
     public static Calendar symptomTrackerMonthCalendar = Calendar.getInstance();
+
+    public static GpsHistoryRecyclerViewAdapter2 contactGpsAdapter;
+    public static List<HumanRecord> changedContactHumanRecords;
+    public static List<SymptomsRecord> changedContactSympRecords;
+    public static List<GpsRecord> changedContactGpsRecords;
+
     public static List<String> symptoms = Lists.newArrayList(
         "Fever",
         "Abdominal pain",
         "Chills",
         "Cough",
         "Diarrhea",
-        "Difficulty breathing",
+        "Difficulty breathing (not severe)",
         "Headache",
-        "Chest pains",
         "Sore throat",
         "Vomiting"
     );
@@ -206,11 +227,10 @@ public class Constants {
         "A high temperature of over 100°F - you feel hot to touch on your chest or back.",
         "Pain from inside the abdomen or the outer muscle wall, ranging from mild and temporary to severe.",
         "The feeling of being cold, though not necessarily in a cold environment, often accompanied by shivering or shaking.",
-        "A new, continuous cough - this means you've started coughing repeatedly",
+        "A sudden, forceful hacking sound to release air and clear an irritation in the throat or airway.",
         "Loose, watery bowel movements that may occur frequently and with a sense of urgency.",
         "Shortness of breath, or dyspnea, is an uncomfortable condition that makes it difficult to fully get air into your lungs.",
         "A painful sensation in any part of the head, ranging from sharp to dull, that may occur with other symptoms.",
-        "Chest pain appears in many forms, ranging from a sharp stab to a dull ache. Sometimes chest pain feels crushing or burning. In certain cases, the pain travels up the neck, into the jaw, and then radiates to the back or down one or both arms.",
         "Pain or irritation in the throat that can occur with or without swallowing, often accompanies infections.",
         "Forcefully expelling the stomach's contents out of the mouth."
     );
@@ -252,6 +272,9 @@ public class Constants {
 
         SymptomTrackerFragment = new SymptomTrackerFragment();
         HealthFragmentState = SymptomTrackerFragment;
+
+        ContactTraceFragment = new ContactTraceFragment();
+
         if (!DEBUG) {
             LOG_TO_DISK = false;
         }

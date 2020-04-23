@@ -75,13 +75,26 @@
                 android:layout_width="00dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="18dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="17dp"
-                android:text="If you start your self quarantine today, your 14 days will end May 7th. Please check with your local Health Authorities for more guidance."
+                android:text="@string/tip_desc_1"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/icon" />
+
+            <Button
+                android:id="@+id/whatHappens"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:backgroundTint="@color/white"
+                android:text="Learn more"
+                android:textColor="@color/purpleLight"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guidelineV10"
@@ -98,20 +111,6 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_begin="20dp"
                 app:layout_constraintGuide_percent=".85" />
-
-            <Button
-                android:id="@+id/whatHappens"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="18dp"
-                android:backgroundTint="@color/white"
-                android:text="Learn more"
-                android:textColor="@color/purpleLight"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

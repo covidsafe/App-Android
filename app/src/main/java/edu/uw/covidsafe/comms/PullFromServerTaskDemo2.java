@@ -52,8 +52,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-// this has fixed gps data
-// this has hard-coded set of seeds to match against with server results
+// this is a demo file, but the only difference is that it uses 30 seconds as exposure time
+// and has some other debug logging statements
 
 public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
 
@@ -128,8 +128,10 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         int currentGpsPrecision = 0;
 
         int sizeOfPayload = 0;
-//        long lastQueryTime = prefs.getLong(context.getString(R.string.time_of_last_query_pkey), 0L);
         long lastQueryTime = 0;
+        if (Constants.USE_LAST_QUERY_TIME) {
+            lastQueryTime = prefs.getLong(context.getString(R.string.time_of_last_query_pkey), 0L);
+        }
         while (currentGpsPrecision < Constants.MaximumGpsPrecision) {
             double preciseLat = Utils.getCoarseGpsCoord(lat, currentGpsPrecision);
             double preciseLong = Utils.getCoarseGpsCoord(lon, currentGpsPrecision);
@@ -226,7 +228,7 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         List<Long> contactEndTimes = new ArrayList<>();
         Log.e("pulldemo","we have seeds: "+seenSeeds.size());
         for (String seed : seenSeeds) {
-//            Log.e("pull","SEED "+seed);
+            Log.e("pull","SEED "+seed);
             if (seed.equals("c2db5cac-9875-4ad7-acc7-ead49c76d1ec")) {
                 Log.e("pulldemo","got seed");
                 Log.e("pulldemo","start time "+format.format(new Date(startTimes.get(seed))));
@@ -344,26 +346,28 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         /////////////////////////////////////////////////////////////////////////
         // (4) narrowcast messages: check for area intersection and record matched messages
         /////////////////////////////////////////////////////////////////////////
-        List<String> narrowCastMessages = new ArrayList<String>();
-        List<Long> narrowCastMessageStartTimes = new ArrayList<>();
-        List<Long> narrowCastMessageEndTimes = new ArrayList<>();
-        for (int i = 0; i < matchMessages.length; i++) {
-            if (matchMessages[i].areaMatches != null) {
-                for (AreaMatch areaMatch : matchMessages[i].areaMatches) {
-                    Area[] areas = areaMatch.areas;
-                    for (Area area : areas) {
-                        if (intersect(area)) {
-                            Log.e("pulldemo", "NARROWCAST USER MESSAGE " + areaMatch.userMessage+","+area.beginTime+","+area.endTime);
-                            narrowCastMessages.add(areaMatch.userMessage);
-                            narrowCastMessageStartTimes.add(area.beginTime);
-                            narrowCastMessageEndTimes.add(area.endTime);
-                            break;
+        if (Constants.NARROWCAST_ENABLE) {
+            List<String> narrowCastMessages = new ArrayList<String>();
+            List<Long> narrowCastMessageStartTimes = new ArrayList<>();
+            List<Long> narrowCastMessageEndTimes = new ArrayList<>();
+            for (int i = 0; i < matchMessages.length; i++) {
+                if (matchMessages[i].areaMatches != null) {
+                    for (AreaMatch areaMatch : matchMessages[i].areaMatches) {
+                        Area[] areas = areaMatch.areas;
+                        for (Area area : areas) {
+                            if (intersect(area)) {
+                                Log.e("pulldemo", "NARROWCAST USER MESSAGE " + areaMatch.userMessage+","+area.beginTime+","+area.endTime);
+                                narrowCastMessages.add(areaMatch.userMessage);
+                                narrowCastMessageStartTimes.add(area.beginTime);
+                                narrowCastMessageEndTimes.add(area.endTime);
+                                break;
+                            }
                         }
                     }
                 }
             }
+            notifyBulk(Constants.MessageType.NarrowCast, narrowCastMessages, narrowCastMessageStartTimes, narrowCastMessageEndTimes);
         }
-        notifyBulk(Constants.MessageType.NarrowCast, narrowCastMessages,narrowCastMessageStartTimes,narrowCastMessageEndTimes);
         /////////////////////////////////////////////////////////////////////////
 
         List<BluetoothMatch> bluetoothMatches = new ArrayList<>();
@@ -452,6 +456,7 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         double bluetoothScanIntervalInMilliseconds = BluetoothScanIntervalInMinutes*60000;
 //        int uuidGenerationIntervalInMillliseconds = Constants.UUIDGenerationIntervalInMinutes*60000;
 
+        List<String>matchSeeds = new ArrayList<>();
         List<String>matchDates = new ArrayList<>();
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm.ss");
         for (String receivedUUID : receivedUUIDs) {
@@ -463,10 +468,20 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
                     matches.add(localTs);
                     String mdate = format.format(new Date(localTs));
                     matchDates.add(mdate);
+                    matchSeeds.add(receivedUUID);
 //                    }
                 }
             }
 //            ts += uuidGenerationIntervalInMillliseconds;
+        }
+
+        if (matchSeeds.size()>0) {
+            Log.e("matches", "0 >>> " + seed);
+            int counter = 1;
+            for (String s : matchSeeds) {
+                Log.e("matches", counter + " >>> " + s);
+                counter++;
+            }
         }
 
 //        // calculate how many matches we need to say user is exposed for at least 10 minutes

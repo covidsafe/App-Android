@@ -32,6 +32,7 @@ public class UUIDGeneratorTask implements Runnable {
             SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
             long mostRecentSeedTimestamp = prefs.getLong(context.getString(R.string.most_recent_seed_timestamp_pkey), 0);
 
+            Log.e("ble","most recent seed timestamp "+mostRecentSeedTimestamp);
             UUID uuid = CryptoUtils.generateSeedHelper(context, mostRecentSeedTimestamp);
             Log.e("ble", "changing contact uuid now");
             if (uuid != null) {

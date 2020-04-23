@@ -5,10 +5,15 @@
     <string name="history_header_text">History</string>
     <string name="permissions_header_text"><![CDATA[<font color=#000000>Select your preferences</font>]]></string>
     <string name="health_header_text"><![CDATA[<font color=#000000>Health</font>]]></string>
+    <string name="health_header_text_demo"><![CDATA[<font color=#000000>Health [DEMO]</font>]]></string>
+    <string name="contact_header_text"><![CDATA[<font color=#000000>Interview Preparation</font>]]></string>
+    <string name="contact_header_text_demo"><![CDATA[<font color=#000000>Interview Preparation [DEMO]</font>]]></string>
     <string name="add_symptoms_header_text"><![CDATA[<font color=#000000>Create New Log</font>]]></string>
     <string name="settings_header_text"><![CDATA[<font color=#000000>Settings</font>]]></string>
     <string name="help_header_text"><![CDATA[<font color=#000000>Resources</font>]]></string>
+    <string name="help_header_text_demo"><![CDATA[<font color=#000000>Resources [DEMO]</font>]]></string>
     <string name="contact_log_header_text"><![CDATA[<font color=#000000>Contact Log</font>]]></string>
+    <string name="contact_log_header_text_demo"><![CDATA[<font color=#000000>Contact Log [DEMO]</font>]]></string>
     <string name="warning_header_text"><![CDATA[<font color=#000000>Diagnosis Report</font>]]></string>
     <string name="symptom_help_text">Use this form to provide a daily report of any symptoms you have. You may submit this form once a day.</string>
     <string name="warning_help_text">You\'ve received a positive diagnosis from your healthcare provider. To confirm your diagnosis, please provider your credentials below.</string>
@@ -17,49 +22,62 @@
     <string name="default_exposed_notif">Based on your location history, we believe you might have been in the same place as people infected with COVID-19.</string>
     <string name="exposed_notif2">Please contact your healthcare professional.</string>
 
+    <string name="contact_title_1">
+        Review which symptoms you would like to include.
+    </string>
+    <string name="contact_title_2">
+        Review your location history from the last 14 days.
+    </string>
+    <string name="contact_title_3">
+        Review the people you’ve been in contact with recently.
+    </string>
+    <string name="contact_title_4">
+        Save this list for reference during your interview.
+    </string>
+    <string name="contact_desc_1">
+        We’ve detected severe symptoms in your recent reports, and collected them below.
+    </string>
+    <string name="contact_desc_2">
+        Below are locations you’ve recently visited for 10 minutes or more. This helps us track locations that might be high-risk for exposure.
+    </string>
+    <string name="contact_desc_3">
+        Below you can add a list of people you’ve been in close contact with (6m) for 10 or more minutes in the last 14 days.
+    </string>
+    <string name="contact_desc_4">
+        Don’t worry, you can always come back to edit this list later. You can export this information into an email record for yourself.
+    </string>
+
     <string name="q1">
         What is the purpose of this app?
     </string>
     <string name="a1">
-        CovidSafe is an app that seeks to reduce the spread of coronavirus by helping people learn if they\'ve been exposed and take care of themselves if they become ill. CovidSafe also reduces the burden on medical providers by offering people who have been positively diagnosed a safe, private, and fast way to report locations they\'ve visited recently, as well as self-care tips for those well enough to isolate at home.
+        CovidSafe is an app that seeks to reduce the spread of coronavirus in the community, specifically by helping people learn if they\'ve been exposed, connecting them to the appropriate public health guidance, and by enabling effective contact tracing. CovidSafe also reduces the burden on public health systems by offering people who have been positively diagnosed and their potential exposures, a safe, private, and fast way to communicate this information to the people who need it — public health authorities and their contact tracing teams.
     </string>
     <string name="q2">
         How does this app benefit me?
     </string>
     <string name="a2">
         CovidSafe offers several features to protect both you and your community:\n
-        •	Get notified about possible exposure. You may be notified if someone who was near you within the last two weeks has come down with symptoms of COVID-19 shares information.  The measure of ‘near’ is not as precise as the medical definition (within 6 feet for more than 10 minutes), but it is accurate up to a few meters.\n
-        •	Track your symptoms. The symptoms you track will stay on your phone unless you decide to share them so others can be alerted that they may have been exposed. You can learn how to manage your symptoms, get help from a healthcare professional, and know when it\'s time to head to a healthcare facility. You can also get reliable info about the virus, why it\'s so dangerous, and how it spreads.
+        •	Get notified about possible exposure. You may be notified if someone who was near you within the last two weeks has come down with symptoms of COVID-19. The measure of \‘near\’ is not as precise as the medical definition (within 6 feet for more than 10 minutes), but it is accurate up to a few meters.\n
+        •	Track your symptoms. The symptoms you track may be useful to assist public health teams if you are confirmed positive, and for having this information readily available if you are exposed and called for a contact tracing interview. You can also get reliable, vetted information about SARS-CoV-2, why it\'s so dangerous, and how it spreads.
     </string>
     <string name="q3">
         Who can use CovidSafe?
     </string>
     <string name="a3">
-        CovidSafe is free, and anyone can use it.
+        When it becomes available for use, CovidSafe is free, and anyone can use it.
     </string>
     <string name="q4">
-        Do I need to have health insurance to use this app?
-    </string>
-    <string name="a4">
-        No, you don’t need health insurance to use CovidSafe. CovidSafe doesn’t provide medical care. You will be responsible for all your medical expenses.
-    </string>
-    <string name="q5">
-        What are the advantages of knowing I was exposed?
-    </string>
-    <string name="a5">
-        It may be helpful so you can let others know. For example, if you’re exposed, alerting public health authorities could give you access to testing or other care.
-    </string>
-    <string name="q6">
         Who else benefits from my participation with this app?
     </string>
-    <string name="a6">
-        CovidSafe alerts people who have been in areas where coronavirus is active which may initiate discussion with healthcare authorities about who has been exposed as well as how the virus is spreading. If you test positive for coronavirus, you\'ll also be able to anonymously notify others you may have been in contact with over the past two weeks to alert them that they may have been exposed.
+    <string name="a4">
+        CovidSafe is capable of alerting people who have been in areas where coronavirus is active. If you test positive for coronavirus, you\'ll also be able to anonymously notify others you may have been in contact with over the past two weeks to alert them that they may have been exposed, and to prepare them for potential contact tracing interviews.
     </string>
-    <string name="q7">
-        How does CovidSafe help healthcare providers?
+    <string name="q5">
+        How does CovidSafe help public health officials?
     </string>
-    <string name="a7">
-        Traditional contact tracing interviews done by public health services are complicated and often miss important contacts because patients forget to mention them. CovidSafe helps people who have tested positive remember locations they’ve visited recently, which they can then share with the healthcare organization performing their contact tracing interview. This streamlines the interview process.
+    <string name="a5">
+        Traditional contact tracing interviews done by public health services are important, laborious, complicated and can sometimes omit important contacts because patients forget to mention them. CovidSafe helps people who have tested positive remember locations they’ve visited recently, by providing an objective log, which they can then share with contact tracing teams. There is also functionality to organize the contact information of known contacts, which streamlines the interview process and enables contact tracers to work faster.
     </string>
 
 <!--    privacy-->
@@ -67,7 +85,7 @@
         If I test positive and I disclose it via CovidSafe, what information is revealed to others?
     </string>
     <string name="pa1">
-        Any other person who’s been exposed is notified, along with the time the exposure occurred. No other information will be revealed.
+        Other people with the application, who have been exposed may be notified, along with the time the exposure occurred. No other information will be revealed.
     </string>
     <string name="pq2">
         If I test negative, can a malicious person get access to my phone’s broadcasts and report me as being positive?
@@ -91,7 +109,7 @@
         Can the identity of a person who chooses to report they’ve tested positive be guessed by others?
     </string>
     <string name="pa5">
-        Possibly. A person who was near someone who has tested positive may be able to guess the infected person\'s identity. If there are two or more people who were near someone who has tested positive, the process of identifying the infected person may be easier. However, the person\'s identity will never be broadcast directly. People’s identities aren\’t stored in the data. Only the infected person\’s random broadcast is stored.
+        Possibly. A person who was near someone who has tested positive may be able to guess the infected person\'s identity. If there are two or more people who were near someone who has tested positive, the process of identifying the infected person may be easier. However, the person\'s identity will never be broadcast directly. People’s identities aren’t stored in the data. Only the infected person’s random broadcast is stored.
     </string>
     <string name="pq6">
         What data is stored on my phone? What data about me is stored publicly?
@@ -109,13 +127,13 @@
         Will this information be shared with government agencies?
     </string>
     <string name="pa8">
-        The tool won\'t alert government agencies about your identity if you\'re exposed. You might want to notify public health authorities yourself because alerting them could give you access to testing or other care.
+        The tool won\'t alert government agencies about your identity if you\'re exposed.
     </string>
     <string name="pq9">
-        Will people who are alerted about my illness know my identity?
+        Why should I report my illness?
     </string>
     <string name="pa9">
-        As with traditional contact tracing done by public health services, the alert mechanism has a secure implementation to ensure that positive diagnoses remain anonymous to the general public, and that the alerts people who have been exposed are sent in a secure manner.
+        If you become ill, you can use the app to improve the efficiency and completeness of manual contact tracing interviews. Your privacy is maximized by ensuring that all the data remains on your device, except for what you voluntarily reveal to healthcare authorities to enable more effective contact tracing.
     </string>
 <!---->
 
@@ -173,11 +191,26 @@ Contact tracing is a process that helps identify all the people who may have com
     <string name="perm_ble_rationale">Without this permission, we will be unable to capture Bluetooth information of users around you. Are you sure you want to deny this permission?</string>
     <string name="perm_ble_ask">We require access to Bluetooth information when the app is closed. Would you like to open app settings to enable this?</string>
 
+    <string name="perm_contacts_rationale">Without this permission, we will be unable to add contacts to the app. Are you sure you want to deny this permission?</string>
+
     <string name="perm_notifs_rationale">Without this permission, we will be unable to send you notifications. Are you sure you want to deny this permission?</string>
     <string name="perm_notifs_ask">We require push notifications to be enabled. Would you like to open app settings to enable this?</string>
 
     <string name="perm_loc_rationale">Without this permission, we will be unable to track your location when the app is closed. Are you sure you want to deny this permission?</string>
     <string name="perm_loc_ask">We require access to location information when the app is closed. Would you like to open app settings to enable this?</string>
+
+    <string name="tip_desc_1">
+        Everyone with COVID-19 symptoms (fever, cough, and/or difficulty breathing) who has a test result pending, shall stay in an quarantine location (your home if you have one or in a government directed or publicly provided location if one is available) in accordance with CDC and Public Health guidance.\n\n
+        If your test result is positive, you must then remain in isolation.
+    </string>
+
+    <string name="tip_desc_2">
+        Not everybody who feels ill needs to be tested, particularly if you have mild illness. Healthcare providers determine who should be tested. While testing is becoming more available, there are still limitations in the ability to quickly collect and process tests.\n\n        If you are sick with fever, cough or shortness of breath and are in a high risk group, call your healthcare provider to discuss whether you should be tested for COVID-19.
+    </string>
+
+    <string name="tip_desc_3">
+        If you have symptoms like cough, fever, or other respiratory problems, contact your regular doctor first. <b>Do not go to the emergency room.</b> Emergency rooms need to be able to serve those with the most critical needs. If you have difficulty breathing, it doesn’t mean you have novel coronavirus, but you should call 911.
+    </string>
 
     <string name="risk_low">No known transmission vectors</string>
     <string name="risk_high">Risk of transmission</string>
@@ -194,6 +227,7 @@ Contact tracing is a process that helps identify all the people who may have com
     <string name="logging">Limited trace data is being collected. We keep your identity anonymous.<![CDATA[<font color=#8d55e9><br/><b><a href="https://covidsafe.cs.washington.edu/">Learn More</a></b></font>]]></string>
     <string name="stopping">Turn broadcasting on to improve the accuracy of your notifications. <![CDATA[<font color=#8d55e9><br/><b><a href="https://covidsafe.cs.washington.edu/">Learn More</a></b></font>]]></string>
 
+    <string name="kingCountyLink">https://kingcounty.gov/depts/health/communicable-diseases/disease-control/novel-coronavirus.aspx</string>
     <string name="covidSiteLink">https://covidsafe.cs.washington.edu/</string>
     <string name="covidSiteFaqLink">https://covidsafe.cs.washington.edu/#faq</string>
     <string name="privacyLink1"><![CDATA[<font color=#8d55e9><a href="https://covidsafe.cs.washington.edu/">Learn more.</a></font>]]></string>
@@ -210,7 +244,7 @@ Contact tracing is a process that helps identify all the people who may have com
         Learn more
     </string>
     <string name="permissionsHeader">
-        Enable real-time notifications to get alerts about potential exposure and public health messages relevant to you.\n\nCovidSafe reveals no information about you without your consent.
+        Enable real-time notifications to get alerts about potential exposures and public health messages relevant to you.\n\nCovidSafe reveals no information about you without your consent.
     </string>
 
     <string name="perm1">Notifications</string>
@@ -244,19 +278,27 @@ Contact tracing is a process that helps identify all the people who may have com
     </string>
 
     <string name="story1">
-        CovidSafe notifies you if you may have been exposed to coronavirus and helps you monitor any symptoms you\'re having.
+        CovidSafe notifies you if you may have been exposed to coronavirus and helps keep you and your community safer.
     </string>
     <string name="story2">
-        Learn if you might have been exposed. If you\'ve recently visited a location with a risk of COVID-19 exposure, you\'ll get a notification letting you know.
+        Learn if you might have been exposed. If you\'ve recently been in close contact with someone recently diagnosed with COVID-19. You\'ll get a notification.
     </string>
     <string name="story3">
-        Take care of yourself and others. Get self-care tips, connect with a healthcare professional if your symptoms worsen, and report locations you recently visited to protect others.
+        Take care of yourself and others. Get self-care tips, connect with the appropriate public health guidance if you\'ve experienced symptoms. And log locations you recently visited to protect others.
     </string>
     <string name="story4">
         Any information you contribute is protected. Learn more about how your information is used and protected on the Privacy page in Settings.
     </string>
     <string name="startText">
         Let\s slow the spread of COVID-19 together.
+    </string>
+
+    <string name="emergency">
+        Stop and call 911 if you are experiencing:\n
+        • Severe, constant chest pain or pressure\n
+        • Extreme difficulty breathing\n
+        • Severe, constant lightheadedness\n
+        • Serious disorientation or unresponsiveness
     </string>
 
     <string name="symptom1">Fever</string>
