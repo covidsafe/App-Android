@@ -52,7 +52,9 @@ public class HealthFragment extends Fragment {
             window.setStatusBarColor(getActivity().getResources().getColor(R.color.white));
         }
 
-        Constants.menu.findItem(R.id.mybutton).setVisible(true);
+        if (Constants.menu.findItem(R.id.mybutton) != null) {
+            Constants.menu.findItem(R.id.mybutton).setVisible(true);
+        }
         ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getResources().getColor(R.color.white)));
         ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -73,10 +75,14 @@ public class HealthFragment extends Fragment {
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 //                Log.e("time","onpagescrolled "+position);
                 if (position == 0) {
-                    Constants.menu.findItem(R.id.mybutton).setVisible(true);
+                    if (Constants.menu.findItem(R.id.mybutton) != null) {
+                        Constants.menu.findItem(R.id.mybutton).setVisible(true);
+                    }
                 }
                 else {
-                    Constants.menu.findItem(R.id.mybutton).setVisible(false);
+                    if (Constants.menu.findItem(R.id.mybutton) != null) {
+                        Constants.menu.findItem(R.id.mybutton).setVisible(false);
+                    }
                 }
             }
 
@@ -84,10 +90,14 @@ public class HealthFragment extends Fragment {
             public void onPageSelected(int position) {
 //                Log.e("time","onpageselected "+position);
                 if (position == 0) {
-                    Constants.menu.findItem(R.id.mybutton).setVisible(true);
+                    if (Constants.menu.findItem(R.id.mybutton) != null) {
+                        Constants.menu.findItem(R.id.mybutton).setVisible(true);
+                    }
                 }
                 else {
-                    Constants.menu.findItem(R.id.mybutton).setVisible(false);
+                    if (Constants.menu.findItem(R.id.mybutton) != null) {
+                        Constants.menu.findItem(R.id.mybutton).setVisible(false);
+                    }
                 }
             }
 

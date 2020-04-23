@@ -55,7 +55,9 @@ public class ContactStepFragment extends Fragment {
             Log.e("state", "key "+k);
         }
 
-        Constants.menu.findItem(R.id.mybutton).setVisible(false);
+        if (Constants.menu.findItem(R.id.mybutton) != null) {
+            Constants.menu.findItem(R.id.mybutton).setVisible(false);
+        }
 
         int pgnum = getArguments().getInt("pgnum");
         Constants.ContactPageNumber = pgnum-1;

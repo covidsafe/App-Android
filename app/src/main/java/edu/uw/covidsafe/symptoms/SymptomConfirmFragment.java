@@ -40,7 +40,9 @@ public class SymptomConfirmFragment extends Fragment {
         Log.e("health", "symptom tracker fragment oncreate");
         view = inflater.inflate(R.layout.fragment_symptom_confirmation, container, false);
 
-        Constants.menu.findItem(R.id.mybutton).setVisible(false);
+        if (Constants.menu.findItem(R.id.mybutton) != null) {
+            Constants.menu.findItem(R.id.mybutton).setVisible(false);
+        }
         ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getResources().getColor(R.color.white)));
         ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
