@@ -173,22 +173,12 @@ public class DiagnosisFragment extends Fragment {
             prepForInterview.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (Constants.PUBLIC_DEMO) {
-                        AlertDialog dialog = new MaterialAlertDialogBuilder(getActivity())
-                                .setMessage("This function is disabled in the demo version of the app.")
-                                .setPositiveButton("Ok",null)
-                                .setCancelable(true).create();
-                        dialog.show();
-                        return;
-                    }
-                    else {
-                        FragmentTransaction tx = getActivity().getSupportFragmentManager().beginTransaction();
-                        tx.setCustomAnimations(
-                                R.anim.enter_right_to_left, R.anim.exit_right_to_left,
-                                R.anim.enter_left_to_right, R.anim.exit_left_to_right);
-                        Constants.ContactPageNumber = 0;
-                        tx.replace(R.id.fragment_container, Constants.ContactTraceFragment).commit();
-                    }
+                    FragmentTransaction tx = getActivity().getSupportFragmentManager().beginTransaction();
+                    tx.setCustomAnimations(
+                            R.anim.enter_right_to_left, R.anim.exit_right_to_left,
+                            R.anim.enter_left_to_right, R.anim.exit_left_to_right);
+                    Constants.ContactPageNumber = 0;
+                    tx.replace(R.id.fragment_container, Constants.ContactTraceFragment).commit();
                 }
             });
         }
