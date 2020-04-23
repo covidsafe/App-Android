@@ -69,9 +69,6 @@ public class ContactLogFragment extends Fragment {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(getActivity().getResources().getColor(R.color.white));
         }
-        if (Constants.menu.findItem(R.id.mybutton) != null) {
-            Constants.menu.findItem(R.id.mybutton).setVisible(true);
-        }
 
         ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getResources().getColor(R.color.white)));
         ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
@@ -221,6 +218,9 @@ public class ContactLogFragment extends Fragment {
         Constants.CurrentFragment = this;
         Constants.ContactLogFragment = this;
 
+        if (Constants.menu != null && Constants.menu.findItem(R.id.mybutton) != null) {
+            Constants.menu.findItem(R.id.mybutton).setVisible(true);
+        }
         if (gpsDbChanged) {
             Log.e("contact","db changed ");
             updateLocationView(cal.getSelectedDate(), getContext());

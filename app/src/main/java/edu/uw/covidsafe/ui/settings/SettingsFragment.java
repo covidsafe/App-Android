@@ -55,9 +55,6 @@ public class SettingsFragment extends Fragment {
             window.setStatusBarColor(getActivity().getResources().getColor(R.color.white));
         }
 
-        if (Constants.menu.findItem(R.id.mybutton) != null) {
-            Constants.menu.findItem(R.id.mybutton).setVisible(false);
-        }
         ((MainActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(getActivity().getDrawable(R.drawable.ic_close_black_24dp));
 
         ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getResources().getColor(R.color.white)));
@@ -96,6 +93,9 @@ public class SettingsFragment extends Fragment {
         Constants.CurrentFragment = this;
         Constants.MainFragmentState = this;
 
+        if (Constants.menu != null && Constants.menu.findItem(R.id.mybutton) != null) {
+            Constants.menu.findItem(R.id.mybutton).setVisible(false);
+        }
         Log.e("perms","should update switch states? "+Constants.SuppressSwitchStateCheck);
         if (Constants.SuppressSwitchStateCheck) {
             Constants.SuppressSwitchStateCheck = false;
