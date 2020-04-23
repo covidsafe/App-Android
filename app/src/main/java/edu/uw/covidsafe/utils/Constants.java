@@ -18,7 +18,10 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.covidsafe.R;
 import com.google.common.collect.Lists;
 
+import edu.uw.covidsafe.contact_trace.GpsHistoryRecyclerViewAdapter2;
+import edu.uw.covidsafe.contact_trace.HumanRecord;
 import edu.uw.covidsafe.contact_trace.NonSwipeableViewPager;
+import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.MainFragment;
 import edu.uw.covidsafe.ui.health.TipRecyclerViewAdapter;
@@ -57,7 +60,7 @@ public class Constants {
     public static boolean UI_AUTH = false;
     public static boolean WRITE_TO_DISK = false;
     public static boolean DEBUG = true;
-    public static boolean PUBLIC_DEMO = false;
+    public static boolean PUBLIC_DEMO = true;
     public static boolean NARROWCAST_ENABLE = true;
     public static boolean USE_LAST_QUERY_TIME = true;
 
@@ -201,6 +204,12 @@ public class Constants {
     public static ViewPager healthViewPager;
     public static Calendar contactLogMonthCalendar = Calendar.getInstance();
     public static Calendar symptomTrackerMonthCalendar = Calendar.getInstance();
+
+    public static GpsHistoryRecyclerViewAdapter2 contactGpsAdapter;
+    public static List<HumanRecord> changedContactHumanRecords;
+    public static List<SymptomsRecord> changedContactSympRecords;
+    public static List<GpsRecord> changedContactGpsRecords;
+
     public static List<String> symptoms = Lists.newArrayList(
         "Fever",
         "Abdominal pain",

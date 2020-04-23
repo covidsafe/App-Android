@@ -3,6 +3,7 @@ package edu.uw.covidsafe.contact_trace;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -25,29 +26,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.covidsafe.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.Date;
 import java.util.List;
 
 import edu.uw.covidsafe.gps.GpsDbModel;
 import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.symptoms.SymptomDbModel;
-import edu.uw.covidsafe.symptoms.SymptomUtils;
 import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.utils.Constants;
-import edu.uw.covidsafe.utils.TimeUtils;
 
 public class ContactStepFragment extends Fragment {
 
     boolean gpsDbChanged = false;
-    static List<GpsRecord> changedGpsRecords;
+    static List<GpsRecord> changedContactGpsRecords;
 
     boolean sympDbChanged = false;
-    static List<SymptomsRecord> changedSympRecords;
 
     boolean humanDbChanged = false;
-    static List<HumanRecord> changedHumanRecords;
 
-    GpsHistoryRecyclerViewAdapter2 adapter;
     SymptomSummaryRecyclerViewAdapter2 symptomAdapter;
     HumanSummaryRecyclerViewAdapter humanAdapter;
 
@@ -146,7 +141,7 @@ public class ContactStepFragment extends Fragment {
                     public void onChanged(List<SymptomsRecord> symptomRecords) {
                         //something in db has changed, update
                         sympDbChanged = true;
-                        changedSympRecords = symptomRecords;
+                        Constants.changedContactSympRecords = symptomRecords;
                         Constants.symptomRecords = symptomRecords;
                         Log.e("symptom","mainfragment - symptom list changed");
                         if (Constants.CurrentFragment.toString().toLowerCase().contains("mainfragment")) {
@@ -166,9 +161,9 @@ public class ContactStepFragment extends Fragment {
                 desc.setText(getContext().getString(R.string.contact_desc_2));
                 header2.setText("General Locations");
 
-                adapter = new GpsHistoryRecyclerViewAdapter2(getContext(), getActivity(), view);
+                Constants.contactGpsAdapter = new GpsHistoryRecyclerViewAdapter2(getContext(), getActivity(), view);
                 RecyclerView tipView = view.findViewById(R.id.recyclerView);
-                tipView.setAdapter(adapter);
+                tipView.setAdapter(Constants.contactGpsAdapter);
                 tipView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
                 GpsDbModel smodel = ViewModelProviders.of(getActivity()).get(GpsDbModel.class);
@@ -177,11 +172,11 @@ public class ContactStepFragment extends Fragment {
                     public void onChanged(List<GpsRecord> gpsRecords) {
                         //something in db has changed, update
                         gpsDbChanged = true;
-                        changedGpsRecords = gpsRecords;
-                        Log.e("contact","db on changed "+(changedGpsRecords.size()));
+                        changedContactGpsRecords = gpsRecords;
+                        Log.e("contact","db on changed "+(changedContactGpsRecords.size()));
                         if (Constants.CurrentFragment.toString().toLowerCase().contains("contactstep")) {
                             Log.e("contact","db on changing");
-                            adapter.setRecords(changedGpsRecords, getContext());
+                            Constants.contactGpsAdapter.setRecords(changedContactGpsRecords, getContext());
                             gpsDbChanged = false;
                         }
                     }
@@ -195,6 +190,7 @@ public class ContactStepFragment extends Fragment {
                 tt.setText(getContext().getString(R.string.contact_title_3));
                 desc.setText(getContext().getString(R.string.contact_desc_3));
                 header2.setText("People");
+
                 actionButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -220,7 +216,7 @@ public class ContactStepFragment extends Fragment {
                     public void onChanged(List<HumanRecord> humanRecords) {
                         Log.e("human","onchanged");
                         humanDbChanged = true;
-                        changedHumanRecords = humanRecords;
+                        Constants.changedContactHumanRecords = humanRecords;
                         if (Constants.CurrentFragment.toString().toLowerCase().contains("contactstep")) {
                             humanAdapter.setRecords(humanRecords);
                             humanDbChanged = false;
@@ -235,11 +231,39 @@ public class ContactStepFragment extends Fragment {
                 pg4.setImageDrawable(getContext().getDrawable(R.drawable.current_4));
                 tt.setText(getContext().getString(R.string.contact_title_4));
                 desc.setText(getContext().getString(R.string.contact_desc_4));
-                nextButton.setText("Save");
+                nextButton.setText("Done");
+                prevButton.setVisibility(View.VISIBLE);
+                prevButton.setText("Export as email");
+                prevButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        exportAsEmail();
+                    }
+                });
                 header2.setText("");
             }
         }
         return view;
+    }
+
+    public void exportAsEmail() {
+        String rep="Symptom logs:\n";
+        for (SymptomsRecord record : Constants.changedContactSympRecords) {
+            rep += record.toString();
+        }
+        rep+="\nLocation logs:\n";
+        for (GpsRecord record : Constants.contactGpsAdapter.records) {
+            rep += record.toString();
+        }
+        rep+="\nContact logs:\n";
+        for (HumanRecord record : Constants.changedContactHumanRecords) {
+            rep += record.toString();
+        }
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                "mailto","", null));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "CovidSafe Contact Tracer Interview Information Packet");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, rep);
+        startActivity(Intent.createChooser(emailIntent, "Send email..."));
     }
 
     @Override
@@ -248,15 +272,15 @@ public class ContactStepFragment extends Fragment {
         Constants.CurrentFragment = this;
 
         if (gpsDbChanged) {
-            adapter.setRecords(changedGpsRecords, getContext());
+            Constants.contactGpsAdapter.setRecords(changedContactGpsRecords, getContext());
             gpsDbChanged = false;
         }
         if (sympDbChanged) {
-            symptomAdapter.setRecords(changedSympRecords);
+            symptomAdapter.setRecords(Constants.changedContactSympRecords);
             sympDbChanged = false;
         }
         if (humanDbChanged) {
-            humanAdapter.setRecords(changedHumanRecords);
+            humanAdapter.setRecords(Constants.changedContactHumanRecords);
             humanDbChanged = false;
         }
     }
