@@ -14,7 +14,7 @@ CovidSafe has the following features:
 * Public health officials can send messages to individual neighborhoods using Google Forms [Video](https://www.youtube.com/watch?v=sdu5YkUmRB8) (0:47). For more details for how to do this, check out this [repo](https://github.com/covidsafe/hcp-tools)
 * You can log **symptoms** with our symptom tracker, your **location** with our private location log and **contacts** you have been around with recently. These logs are useful for aggregating information that can be useful for interviews with public health officials and contact tracers
 
-To run an end-to-end demo of the app on your own phone, please refer to **[these instructions]**(https://github.com/covidsafe/App-Android/wiki/Running-the-app) in our wiki.
+To run an end-to-end demo of the app on your own phone, please refer to [**these instructions**](https://github.com/covidsafe/App-Android/wiki/Running-the-app) in our wiki.
 
 Our tool is built upon the following white paper:<br/>
 **PACT: Privacy Sensitive Protocols and Mechanisms for Mobile Contact Tracing<br/>**
