@@ -17,7 +17,10 @@ import androidx.core.app.NotificationCompat;
 import com.example.covidsafe.R;
 
 import edu.uw.covidsafe.ble.BluetoothUtils;
+import edu.uw.covidsafe.crypto.Constant;
 import edu.uw.covidsafe.gps.GpsUtils;
+import edu.uw.covidsafe.preferences.AppPreferencesHelper;
+import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.utils.Constants;
 
 public class LoggingService extends IntentService {
@@ -57,8 +60,8 @@ public class LoggingService extends IntentService {
 //        Log.e("service", "bundle status " + (bundle == null));
 
         SharedPreferences prefs = getApplicationContext().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-        boolean bleEnabled = prefs.getBoolean(getApplicationContext().getString(R.string.ble_enabled_pkey), Constants.BLUETOOTH_ENABLED);
-        boolean gpsEnabled = prefs.getBoolean(getApplicationContext().getString(R.string.gps_enabled_pkey), Constants.GPS_ENABLED);
+        boolean bleEnabled = AppPreferencesHelper.isBluetoothEnabled(getApplicationContext(), Constants.BLUETOOTH_ENABLED);
+        boolean gpsEnabled = AppPreferencesHelper.isGPSEnabled(getApplicationContext(), Constants.GPS_ENABLED);
 
         if (bleEnabled) {
             BluetoothUtils.startBle(getApplicationContext());
