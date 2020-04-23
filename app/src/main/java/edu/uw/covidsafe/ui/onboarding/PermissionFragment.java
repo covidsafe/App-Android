@@ -37,6 +37,7 @@ import com.example.covidsafe.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import edu.uw.covidsafe.ble.BluetoothUtils;
+import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.ui.settings.PermissionsRecyclerViewAdapter;
 import edu.uw.covidsafe.utils.Constants;
@@ -91,10 +92,9 @@ public class PermissionFragment extends Fragment {
         bb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-                boolean s1 = prefs.getBoolean(getString(R.string.notifs_enabled_pkey), false);
-                boolean s2 = prefs.getBoolean(getString(R.string.gps_enabled_pkey), false);
-                boolean s3 = prefs.getBoolean(getString(R.string.ble_enabled_pkey), false);
+                boolean s1 = AppPreferencesHelper.areNotificationsEnabled(getActivity());
+                boolean s2 = AppPreferencesHelper.isGPSEnabled(getActivity());
+                boolean s3 = AppPreferencesHelper.isBluetoothEnabled(getActivity());
                 Log.e("perms","PERM STATE "+s1+","+s2+","+s3);
             }
         });
