@@ -23,18 +23,24 @@
             android:id="@+id/sick"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="What to Do Next"
+            android:text="Next Steps"
             android:textSize="20sp"
             android:layout_marginTop="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/rel"
             app:layout_constraintStart_toStartOf="@+id/guidelineV10"
             app:layout_constraintTop_toBottomOf="@+id/upload" />
+
+        <include
+            android:id="@+id/tracer"
+            layout="@layout/card_tracer_interview"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/sick" />
 
         <RelativeLayout
             android:id="@+id/rel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/sick"
+            app:layout_constraintTop_toBottomOf="@+id/tracer"
             >
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewTipsDiagnosis"

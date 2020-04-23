@@ -95,10 +95,6 @@ public class SymptomsRecord {
     private boolean headache;
 
     @NonNull
-    @ColumnInfo(name = "chestPain")
-    private boolean chestPain;
-
-    @NonNull
     @ColumnInfo(name = "soreThroat")
     private boolean soreThroat;
 
@@ -228,14 +224,6 @@ public class SymptomsRecord {
         this.headache = headache;
     }
 
-    public boolean isChestPain() {
-        return chestPain;
-    }
-
-    public void setChestPain(boolean chestPain) {
-        this.chestPain = chestPain;
-    }
-
     public boolean isSoreThroat() {
         return soreThroat;
     }
@@ -260,7 +248,7 @@ public class SymptomsRecord {
                           int feverDaysExperienced, boolean abdominalPain, boolean chills,
                           boolean cough, long coughOnset, int coughDaysExperienced,
                           String coughSeverity, boolean diarrhea, boolean troubleBreathing,
-                          boolean headache, boolean chestPain, boolean soreThroat, boolean vomiting) {
+                          boolean headache, boolean soreThroat, boolean vomiting) {
         this.ts = ts;
         this.logTime = logTime;
         this.fever = fever;
@@ -277,7 +265,6 @@ public class SymptomsRecord {
         this.diarrhea = diarrhea;
         this.troubleBreathing = troubleBreathing;
         this.headache = headache;
-        this.chestPain = chestPain;
         this.soreThroat = soreThroat;
         this.vomiting = vomiting;
     }
@@ -300,7 +287,6 @@ public class SymptomsRecord {
         out.diarrhea = diarrhea;
         out.troubleBreathing = troubleBreathing;
         out.headache = headache;
-        out.chestPain = chestPain;
         out.soreThroat = soreThroat;
         out.vomiting = vomiting;
         return out;
@@ -308,7 +294,7 @@ public class SymptomsRecord {
 
     public int numSymptoms() {
         List<Boolean> values = Lists.newArrayList(
-                fever, abdominalPain, chills, cough, diarrhea, troubleBreathing, headache, chestPain,
+                fever, abdominalPain, chills, cough, diarrhea, troubleBreathing, headache,
                 soreThroat, vomiting
         );
         return Booleans.countTrue(Booleans.toArray(values));
@@ -337,9 +323,6 @@ public class SymptomsRecord {
         if (this.headache) {
             values.add("headache");
         }
-        if (this.chestPain) {
-            values.add("chest");
-        }
         if (this.soreThroat) {
             values.add("sore");
         }
@@ -347,5 +330,56 @@ public class SymptomsRecord {
             values.add("vomiting");
         }
         return values;
+    }
+
+    public String toString() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm");
+        SimpleDateFormat format2 = new SimpleDateFormat("MM/dd");
+        String ts = format.format(this.getTs());
+        String rep = ts+" - ";
+        if (this.fever) {
+            rep += "Fever";
+            if (this.getFeverTemp() != 0) {
+                rep += " ("+this.getFeverTemp()+"°"+this.getFeverUnit()+")\n";
+            }
+            if (this.getFeverOnset() != 0) {
+                rep += "Onset date: "+format2.format(this.feverOnset)+"\n";
+            }
+            if (this.getFeverDaysExperienced() != 0) {
+                rep += "Days experienced: "+this.feverDaysExperienced+"\n";
+            }
+            rep += "\n";
+        }
+        if (this.abdominalPain) {
+            rep += "Abdominal pain\n";
+        }
+        if (this.chills) {
+            rep += "Chills\n";
+        }
+        if (this.cough) {
+            rep += "Cough";
+            if (this.getCoughOnset() != 0) {
+                rep += "Onset date: "+format2.format(this.coughOnset)+"\n";
+            }
+            if (this.getCoughDaysExperienced() != 0) {
+                rep += "Days experienced: "+this.coughDaysExperienced+"\n";
+            }
+        }
+        if (this.diarrhea) {
+            rep += "Diarrhea\n";
+        }
+        if (this.troubleBreathing) {
+            rep += "Difficulty breathing (not severe)\n";
+        }
+        if (this.headache) {
+            rep += "Headache\n";
+        }
+        if (this.soreThroat) {
+            rep += "Sore throat\n";
+        }
+        if (this.vomiting) {
+            rep += "Vomitting\n";
+        }
+        return rep;
     }
 }

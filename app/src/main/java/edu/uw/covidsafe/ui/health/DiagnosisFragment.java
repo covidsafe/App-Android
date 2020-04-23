@@ -27,6 +27,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -67,19 +68,32 @@ public class DiagnosisFragment extends Fragment {
         upArrow.setColorFilter(getActivity().getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
         ((MainActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(upArrow);
 
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(getActivity().getString(R.string.health_header_text)));
+        String header_str = getActivity().getString(R.string.health_header_text);
+        if (Constants.PUBLIC_DEMO) {
+            header_str = getActivity().getString(R.string.health_header_text_demo);
+        }
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(header_str));
 
         RecyclerView rview = view.findViewById(R.id.recyclerViewTipsDiagnosis);
         rview.setAdapter(Constants.DiagnosisTipAdapter);
         rview.setLayoutManager(new LinearLayoutManager(getActivity()));
-        Constants.DiagnosisTipAdapter.enableTips(1,view);
+        Constants.DiagnosisTipAdapter.enableTips(1,view,true);
 
-        CheckBox certBox =(CheckBox) view.findViewById(R.id.certBoxReport);
+        CheckBox certBox = (CheckBox) view.findViewById(R.id.certBoxReport);
         Button uploadButton = (Button)view.findViewById(R.id.uploadButton);
         if (uploadButton != null) {
             uploadButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (Constants.PUBLIC_DEMO) {
+                        AlertDialog dialog = new MaterialAlertDialogBuilder(getActivity())
+                                .setMessage("This function is disabled in the demo version of the app.")
+                                .setPositiveButton("Ok",null)
+                                .setCancelable(true).create();
+                        dialog.show();
+                        return;
+                    }
+
                     if (!NetworkHelper.isNetworkAvailable(getActivity())) {
                         Utils.mkSnack(getActivity(),view,"Network not available. Please try again.");
                     }
@@ -93,35 +107,39 @@ public class DiagnosisFragment extends Fragment {
                             dialog.show();
                         }
                         else {
-                            final EditText input = new EditText(getContext());
+                            if (Constants.UI_AUTH) {
+                                final EditText input = new EditText(getContext());
 
-                            input.setInputType(InputType.TYPE_CLASS_TEXT);
+                                input.setInputType(InputType.TYPE_CLASS_TEXT);
 
-                            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity())
-                                    .setMessage("Reporting a positive diagnosis cannot be undone. Please be certain. Please enter the phrase \"I confirm\" in the box below to confirm that you have been officially diagnosed with COVID-19")
-                                    .setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            Utils.mkSnack(getActivity(),view,"Diagnosis not submitted");
-                                        }
-                                    })
-                                    .setPositiveButton("Ok",new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            String txt = input.getText().toString();
-                                            if (txt.trim().equals("I confirm")) {
-                                                new SendInfectedUserData(getContext(), getActivity(), view).execute();
+                                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity())
+                                        .setMessage("Reporting a positive diagnosis cannot be undone. Please be certain. Please enter the phrase \"I confirm\" in the box below to confirm that you have been officially diagnosed with COVID-19")
+                                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Utils.mkSnack(getActivity(), view, "Diagnosis not submitted");
                                             }
-                                            else {
-                                                Utils.mkSnack(getActivity(),view,"Diagnosis not submitted");
+                                        })
+                                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                String txt = input.getText().toString();
+                                                if (txt.trim().equals("I confirm")) {
+                                                    new SendInfectedUserData(getContext(), getActivity(), view).execute();
+                                                } else {
+                                                    Utils.mkSnack(getActivity(), view, "Diagnosis not submitted");
+                                                }
                                             }
-                                        }
-                                    })
-                                    .setCancelable(true);
+                                        })
+                                        .setCancelable(true);
 
-                            builder.setView(input);
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
+                                builder.setView(input);
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+                            }
+                            else {
+                                new SendInfectedUserData(getContext(), getActivity(), view).execute();
+                            }
                         }
                     }
                 }
@@ -134,7 +152,7 @@ public class DiagnosisFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     AlertDialog dialog = new MaterialAlertDialogBuilder(getActivity())
-                            .setMessage("If you upload  trace data, people who have visited any locations you've recently been to will be notified that they might have been exposed.")
+                            .setMessage("If you upload this diagnosis report, people you've recently been in contact with will be notified that they might have been exposed. Your identity will not be revealed.")
                             .setNegativeButton("Learn more", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -146,6 +164,41 @@ public class DiagnosisFragment extends Fragment {
                             .setCancelable(false).create();
                     dialog.show();
                     dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getContext().getResources().getColor(R.color.darkGray));
+                }
+            });
+        }
+
+        Button prepForInterview = (Button)view.findViewById(R.id.prep);
+        if (prepForInterview != null) {
+            prepForInterview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FragmentTransaction tx = getActivity().getSupportFragmentManager().beginTransaction();
+                    tx.setCustomAnimations(
+                            R.anim.enter_right_to_left, R.anim.exit_right_to_left,
+                            R.anim.enter_left_to_right, R.anim.exit_left_to_right);
+                    Constants.ContactPageNumber = 0;
+                    tx.replace(R.id.fragment_container, Constants.ContactTraceFragment).commit();
+                }
+            });
+        }
+        Button learnMore = (Button)view.findViewById(R.id.learnMore);
+        if (learnMore != null) {
+            learnMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Constants.PUBLIC_DEMO) {
+                        AlertDialog dialog = new MaterialAlertDialogBuilder(getActivity())
+                                .setMessage("This function is disabled in the demo version of the app.")
+                                .setPositiveButton("Ok",null)
+                                .setCancelable(true).create();
+                        dialog.show();
+                        return;
+                    }
+                    else {
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.kingCountyLink)));
+                        startActivity(browserIntent);
+                    }
                 }
             });
         }
@@ -167,10 +220,11 @@ public class DiagnosisFragment extends Fragment {
                 TextView date = view.findViewById(R.id.date);
                 if (justReported) {
                     Log.e("state","VISIBLE");
-                    pos.setText(context.getString(R.string.pos_text));
-                    pos.setVisibility(View.VISIBLE);
-                    date.setText("");
-                    date.setVisibility(View.GONE);
+//                    pos.setText(context.getString(R.string.pos_text));
+//                    pos.setVisibility(View.VISIBLE);
+//                    date.setText("");
+//                    date.setVisibility(View.GONE);
+//                    textView7
                 }
                 else {
                     pos.setText("");

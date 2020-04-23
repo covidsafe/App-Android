@@ -90,15 +90,16 @@ public class GpsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     }
 
     public void setRecords(List<GpsRecord> records, Context cxt) {
-
         Log.e("contact","set records");
         List<String> lats = new LinkedList<>();
         List<String> lons = new LinkedList<>();
         List<String> addresses = new LinkedList<>();
+        List<Long> ts = new LinkedList<>();
         for(GpsRecord record : records) {
             lats.add(record.getRawLat());
             lons.add(record.getRawLongi());
             addresses.add(record.getRawAddress());
+            ts.add(record.getTs());
         }
 
         String[] decryptedLats = CryptoUtils.decryptBatch(cxt, lats);
@@ -108,13 +109,13 @@ public class GpsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         Set<String> seenAddresses = new HashSet<>();
 
         List<GpsRecord> filtRecords = new LinkedList<>();
-        int counter = 0;
         for(int i = 0; i <decryptedAddresses.length; i++) {
             if (!seenAddresses.contains(decryptedAddresses[i])) {
                 GpsRecord newRec = new GpsRecord();
                 newRec.setRawLat(decryptedLats[i]);
                 newRec.setRawLongi(decryptedLons[i]);
                 newRec.setRawAddress(decryptedAddresses[i]);
+                newRec.setTs(ts.get(i));
                 filtRecords.add(newRec);
                 seenAddresses.add(decryptedAddresses[i]);
             }

@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -46,7 +45,6 @@ import java.util.List;
 import edu.uw.covidsafe.gps.GpsDbModel;
 import edu.uw.covidsafe.gps.GpsHistoryRecyclerViewAdapter;
 import edu.uw.covidsafe.gps.GpsRecord;
-import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.utils.Constants;
 
@@ -77,7 +75,12 @@ public class ContactLogFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().show();
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(getActivity().getString(R.string.contact_log_header_text)));
+
+        String header_str = getActivity().getString(R.string.contact_log_header_text);
+        if (Constants.PUBLIC_DEMO) {
+            header_str = getActivity().getString(R.string.contact_log_header_text_demo);
+        }
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(header_str));
 
         RecyclerView rview = view.findViewById(R.id.recyclerViewGpsHistory);
         gpsHistoryAdapter = new GpsHistoryRecyclerViewAdapter(getActivity(),getActivity(), view);
@@ -93,7 +96,7 @@ public class ContactLogFragment extends Fragment {
                 gpsDbChanged = true;
                 changedRecords = gpsRecords;
                 Log.e("contact","db on changed "+(changedRecords.size()));
-                if (Constants.CurrentFragment.toString().toLowerCase().contains("contact")) {
+                if (Constants.CurrentFragment.toString().toLowerCase().contains("contactlog")) {
                     Log.e("contact","db on changing");
                     updateLocationView(cal.getSelectedDate(), getContext());
                     gpsDbChanged = false;
@@ -103,7 +106,6 @@ public class ContactLogFragment extends Fragment {
 
         return view;
     }
-
 
     public void initCal() {
         cal = view.findViewById(R.id.calendarView);
@@ -184,8 +186,10 @@ public class ContactLogFragment extends Fragment {
                     Integer.parseInt(day.format(ts))));
         }
 
-        cal.addDecorators(new ContactLogFragment.EventDecorator(cxt.getColor(R.color.purpleDark),
-                markedDays));
+        if (cxt != null) {
+            cal.addDecorators(new ContactLogFragment.EventDecorator(cxt.getColor(R.color.purpleDark),
+                    markedDays));
+        }
     }
 
     private static class EventDecorator implements DayViewDecorator {

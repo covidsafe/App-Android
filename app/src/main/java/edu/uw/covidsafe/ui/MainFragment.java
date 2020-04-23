@@ -39,6 +39,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.uw.covidsafe.comms.PullFromServerTask;
+import edu.uw.covidsafe.comms.PullFromServerTaskDemo;
 import edu.uw.covidsafe.comms.PullFromServerTaskDemo2;
 import edu.uw.covidsafe.hcp.SubmitNarrowcastMessageTask;
 import edu.uw.covidsafe.preferences.AppPreferencesHelper;
@@ -168,7 +169,7 @@ public class MainFragment extends Fragment {
 
                 Constants.HistoryAdapter.setRecords(historyNotifs, view);
                 Constants.NotificationAdapter.setRecords(currentNotifs, view);
-                Constants.MainTipAdapter.enableTips(notifRecords.size(), view);
+                Constants.MainTipAdapter.enableTips(notifRecords.size(), view, false);
             }
         });
 
@@ -256,20 +257,26 @@ public class MainFragment extends Fragment {
     public void refreshTask() {
         Log.e("refresh","freshtask ");
         if (!Constants.PullFromServerTaskRunning) {
-            if (Constants.DEBUG) {
-                new PullFromServerTaskDemo2(getContext(), getActivity(), view).execute();
-            } else {
-                new PullFromServerTask(getContext(), getActivity(), view).execute();
+            if (!Constants.PUBLIC_DEMO) {
+                if (Constants.DEBUG) {
+                    new PullFromServerTaskDemo(getContext(), getActivity(), view).execute();
+                } else {
+                    new PullFromServerTask(getContext(), getActivity(), view).execute();
+                }
+
+                RotateAnimation rotate = new RotateAnimation(0,360,
+                        Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                rotate.setDuration(1000);
+                rotate.setRepeatCount(Animation.INFINITE);
+                rotate.setRepeatMode(Animation.INFINITE);
+                rotate.setInterpolator(new LinearInterpolator());
+                refresh.startAnimation(rotate);
+            }
+            else {
+                swipeLayout.setRefreshing(false);
+                refresh.clearAnimation();
             }
         }
-
-        RotateAnimation rotate = new RotateAnimation(0,360,
-                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        rotate.setDuration(1000);
-        rotate.setRepeatCount(Animation.INFINITE);
-        rotate.setRepeatMode(Animation.INFINITE);
-        rotate.setInterpolator(new LinearInterpolator());
-        refresh.startAnimation(rotate);
     }
 
     public void broadcastSwitchLogic(boolean isChecked) {

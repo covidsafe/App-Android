@@ -32,6 +32,10 @@ public class SymptomUtils {
     public static void updateTodaysLogs(View view, List<SymptomsRecord> symptomRecords, Context cxt, Activity av, Date dateToShow, String entryPoint) {
         Log.e("symptom","update todays log "+entryPoint);
         Constants.entryPoint = entryPoint;
+        TextView title = (TextView)view.findViewById(R.id.symptomTrackerTitle);
+        if (Constants.PUBLIC_DEMO && !title.getText().toString().contains("DEMO")) {
+            title.setText(title.getText().toString()+" [DEMO]");
+        }
         ImageView amImage  = (ImageView)view.findViewById(R.id.amImage);
         ImageView pmImage  = (ImageView)view.findViewById(R.id.pmImage);
         TextView amStatus  = (TextView)view.findViewById(R.id.amStatus);
