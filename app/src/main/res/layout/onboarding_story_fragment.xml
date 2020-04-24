@@ -25,7 +25,7 @@
             android:id="@+id/storyTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Welcome to CovidSafe"
+            android:text="@string/welcome_to_covidsafe_text"
             android:textColor="@color/white"
             android:textFontWeight="500"
             android:textSize="28sp" />
@@ -34,7 +34,7 @@
             android:id="@+id/storyMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="CovidSafe notifies you if you may have been exposed to coronavirus and helps you monitor any symptoms you're having."
+            android:text="@string/covidsafe_notifies_you"
             android:textColor="@color/white"
             android:textSize="14sp" />
 

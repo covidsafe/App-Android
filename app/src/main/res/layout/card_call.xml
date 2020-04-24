@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="23dp"
                 android:layout_marginEnd="48dp"
-                android:text="Call 911 immediately if you are having a medical emergency."
+                android:text="@string/emergency_call_text"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
