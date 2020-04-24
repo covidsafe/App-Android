@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginTop="5dp"
-        android:text="Cough"
+        android:text="@string/cough_text"
         android:textColor="#000000"
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/guidelineV80"
@@ -51,7 +51,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="A new, continuous cough - this means you've started coughing repeatedly"
+            android:text="@string/cough_symptoms_text"
             app:layout_constraintEnd_toStartOf="@+id/guidelineV80"
             app:layout_constraintStart_toStartOf="@+id/guidelineV05"
             app:layout_constraintTop_toBottomOf="@+id/symptom_name" />

@@ -23,7 +23,7 @@
             android:id="@+id/sick"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Next Steps"
+            android:text="@string/next_steps_text"
             android:textSize="20sp"
             android:layout_marginTop="10dp"
             app:layout_constraintStart_toStartOf="@+id/guidelineV10"
