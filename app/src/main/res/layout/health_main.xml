@@ -18,13 +18,13 @@
             android:id="@+id/symptomTab"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Symptoms" />
+            android:text="@string/symptoms_text" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/diagnosisTab"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Diagnosis" />
+            android:text="@string/diagnosis_text" />
 
     </com.google.android.material.tabs.TabLayout>
 

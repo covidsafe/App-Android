@@ -80,7 +80,7 @@
         Traditional contact tracing interviews done by public health services are important, laborious, complicated and can sometimes omit important contacts because patients forget to mention them. CovidSafe helps people who have tested positive remember locations they’ve visited recently, by providing an objective log, which they can then share with contact tracing teams. There is also functionality to organize the contact information of known contacts, which streamlines the interview process and enables contact tracers to work faster.
     </string>
 
-<!--    privacy-->
+    <!--    privacy-->
     <string name="pq1">
         If I test positive and I disclose it via CovidSafe, what information is revealed to others?
     </string>
@@ -135,7 +135,7 @@
     <string name="pa9">
         If you become ill, you can use the app to improve the efficiency and completeness of manual contact tracing interviews. Your privacy is maximized by ensuring that all the data remains on your device, except for what you voluntarily reveal to healthcare authorities to enable more effective contact tracing.
     </string>
-<!---->
+    <!---->
 
     <string name="aq1">
         What is contact tracing?
@@ -293,7 +293,7 @@ Contact tracing is a process that helps identify all the people who may have com
         Let\s slow the spread of COVID-19 together.
     </string>
 
-    <string name="emergency">
+    <string name="emergency_text" comment="This is the emergency text that needs to be shown to the user in the symptom tab">
         Stop and call 911 if you are experiencing:\n
         • Severe, constant chest pain or pressure\n
         • Extreme difficulty breathing\n
@@ -310,4 +310,92 @@ Contact tracing is a process that helps identify all the people who may have com
     <string name="symptom7">Bluish lips or face</string>
     <string name="certText">I certify that the information submitted in this report is true and correct to the best of my knowledge.</string>
     <string name="certDiagnosisText">I certify that I have been officially diagnosed with COVID-19</string>
+
+
+    <string name="bottom_sheet_menu_item_home" comment="This is the bottom menu item called as home">Home</string>
+    <string name="bottom_sheet_menu_item_contact_log" comment="This is the bottom menu item called as contact log">Contact Log</string>
+    <string name="bottom_sheet_menu_item_health_report" comment="This is the bottom menu item called as health report">Health Report</string>
+    <string name="bottom_sheet_menu_item_resources" comment="This is the bottom menu item called as resources">Resources</string>
+
+    <string name="self_quarantine_for_14_days">Self-quarantine For 14 Days</string>
+    <string name="learn_more_link_text" comment="This is a button link which when clicked will take the user to the online resources">Learn More</string>
+    <string name="settings_text" comment="This is the button for taking the users to the settings">Settings</string>
+    <string name="broadcasting_on_text" comment="This is the text shown for broadcasting on">Broadcasting on</string>
+    <string name="broadcasting_description_text" comment="This is the broadcasting text that needs to be show to the user">Limited trace data is being collected. We keep your identity anonymous. Learn More.</string>
+
+    <string name="emergency_call_text" comment="This is the emergency text that needs to be shown to the user on call tab">Call 911 immediately if you are having a medical emergency.</string>
+
+    <string name="card_onset_date_hint" comment="This is the hint text that needs to be shown to the user when they open cough card">Onset Date (MM/DD)</string>
+    <string name="card_onset_days_experienced" comment="This is the hint text that needs to be shown for the days cough is experienced">Days experienced</string>
+
+    <string name="card_symptom_severity_mild" comment="Severity of the symptom">Mild</string>
+    <string name="card_symptom_severity_moderate" comment="Severity of the symptom">Moderate</string>
+    <string name="card_symptom_severity_severe" comment="Severity of the symptom">Severe</string>
+
+    <string name="card_data_storage_local" comment="text if the storage is local">Local Data Storage</string>
+    <string name="card_data_storage_local_expiration" comment="local data expiration">Your data will expire on April 25.\n\nOn this date your symptom logs and location data will be removed from the app. This action cannot be undone.\n</string>
+
+    <string name="change_in_settings_text" comment="text for changing settings">Change in Settings</string>
+    <string name="highest_temperature_text">Highest Temperature</string>
+
+    <string name="legal_text">Legal</string>
+    <string name="share_text">Share</string>
+    <string name="you_might_have_exposed" comment="text shown to the user if they have been exposed to the virus">You might have been exposed</string>
+    <string name="exposure_notification_description_text" comment="description for the notifcation">Based on your location history, we believe you might have been in the same place as people infected with COVID-19</string>
+    <string name="contact_healthcare_professional" comment="contact your healthcare">Please contact your healthcare professional.</string>
+    <string name="dismiss_text">Dismiss</string>
+    <string name="disclaimer_text">Disclaimer</string>
+    <string name="cdc_guidance_text" comment="button string for taking the user to the CDC guidance">CDC Guidance</string>
+    <string name="symptom_tracker_text" comment="symptom tracker text">Symptom Tracker</string>
+    <string name="time_am">AM</string>
+    <string name="time_pm">PM</string>
+    <string name="saved_text">Saved</string>
+    <string name="not_logged_text">Not Logged</string>
+    <string name="prepare_for_contact_tracer_interview">Prepare for your contact tracer interview</string>
+    <string name="prepare_for_interview_btn_text">Prepare for your interview</string>
+    <string name="prepare_for_contact_tracer_description_text">During an interview, a public health official will collect a list of critical information to help identify those around you who may have been exposed.</string>
+    <string name="positive_covid_report" comment="text to be shown to user when they want to report that they were tested positive">Positive COVID-19 Diagnosis Reported</string>
+    <string name="reported_text">Reported</string>
+    <string name="submit_your_report_button_text">Submit your report</string>
+    <string name="what_happen_when_i_submit_report">What happens when I submit my report?</string>
+    <string name="symptoms_text">Symptoms</string>
+    <string name="location_text">Location</string>
+    <string name="people_text">People</string>
+    <string name="summary_text">Summary</string>
+    <string name="review_which_symptoms_to_include">Review which symptoms you would like to include.</string>
+    <string name="we_have_detected_severe_symptoms_in_your_report">We’ve detected severe symptoms in your recent reports, and collected them below. We use this to determine lorem ipsum dolor consect. Learn More</string>
+
+    <string name="next_btn_text">Next</string>
+    <string name="previous_btn_text">Previous</string>
+    <string name="how_to_prepare_for_your_interview">How to prepare for your interview</string>
+    <string name="interview_preparation_description_text">During your interview, a healthcare nurse will be collecting a list of critical information to help identify those who may have been exposed.
+You can prepare a list of informaton they will ask about based on information collected through CovidSafe. This information includes:</string>
+    <string name="symptoms_experienced_last_14_days">Symptoms you’ve experienced in the last 14 days</string>
+    <string name="location_visited_in_last_14_days">Locations you’ve visited in the last 14 days</string>
+    <string name="people_you_have_been_in_contact_last_14_days">People you’ve been in direct contact with over the last 14 days</string>
+    <string name="get_started_text">Get started</string>
+    <string name="frequently_asked_questions">Frequently Asked Questions</string>
+    <string name="about_covidsafe">About CovidSafe</string>
+    <string name="privacy_and_security">Privacy and Security</string>
+    <string name="exposure_history">Exposure history</string>
+    <string name="what_to_do_if_you_are_sick">What to do if you are sick</string>
+    <string name="last_updated_text">Last updated</string>
+    <string name="tracing_tools">Tracing tools</string>
+    <string name="more_text">More</string>
+    <string name="your_log_have_been_saved_text">Your log has been saved</string>
+    <string name="next_steps_text">Next Steps</string>
+    <string name="diagnosis_text">Diagnosis</string>
+    <string name="help_your_community_by_reporting">Help your community by reporting your diagnosis</string>
+    <string name="your_report_will_be_anonymous_text">Your report will be anonymous and your identity will be protected</string>
+    <string name="new_report_text">New Report</string>
+    <string name="recent_logs">Recent logs</string>
+    <string name="learn_how_we_protect_your_privacy">Learn about how we protect your privacy</string>
+    <string name="welcome_to_covidsafe_text">Welcome to CovidSafe</string>
+    <string name="covidsafe_notifies_you">CovidSafe notifies you if you may have been exposed to coronavirus and helps you monitor any symptoms you\'re having.</string>
+    <string name="clear_all_text">Clear all</string>
+    <string name="save_text">Save</string>
+    <string name="cough_text">Cough</string>
+    <string name="cough_symptoms_text">A new, continuous cough - this means you\'ve started coughing repeatedly</string>
+
+
 </resources>

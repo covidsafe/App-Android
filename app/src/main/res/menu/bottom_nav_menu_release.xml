@@ -6,28 +6,28 @@
         android:id="@+id/action_track"
         android:enabled="true"
         android:icon="@drawable/nav1"
-        android:title="Home"
+        android:title="@string/bottom_sheet_menu_item_home"
         app:showAsAction="always|withText" />
 
     <item
         android:id="@+id/action_contact_log"
         android:enabled="true"
         android:icon="@drawable/contact"
-        android:title="Contact Log"
+        android:title="@string/bottom_sheet_menu_item_contact_log"
         app:showAsAction="always|withText" />
 
     <item
         android:id="@+id/action_report"
         android:enabled="true"
         android:icon="@drawable/nav2"
-        android:title="Health report"
+        android:title="@string/bottom_sheet_menu_item_health_report"
         app:showAsAction="always|withText" />
 
     <item
         android:id="@+id/action_settings"
         android:enabled="true"
         android:icon="@drawable/nav3"
-        android:title="Resources"
+        android:title="@string/bottom_sheet_menu_item_resources"
         app:showAsAction="always|withText" />
 
 </menu>
