@@ -21,3 +21,6 @@ Our tool is built upon the following white paper:<br/>
 **PACT: Privacy Sensitive Protocols and Mechanisms for Mobile Contact Tracing<br/>**
 *Justin Chan, Dean Foster\*, Shyam Gollakota, Eric Horvitz\*, Joseph Jaeger\*, Sham Kakade\*, Tadayoshi Kohno, John Langford\*, Jonathan Larson, Sudheesh Singanamalla, Jacob Sunshine, Stefano Tessaro\**<br/>
 \* Corresponding authors
+
+
+If you want to contribute to this project, please look through the list of issues, and if you find one you want to work on specifically, email me (jucha@cs.washington.edu). I am more than happy to walk you through the details of the current codebase so we can figure out how best to integrate your chosen feature.
