@@ -63,7 +63,7 @@ public class AddEditSymptomsFragment extends Fragment {
 
     public static final AddEditSymptomsFragment newInstance(Date date, String ampm) {
         AddEditSymptomsFragment f = new AddEditSymptomsFragment();
-        Bundle bdl = new Bundle(2);
+        Bundle bdl = new Bundle(3);
         bdl.putSerializable("date",date);
         bdl.putString("ampm",ampm);
         bdl.putString("op","add");
