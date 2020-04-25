@@ -119,7 +119,8 @@ public class SymptomUtils {
         tx.setCustomAnimations(
                 R.anim.enter_right_to_left,R.anim.exit_right_to_left,
                 R.anim.enter_left_to_right,R.anim.exit_left_to_right);
-        tx.replace(R.id.fragment_container, new AddEditSymptomsFragment(date, ampm)).commit();
+        tx.replace(R.id.fragment_container, AddEditSymptomsFragment.newInstance(date, ampm)).commit();
+
     }
 
     public static void editAction(Context context, Activity av, View view, SymptomsRecord record) {
@@ -137,7 +138,7 @@ public class SymptomUtils {
                         tx.setCustomAnimations(
                                 R.anim.enter_right_to_left, R.anim.exit_right_to_left,
                                 R.anim.enter_left_to_right, R.anim.exit_left_to_right);
-                        tx.replace(R.id.fragment_container, new AddEditSymptomsFragment(record)).commit();
+                        tx.replace(R.id.fragment_container, AddEditSymptomsFragment.newInstance(record)).commit();
                         break;
                     case R.id.deleteItem:
                         AlertDialog dialog = new MaterialAlertDialogBuilder(av)

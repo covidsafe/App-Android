@@ -13,13 +13,14 @@ import com.google.common.primitives.Booleans;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 @Entity(tableName = "symptoms_record_table")
-public class SymptomsRecord {
+public class SymptomsRecord implements Serializable {
 
     @PrimaryKey
     @NonNull
