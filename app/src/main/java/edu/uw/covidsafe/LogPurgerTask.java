@@ -12,6 +12,7 @@ import edu.uw.covidsafe.seed_uuid.SeedUUIDDbRecordRepository;
 import edu.uw.covidsafe.symptoms.SymptomsDbRecordRepository;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.TimeUtils;
+import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
 
 import java.text.SimpleDateFormat;
@@ -37,14 +38,22 @@ public class LogPurgerTask implements Runnable {
         Log.e("uuid", "PURGE LOGS");
         try {
             Log.e("truetime","truetime init");
-            TrueTimeRx.build()
-                    .initializeRx("time.apple.com")
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(date -> {
-                        Log.e("truetime", "TrueTime was initialized and we have a time: " + TrueTime.now());
-                    }, throwable -> {
-                        throwable.printStackTrace();
-                    });
+            RxJavaPlugins.setErrorHandler(e -> {
+                Log.e("truetime",e.getMessage());
+            });
+            try {
+                TrueTimeRx.build()
+                        .initializeRx("time.apple.com")
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(date -> {
+                            Log.e("truetime", "TrueTime was initialized and we have a time: " + TrueTime.now());
+                        }, throwable -> {
+                            throwable.printStackTrace();
+                        });
+            }
+            catch(Exception e) {
+                Log.e("truetime",e.getMessage());
+            }
             Log.e("truetime","truetime build ");
         }
         catch(Exception e) {
