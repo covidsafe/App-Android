@@ -95,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
         Constants.DiagnosisTipAdapter = new TipRecyclerViewAdapter(this, this);
         Constants.NotificationAdapter = new NotifRecyclerViewAdapter(this,this);
         Constants.HistoryAdapter = new HistoryRecyclerViewAdapter(this,this);
+
+        Utils.minApiCheck(this);
     }
 
     @Override

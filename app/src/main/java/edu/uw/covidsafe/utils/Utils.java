@@ -1,11 +1,13 @@
 package edu.uw.covidsafe.utils;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -20,13 +22,17 @@ import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.covidsafe.R;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DateFormat;
@@ -73,6 +79,40 @@ public class Utils {
 
         AppPreferencesHelper.setGPSEnabled(av, false);
         AppPreferencesHelper.setBluetoothEnabled(av,false);
+    }
+
+    public static void minApiCheck(Activity av) {
+        SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        boolean doCheck = prefs.getBoolean(av.getString(R.string.min_api_check_pkey), true);
+
+//        if (android.os.Build.VERSION.SDK_INT < Constants.MIN_API) {
+        if (doCheck && android.os.Build.VERSION.SDK_INT < 30) {
+            SharedPreferences.Editor editor = prefs.edit();
+
+            View checkBoxView = View.inflate(av, R.layout.checkbox, null);
+            CheckBox checkBox = checkBoxView.findViewById(R.id.checkbox);
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    Log.e("logme", "oncheckedchanged " + isChecked);
+                    if (isChecked) {
+                        editor.putBoolean(av.getString(R.string.min_api_check_pkey), !isChecked).commit();
+                    }
+                }
+            });
+            checkBox.setTextSize(15);
+            checkBox.setText(av.getString(R.string.dont_show_this_again));
+
+            AlertDialog dialog = new MaterialAlertDialogBuilder(av)
+                    .setView(checkBoxView)
+                    .setTitle("Warning")
+                    .setMessage(av.getString(R.string.min_api_error)+" "+Constants.MIN_OS)
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    }).setCancelable(false).create();
+            dialog.show();
+        }
     }
 
     public static void updateSwitchStates(Activity av) {
