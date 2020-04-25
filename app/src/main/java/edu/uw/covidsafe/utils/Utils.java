@@ -85,8 +85,7 @@ public class Utils {
         SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         boolean doCheck = prefs.getBoolean(av.getString(R.string.min_api_check_pkey), true);
 
-//        if (android.os.Build.VERSION.SDK_INT < Constants.MIN_API) {
-        if (doCheck && android.os.Build.VERSION.SDK_INT < 30) {
+        if (android.os.Build.VERSION.SDK_INT < Constants.MIN_API) {
             SharedPreferences.Editor editor = prefs.edit();
 
             View checkBoxView = View.inflate(av, R.layout.checkbox, null);
