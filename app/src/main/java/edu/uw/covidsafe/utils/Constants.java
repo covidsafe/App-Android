@@ -90,6 +90,8 @@ public class Constants {
         BatchInsert, Insert,ViewAll,DeleteAll
     }
 
+    public static int MIN_OS = 6;
+    public static int MIN_API = 23;
     public static int ContactPageNumber;
     public static String entryPoint = "";
     public static List<SymptomsRecord> symptomRecords;
