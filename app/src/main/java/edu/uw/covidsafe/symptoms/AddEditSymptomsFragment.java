@@ -49,19 +49,35 @@ public class AddEditSymptomsFragment extends Fragment {
 
     String op;
 
-    // add path
-    public AddEditSymptomsFragment(Date date, String ampm) {
-        Log.e("symptoms","add path");
-        this.date = date;
-        this.ampm = ampm;
-        this.op = "add";
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.op = getArguments().getString("op");
+        if (this.op.equals("add")) {
+            this.ampm = getArguments().getString("ampm");
+            this.date = (Date) getArguments().getSerializable("date");
+        } else if (this.op.equals("edit")) {
+            this.record = (SymptomsRecord) getArguments().getSerializable("record");
+        }
     }
 
-    // edit path
-    public AddEditSymptomsFragment(SymptomsRecord record) {
-        Log.e("symptoms","edit path");
-        this.record = record;
-        this.op = "edit";
+    public static final AddEditSymptomsFragment newInstance(Date date, String ampm) {
+        AddEditSymptomsFragment f = new AddEditSymptomsFragment();
+        Bundle bdl = new Bundle(2);
+        bdl.putSerializable("date",date);
+        bdl.putString("ampm",ampm);
+        bdl.putString("op","add");
+        f.setArguments(bdl);
+        return f;
+    }
+
+    public static final AddEditSymptomsFragment newInstance(SymptomsRecord record) {
+        AddEditSymptomsFragment f = new AddEditSymptomsFragment();
+        Bundle bdl = new Bundle(2);
+        bdl.putSerializable("record",record);
+        bdl.putString("op","edit");
+        f.setArguments(bdl);
+        return f;
     }
 
     @SuppressLint("RestrictedApi")
