@@ -1,7 +1,6 @@
 package edu.uw.covidsafe.utils;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -39,7 +38,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import edu.uw.covidsafe.LoggingService;
+import edu.uw.covidsafe.LoggingServiceV2;
 import edu.uw.covidsafe.PullService;
 import edu.uw.covidsafe.ble.BleOpsAsyncTask;
 import edu.uw.covidsafe.ble.BleRecord;
@@ -48,7 +47,6 @@ import edu.uw.covidsafe.gps.GpsOpsAsyncTask;
 import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.gps.GpsUtils;
 import edu.uw.covidsafe.preferences.AppPreferencesHelper;
-import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
 import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.MainActivity;
@@ -69,8 +67,7 @@ public class Utils {
 
         Log.e("logme", "stop service");
         if (Constants.LoggingServiceRunning) {
-            av.stopService(new Intent(av, LoggingService.class));
-            Constants.LoggingServiceRunning = false;
+            av.stopService(new Intent(av, LoggingServiceV2.class));
         }
 
         GpsUtils.haltGps();
@@ -78,7 +75,7 @@ public class Utils {
         BluetoothUtils.haltBle(av);
 
         AppPreferencesHelper.setGPSEnabled(av, false);
-        AppPreferencesHelper.setBluetoothEnabled(av,false);
+        AppPreferencesHelper.setBluetoothEnabled(av, false);
     }
 
     public static void minApiCheck(Activity av) {
@@ -105,7 +102,7 @@ public class Utils {
             AlertDialog dialog = new MaterialAlertDialogBuilder(av)
                     .setView(checkBoxView)
                     .setTitle("Warning")
-                    .setMessage(av.getString(R.string.min_api_error)+" "+Constants.MIN_OS)
+                    .setMessage(av.getString(R.string.min_api_error) + " " + Constants.MIN_OS)
                     .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                         }
@@ -115,7 +112,7 @@ public class Utils {
     }
 
     public static void updateSwitchStates(Activity av) {
-        Log.e("state","update switch states");
+        Log.e("state", "update switch states");
         SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         if (Constants.notifSwitch != null) {
@@ -125,18 +122,18 @@ public class Utils {
 //            Constants.notifSwitch.setChecked(perm);
             if (!hasNotifPerms) {
 //                Constants.notifSwitch.setOnCheckedChangeListener (null);
-                Constants.notifSwitch.setChecked (false);
+                Constants.notifSwitch.setChecked(false);
 //                Constants.notifSwitch.setOnCheckedChangeListener (PermUtil.listener);
                 AppPreferencesHelper.setNotificationEnabled(av, false);
             }
         }
         if (Constants.gpsSwitch != null) {
             boolean hasGpsPerms = Utils.hasGpsPermissions(av);
-            Log.e("perm","gps get "+hasGpsPerms);
+            Log.e("perm", "gps get " + hasGpsPerms);
 //            editor.putBoolean(av.getString(R.string.gps_enabled_pkey),hasGpsPerms);
             if (!hasGpsPerms) {
 //                Constants.gpsSwitch.setOnCheckedChangeListener (null);
-                Constants.gpsSwitch.setChecked (false);
+                Constants.gpsSwitch.setChecked(false);
 //                Constants.gpsSwitch.setOnCheckedChangeListener (PermUtil.listener);
 
                 AppPreferencesHelper.setGPSEnabled(av, false);
@@ -145,11 +142,11 @@ public class Utils {
         if (Constants.bleSwitch != null) {
             boolean hasBlePerms = Utils.hasBlePermissions(av);
             boolean isBluetoothOn = BluetoothUtils.isBluetoothOn(av);
-            Log.e("perm","ble get "+hasBlePerms);
+            Log.e("perm", "ble get " + hasBlePerms);
 //            editor.putBoolean(av.getString(R.string.ble_enabled_pkey),hasBlePerms);
             if (!hasBlePerms || !isBluetoothOn) {
 //                Constants.bleSwitch.setOnCheckedChangeListener (null);
-                Constants.bleSwitch.setChecked (false);
+                Constants.bleSwitch.setChecked(false);
 //                Constants.bleSwitch.setOnCheckedChangeListener (PermUtil.listener);
                 AppPreferencesHelper.setBluetoothEnabled(av, false);
             }
@@ -174,7 +171,7 @@ public class Utils {
         SharedPreferences prefs = mContext.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = mContext.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
         if (AppPreferencesHelper.areNotificationsEnabled(mContext, Constants.NOTIFS_ENABLED)) {
-            Log.e("notif","notif");
+            Log.e("notif", "notif");
             NotificationManager mNotificationManager;
 
             NotificationCompat.Builder mBuilder =
@@ -211,9 +208,9 @@ public class Utils {
                 mBuilder.setChannelId(channelId);
             }
 
-            int notifID = prefs.getInt(mContext.getString(R.string.notif_id_pkey),0);
+            int notifID = prefs.getInt(mContext.getString(R.string.notif_id_pkey), 0);
             mNotificationManager.notify(notifID, mBuilder.build());
-            editor.putInt(mContext.getString(R.string.notif_id_pkey),notifID+1);
+            editor.putInt(mContext.getString(R.string.notif_id_pkey), notifID + 1);
             editor.commit();
         }
     }
@@ -235,7 +232,8 @@ public class Utils {
                 textView.setMaxLines(5);
 
                 snackBar.show();
-        }});
+            }
+        });
     }
 
     public static void gpsLogToFile(Context cxt, GpsRecord rec) {
@@ -263,46 +261,45 @@ public class Utils {
     }
 
     public static void bleLogToDatabase(Context cxt, String id, int rssi, long ts) {
-        Log.e("ble","ble log to database");
+        Log.e("ble", "ble log to database");
         new BleOpsAsyncTask(cxt, id, rssi, ts).execute();
     }
 
     public static void uuidLogToFile(Context cxt, SeedUUIDRecord rec) {
-        Log.e("uuid","uuid log to file");
+        Log.e("uuid", "uuid log to file");
         FileOperations.append(rec.toString(),
                 cxt, Constants.uuidDirName, Utils.getUuidLogName());
     }
 
     public static String formatDate(String s) {
-        s = s.substring(0,s.length()-4);
+        s = s.substring(0, s.length() - 4);
         String[] ss = s.split("-");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Date date = format.parse(s);
             SimpleDateFormat human = new SimpleDateFormat("E, dd MMMM yyyy");
             return human.format(date);
-        }
-        catch(Exception e) {
-            Log.e("test",e.getMessage());
+        } catch (Exception e) {
+            Log.e("test", e.getMessage());
         }
         return "";
     }
 
     public static void startLoggingService(Activity av) {
         Utils.createNotificationChannel(av);
-        Log.e("service","logging service -- utils start");
-        if(!Constants.LoggingServiceRunning) {
+        Log.e("service", "logging service -- utils start");
+        if (!Constants.LoggingServiceRunning) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                av.startForegroundService(new Intent(av, LoggingService.class));
+                av.startForegroundService(new Intent(av, LoggingServiceV2.class));
             } else {
-                av.startService(new Intent(av, LoggingService.class));
+                av.startService(new Intent(av, LoggingServiceV2.class));
             }
         }
     }
 
     public static void startPullService(Activity av) {
         Utils.createNotificationChannel(av);
-        Log.e("service","pull service -- utils start");
+        Log.e("service", "pull service -- utils start");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             av.startForegroundService(new Intent(av, PullService.class));
         } else {
@@ -321,15 +318,14 @@ public class Utils {
 //        Log.e("ERR ",d+","+precision);
 
         long negative = bits & (1L << 63);
-        int exponent = (int)((bits >> 52) & 0x7ffL);
+        int exponent = (int) ((bits >> 52) & 0x7ffL);
         long mantissa = bits & 0xfffffffffffffL;
 
         int mantissaLog = 52;
         if (exponent == 0) {
-            mantissaLog = (int)log(mantissa, 2);
-        }
-        else {
-            mantissa = mantissa | (1L<<52);
+            mantissaLog = (int) log(mantissa, 2);
+        } else {
+            mantissa = mantissa | (1L << 52);
         }
 
         int precisionShift = mantissaLog + exponent - 1075;
@@ -339,12 +335,11 @@ public class Utils {
         mantissa = mantissa >> (52 - maskLength);
         mantissa = mantissa << (52 - maskLength);
 
-        if (mantissa == 0)
-        {
+        if (mantissa == 0) {
             exponent = 0;
         }
         long result = negative |
-                ((long)(exponent & 0x7ffL) << 52) |
+                ((long) (exponent & 0x7ffL) << 52) |
                 (mantissa & 0xfffffffffffffL);
 
         return Double.longBitsToDouble(result);
@@ -356,17 +351,16 @@ public class Utils {
 
     public static String[] getBlePermissions() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            String[] out = new String[Constants.blePermissions.length+Constants.gpsPermissions.length];
+            String[] out = new String[Constants.blePermissions.length + Constants.gpsPermissions.length];
             int counter = 0;
-            for (int i = 0 ; i < Constants.blePermissions.length; i++) {
+            for (int i = 0; i < Constants.blePermissions.length; i++) {
                 out[counter++] = Constants.blePermissions[i];
             }
-            for (int i = 0 ; i < Constants.gpsPermissions.length; i++) {
+            for (int i = 0; i < Constants.gpsPermissions.length; i++) {
                 out[counter++] = Constants.gpsPermissions[i];
             }
             return out;
-        }
-        else {
+        } else {
             return Constants.blePermissions;
         }
     }
@@ -383,7 +377,7 @@ public class Utils {
         }
         // for the lower APIs, you need location permissions to do bluetooth scanning
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            Log.e("results","lower api, check for gps also");
+            Log.e("results", "lower api, check for gps also");
             return hasGpsPermissions(context);
         }
         return true;
@@ -402,8 +396,7 @@ public class Utils {
                     }
                 }
             }
-        }
-        else {
+        } else {
             if (context != null && Constants.gpsPermissionsLite != null) {
                 for (String permission : Constants.gpsPermissionsLite) {
                     int result = ActivityCompat.checkSelfPermission(context, permission);
@@ -418,8 +411,8 @@ public class Utils {
         return true;
     }
 
-    public static void openPhone (Activity av, String phoneNumber) {
-        Intent launchBrowser = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+phoneNumber));
+    public static void openPhone(Activity av, String phoneNumber) {
+        Intent launchBrowser = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneNumber));
         av.startActivity(launchBrowser);
     }
 
@@ -457,31 +450,31 @@ public class Utils {
     public static String getGpsLogName() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date(TimeUtils.getTime());
-        return dateFormat.format(date)+".txt";
+        return dateFormat.format(date) + ".txt";
     }
 
     public static String getNotifLogName() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date(TimeUtils.getTime());
-        return dateFormat.format(date)+".txt";
+        return dateFormat.format(date) + ".txt";
     }
 
     public static String getBleLogName() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date(TimeUtils.getTime());
-        return dateFormat.format(date)+".txt";
+        return dateFormat.format(date) + ".txt";
     }
 
     public static String getSymptomsLogName() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date(TimeUtils.getTime());
-        return dateFormat.format(date)+".txt";
+        return dateFormat.format(date) + ".txt";
     }
 
     public static String getUuidLogName() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date(TimeUtils.getTime());
-        return dateFormat.format(date)+".txt";
+        return dateFormat.format(date) + ".txt";
     }
 
     public static String getFormRecordName() {
@@ -507,7 +500,7 @@ public class Utils {
         if (subDate == 0) {
             return "";
         }
-        return "Last submitted: "+dateFormat.format(subDate);
+        return "Last submitted: " + dateFormat.format(subDate);
     }
 
     public static void updateSymptomSubmitTime(Activity av) {
@@ -525,15 +518,14 @@ public class Utils {
             Log.e("logme", "days betweeen " + diff);
 
             return diff >= submitThresh;
-        }
-        catch(Exception e) {
-            Log.e("logme",e.getMessage());
+        } catch (Exception e) {
+            Log.e("logme", e.getMessage());
         }
         return false;
     }
 
     public static int daysBetween(Date d1, Date d2) {
-        return (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
+        return (int) ((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
     }
 
     public static void clearPreferences(Context cxt) {
@@ -546,9 +538,8 @@ public class Utils {
     public static int byteConvert(byte i) {
         if (i > 0) {
             return i;
-        }
-        else {
-            return i&0xff;
+        } else {
+            return i & 0xff;
         }
     }
 }

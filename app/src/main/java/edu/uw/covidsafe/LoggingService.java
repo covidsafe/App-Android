@@ -1,3 +1,4 @@
+/*
 package edu.uw.covidsafe;
 
 import android.app.IntentService;
@@ -84,4 +85,4 @@ public class LoggingService extends IntentService {
         Constants.LoggingServiceRunning = false;
     }
 
-}
+}*/
