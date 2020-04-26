@@ -77,7 +77,10 @@ public class SymptomSummaryRecyclerViewAdapter2 extends RecyclerView.Adapter<Rec
         }
 
         SymptomsRecord record = records.get(currentSymptomCounter);
-        String symptom = record.getSymptoms().get(currentSubSymptomCounter);
+        String symptom = "";
+        if (currentSubSymptomCounter < record.getSymptoms().size()) {
+            symptom = record.getSymptoms().get(currentSubSymptomCounter);
+        }
 
         Log.e("adapter","currentSymptomCounter "+currentSymptomCounter);
         Log.e("adapter","currentSubSymptomCounter "+currentSubSymptomCounter);
