@@ -26,18 +26,6 @@ import java.util.Map;
 
 public class BluetoothScanHelper implements Runnable {
 
-    public static AdvertiseCallback advertiseCallback = new AdvertiseCallback() {
-        @Override
-        public void onStartSuccess(AdvertiseSettings settingsInEffect) {
-            Log.e("ble", "BLE advertisement added successfully "+settingsInEffect.toString());
-        }
-
-        @Override
-        public void onStartFailure(int errorCode) {
-            Log.e("ble", "Failed to add BLE advertisement, reason: " + errorCode);
-        }
-    };
-
     static Context cxt;
 
     public BluetoothScanHelper(Context cxt) {

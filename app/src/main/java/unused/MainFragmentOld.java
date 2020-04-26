@@ -188,7 +188,7 @@ public class MainFragmentOld extends Fragment {
                         }
                     }
 
-                    Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothScanHelper.advertiseCallback);
+                    Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothUtils.advertiseCallback);
                     BluetoothUtils.finishScan(getContext());
 //                    if (Constants.uploadTask!=null) {
 //                        Constants.uploadTask.cancel(true);
