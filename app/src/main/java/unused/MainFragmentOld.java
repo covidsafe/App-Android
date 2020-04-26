@@ -22,18 +22,18 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.covidsafe.R;
+
+import java.util.UUID;
+
+import edu.uw.covidsafe.LoggingServiceV2;
 import edu.uw.covidsafe.ble.BluetoothScanHelper;
 import edu.uw.covidsafe.ble.BluetoothServerHelper;
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.ui.health.TipRecyclerViewAdapter;
 import edu.uw.covidsafe.utils.Constants;
-import edu.uw.covidsafe.LoggingService;
-import com.example.covidsafe.R;
-
 import edu.uw.covidsafe.utils.Utils;
-
-import java.util.UUID;
 
 public class MainFragmentOld extends Fragment {
 
@@ -48,7 +48,7 @@ public class MainFragmentOld extends Fragment {
 //            view = inflater.inflate(R.layout.fragment_main_debug, container, false);
 //        }
 //        else {
-            view = inflater.inflate(R.layout.fragment_main_old, container, false);
+        view = inflater.inflate(R.layout.fragment_main_old, container, false);
 //        }
 
         RecyclerView rview = view.findViewById(R.id.recyclerViewDiagnosis);
@@ -64,7 +64,7 @@ public class MainFragmentOld extends Fragment {
     public void onResume() {
         super.onResume();
 //        new SendInfectedUserData(getContext(),"","",0).execute();
-        Log.e("logme","main fragment onresume");
+        Log.e("logme", "main fragment onresume");
 
         SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
 
@@ -83,7 +83,7 @@ public class MainFragmentOld extends Fragment {
 //            }
 //        });
 
-        Switch bleSwitch = (Switch)getActivity().findViewById(R.id.bleSwitch);
+        Switch bleSwitch = (Switch) getActivity().findViewById(R.id.bleSwitch);
         bleSwitch.setChecked(prefs.getBoolean("bleEnabled", Constants.BLUETOOTH_ENABLED));
 
         bleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -95,7 +95,7 @@ public class MainFragmentOld extends Fragment {
             }
         });
 
-        Switch gpsSwitch = (Switch)getActivity().findViewById(R.id.gpsSwitch);
+        Switch gpsSwitch = (Switch) getActivity().findViewById(R.id.gpsSwitch);
         gpsSwitch.setChecked(prefs.getBoolean("gpsEnabled", Constants.GPS_ENABLED));
 
         gpsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -110,19 +110,19 @@ public class MainFragmentOld extends Fragment {
         Constants.CurrentFragment = this;
         Constants.MainFragment = this;
 
-        bleBeaconId = (TextView)getActivity().findViewById(R.id.uuidView);
+        bleBeaconId = (TextView) getActivity().findViewById(R.id.uuidView);
 
-        Utils.gpsResults = (TextView)getActivity().findViewById(R.id.gpsResults);
+        Utils.gpsResults = (TextView) getActivity().findViewById(R.id.gpsResults);
         Utils.gpsResults.setText("");
         Utils.gpsResults.setMovementMethod(new ScrollingMovementMethod());
 
-        Utils.bleResults = (TextView)getActivity().findViewById(R.id.bleResults);
+        Utils.bleResults = (TextView) getActivity().findViewById(R.id.bleResults);
         Utils.bleResults.setText("");
         Utils.bleResults.setMovementMethod(new ScrollingMovementMethod());
 
-        Utils.bleBeaconId = (TextView)getActivity().findViewById(R.id.uuidView);
+        Utils.bleBeaconId = (TextView) getActivity().findViewById(R.id.uuidView);
 
-        trackButton = (Button)getActivity().findViewById(R.id.trackButton);
+        trackButton = (Button) getActivity().findViewById(R.id.trackButton);
         updateUI();
 
         Constants.contactUUID = UUID.randomUUID();
@@ -135,27 +135,27 @@ public class MainFragmentOld extends Fragment {
                     Utils.bleLines = 0;
                     Constants.startingToTrack = true;
                     try {
-                        Log.e("logme","start service");
+                        Log.e("logme", "start service");
 
                         BluetoothManager bluetoothManager =
                                 (BluetoothManager) getActivity().getSystemService(Context.BLUETOOTH_SERVICE);
                         Constants.blueAdapter = bluetoothManager.getAdapter();
 
                         if (Constants.BLUETOOTH_ENABLED && !Utils.hasBlePermissions(getActivity())) {
-                            Log.e("aa","NO BLE PERMS");
+                            Log.e("aa", "NO BLE PERMS");
                             ActivityCompat.requestPermissions(getActivity(), Constants.blePermissions, 1);
                         }
 
                         if (Utils.hasBlePermissions(getActivity()) &&
-                            Constants.BLUETOOTH_ENABLED && (Constants.blueAdapter == null || !Constants.blueAdapter.isEnabled())) {
-                            Log.e("aa","BLE");
+                                Constants.BLUETOOTH_ENABLED && (Constants.blueAdapter == null || !Constants.blueAdapter.isEnabled())) {
+                            Log.e("aa", "BLE");
                             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                             getActivity().startActivityForResult(enableBtIntent, 0);
                         }
 
                         if (Constants.GPS_ENABLED && !Utils.hasGpsPermissions(getActivity())) {
 //                            if ((Constants.GPS_ENABLED || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) && !Utils.hasGpsPermissions(getActivity())) {
-                            Log.e("aa","PERMS");
+                            Log.e("aa", "PERMS");
                             ActivityCompat.requestPermissions(getActivity(), Constants.gpsPermissions, 2);
                         }
 
@@ -174,10 +174,10 @@ public class MainFragmentOld extends Fragment {
                     } catch (SecurityException e) {
                         Log.e("log", e.getMessage());
                     }
-                }
-                else {
-                    Log.e("logme","stop service");
-                    getActivity().stopService(new Intent(getActivity(), LoggingService.class));
+                } else {
+                    Log.e("logme", "stop service");
+                    //getActivity().stopService(new Intent(getActivity(), LoggingServiceV2.class));
+                   // Utils.haltLoggingService(this);
 
                     if (Constants.mLocationManager != null) {
                         try {
@@ -193,7 +193,7 @@ public class MainFragmentOld extends Fragment {
 //                    if (Constants.uploadTask!=null) {
 //                        Constants.uploadTask.cancel(true);
 //                    }
-                    if (Constants.uuidGeneartionTask!=null) {
+                    if (Constants.uuidGeneartionTask != null) {
                         Constants.uuidGeneartionTask.cancel(true);
                     }
                     BluetoothServerHelper.stopServer();
@@ -207,14 +207,13 @@ public class MainFragmentOld extends Fragment {
     }
 
     public void updateUI() {
-        Log.e("aa","updateui");
+        Log.e("aa", "updateui");
         if (Constants.tracking) {
-            Log.e("aa","yes");
+            Log.e("aa", "yes");
             trackButton.setText(getString(R.string.stop));
             trackButton.setBackgroundResource(R.drawable.stopbutton);
-        }
-        else {
-            Log.e("aa","no");
+        } else {
+            Log.e("aa", "no");
             trackButton.setText(getString(R.string.start));
             trackButton.setBackgroundResource(R.drawable.startbutton);
         }
