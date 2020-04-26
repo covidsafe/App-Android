@@ -3,6 +3,7 @@ package edu.uw.covidsafe.ble;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseData;
 import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.BluetoothLeAdvertiser;
@@ -36,6 +37,18 @@ import java.util.concurrent.TimeUnit;
 import static android.content.Context.BLUETOOTH_SERVICE;
 
 public class BluetoothUtils {
+
+    public static AdvertiseCallback advertiseCallback = new AdvertiseCallback() {
+        @Override
+        public void onStartSuccess(AdvertiseSettings settingsInEffect) {
+            Log.e("ble", "BLE advertisement added successfully "+settingsInEffect.toString());
+        }
+
+        @Override
+        public void onStartFailure(int errorCode) {
+            Log.e("ble", "Failed to add BLE advertisement, reason: " + errorCode);
+        }
+    };
 
     // react appropriately if user turns of bluetooth off/on in middle of logging
     // this broadcast receiver is only registered when the logging is in process
@@ -128,7 +141,7 @@ public class BluetoothUtils {
 
     public static void haltBle(Context av) {
         if (Constants.blueAdapter != null && Constants.blueAdapter.getBluetoothLeAdvertiser() != null) {
-            Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothScanHelper.advertiseCallback);
+            Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothUtils.advertiseCallback);
         }
         BluetoothUtils.finishScan(av);
         BluetoothServerHelper.stopServer();
@@ -182,7 +195,7 @@ public class BluetoothUtils {
                     .build();
             BluetoothLeAdvertiser bluetoothLeAdvertiser = Constants.blueAdapter.getBluetoothLeAdvertiser();
             Log.e("ble","start advertising");
-            bluetoothLeAdvertiser.startAdvertising(settings, advertiseData, BluetoothScanHelper.advertiseCallback);
+            bluetoothLeAdvertiser.startAdvertising(settings, advertiseData, BluetoothUtils.advertiseCallback);
         }
     }
 

@@ -46,7 +46,7 @@ public class UUIDGeneratorTask implements Runnable {
             }
             if (Constants.blueAdapter != null && Constants.blueAdapter.getBluetoothLeAdvertiser() != null) {
                 Log.e("ble", "about to stop advertising");
-                Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothScanHelper.advertiseCallback);
+                Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothUtils.advertiseCallback);
                 //restart beacon after UUID generation
                 Log.e("ble", "about to mkbeacon");
                 BluetoothUtils.mkBeacon(context);
