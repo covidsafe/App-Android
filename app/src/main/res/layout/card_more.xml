@@ -26,8 +26,8 @@
 
             <TextView
                 android:id="@+id/share"
-                android:layout_width="31dp"
-                android:layout_height="17dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/share_text"
                 android:textColor="@color/black"
                 android:textSize="16sp"
