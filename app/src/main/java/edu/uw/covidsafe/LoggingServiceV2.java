@@ -45,7 +45,8 @@ public class LoggingServiceV2 extends Service {
         // Perform logging work
         Log.d(TAG, "Service is running...");
         performLoggingWork();
-        return START_STICKY;
+//        return START_STICKY;
+        return super.onStartCommand(intent, flags, startId);
     }
 
     private void performLoggingWork() {
