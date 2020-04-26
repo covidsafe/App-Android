@@ -23,4 +23,4 @@ Our tool is built upon the following white paper:<br/>
 \* Corresponding authors
 
 
-**There are many more exciting additions that we wish to add to this repo and in other repos that are detailed in the issue trackers. We are looking people to contribute to this project, please look through the list of issues, and if you find one you want to work on specifically, email me (jucha@cs.washington.edu) and I can add you as a member of the Slack and Github org. I am also more than happy to walk you through the details of the current codebase so we can figure out how best to integrate your chosen feature.**
+**There are many more exciting additions that we wish to add to this repo and in other repos that are detailed in the issue trackers. We are looking for people to contribute to this project, please look through the list of issues, and if you find one you want to work on specifically, email me (jucha@cs.washington.edu) and I can add you as a member of the Slack and Github org. I am also more than happy to walk you through the details of the current codebase so we can figure out how best to integrate your chosen feature.**
