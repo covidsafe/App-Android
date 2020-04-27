@@ -96,7 +96,7 @@ public class SymptomSummaryRecyclerViewAdapter2 extends RecyclerView.Adapter<Rec
         ((SymptomSummaryHolder) holder).details.setVisibility(View.GONE);
 
         if (symptom.equals("fever")) {
-            ((SymptomSummaryHolder) holder).symptom.setText("Fever");
+            ((SymptomSummaryHolder) holder).symptom.setText(R.string.fever_txt);
             String details = "";
             if (record.getFeverOnset() != 0) {
                 details += "Onset date: "+format.format(record.getFeverOnset())+"\n";
@@ -113,13 +113,13 @@ public class SymptomSummaryRecyclerViewAdapter2 extends RecyclerView.Adapter<Rec
             }
         }
         else if (symptom.equals("abdominal")) {
-            ((SymptomSummaryHolder) holder).symptom.setText("Abdominal pain");
+            ((SymptomSummaryHolder) holder).symptom.setText(R.string.abdominal_pain_txt);
         }
         else if (symptom.equals("chills")) {
-            ((SymptomSummaryHolder) holder).symptom.setText("Chills");
+            ((SymptomSummaryHolder) holder).symptom.setText(R.string.chills_txt);
         }
         else if (symptom.equals("cough")) {
-            ((SymptomSummaryHolder) holder).symptom.setText("Cough");
+            ((SymptomSummaryHolder) holder).symptom.setText(R.string.cough_text);
             String details = "";
             if (record.getCoughOnset() != 0) {
                 details += "Onset date: "+format.format(record.getCoughOnset())+"\n";
@@ -136,22 +136,22 @@ public class SymptomSummaryRecyclerViewAdapter2 extends RecyclerView.Adapter<Rec
             }
         }
         else if (symptom.equals("diarrhea")) {
-            ((SymptomSummaryHolder) holder).symptom.setText("Diarrhea");
+            ((SymptomSummaryHolder) holder).symptom.setText(R.string.diarrhea_txt);
         }
         else if (symptom.equals("breathing")) {
-            ((SymptomSummaryHolder) holder).symptom.setText("Difficulty breathing");
+            ((SymptomSummaryHolder) holder).symptom.setText(R.string.difficult_in_breathing);
         }
         else if (symptom.equals("headache")) {
-            ((SymptomSummaryHolder) holder).symptom.setText("Headache");
+            ((SymptomSummaryHolder) holder).symptom.setText(R.string.headache_txt);
         }
         else if (symptom.equals("chest")) {
-            ((SymptomSummaryHolder) holder).symptom.setText("Chest pains");
+            ((SymptomSummaryHolder) holder).symptom.setText(R.string.chest_pain_txt);
         }
         else if (symptom.equals("sore")) {
-            ((SymptomSummaryHolder) holder).symptom.setText("Sore throat");
+            ((SymptomSummaryHolder) holder).symptom.setText(R.string.sore_throat_txt);
         }
         else if (symptom.equals("vomiting")) {
-            ((SymptomSummaryHolder) holder).symptom.setText("Vomiting");
+            ((SymptomSummaryHolder) holder).symptom.setText(R.string.vomitting_txt);
         }
         else {
             ((SymptomSummaryHolder) holder).layout.setVisibility(View.GONE);

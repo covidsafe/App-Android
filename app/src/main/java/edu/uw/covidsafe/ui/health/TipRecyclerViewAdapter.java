@@ -119,7 +119,7 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             av.runOnUiThread(new Runnable() {
                 public void run() {
                     if (tv!=null) {
-                        tv.setText("What to Do If You Are Sick");
+                        tv.setText(R.string.what_to_do_if_you_are_sick);
                         tv.setVisibility(View.VISIBLE);
                     }
                 }});

@@ -50,8 +50,8 @@ public class SymptomUtils {
         if (cxt==null) {return;}
         amImage.setImageDrawable(cxt.getResources().getDrawable(R.drawable.symptom_edit));
         pmImage.setImageDrawable(cxt.getResources().getDrawable(R.drawable.symptom_edit));
-        amStatus.setText("Not logged");
-        pmStatus.setText("Not logged");
+        amStatus.setText(R.string.not_logged_text);
+        pmStatus.setText(R.string.not_logged_text);
 
         amAction.setImageDrawable(cxt.getDrawable(R.drawable.ic_add_gray_24dp));
         pmAction.setImageDrawable(cxt.getDrawable(R.drawable.ic_add_gray_24dp));

@@ -359,7 +359,7 @@ public class MainFragment extends Fragment {
                 ObjectAnimator anim2 = ObjectAnimator.ofPropertyValuesHolder(broadcastTitle, a2);
                 anim2.setDuration(1000);
                 anim1.start();
-                broadcastTitle.setText("Broadcasting Off");
+                broadcastTitle.setText(getString(R.string.broadcasting_on_text));
                 anim2.start();
 
                 a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f,0f);
@@ -375,7 +375,7 @@ public class MainFragment extends Fragment {
             else {
                 broadcastSwitch.setImageDrawable(getActivity().getDrawable(R.drawable.switch_off));
                 broadcastRing.setAlpha(0f);
-                broadcastTitle.setText("Broadcasting Off");
+                broadcastTitle.setText(getString(R.string.broadcasting_off_text));
                 Utils.linkify(broadcastProp,getString(R.string.stopping));
             }
         }
@@ -393,7 +393,7 @@ public class MainFragment extends Fragment {
                 ObjectAnimator anim2 = ObjectAnimator.ofPropertyValuesHolder(broadcastTitle, a2);
                 anim2.setDuration(1000);
                 anim1.start();
-                broadcastTitle.setText("Broadcasting On");
+                broadcastTitle.setText(getString(R.string.broadcasting_on_text));
                 anim2.start();
 
                 a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f,0f);
@@ -409,7 +409,7 @@ public class MainFragment extends Fragment {
             else {
                 broadcastSwitch.setImageDrawable(getActivity().getDrawable(R.drawable.switch_on));
                 broadcastRing.setAlpha(1f);
-                broadcastTitle.setText("Broadcasting On");
+                broadcastTitle.setText(getString(R.string.broadcasting_on_text));
                 Utils.linkify(broadcastProp,getString(R.string.logging));
             }
         }

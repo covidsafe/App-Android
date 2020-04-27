@@ -69,7 +69,7 @@ public class NotifRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         SimpleDateFormat dateFormat = new SimpleDateFormat("M/d");
 
         if (rec.msgType == Constants.MessageType.Exposure.ordinal()) {
-            ((NotifCard)holder).header.setText("You might have been exposed");
+            ((NotifCard)holder).header.setText(cxt.getResources().getString(R.string.you_might_have_exposed));
 
             String tt = timeFormat.format(rec.getTs_start()) +"-"+ timeFormat2.format(rec.getTs_end());
 
@@ -80,7 +80,7 @@ public class NotifRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         }
         else {
             ((NotifCard)holder).message.setText(rec.msg);
-            ((NotifCard)holder).header.setText("Announcement");
+            ((NotifCard)holder).header.setText(R.string.announcement_txt);
             ((NotifCard)holder).contact.setText("");
             ((NotifCard)holder).contact.setVisibility(View.GONE);
             ((NotifCard)holder).icon.setImageDrawable(av.getDrawable(R.drawable.ic_info_outline_black_24dp));

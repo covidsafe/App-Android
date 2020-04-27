@@ -63,7 +63,7 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         else {
             av.runOnUiThread(new Runnable() {
                 public void run() {
-                    tv.setText("Exposure history");
+                    tv.setText(cxt.getResources().getString(R.string.exposure_history));
                     tv.setVisibility(View.VISIBLE);
                 }});
         }
