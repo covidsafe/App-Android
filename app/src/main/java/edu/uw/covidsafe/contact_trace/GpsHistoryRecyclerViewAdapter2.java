@@ -81,7 +81,7 @@ public class GpsHistoryRecyclerViewAdapter2 extends RecyclerView.Adapter<Recycle
                     address = addresses.get(0).getAddressLine(0);
                 } catch (IOException e) {
                     Log.e("err",e.getMessage());
-                    ((GpsHistoryHolder)holder).messageView.setText("Unknown address");
+                    ((GpsHistoryHolder)holder).messageView.setText(R.string.unknown_address_txt);
                 }
             }
         }

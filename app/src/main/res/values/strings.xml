@@ -304,13 +304,13 @@ Contact tracing is a process that helps identify all the people who may have com
         • Serious disorientation or unresponsiveness
     </string>
 
-    <string name="symptom1">Fever</string>
-    <string name="symptom2">Cough</string>
-    <string name="symptom3">Shortness of breath</string>
-    <string name="symptom4">Trouble breathing</string>
-    <string name="symptom5">Persistent pain or pressure in the chest</string>
-    <string name="symptom6">New confusion or inability to arouse</string>
-    <string name="symptom7">Bluish lips or face</string>
+    <string name="fever_txt">Fever</string>
+    <string name="cough_txt">Cough</string>
+    <string name="shortness_of_breath_txt">Shortness of breath</string>
+    <string name="trouble_breathing_txt">Trouble breathing</string>
+    <string name="persistent_pain_or_pressure_in_chest">Persistent pain or pressure in the chest</string>
+    <string name="new_confusion_inability_to_arouse">New confusion or inability to arouse</string>
+    <string name="bluish_lips_or_face">Bluish lips or face</string>
     <string name="certText">I certify that the information submitted in this report is true and correct to the best of my knowledge.</string>
     <string name="certDiagnosisText">I certify that I have been officially diagnosed with COVID-19</string>
 
@@ -324,6 +324,7 @@ Contact tracing is a process that helps identify all the people who may have com
     <string name="learn_more_link_text" comment="This is a button link which when clicked will take the user to the online resources">Learn More</string>
     <string name="settings_text" comment="This is the button for taking the users to the settings">Settings</string>
     <string name="broadcasting_on_text" comment="This is the text shown for broadcasting on">Broadcasting on</string>
+    <string name="broadcasting_off_text">Broadcasting off</string>
     <string name="broadcasting_description_text" comment="This is the broadcasting text that needs to be show to the user">Limited trace data is being collected. We keep your identity anonymous. Learn More.</string>
 
     <string name="emergency_call_text" comment="This is the emergency text that needs to be shown to the user on call tab">Call 911 immediately if you are having a medical emergency.</string>
@@ -399,6 +400,22 @@ You can prepare a list of informaton they will ask about based on information co
     <string name="save_text">Save</string>
     <string name="cough_text">Cough</string>
     <string name="cough_symptoms_text">A new, continuous cough - this means you\'ve started coughing repeatedly</string>
+    <string name="abdominal_pain_txt">Abdominal pain</string>
+    <string name="chills_txt">Chills</string>
+    <string name="diarrhea_txt">Diarrhea</string>
+    <string name="difficult_in_breathing">Difficulty breathing</string>
+    <string name="headache_txt">Headache</string>
+    <string name="chest_pain_txt">Chest pains</string>
+    <string name="sore_throat_txt">Sore throat</string>
+    <string name="vomitting_txt">Vomitting</string>
+    <string name="announcement_txt">Announcement</string>
+    <string name="bluetooth_is_disabled_on_this_device">Bluetooth is disabled on this device</string>
+    <string name="not_logged_txt">Not logged</string>
+    <string name="unknown_address_txt">Unknown address</string>
+    <string name="general_locations_txt">General Locations</string>
+    <string name="R.string.people_txt">People</string>
+    <string name="done_txt">Done</string>
+    <string name="export_as_email_txt">Export as email</string>
 
 
 </resources>

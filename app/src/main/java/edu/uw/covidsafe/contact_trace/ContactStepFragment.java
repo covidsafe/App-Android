@@ -126,7 +126,7 @@ public class ContactStepFragment extends Fragment {
                 pg4.setImageDrawable(getContext().getDrawable(R.drawable.todo_4));
                 tt.setText(getContext().getString(R.string.contact_title_1));
                 desc.setText(getContext().getString(R.string.contact_desc_1));
-                header2.setText("Symptoms");
+                header2.setText(R.string.symptoms_text);
 
                 RecyclerView tipView = view.findViewById(R.id.recyclerView);
                 symptomAdapter = new SymptomSummaryRecyclerViewAdapter2(getActivity(),getActivity(), view);
@@ -157,7 +157,7 @@ public class ContactStepFragment extends Fragment {
                 pg4.setImageDrawable(getContext().getDrawable(R.drawable.todo_4));
                 tt.setText(getContext().getString(R.string.contact_title_2));
                 desc.setText(getContext().getString(R.string.contact_desc_2));
-                header2.setText("General Locations");
+                header2.setText(R.string.general_locations_txt);
 
                 Constants.contactGpsAdapter = new GpsHistoryRecyclerViewAdapter2(getContext(), getActivity(), view);
                 RecyclerView tipView = view.findViewById(R.id.recyclerView);
@@ -187,7 +187,7 @@ public class ContactStepFragment extends Fragment {
                 pg4.setImageDrawable(getContext().getDrawable(R.drawable.todo_4));
                 tt.setText(getContext().getString(R.string.contact_title_3));
                 desc.setText(getContext().getString(R.string.contact_desc_3));
-                header2.setText("People");
+                header2.setText(R.string.R_string_people_txt);
 
                 actionButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -229,9 +229,9 @@ public class ContactStepFragment extends Fragment {
                 pg4.setImageDrawable(getContext().getDrawable(R.drawable.current_4));
                 tt.setText(getContext().getString(R.string.contact_title_4));
                 desc.setText(getContext().getString(R.string.contact_desc_4));
-                nextButton.setText("Done");
+                nextButton.setText(R.string.done_txt);
                 prevButton.setVisibility(View.VISIBLE);
-                prevButton.setText("Export as email");
+                prevButton.setText(R.string.export_as_email_txt);
                 prevButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
