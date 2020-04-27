@@ -413,7 +413,7 @@ You can prepare a list of informaton they will ask about based on information co
     <string name="not_logged_txt">Not logged</string>
     <string name="unknown_address_txt">Unknown address</string>
     <string name="general_locations_txt">General Locations</string>
-    <string name="R.string.people_txt">People</string>
+    <string name="people_txt">People</string>
     <string name="done_txt">Done</string>
     <string name="export_as_email_txt">Export as email</string>
 

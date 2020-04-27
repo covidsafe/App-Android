@@ -187,7 +187,7 @@ public class ContactStepFragment extends Fragment {
                 pg4.setImageDrawable(getContext().getDrawable(R.drawable.todo_4));
                 tt.setText(getContext().getString(R.string.contact_title_3));
                 desc.setText(getContext().getString(R.string.contact_desc_3));
-                header2.setText(R.string.R_string_people_txt);
+                header2.setText(R.string.people_txt);
 
                 actionButton.setOnClickListener(new View.OnClickListener() {
                     @Override
