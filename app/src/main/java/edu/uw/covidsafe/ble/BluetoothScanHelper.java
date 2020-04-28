@@ -26,7 +26,7 @@ import java.util.Map;
 
 public class BluetoothScanHelper implements Runnable {
 
-    static Context cxt;
+    Context cxt;
 
     public BluetoothScanHelper(Context cxt) {
         this.cxt = cxt;

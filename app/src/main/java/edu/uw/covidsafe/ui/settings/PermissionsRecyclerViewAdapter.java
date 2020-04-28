@@ -38,9 +38,9 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
     private ArrayList<String> titles = new ArrayList<>();
     private ArrayList<String> desc = new ArrayList<>();
     private ArrayList<Drawable> icons = new ArrayList<>();
-    static Context cxt;
-    static Activity av;
-    static View view;
+    Context cxt;
+    Activity av;
+    View view;
 
     public PermissionsRecyclerViewAdapter(Context cxt, Activity av, View view) {
         this.cxt = cxt;
@@ -150,7 +150,7 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                             // preemptively add the permission
                             AppPreferencesHelper.setNotificationEnabled(cxt, isChecked);
                             Log.e("perm", "notif set " + isChecked);
-                            makeOpenSettingsDialog();
+                            makeOpenSettingsDialog(av,cxt);
                         }
                     }
                 }
@@ -185,9 +185,9 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             }});
     }
 
-    public static void makeOpenSettingsDialog() {
+    public static void makeOpenSettingsDialog(Activity av, Context cxt) {
         AlertDialog dialog = new MaterialAlertDialogBuilder(av)
-                .setTitle(cxt.getString(R.string.perm_denied))
+                .setTitle(av.getString(R.string.perm_denied))
                 .setMessage(av.getString(R.string.perm_notifs_ask))
                 .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                     @Override

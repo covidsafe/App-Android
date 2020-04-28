@@ -9,30 +9,29 @@ import edu.uw.covidsafe.utils.Utils;
 import java.util.List;
 
 public class BleOpsAsyncTask extends AsyncTask<Void, Void, Void> {
-    private Context context;
+    private BleDbRecordRepository repo;
     private BleRecord result;
     private Constants.BleDatabaseOps op;
 
-    public BleOpsAsyncTask(Context activity, String id, int rssi, long ts) {
-        this.context = activity;
+    public BleOpsAsyncTask(Context cxt, String id, int rssi, long ts) {
+        repo = new BleDbRecordRepository(cxt);
         this.result = new BleRecord(id, ts, rssi);
         this.op = Constants.BleDatabaseOps.Insert;
     }
 
     public BleOpsAsyncTask(Context cxt, Constants.BleDatabaseOps op) {
-        this.context = cxt;
+        repo = new BleDbRecordRepository(cxt);
         this.op = op;
     }
 
     @Override
     protected Void doInBackground(Void... params) {
         Log.e("ble","doinbackground ble "+this.op);
-        BleDbRecordRepository repo = new BleDbRecordRepository(context);
         if (this.op == Constants.BleDatabaseOps.Insert) {
             repo.insert(this.result);
-            if (Constants.WRITE_TO_DISK) {
-                Utils.bleLogToFile(this.context, this.result);
-            }
+//            if (Constants.WRITE_TO_DISK) {
+//                Utils.bleLogToFile(this.context, this.result);
+//            }
         }
         else if (this.op == Constants.BleDatabaseOps.ViewAll) {
             List<BleRecord> records = repo.getAllRecords();

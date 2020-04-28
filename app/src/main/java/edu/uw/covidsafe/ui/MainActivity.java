@@ -221,6 +221,7 @@ public class MainActivity extends AppCompatActivity {
                     String photo = c.getString(c.getColumnIndex(ContactsContract.Contacts.PHOTO_URI));
                     new HumanOpsAsyncTask(this, phone, name, photo).execute();
                 }
+                c.close();
             }
         }
     }

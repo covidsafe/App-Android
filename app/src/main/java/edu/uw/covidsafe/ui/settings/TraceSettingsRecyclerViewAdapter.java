@@ -24,9 +24,9 @@ import edu.uw.covidsafe.utils.Constants;
 
 public class TraceSettingsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    static Context cxt;
-    static Activity av;
-    static View view;
+    Context cxt;
+    Activity av;
+    View view;
     List<String> names = new LinkedList<>();
     List<String> descs = new LinkedList<>();
     List<Drawable> icons = new LinkedList<>();

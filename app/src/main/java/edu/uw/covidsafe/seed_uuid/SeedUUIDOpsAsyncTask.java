@@ -11,39 +11,38 @@ import java.util.List;
 import java.util.UUID;
 
 public class SeedUUIDOpsAsyncTask extends AsyncTask<Void, Void, Void> {
-    private Context context;
+    private SeedUUIDDbRecordRepository repo;
     private SeedUUIDRecord record;
     private List<SeedUUIDRecord> records;
     private Constants.UUIDDatabaseOps op;
     public String msg="";
 
     public SeedUUIDOpsAsyncTask(Context context, SeedUUIDRecord record) {
-        this.context = context;
+        repo = new SeedUUIDDbRecordRepository(context);
         this.record = record;
         this.op = Constants.UUIDDatabaseOps.Insert;
     }
 
     public SeedUUIDOpsAsyncTask(Context context, List<SeedUUIDRecord> records) {
-        this.context = context;
+        repo = new SeedUUIDDbRecordRepository(context);
         this.records = records;
         this.op = Constants.UUIDDatabaseOps.BatchInsert;
     }
 
     public SeedUUIDOpsAsyncTask(Constants.UUIDDatabaseOps ops, Context context) {
         this.op = ops;
-        this.context = context;
+        repo = new SeedUUIDDbRecordRepository(context);
     }
 
     @Override
     protected Void doInBackground(Void... params) {
         Log.e("uuid","doinbackground uuid "+this.op);
-        SeedUUIDDbRecordRepository repo = new SeedUUIDDbRecordRepository(context);
         if (this.op == Constants.UUIDDatabaseOps.Insert) {
             Log.e("uuid","insert "+this.record.getRawTs() + " "+msg);
             repo.insert(this.record);
-            if (Constants.WRITE_TO_DISK) {
-                Utils.uuidLogToFile(this.context, this.record);
-            }
+//            if (Constants.WRITE_TO_DISK) {
+//                Utils.uuidLogToFile(this.context, this.record);
+//            }
         }
         else if (this.op == Constants.UUIDDatabaseOps.BatchInsert) {
             Log.e("uuid","batch insert "+records.size());
@@ -52,9 +51,9 @@ public class SeedUUIDOpsAsyncTask extends AsyncTask<Void, Void, Void> {
                 Log.e("uuid","insert "+counter);
                 counter++;
                 repo.insert(record);
-                if (Constants.WRITE_TO_DISK) {
-                    Utils.uuidLogToFile(this.context, record);
-                }
+//                if (Constants.WRITE_TO_DISK) {
+//                    Utils.uuidLogToFile(this.context, record);
+//                }
             }
         }
         else if (this.op == Constants.UUIDDatabaseOps.ViewAll) {

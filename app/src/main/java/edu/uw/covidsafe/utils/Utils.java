@@ -56,9 +56,6 @@ public class Utils {
 
     public static int gpsLines = 0;
     public static int bleLines = 0;
-    public static TextView gpsResults;
-    public static TextView bleResults;
-    public static TextView bleBeaconId;
 
     public static void haltLoggingService(Activity av, View view) {
         if (Constants.LoggingServiceRunning && view != null) {

@@ -22,7 +22,7 @@ import edu.uw.covidsafe.utils.Constants;
 
 public class ContactLogFragment extends Fragment {
 
-    static View view;
+    View view;
     ContactLogPageAdapter adapter;
 
     @SuppressLint("RestrictedApi")

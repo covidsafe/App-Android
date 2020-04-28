@@ -112,16 +112,6 @@ public class MainFragmentOld extends Fragment {
 
         bleBeaconId = (TextView) getActivity().findViewById(R.id.uuidView);
 
-        Utils.gpsResults = (TextView) getActivity().findViewById(R.id.gpsResults);
-        Utils.gpsResults.setText("");
-        Utils.gpsResults.setMovementMethod(new ScrollingMovementMethod());
-
-        Utils.bleResults = (TextView) getActivity().findViewById(R.id.bleResults);
-        Utils.bleResults.setText("");
-        Utils.bleResults.setMovementMethod(new ScrollingMovementMethod());
-
-        Utils.bleBeaconId = (TextView) getActivity().findViewById(R.id.uuidView);
-
         trackButton = (Button) getActivity().findViewById(R.id.trackButton);
         updateUI();
 

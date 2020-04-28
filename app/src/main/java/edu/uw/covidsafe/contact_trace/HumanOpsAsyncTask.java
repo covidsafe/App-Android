@@ -9,23 +9,23 @@ import edu.uw.covidsafe.utils.Utils;
 import java.util.List;
 
 public class HumanOpsAsyncTask extends AsyncTask<Void, Void, Void> {
-    private Context context;
+    private HumanDbRecordRepository repo;
     private HumanRecord result;
     private Constants.HumanDatabaseOps op;
 
-    public HumanOpsAsyncTask(Context activity, String phone, String name, String imageUri) {
-        this.context = activity;
+    public HumanOpsAsyncTask(Context cxt, String phone, String name, String imageUri) {
+        repo = new HumanDbRecordRepository(cxt);
         this.result = new HumanRecord(phone, name, imageUri);
         this.op = Constants.HumanDatabaseOps.Insert;
     }
 
-    public HumanOpsAsyncTask(Context activity, Constants.HumanDatabaseOps op) {
-        this.context = activity;
+    public HumanOpsAsyncTask(Context cxt, Constants.HumanDatabaseOps op) {
+        repo = new HumanDbRecordRepository(cxt);
         this.op = op;
     }
 
-    public HumanOpsAsyncTask(Context activity, Constants.HumanDatabaseOps op, HumanRecord record) {
-        this.context = activity;
+    public HumanOpsAsyncTask(Context cxt, Constants.HumanDatabaseOps op, HumanRecord record) {
+        repo = new HumanDbRecordRepository(cxt);
         this.op = op;
         this.result = record;
     }
@@ -33,7 +33,6 @@ public class HumanOpsAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... params) {
         Log.e("human","doinbackground human "+this.op);
-        HumanDbRecordRepository repo = new HumanDbRecordRepository(context);
         if (this.op == Constants.HumanDatabaseOps.Insert) {
             repo.insert(this.result);
         }
