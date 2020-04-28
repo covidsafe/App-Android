@@ -233,6 +233,7 @@ Contact tracing is a process that helps identify all the people who may have com
 
     <string name="error_submitting_data">There was an error with submitting your traces. Please try again later.</string>
     <string name="confirm_info">Please confirm this information is accurate</string>
+    <string name="gen_error">An error occurred. Please try again later.</string>
 
     <string name="ok">Ok</string>
     <string name="yes">Yes</string>

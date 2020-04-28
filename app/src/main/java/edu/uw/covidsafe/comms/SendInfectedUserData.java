@@ -93,7 +93,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         if (generatedRecord == null) {
             Log.e("demo","get zeroth seed");
             if (allRecords.size() == 0) {
-                mkSnack(av, view, "An error occurred. Please try again later.");
+                mkSnack(av, view, av.getString(R.string.gen_error));
                 status = false;
                 return null;
             }
