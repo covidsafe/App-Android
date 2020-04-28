@@ -50,6 +50,10 @@ public class GpsDbRecordRepository {
         mRecordDao.deleteAll();
     }
 
+    public void delete(long ts) {
+        mRecordDao.delete(ts);
+    }
+
     public void deleteEarlierThan(long ts_thresh) {
         mRecordDao.deleteEarlierThan(ts_thresh);
     }

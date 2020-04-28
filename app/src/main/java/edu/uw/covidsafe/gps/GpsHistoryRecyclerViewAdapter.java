@@ -2,15 +2,20 @@ package edu.uw.covidsafe.gps;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.example.covidsafe.R;
@@ -35,6 +40,8 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.uw.covidsafe.comms.NetworkHelper;
+import edu.uw.covidsafe.contact_trace.HumanOpsAsyncTask;
+import edu.uw.covidsafe.contact_trace.HumanRecord;
 import edu.uw.covidsafe.symptoms.SymptomsOpsAsyncTask;
 import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.notif.NotifRecord;
@@ -87,6 +94,12 @@ public class GpsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         String time = format.format(record.getTs());
         ((GpsHistoryHolder)holder).loc.setText(address);
         ((GpsHistoryHolder)holder).time.setText(time);
+        ((GpsHistoryHolder) holder).bb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                makeMenu(((GpsHistoryHolder) holder).bb, record);
+            }
+        });
     }
 
     public void setRecords(List<GpsRecord> records, Context cxt) {
@@ -135,11 +148,45 @@ public class GpsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     public class GpsHistoryHolder extends RecyclerView.ViewHolder {
         TextView loc;
         TextView time;
+        ImageButton bb;
 
         GpsHistoryHolder(@NonNull View itemView) {
             super(itemView);
             this.loc = itemView.findViewById(R.id.loc);
             this.time = itemView.findViewById(R.id.time);
+            this.bb = itemView.findViewById(R.id.overflow);
         }
+    }
+
+    public void makeMenu(View view, GpsRecord record) {
+        PopupMenu popup = new PopupMenu(mContext, view);
+        MenuInflater inflater = popup.getMenuInflater();
+//        ((MenuBuilder)popup.getMenu()).setOptionalIconsVisible(true);
+        inflater.inflate(R.menu.overflow_menu, popup.getMenu());
+        popup.getMenu().findItem(R.id.editItem).setVisible(false);
+
+        //registering popup with OnMenuItemClickListener
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.deleteItem:
+                        AlertDialog dialog = new MaterialAlertDialogBuilder(av)
+                                .setTitle(mContext.getString(R.string.sure_delete))
+                                .setNegativeButton(mContext.getString(R.string.cancel), null)
+                                .setPositiveButton(mContext.getString(R.string.yes), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        SimpleDateFormat outformat = new SimpleDateFormat("MM/dd h:mm aa");
+                                        new GpsOpsAsyncTask(mContext, Constants.GpsDatabaseOps.Delete, record.getTs()).execute();
+                                    }
+                                })
+                                .setCancelable(true).create();
+                        dialog.show();
+                        break;
+                }
+                return true;
+            }
+        });
+        popup.show();
     }
 }

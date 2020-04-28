@@ -16,6 +16,7 @@ GpsOpsAsyncTask extends AsyncTask<Void, Void, Void> {
     private Context context;
     private GpsRecord record;
     private Constants.GpsDatabaseOps op;
+    long ts;
 
     public GpsOpsAsyncTask(Context context, Location loc, long ts) {
         Log.e("gps", "gps ops async task constructor");
@@ -33,6 +34,12 @@ GpsOpsAsyncTask extends AsyncTask<Void, Void, Void> {
     public GpsOpsAsyncTask(Constants.GpsDatabaseOps op, Context cxt) {
         this.op = op;
         this.context = cxt;
+    }
+
+    public GpsOpsAsyncTask(Context cxt, Constants.GpsDatabaseOps op, long ts) {
+        this.op = op;
+        this.context = cxt;
+        this.ts = ts;
     }
 
     @Override
@@ -60,6 +67,9 @@ GpsOpsAsyncTask extends AsyncTask<Void, Void, Void> {
             for (GpsRecord record : records) {
                 Log.e("gps",record.toString());
             }
+        }
+        else if (this.op == Constants.GpsDatabaseOps.Delete) {
+            repo.delete(ts);
         }
         else if (this.op == Constants.GpsDatabaseOps.DeleteAll) {
             repo.deleteAll();

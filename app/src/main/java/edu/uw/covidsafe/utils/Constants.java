@@ -87,7 +87,7 @@ public class Constants {
     }
 
     public enum GpsDatabaseOps {
-        Insert,ViewAll,DeleteAll
+        Insert,ViewAll,DeleteAll,Delete
     }
 
     public enum UUIDDatabaseOps {
