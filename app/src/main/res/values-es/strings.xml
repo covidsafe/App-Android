@@ -247,9 +247,7 @@
     <string comment="Severity of the symptom" name="card_symptom_severity_severe">Grave</string>
 
     <string comment="text if the storage is local" name="card_data_storage_local">Almacenamiento local de datos</string>
-    <string comment="local data expiration1" name="card_data_storage_local_expiration1">Sus datos caducarán el</string>
-    <string comment="local data expiration2" name="card_data_storage_local_expiration2">En esta fecha, los registros de síntomas y los datos de ubicación se eliminarán de la aplicación. Esta acción no se puede deshacer. \N</string>
-
+    <string name="card_data_storage_local_expiration" comment="local data expiration">Sus datos caducarán en %1$s\nEn esta fecha, los registros de síntomas y los datos de ubicación se eliminarán de la aplicación. Esta acción no se puede deshacer.\n</string>
     <string comment="text for changing settings" name="change_in_settings_text">Cambio en la configuración</string>
     <string name="highest_temperature_text">Temperatura más alta</string>
     <string name="severity">Gravedad</string>
