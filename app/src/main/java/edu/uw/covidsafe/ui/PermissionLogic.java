@@ -48,6 +48,7 @@ public class PermissionLogic {
             } else if (!shouldAsk) {
                 makeOpenSettingsDialog(av, Manifest.permission.READ_CONTACTS, requestCode);
             }
+            return;
         }
 
 
@@ -159,7 +160,7 @@ public class PermissionLogic {
 
         String msg;
         if (perm.equals(Manifest.permission.READ_CONTACTS)) {
-            msg = av.getString(R.string.perm_ble_rationale);
+            msg = av.getString(R.string.perm_contacts_rationale);
         }
         else {
             msg = av.getString(R.string.perm_ble_rationale);
