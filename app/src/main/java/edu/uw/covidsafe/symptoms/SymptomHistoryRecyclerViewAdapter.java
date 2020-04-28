@@ -67,7 +67,7 @@ public class SymptomHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         ((SymptomHistoryHolder)holder).amStatus.setText(R.string.not_logged_txt);
         ((SymptomHistoryHolder)holder).pmStatus.setText(R.string.not_logged_text);
         SimpleDateFormat outformat = new SimpleDateFormat("h:mm aa");
-        SimpleDateFormat outformat2 = new SimpleDateFormat("MMMM dd, YYYY");
+        SimpleDateFormat outformat2 = new SimpleDateFormat("MMMM dd, yyyy");
 
 //        ((SymptomHistoryHolder)holder).dayAction.setOnClickListener(new View.OnClickListener() {
 //            @Override

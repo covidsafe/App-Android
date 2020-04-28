@@ -178,11 +178,13 @@ public class ContactLogFragment extends Fragment {
         SimpleDateFormat month = new SimpleDateFormat("MM");
         SimpleDateFormat day = new SimpleDateFormat("dd");
 
-        for (GpsRecord record : changedRecords) {
-            Date ts = new Date(record.getTs());
-            markedDays.add(CalendarDay.from(Integer.parseInt(year.format(ts)),
-                    Integer.parseInt(month.format(ts)),
-                    Integer.parseInt(day.format(ts))));
+        if (changedRecords != null) {
+            for (GpsRecord record : changedRecords) {
+                Date ts = new Date(record.getTs());
+                markedDays.add(CalendarDay.from(Integer.parseInt(year.format(ts)),
+                        Integer.parseInt(month.format(ts)),
+                        Integer.parseInt(day.format(ts))));
+            }
         }
 
         if (cxt != null) {
@@ -221,7 +223,7 @@ public class ContactLogFragment extends Fragment {
         if (Constants.menu != null && Constants.menu.findItem(R.id.mybutton) != null) {
             Constants.menu.findItem(R.id.mybutton).setVisible(true);
         }
-        if (gpsDbChanged) {
+        if (gpsDbChanged ) {
             Log.e("contact","db changed ");
             updateLocationView(cal.getSelectedDate(), getContext());
             gpsDbChanged = false;
