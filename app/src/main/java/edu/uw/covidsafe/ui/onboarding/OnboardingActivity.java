@@ -155,6 +155,12 @@ public class OnboardingActivity extends AppCompatActivity {
 
             new HumanOpsAsyncTask(this, "1234","Alice","").execute();
             new HumanOpsAsyncTask(this, "5678","Bob","").execute();
+            new HumanOpsAsyncTask(this, "5678","Charlie","").execute();
+            new HumanOpsAsyncTask(this, "5678","David","").execute();
+            new HumanOpsAsyncTask(this, "5678","Ernie","").execute();
+            new HumanOpsAsyncTask(this, "5678","Francis","").execute();
+            new HumanOpsAsyncTask(this, "5678","George","").execute();
+            new HumanOpsAsyncTask(this, "5678","Harry","").execute();
         }
         catch(Exception e) {
             Log.e("err",e.getMessage());

@@ -351,10 +351,23 @@ public class MainActivity extends AppCompatActivity {
     public void initView() {
         if (Constants.CurrentFragment != null &&
             !Constants.CurrentFragment.toString().toLowerCase().contains("permission") &&
-            !Constants.CurrentFragment.toString().toLowerCase().contains("contactstep")) {
+                !Constants.CurrentFragment.toString().toLowerCase().contains("contactstep")&&
+                !Constants.CurrentFragment.toString().toLowerCase().contains("people")&&
+                !Constants.CurrentFragment.toString().toLowerCase().contains("location")) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.CurrentFragment).commit();
         } else if (Constants.CurrentFragment != null&&Constants.CurrentFragment.toString().toLowerCase().contains("contactstep")) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.ContactTraceFragment).commit();
+        }else if (Constants.CurrentFragment != null&&Constants.CurrentFragment.toString().toLowerCase().contains("people")) {
+            Bundle data = new Bundle();
+            data.putInt("pg", 1);
+            Constants.ContactLogFragment.setArguments(data);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.ContactLogFragment).commit();
+        }
+        else if (Constants.CurrentFragment != null&&Constants.CurrentFragment.toString().toLowerCase().contains("location")) {
+            Bundle data = new Bundle();
+            data.putInt("pg", 0);
+            Constants.ContactLogFragment.setArguments(data);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.ContactLogFragment).commit();
         }
         else {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.MainFragment).commit();

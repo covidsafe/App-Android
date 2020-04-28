@@ -55,7 +55,10 @@ public class ContactLogFragment extends Fragment {
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(Constants.contactLogViewPager);
 
-        Constants.contactLogCal = view.findViewById(R.id.calendarView);
+        Bundle extras = getArguments();
+        if (extras != null && extras.containsKey("pg")) {
+            Constants.contactLogViewPager.setCurrentItem(extras.getInt("pg"));
+        }
 
         return view;
     }

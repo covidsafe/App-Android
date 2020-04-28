@@ -90,7 +90,7 @@ public class PeopleFragment extends Fragment {
                 else {
                     Intent pickContact = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
                     pickContact.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
-                    getActivity().startActivityForResult(pickContact, 2);
+                    ((MainActivity) getActivity()).startActivityForResult(pickContact, 2);
                 }
             }
         });
@@ -130,7 +130,7 @@ public class PeopleFragment extends Fragment {
         Constants.CurrentFragment = this;
 
         if (Constants.menu != null && Constants.menu.findItem(R.id.mybutton) != null) {
-            Constants.menu.findItem(R.id.mybutton).setVisible(true);
+            Constants.menu.findItem(R.id.mybutton).setVisible(false);
         }
         if (humanDbChanged) {
             Log.e("contact","db changed ");

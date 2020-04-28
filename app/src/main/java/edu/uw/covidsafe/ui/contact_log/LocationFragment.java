@@ -107,6 +107,7 @@ public class LocationFragment extends Fragment {
     }
 
     public void initCal() {
+        Constants.contactLogCal = view.findViewById(R.id.calendarView);
         /////////////////////////////////////////////////////////////////
         SharedPreferences prefs = getContext().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         int days = prefs.getInt(getContext().getString(R.string.infection_window_in_days_pkeys), Constants.DefaultInfectionWindowInDays);

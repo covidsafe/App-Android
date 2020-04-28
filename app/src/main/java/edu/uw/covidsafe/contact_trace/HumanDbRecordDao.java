@@ -25,6 +25,6 @@ public interface HumanDbRecordDao {
     @Query("DELETE FROM human_record_table WHERE name == :name")
     void delete(String name);
 
-    @Query("SELECT * FROM human_record_table ORDER BY name DESC")
+    @Query("SELECT * FROM human_record_table ORDER BY name")
     LiveData<List<HumanRecord>> getSortedRecords();
 }
