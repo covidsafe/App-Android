@@ -241,6 +241,7 @@
     <string name="what_happen_when_i_submit_report">¿Qué sucede cuando envío mi informe?</string>
     <string name="symptoms_text">Síntomas</string>
     <string name="location_text">Ubicación</string>
+    <string name="locations_text">Ubicaciónes</string>
     <string name="people_text">Personas</string>
     <string name="summary_text">Resumen</string>
     <string name="review_which_symptoms_to_include">Revise qué síntomas le gustaría incluir.</string>

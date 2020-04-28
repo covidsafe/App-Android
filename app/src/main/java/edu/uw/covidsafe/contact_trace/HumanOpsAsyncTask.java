@@ -19,6 +19,11 @@ public class HumanOpsAsyncTask extends AsyncTask<Void, Void, Void> {
         this.op = Constants.HumanDatabaseOps.Insert;
     }
 
+    public HumanOpsAsyncTask(Context activity, Constants.HumanDatabaseOps op) {
+        this.context = activity;
+        this.op = op;
+    }
+
     public HumanOpsAsyncTask(Context activity, Constants.HumanDatabaseOps op, HumanRecord record) {
         this.context = activity;
         this.op = op;
@@ -34,6 +39,9 @@ public class HumanOpsAsyncTask extends AsyncTask<Void, Void, Void> {
         }
         else if (this.op == Constants.HumanDatabaseOps.Delete) {
             repo.delete(this.result.getName());
+        }
+        else if (this.op == Constants.HumanDatabaseOps.DeleteAll) {
+            repo.deleteAll();
         }
         return null;
     }

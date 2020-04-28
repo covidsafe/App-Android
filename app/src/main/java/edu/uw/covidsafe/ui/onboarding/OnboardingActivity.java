@@ -22,6 +22,7 @@ import java.util.Date;
 import edu.uw.covidsafe.ble.BleOpsAsyncTask;
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.comms.NetworkConstant;
+import edu.uw.covidsafe.contact_trace.HumanOpsAsyncTask;
 import edu.uw.covidsafe.gps.GpsOpsAsyncTask;
 import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.preferences.AppPreferencesHelper;
@@ -89,6 +90,7 @@ public class OnboardingActivity extends AppCompatActivity {
         new GpsOpsAsyncTask(Constants.GpsDatabaseOps.DeleteAll, this).execute();
         new SeedUUIDOpsAsyncTask(Constants.UUIDDatabaseOps.DeleteAll, this).execute();
         new BleOpsAsyncTask(this, Constants.BleDatabaseOps.DeleteAll).execute();
+        new HumanOpsAsyncTask(this, Constants.HumanDatabaseOps.DeleteAll).execute();
 
         SharedPreferences prefs = activity.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
@@ -150,6 +152,9 @@ public class OnboardingActivity extends AppCompatActivity {
             new GpsOpsAsyncTask(new GpsRecord(
                     d4.getTime(), lats[4],lons[4],"",this
             ), this).execute();
+
+            new HumanOpsAsyncTask(this, "1234","Alice","").execute();
+            new HumanOpsAsyncTask(this, "5678","Bob","").execute();
         }
         catch(Exception e) {
             Log.e("err",e.getMessage());

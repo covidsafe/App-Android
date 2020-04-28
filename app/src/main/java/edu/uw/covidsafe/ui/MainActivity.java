@@ -36,6 +36,7 @@ import edu.uw.covidsafe.symptoms.SymptomTrackerFragment;
 import edu.uw.covidsafe.symptoms.SymptomsOpsAsyncTask;
 import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.contact_log.ContactLogFragment;
+import edu.uw.covidsafe.ui.contact_log.LocationFragment;
 import edu.uw.covidsafe.ui.health.TipRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.HistoryRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
@@ -244,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
         Log.e("date","cal setup");
         Calendar myCalendar = Calendar.getInstance();
 
-        if (Constants.CurrentFragment.toString().toLowerCase().contains("contactlog")) {
+        if (Constants.CurrentFragment.toString().toLowerCase().contains("location")) {
             Log.e("date","contact");
             myCalendar = Constants.contactLogMonthCalendar;
         }
@@ -297,8 +298,8 @@ public class MainActivity extends AppCompatActivity {
                 int month = finalMyCalendar.get(Calendar.MONTH)+1;
                 int day = finalMyCalendar.get(Calendar.DAY_OF_MONTH);
                 Log.e("date","ok "+year+","+month+","+day);
-                if (Constants.CurrentFragment.toString().toLowerCase().contains("contactlog")) {
-                    ContactLogFragment.updateLocationView(CalendarDay.from(year,month,day),
+                if (Constants.CurrentFragment.toString().toLowerCase().contains("location")) {
+                    LocationFragment.updateLocationView(CalendarDay.from(year,month,day),
                             getApplicationContext());
                 }
                 else if (Constants.CurrentFragment.toString().toLowerCase().contains("health")) {

@@ -17,6 +17,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.covidsafe.R;
 import com.google.common.collect.Lists;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 
 import edu.uw.covidsafe.preferences.AppPreferencesHelper;
@@ -26,6 +27,8 @@ import edu.uw.covidsafe.contact_trace.NonSwipeableViewPager;
 import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.MainFragment;
+import edu.uw.covidsafe.ui.contact_log.LocationFragment;
+import edu.uw.covidsafe.ui.contact_log.PeopleFragment;
 import edu.uw.covidsafe.ui.health.TipRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.HistoryRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
@@ -62,7 +65,7 @@ public class Constants {
     public static boolean UI_AUTH = false;
     public static boolean WRITE_TO_DISK = false;
     public static boolean DEBUG = true;
-    public static boolean PUBLIC_DEMO = true;
+    public static boolean PUBLIC_DEMO = false;
     public static boolean NARROWCAST_ENABLE = true;
     public static boolean USE_LAST_QUERY_TIME = true;
 
@@ -71,7 +74,7 @@ public class Constants {
     }
 
     public enum HumanDatabaseOps {
-        Insert,Delete
+        Insert,Delete,DeleteAll
     }
 
     public enum NotifDatabaseOps {
@@ -181,6 +184,8 @@ public class Constants {
     public static Fragment DiagnosisFragment;
     public static Fragment SettingsFragment;
     public static Fragment FaqFragment;
+    public static Fragment LocationFragment;
+    public static Fragment PeopleFragment;
     public static Fragment ContactLogFragment;
     public static Fragment CurrentFragment;
     public static Fragment PermissionsFragment;
@@ -206,6 +211,7 @@ public class Constants {
     public static HashSet<String> writtenUUIDs;
     public static int pageNumber = -1;
     public static ViewPager healthViewPager;
+    public static ViewPager contactLogViewPager;
     public static Calendar contactLogMonthCalendar = Calendar.getInstance();
     public static Calendar symptomTrackerMonthCalendar = Calendar.getInstance();
 
@@ -213,6 +219,7 @@ public class Constants {
     public static List<HumanRecord> changedContactHumanRecords;
     public static List<SymptomsRecord> changedContactSympRecords;
     public static List<GpsRecord> changedContactGpsRecords;
+    public static MaterialCalendarView contactLogCal;
 
     public static List<String> symptoms = Lists.newArrayList(
         "Fever",
@@ -276,6 +283,8 @@ public class Constants {
         HealthFragmentState = SymptomTrackerFragment;
 
         ContactTraceFragment = new ContactTraceFragment();
+        PeopleFragment = new PeopleFragment();
+        LocationFragment = new LocationFragment();
 
         if (!DEBUG) {
             LOG_TO_DISK = false;
