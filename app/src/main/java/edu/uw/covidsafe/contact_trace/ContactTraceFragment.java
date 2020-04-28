@@ -52,7 +52,7 @@ public class ContactTraceFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(header_str));
 
         Constants.contactViewPager = view.findViewById(R.id.pager);
-        adapter = new ContactPageAdapter(getChildFragmentManager());
+        adapter = new ContactPageAdapter(getChildFragmentManager(), getContext());
         Constants.contactViewPager.setAdapter(adapter);
 
         if (Constants.ContactPageNumber != -1) {

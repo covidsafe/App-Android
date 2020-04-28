@@ -1,5 +1,6 @@
 package edu.uw.covidsafe.contact_trace;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -16,9 +17,10 @@ import edu.uw.covidsafe.ui.onboarding.StoryFragment;
 import edu.uw.covidsafe.utils.Constants;
 
 public class ContactPageAdapter extends FragmentPagerAdapter {
-
-    public ContactPageAdapter(@NonNull FragmentManager fm) {
+    Context cxt;
+    public ContactPageAdapter(@NonNull FragmentManager fm, Context cxt) {
         super(fm);
+        this.cxt = cxt;
     }
 
     @NonNull
@@ -54,6 +56,6 @@ public class ContactPageAdapter extends FragmentPagerAdapter {
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return "Interview Preparation";
+        return cxt.getString(R.string.inter_prep);
     }
 }

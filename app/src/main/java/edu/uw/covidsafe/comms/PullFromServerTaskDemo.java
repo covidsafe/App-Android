@@ -514,7 +514,7 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
                         msg,
                         messageType.ordinal(),
                         true)).execute();
-                Utils.sendNotification(context, "You may have been exposed", msg, R.drawable.warning2);
+                Utils.sendNotification(context, context.getString(R.string.exposed), msg, R.drawable.warning2);
             }
             else {
                 if (!msgs.isEmpty()) {
@@ -525,7 +525,7 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
                             msgs.get(i),
                             Constants.MessageType.NarrowCast.ordinal(),
                             true)).execute();
-                    Utils.sendNotification(context, "Announcement",msgs.get(i), R.drawable.ic_info_outline_black_24dp);
+                    Utils.sendNotification(context, context.getString(R.string.announcement_txt),msgs.get(i), R.drawable.ic_info_outline_black_24dp);
                 }
             }
         }
@@ -538,7 +538,7 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
                 builder.append(msg);
                 Snackbar snackBar = Snackbar.make(v, builder, Snackbar.LENGTH_LONG);
 
-                snackBar.setAction("Dismiss", new View.OnClickListener() {
+                snackBar.setAction(av.getString(R.string.dismiss_text), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         snackBar.dismiss();

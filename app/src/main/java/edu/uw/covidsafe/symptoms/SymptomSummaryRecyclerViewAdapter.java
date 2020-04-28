@@ -53,13 +53,13 @@ public class SymptomSummaryRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             ((SymptomSummaryHolder) holder).symptom.setText(mContext.getResources().getString(R.string.fever_txt));
             String details = "";
             if (record.getFeverOnset() != 0) {
-                details += "Onset date: "+format.format(record.getFeverOnset())+"\n";
+                details += mContext.getString(R.string.onset_date)+": "+format.format(record.getFeverOnset())+"\n";
             }
             if (record.getFeverTemp() != 0) {
-                details += "Highest temp: "+df.format(record.getFeverTemp())+record.getFeverUnit()+"\n";
+                details += mContext.getString(R.string.highest_temperature_text)+": "+df.format(record.getFeverTemp())+record.getFeverUnit()+"\n";
             }
             if (record.getFeverDaysExperienced() != 0) {
-                details += "Duration (days): "+record.getFeverDaysExperienced()+"\n";
+                details += mContext.getString(R.string.duration)+": "+record.getFeverDaysExperienced()+"\n";
             }
             ((SymptomSummaryHolder) holder).details.setText(details);
             if (!details.trim().isEmpty()) {
@@ -76,13 +76,13 @@ public class SymptomSummaryRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             ((SymptomSummaryHolder) holder).symptom.setText(mContext.getResources().getString(R.string.cough_txt));
             String details = "";
             if (record.getCoughOnset() != 0) {
-                details += "Onset date: "+format.format(record.getCoughOnset())+"\n";
+                details += mContext.getString(R.string.onset_date)+": "+format.format(record.getCoughOnset())+"\n";
             }
             if (record.getCoughDaysExperienced() != 0) {
-                details += "Duration (days): "+record.getCoughDaysExperienced()+"\n";
+                details += mContext.getString(R.string.duration)+": "+record.getCoughDaysExperienced()+"\n";
             }
             if (!record.getCoughSeverity().isEmpty()) {
-                details += "Severity: "+record.getCoughSeverity()+"\n";
+                details += mContext.getString(R.string.severity)+": "+record.getCoughSeverity()+"\n";
             }
             ((SymptomSummaryHolder) holder).details.setText(details);
             if (!details.trim().isEmpty()) {

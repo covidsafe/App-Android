@@ -284,13 +284,13 @@ public class MainActivity extends AppCompatActivity {
         dialog.getDatePicker().setMinDate(TimeUtils.getNDaysForward(-days));
         dialog.getDatePicker().setMaxDate(new Date(TimeUtils.getTime()).getTime());
 
-        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface d, int which) {
                 Constants.menu.findItem(R.id.mybutton).setIcon(R.drawable.calendar);
             }
         });
 
-        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "Ok", new DialogInterface.OnClickListener() {
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Constants.menu.findItem(R.id.mybutton).setIcon(R.drawable.calendar);

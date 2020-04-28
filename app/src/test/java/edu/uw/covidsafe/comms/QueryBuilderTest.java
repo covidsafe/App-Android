@@ -1,8 +1,5 @@
 package edu.uw.covidsafe.comms;
 
-import edu.uw.covidsafe.comms.CommunicationConfig;
-import edu.uw.covidsafe.comms.QueryBuilder;
-
 import org.junit.Test;
 
 public class QueryBuilderTest {

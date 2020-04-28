@@ -40,8 +40,6 @@ import java.util.List;
 
 import edu.uw.covidsafe.comms.PullFromServerTask;
 import edu.uw.covidsafe.comms.PullFromServerTaskDemo;
-import edu.uw.covidsafe.comms.PullFromServerTaskDemo2;
-import edu.uw.covidsafe.hcp.SubmitNarrowcastMessageTask;
 import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.symptoms.SymptomDbModel;
 import edu.uw.covidsafe.symptoms.SymptomUtils;

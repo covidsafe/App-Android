@@ -337,7 +337,7 @@ public class SymptomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
             dialog.getDatePicker().setMinDate(TimeUtils.getNDaysForward(-days));
             dialog.getDatePicker().setMaxDate(new Date(TimeUtils.getTime()).getTime());
-            dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+            dialog.setButton(DialogInterface.BUTTON_NEGATIVE, mContext.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface d, int which) {
                     if (which == DialogInterface.BUTTON_NEGATIVE) {
                         dialog = null;

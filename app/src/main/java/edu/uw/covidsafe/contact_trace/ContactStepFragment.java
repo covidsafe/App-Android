@@ -245,23 +245,23 @@ public class ContactStepFragment extends Fragment {
     }
 
     public void exportAsEmail() {
-        String rep="Symptom logs:\n";
+        String rep=getContext().getString(R.string.symptom_logs)+":\n";
         for (SymptomsRecord record : Constants.changedContactSympRecords) {
             rep += record.toString();
         }
-        rep+="\nLocation logs:\n";
+        rep+="\n"+getContext().getString(R.string.location_logs)+":\n";
         for (GpsRecord record : Constants.contactGpsAdapter.records) {
             rep += record.toString();
         }
-        rep+="\nContact logs:\n";
+        rep+="\n"+getContext().getString(R.string.contact_logs)+":\n";
         for (HumanRecord record : Constants.changedContactHumanRecords) {
             rep += record.toString();
         }
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                 "mailto","", null));
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "CovidSafe Contact Tracer Interview Information Packet");
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, getContext().getString(R.string.email_subject));
         emailIntent.putExtra(Intent.EXTRA_TEXT, rep);
-        startActivity(Intent.createChooser(emailIntent, "Send email..."));
+        startActivity(Intent.createChooser(emailIntent, getContext().getString(R.string.send_email)+"..."));
     }
 
     @Override

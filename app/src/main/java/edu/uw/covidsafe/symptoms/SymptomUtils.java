@@ -88,7 +88,7 @@ public class SymptomUtils {
             if (symptomDay.equals(dateToMatch)) {
                 if (ampm.format(symptomActualDate).toLowerCase().equals("am")) {
                     amImage.setImageDrawable(cxt.getDrawable(R.drawable.symptom_done));
-                    amStatus.setText("Logged: "+outformat.format(symptomLogDate));
+                    amStatus.setText(cxt.getString(R.string.logged_txt)+": "+outformat.format(symptomLogDate));
                     Log.e("symptom","edit am action to "+dateToMatch);
                     amAction.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -100,7 +100,7 @@ public class SymptomUtils {
                 }
                 else if (ampm.format(symptomActualDate).toLowerCase().equals("pm")) {
                     pmImage.setImageDrawable(cxt.getDrawable(R.drawable.symptom_done));
-                    pmStatus.setText("Logged: "+outformat.format(symptomLogDate));
+                    pmStatus.setText(cxt.getString(R.string.logged_txt)+": "+outformat.format(symptomLogDate));
                     Log.e("symptom","edit pm action to "+dateToMatch);
                     pmAction.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -142,9 +142,9 @@ public class SymptomUtils {
                         break;
                     case R.id.deleteItem:
                         AlertDialog dialog = new MaterialAlertDialogBuilder(av)
-                                .setTitle("Are you sure you want to delete?")
-                                .setNegativeButton("Cancel",null)
-                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                .setTitle(av.getString(R.string.sure_delete))
+                                .setNegativeButton(av.getString(R.string.cancel),null)
+                                .setPositiveButton(av.getString(R.string.yes), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         SimpleDateFormat outformat = new SimpleDateFormat("MM/dd h:mm aa");

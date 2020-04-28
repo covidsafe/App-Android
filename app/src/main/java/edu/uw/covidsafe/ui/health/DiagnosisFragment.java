@@ -113,13 +113,13 @@ public class DiagnosisFragment extends Fragment {
 
                                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity())
                                         .setMessage(getString(R.string.confirm_diagnosis_sure))
-                                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                        .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 Utils.mkSnack(getActivity(), view, getString(R.string.diag_not_submitted));
                                             }
                                         })
-                                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                        .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 String txt = input.getText().toString();
@@ -189,7 +189,7 @@ public class DiagnosisFragment extends Fragment {
                     if (Constants.PUBLIC_DEMO) {
                         AlertDialog dialog = new MaterialAlertDialogBuilder(getActivity())
                                 .setMessage(getString(R.string.demo_disabled))
-                                .setPositiveButton("Ok",null)
+                                .setPositiveButton(getString(R.string.ok),null)
                                 .setCancelable(true).create();
                         dialog.show();
                         return;

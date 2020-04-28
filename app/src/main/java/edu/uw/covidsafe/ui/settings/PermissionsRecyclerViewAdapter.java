@@ -76,7 +76,7 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
         /////////////////////////////////////////////
         // update switch states
         /////////////////////////////////////////////
-        if (titles.get(position).toLowerCase().contains("notification")) {
+        if (titles.get(position).toLowerCase().contains(cxt.getString(R.string.perm1).toLowerCase())) {
             Constants.notifSwitch = ((PermissionCard)holder).sw;
             boolean hasNotifPerms = NotificationManagerCompat.from(cxt).areNotificationsEnabled();
             boolean notifEnabled =  AppPreferencesHelper.areNotificationsEnabled(av, Constants.NOTIFS_ENABLED);
@@ -87,7 +87,7 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             else {
                 ((PermissionCard) holder).sw.setChecked(false);
             }
-        } else if (titles.get(position).toLowerCase().contains("location")) {
+        } else if (titles.get(position).toLowerCase().contains(cxt.getString(R.string.perm2).toLowerCase())) {
             Constants.gpsSwitch = ((PermissionCard)holder).sw;
             boolean hasGpsPerms = Utils.hasGpsPermissions(cxt);
             boolean gpsEnabled = AppPreferencesHelper.isGPSEnabled(cxt, Constants.GPS_ENABLED);
@@ -102,7 +102,7 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                 ((PermissionCard)holder).sw.setChecked (false);
 //                ((PermissionCard)holder).sw.setOnCheckedChangeListener (PermUtil.listener);
             }
-        } else if (titles.get(position).toLowerCase().contains("bluetooth")) {
+        } else if (titles.get(position).toLowerCase().contains(cxt.getString(R.string.perm3).toLowerCase())) {
             Constants.bleSwitch = ((PermissionCard)holder).sw;
             Constants.bleDesc = ((PermissionCard)holder).desc;
 
@@ -138,7 +138,7 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
         ((PermissionCard)holder).sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = cxt.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
-                if (titles.get(position).toLowerCase().contains("notification")) {
+                if (titles.get(position).toLowerCase().contains(cxt.getString(R.string.perm1).toLowerCase())) {
                     boolean hasNotifPerms = NotificationManagerCompat.from(cxt).areNotificationsEnabled();
                     if (hasNotifPerms) {
                         AppPreferencesHelper.setNotificationEnabled(cxt, isChecked);
@@ -154,7 +154,7 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                         }
                     }
                 }
-                else if (titles.get(position).toLowerCase().contains("location")) {
+                else if (titles.get(position).toLowerCase().contains(cxt.getString(R.string.perm2).toLowerCase())) {
                     Log.e("perm","gps set "+isChecked);
                     if (isChecked) {
                         PermUtils.gpsSwitchLogic(av);
@@ -168,7 +168,7 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                         }
                     }
                 }
-                else if (titles.get(position).toLowerCase().contains("bluetooth")) {
+                else if (titles.get(position).toLowerCase().contains(cxt.getString(R.string.perm3).toLowerCase())) {
                     Log.e("perm","ble set "+isChecked);
                     if (isChecked) {
                         PermUtils.bleSwitchLogic(av);
@@ -187,7 +187,7 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 
     public static void makeOpenSettingsDialog() {
         AlertDialog dialog = new MaterialAlertDialogBuilder(av)
-                .setTitle("Permission denied")
+                .setTitle(cxt.getString(R.string.perm_denied))
                 .setMessage(av.getString(R.string.perm_notifs_ask))
                 .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                     @Override

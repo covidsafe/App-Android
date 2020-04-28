@@ -114,9 +114,9 @@ public class AddEditSymptomsFragment extends Fragment {
             public void onClick(View v) {
                 if (!cb.isChecked()) {
                     AlertDialog dialog = new MaterialAlertDialogBuilder(getActivity())
-                            .setTitle("Please confirm this information is accurate")
-                            .setNegativeButton("Cancel",null)
-                            .setPositiveButton("Ok",null)
+                            .setTitle(getString(R.string.confirm_info))
+                            .setNegativeButton(getString(R.string.cancel),null)
+                            .setPositiveButton(getString(R.string.ok),null)
                             .setCancelable(true).create();
                     dialog.show();
                 }
@@ -145,7 +145,7 @@ public class AddEditSymptomsFragment extends Fragment {
                         }
                     }
 
-                    Utils.mkSnack(getActivity(), view, "Symptom log updated");
+                    Utils.mkSnack(getActivity(), view, getString(R.string.symp_updated));
                     FragmentTransaction tx = ((MainActivity) getActivity()).getSupportFragmentManager().beginTransaction();
                     tx.setCustomAnimations(
                             R.anim.enter_right_to_left, R.anim.exit_right_to_left,

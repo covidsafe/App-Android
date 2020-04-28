@@ -74,7 +74,7 @@ public class NotifRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             String tt = timeFormat.format(rec.getTs_start()) +"-"+ timeFormat2.format(rec.getTs_end());
 
 //        Spannable ss = (Spannable)Html.fromHtml(rec.msg+" This was during <b>"+dateFormat.format(rec.getTs_start())+ "</b> during <b>"+tt+"</b>");
-            Spannable ss = (Spannable)Html.fromHtml(rec.msg+" This was during <b>"+dateFormat.format(rec.getTs_start())+".");
+            Spannable ss = (Spannable)Html.fromHtml(rec.msg+" "+cxt.getString(R.string.this_was_during)+" <b>"+dateFormat.format(rec.getTs_start())+".");
             ((NotifCard)holder).message.setText(ss);
             ((NotifCard)holder).icon.setImageDrawable(av.getDrawable(R.drawable.warning3));
         }

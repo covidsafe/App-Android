@@ -190,7 +190,7 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     if (Constants.PUBLIC_DEMO) {
                         AlertDialog dialog = new MaterialAlertDialogBuilder(av)
                                 .setMessage(mContext.getString(R.string.demo_disabled))
-                                .setPositiveButton("Ok",null)
+                                .setPositiveButton(mContext.getString(R.string.ok),null)
                                 .setCancelable(true).create();
                         dialog.show();
                     }

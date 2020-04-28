@@ -37,10 +37,7 @@ public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         this.av = av;
         titles.add(cxt.getString(R.string.share_text));
         titles.add(cxt.getString(R.string.about_covidsafe));
-        titles.add("FAQ");
-//        desc.add("Share a link of this app");
-//        desc.add("Learn more about the ");
-//        desc.add("subtitle");
+        titles.add(cxt.getString(R.string.faq));
         icons.add(cxt.getDrawable(R.drawable.icon_share2));
         icons.add(cxt.getDrawable(R.drawable.logo2));
         icons.add(cxt.getDrawable(R.drawable.icon_faq2));
@@ -58,20 +55,21 @@ public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         ((MoreCard)holder).title.setText(titles.get(position));
 //        ((MoreCard)holder).desc.setText(desc.get(position));
         ((MoreCard)holder).icon.setImageDrawable(icons.get(position));
-        if (titles.get(position).equals("Share")) {
+        if (titles.get(position).equals(cxt.getString(R.string.share_text).toLowerCase())) {
             ((MoreCard)holder).card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent shareIntent = new Intent(Intent.ACTION_SEND);
                     shareIntent.setType("text/plain");
                     shareIntent.putExtra(Intent.EXTRA_SUBJECT, "CovidSafe");
-                    String shareMessage= "Download and learn more about the CovidSafe app at covidsafe.cs.washington.edu";
+                    String shareMessage= av.getString(R.string.learn_about_us)+
+                            av.getString(R.string.covidSiteLink);
                     shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
-                    av.startActivity(Intent.createChooser(shareIntent, "Select a sharing option"));
+                    av.startActivity(Intent.createChooser(shareIntent, av.getString(R.string.select_share)));
                 }
             });
         }
-        else if (titles.get(position).toLowerCase().contains("about")) {
+        else if (titles.get(position).toLowerCase().contains(cxt.getString(R.string.about_covidsafe).toLowerCase())) {
             ((MoreCard)holder).card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -80,7 +78,7 @@ public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 }
             });
         }
-        else if (titles.get(position).toLowerCase().contains("faq")) {
+        else if (titles.get(position).toLowerCase().contains(cxt.getString(R.string.faq).toLowerCase())) {
             ((MoreCard)holder).card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

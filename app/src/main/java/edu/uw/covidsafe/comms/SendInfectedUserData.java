@@ -112,14 +112,14 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         if (sortedGpsRecords.size() == 0) {
             Log.e("sendbug","need to get last location");
             if (!Utils.hasGpsPermissions(context)) {
-                mkSnack(av, view, "We need location services enabled to send your traces. Please enable location services permission.");
+                mkSnack(av, view, context.getString(R.string.turn_loc_on));
                 status = false;
                 return null;
             }
             else {
                 Location loc = GpsUtils.getLastLocation(context);
                 if (loc == null) {
-                    mkSnack(av, view, "We need location services enabled to send your traces. Please enable location services permission.");
+                    mkSnack(av, view, context.getString(R.string.turn_loc_on));
                     status = false;
                     return null;
                 }
@@ -176,7 +176,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
                 builder.append(msg);
                 Snackbar snackBar = Snackbar.make(v, builder, Snackbar.LENGTH_LONG);
 
-                snackBar.setAction("Dismiss", new View.OnClickListener() {
+                snackBar.setAction(av.getString(R.string.dismiss_text), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         snackBar.dismiss();
@@ -257,7 +257,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         // if resp is null, the status code != 200
         JSONObject resp = NetworkHelper.sendRequest(selfReportRequest, Request.Method.PUT, announceRequestObj);
         if (resp == null) {
-            mkSnack(av, view, "There was an error with submitting your traces. Please try again later.");
+            mkSnack(av, view, context.getString(R.string.error_submitting_data));
             status = false;
             return;
         }

@@ -33,10 +33,10 @@ public class MiscRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     public MiscRecyclerViewAdapter(Context cxt, Activity av) {
         this.cxt = cxt;
         this.av = av;
-        titles.add("Legal");
-        titles.add("Privacy");
-        titles.add("Terms and Conditions");
-        titles.add("Release information");
+        titles.add(cxt.getString(R.string.legal_text));
+        titles.add(cxt.getString(R.string.privacy_text));
+        titles.add(cxt.getString(R.string.terms_text));
+        titles.add(cxt.getString(R.string.release_text));
     }
 
     @NonNull

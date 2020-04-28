@@ -129,9 +129,9 @@ public class HumanSummaryRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
                 switch (item.getItemId()) {
                     case R.id.deleteItem:
                         AlertDialog dialog = new MaterialAlertDialogBuilder(av)
-                                .setTitle("Are you sure you want to delete?")
-                                .setNegativeButton("Cancel", null)
-                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                .setTitle(mContext.getString(R.string.sure_delete))
+                                .setNegativeButton(mContext.getString(R.string.cancel), null)
+                                .setPositiveButton(mContext.getString(R.string.yes), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         SimpleDateFormat outformat = new SimpleDateFormat("MM/dd h:mm aa");

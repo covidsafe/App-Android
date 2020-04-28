@@ -62,7 +62,7 @@ public class Utils {
 
     public static void haltLoggingService(Activity av, View view) {
         if (Constants.LoggingServiceRunning && view != null) {
-            Utils.mkSnack(av, view, "Logging is now turned off.");
+            Utils.mkSnack(av, view, av.getString(R.string.logging_now_off));
         }
 
         Log.e("logme", "stop service");
@@ -101,9 +101,9 @@ public class Utils {
 
             AlertDialog dialog = new MaterialAlertDialogBuilder(av)
                     .setView(checkBoxView)
-                    .setTitle("Warning")
+                    .setTitle(av.getString(R.string.warning))
                     .setMessage(av.getString(R.string.min_api_error) + " " + Constants.MIN_OS)
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(av.getString(R.string.ok), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                         }
                     }).setCancelable(false).create();
@@ -220,7 +220,7 @@ public class Utils {
             public void run() {
                 final Snackbar snackBar = Snackbar.make(v, msg, Snackbar.LENGTH_LONG);
 
-                snackBar.setAction("Dismiss", new View.OnClickListener() {
+                snackBar.setAction(av.getString(R.string.dismiss_text), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         snackBar.dismiss();
@@ -500,7 +500,7 @@ public class Utils {
         if (subDate == 0) {
             return "";
         }
-        return "Last submitted: " + dateFormat.format(subDate);
+        return av.getString(R.string.last_submitted)+": " + dateFormat.format(subDate);
     }
 
     public static void updateSymptomSubmitTime(Activity av) {

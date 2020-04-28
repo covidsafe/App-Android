@@ -22,6 +22,15 @@
     <string name="default_exposed_notif">Based on your location history, we believe you might have been in the same place as people infected with COVID-19.</string>
     <string name="exposed_notif2">Please contact your healthcare professional.</string>
 
+    <string name="warning">Warning</string>
+    <string name="logging_now_off">Logging is now turned off.</string>
+    <string name="inter_prep">Interview Preparation</string>
+    <string name="email_subject">CovidSafe Contact Tracer Interview Information Packet</string>
+    <string name="symptom_logs">Symptom logs</string>
+    <string name="location_logs">Location logs</string>
+    <string name="contact_logs">Contact logs</string>
+    <string name="send_email">Send email</string>
+
     <string name="contact_title_1">
         Review which symptoms you would like to include.
     </string>
@@ -185,6 +194,7 @@ Contact tracing is a process that helps identify all the people who may have com
     <string name="quarantine_end_time_pkey">quarantine_end_time_pkey</string>
     <string name="last_symptom_update_pkey">last_symptom_update_pkey</string>
 
+    <string name="last_submitted">Last submitted</string>
     <string name="phone">911</string>
     <string name="privacyDisclaimer">Any information collected on CovidSafe is stored securely and locally in your app, and remain private to you.</string>
     <string name="privacyDisclaimer2">This information is stored securely and locally on your app, and remains private to you.</string>
@@ -221,15 +231,23 @@ Contact tracing is a process that helps identify all the people who may have com
     <string name="start">Start logging</string>
     <string name="stop">Stop logging</string>
 
+    <string name="error_submitting_data">There was an error with submitting your traces. Please try again later.</string>
+    <string name="confirm_info">Please confirm this information is accurate</string>
+
     <string name="ok">Ok</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="retry">Retry</string>
     <string name="sure">I\'m sure</string>
 
+    <string name="turn_loc_on">We need location services enabled to send your infection report. Please enable location services permission.</string>
+    <string name="turn_loc_on2">We need location services enabled to check for announcements. Please enable location services permission.</string>
+
     <string name="logging">Limited trace data is being collected. We keep your identity anonymous.<![CDATA[<font color=#8d55e9><br/><b><a href="https://covidsafe.cs.washington.edu/">Learn More</a></b></font>]]></string>
     <string name="stopping">Turn broadcasting on to improve the accuracy of your notifications. <![CDATA[<font color=#8d55e9><br/><b><a href="https://covidsafe.cs.washington.edu/">Learn More</a></b></font>]]></string>
-
+    <string name="learn_about_us">Download and learn more about the CovidSafe app at </string>
+    <string name="select_share">Select a sharing option</string>
+    <string name="faq">FAQ</string>
     <string name="kingCountyLink">https://kingcounty.gov/depts/health/communicable-diseases/disease-control/novel-coronavirus.aspx</string>
     <string name="covidSiteLink">https://covidsafe.cs.washington.edu/</string>
     <string name="covidSiteFaqLink">https://covidsafe.cs.washington.edu/#faq</string>
@@ -251,10 +269,18 @@ Contact tracing is a process that helps identify all the people who may have com
     </string>
 
     <string name="cancel">Cancel</string>
+    <string name="onset_date">Onset date</string>
+    <string name="duration">Duration (days)</string>
+
+    <string name="symp_updated">Symptom log updated</string>
 
     <string name="perm1">Notifications</string>
     <string name="perm2">Location Logging</string>
     <string name="perm3">Bluetooth Tracing</string>
+
+    <string name="perm_denied">Permission denied</string>
+
+    <string name="this_was_during">This was during</string>
 
     <string name="perm1desc">
         Receive notifications for exposure risks in your area.
@@ -281,6 +307,9 @@ Contact tracing is a process that helps identify all the people who may have com
     <string name="storyTitle4">
         Your Privacy
     </string>
+
+    <string name="sure_delete">Are you sure you want to delete?</string>
+    <string name="exposed">You may have been exposed</string>
 
     <string name="story1">
         CovidSafe notifies you if you may have been exposed to coronavirus and helps keep you and your community safer.
@@ -343,9 +372,13 @@ Contact tracing is a process that helps identify all the people who may have com
     <string name="card_data_storage_local_expiration2" comment="local data expiration2">On this date your symptom logs and location data will be removed from the app. This action cannot be undone.\n</string>
 
     <string name="change_in_settings_text" comment="text for changing settings">Change in Settings</string>
-    <string name="highest_temperature_text">Highest Temperature</string>
+    <string name="highest_temperature_text">Highest temperature</string>
+    <string name="severity">Severity</string>
 
     <string name="legal_text">Legal</string>
+    <string name="privacy_text">Privacy</string>
+    <string name="terms_text">Terms and Conditions</string>
+    <string name="release_text">Release information</string>
     <string name="share_text">Share</string>
     <string name="you_might_have_exposed" comment="text shown to the user if they have been exposed to the virus">You might have been exposed</string>
     <string name="exposure_notification_description_text" comment="description for the notifcation">Based on your location history, we believe you might have been in the same place as people infected with COVID-19</string>
@@ -433,6 +466,7 @@ You can prepare a list of informaton they will ask about based on information co
     <string name="announcement_txt">Announcement</string>
     <string name="bluetooth_is_disabled_on_this_device">Bluetooth is disabled on this device</string>
     <string name="not_logged_txt">Not logged</string>
+    <string name="logged_txt">Logged</string>
     <string name="unknown_address_txt">Unknown address</string>
     <string name="general_locations_txt">General Locations</string>
     <string name="people_txt">People</string>
