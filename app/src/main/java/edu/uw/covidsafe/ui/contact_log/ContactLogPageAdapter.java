@@ -1,5 +1,9 @@
 package edu.uw.covidsafe.ui.contact_log;
 
+import android.content.Context;
+
+import com.example.covidsafe.R;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -9,9 +13,11 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import edu.uw.covidsafe.utils.Constants;
 
 public class ContactLogPageAdapter extends FragmentPagerAdapter {
-
-    public ContactLogPageAdapter(@NonNull FragmentManager fm) {
+    Context cxt;
+    public ContactLogPageAdapter(@NonNull FragmentManager fm, Context cxt) {
         super(fm);
+        this.cxt = cxt;
+
     }
 
     @NonNull
@@ -35,10 +41,10 @@ public class ContactLogPageAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         if (position == 0) {
-            return "Locations";
+            return cxt.getString(R.string.locations_text);
         }
         else if (position == 1) {
-            return "People";
+            return cxt.getString(R.string.people_text);
         }
         return "";
     }

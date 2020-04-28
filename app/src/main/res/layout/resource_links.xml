@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="Resources"
+        android:text="@string/bottom_sheet_menu_item_resources"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/guidelineV10"
         app:layout_constraintTop_toTopOf="parent" />

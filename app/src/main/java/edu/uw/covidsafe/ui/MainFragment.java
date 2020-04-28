@@ -235,12 +235,11 @@ public class MainFragment extends Fragment {
         SimpleDateFormat format = new SimpleDateFormat("MMMM d");
         String ss = format.format(new Date(thresh));
 
-        String out = "Your data will expire on "+ss+".\n\nOn this date your symptom logs and location data will be removed from the app. This action cannot be undone.\n";
-
+        String out = getString(R.string.card_data_storage_local_expiration1)+ss+".\n"+getString(R.string.card_data_storage_local_expiration2);
         localDataStorageText.setText(out);
 
         TextView changeInSettings = (TextView) view.findViewById(R.id.changeInSettings);
-        changeInSettings.setText((Spannable)Html.fromHtml("<u>Change in settings</u>"));
+        changeInSettings.setText((Spannable)Html.fromHtml("<u>"+getString(R.string.change_in_settings_text)+"</u>"));
         changeInSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -310,7 +309,7 @@ public class MainFragment extends Fragment {
         long ts = prefs.getLong(getActivity().getString(R.string.last_refresh_date_pkey), 0);
         if (ts != 0) {
             SimpleDateFormat format = new SimpleDateFormat("h:mm a");
-            lastUpdated.setText("Last updated: "+format.format(new Date(ts)));
+            lastUpdated.setText(getContext().getString(R.string.last_updated_text)+": "+format.format(new Date(ts)));
         }
         else {
             lastUpdated.setText("");

@@ -39,6 +39,7 @@ import java.security.KeyStore;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
 import java.util.UUID;
@@ -221,28 +222,8 @@ public class Constants {
     public static List<GpsRecord> changedContactGpsRecords;
     public static MaterialCalendarView contactLogCal;
 
-    public static List<String> symptoms = Lists.newArrayList(
-        "Fever",
-        "Abdominal pain",
-        "Chills",
-        "Cough",
-        "Diarrhea",
-        "Difficulty breathing (not severe)",
-        "Headache",
-        "Sore throat",
-        "Vomiting"
-    );
-    public static List<String> symptomDesc = Lists.newArrayList(
-        "A high temperature of over 100°F - you feel hot to touch on your chest or back.",
-        "Pain from inside the abdomen or the outer muscle wall, ranging from mild and temporary to severe.",
-        "The feeling of being cold, though not necessarily in a cold environment, often accompanied by shivering or shaking.",
-        "A sudden, forceful hacking sound to release air and clear an irritation in the throat or airway.",
-        "Loose, watery bowel movements that may occur frequently and with a sense of urgency.",
-        "Shortness of breath, or dyspnea, is an uncomfortable condition that makes it difficult to fully get air into your lungs.",
-        "A painful sensation in any part of the head, ranging from sharp to dull, that may occur with other symptoms.",
-        "Pain or irritation in the throat that can occur with or without swallowing, often accompanies infections.",
-        "Forcefully expelling the stomach's contents out of the mouth."
-    );
+    public static List<String> symptoms = new LinkedList<>();
+    public static List<String> symptomDesc = new LinkedList<>();
 
     public static String[] gpsPermissions= {
             Manifest.permission.ACCESS_BACKGROUND_LOCATION,
@@ -265,6 +246,27 @@ public class Constants {
 
     public static void init(Activity av) {
         Log.e("logme","constants init");
+
+        symptomDesc.add(av.getString(R.string.fever_desc));
+        symptomDesc.add(av.getString(R.string.ab_pain_desc));
+        symptomDesc.add(av.getString(R.string.chills_desc));
+        symptomDesc.add(av.getString(R.string.cough_desc));
+        symptomDesc.add(av.getString(R.string.diarrhea_desc));
+        symptomDesc.add(av.getString(R.string.breathing_desc));
+        symptomDesc.add(av.getString(R.string.headache_desc));
+        symptomDesc.add(av.getString(R.string.sore_throat_desc));
+        symptomDesc.add(av.getString(R.string.vomiting_desc));
+
+        symptoms.add(av.getString(R.string.fever_txt));
+        symptoms.add(av.getString(R.string.abdominal_pain_txt));
+        symptoms.add(av.getString(R.string.chills_txt));
+        symptoms.add(av.getString(R.string.cough_text));
+        symptoms.add(av.getString(R.string.diarrhea_txt));
+        symptoms.add(av.getString(R.string.difficult_in_breathing_not_severe));
+        symptoms.add(av.getString(R.string.headache_txt));
+        symptoms.add(av.getString(R.string.sore_throat_txt));
+        symptoms.add(av.getString(R.string.vomitting_txt));
+
         MainFragment = new MainFragment();
         MainFragmentState = MainFragment;
         SettingsFragment = new SettingsFragment();

@@ -34,7 +34,7 @@
     <string name="q1">¿Cuál es el propósito de esta aplicación?</string>
     <string name="a1">CovidSafe es una aplicación que busca reducir la propagación del coronavirus en la comunidad, específicamente ayudando a las personas a saber si han estado expuestas, conectándolas con la orientación adecuada de salud pública y permitiendo un seguimiento de contactos efectivo. CovidSafe también reduce la carga sobre los sistemas de salud pública al ofrecer a las personas que han sido diagnosticadas positivamente y sus posibles exposiciones, una forma segura, privada y rápida de comunicar esta información a las personas que la necesitan: las autoridades de salud pública y sus equipos de búsqueda de contactos.</string>
     <string name="q2">¿Cómo me beneficia esta aplicación?</string>
-    <string name="a2">CovidSafe ofrece varias funciones para protegerlo a usted y a su comunidad: \n        • Recibir notificaciones sobre una posible exposición. Es posible que se le notifique si alguien que estuvo cerca de usted en las últimas dos semanas ha presentado síntomas de COVID-19. La medida de "cerca" no es tan precisa como la definición médica (dentro de 6 pies por más de 10 minutos), pero es precisa hasta unos pocos metros. \N         • Rastree sus síntomas. Los síntomas que rastrea pueden ser útiles para ayudar a los equipos de salud pública si se confirma que es positivo, y para tener esta información fácilmente disponible si está expuesto y solicita una entrevista de seguimiento de contactos. También puede obtener información confiable y verificada sobre el SARS-CoV-2, por qué es tan peligroso y cómo se propaga.</string>
+    <string name="a2">CovidSafe ofrece varias funciones para protegerlo a usted y a su comunidad: \n        • Recibir notificaciones sobre una posible exposición. Es posible que se le notifique si alguien que estuvo cerca de usted en las últimas dos semanas ha presentado síntomas de COVID-19. La medida de "cerca" no es tan precisa como la definición médica (dentro de 6 pies por más de 10 minutos), pero es precisa hasta unos pocos metros. \n         • Rastree sus síntomas. Los síntomas que rastrea pueden ser útiles para ayudar a los equipos de salud pública si se confirma que es positivo, y para tener esta información fácilmente disponible si está expuesto y solicita una entrevista de seguimiento de contactos. También puede obtener información confiable y verificada sobre el SARS-CoV-2, por qué es tan peligroso y cómo se propaga.</string>
     <string name="q3">¿Quién puede usar CovidSafe?</string>
     <string name="a3">Cuando está disponible para su uso, CovidSafe es gratuito y cualquiera puede usarlo.</string>
     <string name="q4">¿Quién más se beneficia de mi participación con esta aplicación?</string>
@@ -122,7 +122,7 @@
 
     <string name="tip_desc_1">Todas las personas con síntomas de COVID-19 (fiebre, tos y /o dificultad para respirar) que tengan un resultado de prueba pendiente, deberán permanecer en un lugar de cuarentena (su hogar si tiene uno o en un lugar dirigido por el gobierno o provisto públicamente si está disponible) ) de acuerdo con los CDC y la guía de salud pública. \n\n        Si el resultado de su prueba es positivo, debe permanecer aislado.</string>
 
-    <string name="tip_desc_2">No todas las personas que se sienten enfermas deben hacerse la prueba, especialmente si tiene una enfermedad leve. Los proveedores de atención médica determinan quién debe hacerse la prueba. Si bien las pruebas están cada vez más disponibles, todavía existen limitaciones en la capacidad de recolectar y procesar rápidamente las pruebas. \N \nSi está enfermo con fiebre, tos o falta de aliento y está en un grupo de alto riesgo, llame a su proveedor de atención médica para discuta si debe hacerse la prueba de COVID-19</string>
+    <string name="tip_desc_2">No todas las personas que se sienten enfermas deben hacerse la prueba, especialmente si tiene una enfermedad leve. Los proveedores de atención médica determinan quién debe hacerse la prueba. Si bien las pruebas están cada vez más disponibles, todavía existen limitaciones en la capacidad de recolectar y procesar rápidamente las pruebas. \n \nSi está enfermo con fiebre, tos o falta de aliento y está en un grupo de alto riesgo, llame a su proveedor de atención médica para discuta si debe hacerse la prueba de COVID-19</string>
 
     <string name="tip_desc_3">Si tiene síntomas como tos, fiebre u otros problemas respiratorios, comuníquese primero con su médico habitual.<b> No vaya a la sala de emergencias.</b> Las salas de emergencia deben poder atender a las personas con las necesidades más críticas. Si tiene dificultades para respirar, no significa que tenga un coronavirus nuevo, pero debe llamar al 911.</string>
 
@@ -155,7 +155,7 @@
     <string name="lipsum5">Egestas tellus rutrum tellus ultrices in iaculis pellentesque eu tincidunt?</string>
     <string name="lipsum6">Odio tempor orci dapibus ultrices en iaculis</string>
     <string name="privacyText">Aprende más</string>
-    <string name="permissionsHeader">Habilite notificaciones en tiempo real para recibir alertas sobre posibles exposiciones y mensajes de salud pública relevantes para usted. \N \nCovidSafe no revela información sobre usted sin su consentimiento.</string>
+    <string name="permissionsHeader">Habilite notificaciones en tiempo real para recibir alertas sobre posibles exposiciones y mensajes de salud pública relevantes para usted. \n \nCovidSafe no revela información sobre usted sin su consentimiento.</string>
 
     <string name="perm1">Notificaciones</string>
     <string name="perm2">Registro de ubicación</string>
@@ -214,7 +214,8 @@
     <string comment="Severity of the symptom" name="card_symptom_severity_severe">Grave</string>
 
     <string comment="text if the storage is local" name="card_data_storage_local">Almacenamiento local de datos</string>
-    <string comment="local data expiration" name="card_data_storage_local_expiration">Sus datos vencerán el 25 de abril. \N \nEn esta fecha, sus registros de síntomas y datos de ubicación se eliminarán de la aplicación. Esta acción no se puede deshacer. \N</string>
+    <string comment="local data expiration1" name="card_data_storage_local_expiration1">Sus datos vencerán el</string>
+    <string comment="local data expiration2" name="card_data_storage_local_expiration2">En esta fecha, sus registros de síntomas y datos de ubicación se eliminarán de la aplicación. Esta acción no se puede deshacer.\n</string>
 
     <string comment="text for changing settings" name="change_in_settings_text">Cambio en la configuración</string>
     <string name="highest_temperature_text">Temperatura más alta</string>

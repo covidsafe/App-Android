@@ -67,7 +67,7 @@ public class HealthFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(header_str));
 
         Constants.healthViewPager = view.findViewById(R.id.pager);
-        adapter = new HealthPageAdapter(getChildFragmentManager());
+        adapter = new HealthPageAdapter(getChildFragmentManager(), getContext());
         Constants.healthViewPager.setAdapter(adapter);
 
         Constants.healthViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

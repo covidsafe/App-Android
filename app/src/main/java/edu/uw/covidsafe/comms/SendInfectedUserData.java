@@ -157,7 +157,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
                     gpsResolution);
 
             Log.e("sendbug","trace data submitted");
-            mkSnack(av, view, "Your report has been submitted.");
+            mkSnack(av, view, context.getString(R.string.report_has_been_submitted));
 
             DiagnosisFragment.updateSubmissionView(av, context, view, true);
             status = true;

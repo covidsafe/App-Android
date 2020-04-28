@@ -58,21 +58,22 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             // for the diagnosed
             if (diagnosis) {
                 titles.add("");
-                desc.add("Call 911 immediately if you are having a medical emergency.");
+                desc.add(mContext.getString(R.string.call_911));
                 icons.add(mContext.getDrawable(R.drawable.icon_phone3));
                 links.add("");
 
-                titles.add("Isolation order");
+                titles.add(mContext.getString(R.string.isolation_order));
 //                desc.add(getQuarantineTime());
 //                desc.add(mContext.getString(R.string.tip_desc_1));
-                Spannable ss = (Spannable)Html.fromHtml("Everyone who has tested positive for COVID-19 shall remain in isolation until no longer infectious. <b>Do not leave your home or recovery facility, except to receive medical care.</b>");
+                Spannable ss = (Spannable)Html.fromHtml(
+                        mContext.getString(R.string.isolation1)+" <b>"+mContext.getString(R.string.isolation2)+"</b>");
                 desc.add(ss);
                 icons.add(mContext.getDrawable(R.drawable.icon_quarantine));
                 links.add("https://www.kingcounty.gov/depts/health/communicable-diseases/disease-control/novel-coronavirus/quarantine.aspx");
 
-                titles.add("Monitor Your Symptoms");
+                titles.add(mContext.getString(R.string.monitor_your_symptoms));
                 Spannable ss2 = (Spannable)Html.fromHtml(
-                        "If you have symptoms like cough, fever, or other respiratory problems, contact your regular doctor first. <b>Do not go to the emergency room.</b> Emergency rooms need to be able to serve those with the most critical needs. If you have difficulty breathing, it doesn’t mean you have novel coronavirus, but you should call 911."
+                        mContext.getString(R.string.monitor1)+" <b>"+mContext.getString(R.string.monitor2)+"</b> "+mContext.getString(R.string.monitor3)
                 );
                 desc.add(ss2);
                 icons.add(mContext.getDrawable(R.drawable.icon_symptoms));
@@ -81,25 +82,24 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             else {
                 // for the exposed
                 titles.add("");
-                desc.add("Call 911 immediately if you are having a medical emergency.");
+                desc.add(mContext.getString(R.string.call_911));
                 icons.add(mContext.getDrawable(R.drawable.icon_phone3));
                 links.add("");
 
-                titles.add("Quarantine directive");
-//                desc.add(getQuarantineTime());
-                desc.add("Everyone with COVID-19 symptoms who has a test result pending shall remain in quarantine while waiting for the test results.");
+                titles.add(mContext.getString(R.string.quarantine_directive));
+                desc.add(mContext.getString(R.string.quarantine_desc));
                 icons.add(mContext.getDrawable(R.drawable.icon_quarantine));
                 links.add("https://www.kingcounty.gov/depts/health/communicable-diseases/disease-control/novel-coronavirus/quarantine.aspx");
 
-                titles.add("Monitor Your Symptoms");
+                titles.add(mContext.getString(R.string.monitor_your_symptoms));
                 Spannable ss = (Spannable)Html.fromHtml(
-                        "If you have symptoms like cough, fever, or other respiratory problems, contact your regular doctor first. <b>Do not go to the emergency room.</b> Emergency rooms need to be able to serve those with the most critical needs. If you have difficulty breathing, it doesn’t mean you have novel coronavirus, but you should call 911."
+                        mContext.getString(R.string.monitor1)+" <b>"+mContext.getString(R.string.monitor2)+"</b> "+mContext.getString(R.string.monitor3)
                 );
                 desc.add(ss);
                 icons.add(mContext.getDrawable(R.drawable.icon_symptoms));
                 links.add("https://kingcounty.gov/depts/health/communicable-diseases/disease-control/novel-coronavirus/FAQ.aspx");
 
-                titles.add("Request a test");
+                titles.add(mContext.getString(R.string.request_test));
                 desc.add(mContext.getString(R.string.tip_desc_2));
                 icons.add(mContext.getDrawable(R.drawable.icon_test));
                 links.add("https://kingcounty.gov/depts/health/communicable-diseases/disease-control/novel-coronavirus/FAQ.aspx");
@@ -189,7 +189,7 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 public void onClick(View v) {
                     if (Constants.PUBLIC_DEMO) {
                         AlertDialog dialog = new MaterialAlertDialogBuilder(av)
-                                .setMessage("This function is disabled in the demo version of the app.")
+                                .setMessage(mContext.getString(R.string.demo_disabled))
                                 .setPositiveButton("Ok",null)
                                 .setCancelable(true).create();
                         dialog.show();

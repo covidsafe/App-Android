@@ -82,7 +82,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
             refresh.clearAnimation();
             TextView lastUpdated = view.findViewById(R.id.lastUpdated);
             SimpleDateFormat format = new SimpleDateFormat("h:mm a");
-            lastUpdated.setText("Last updated: " + format.format(new Date(ts)));
+            lastUpdated.setText(context.getString(R.string.last_updated_text)+": " + format.format(new Date(ts)));
             lastUpdated.setVisibility(View.VISIBLE);
         }
         Constants.PullFromServerTaskRunning = false;

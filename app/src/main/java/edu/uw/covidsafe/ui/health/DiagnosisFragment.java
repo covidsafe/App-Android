@@ -86,22 +86,22 @@ public class DiagnosisFragment extends Fragment {
                 public void onClick(View v) {
                     if (Constants.PUBLIC_DEMO) {
                         AlertDialog dialog = new MaterialAlertDialogBuilder(getActivity())
-                                .setMessage("This function is disabled in the demo version of the app.")
-                                .setPositiveButton("Ok",null)
+                                .setMessage(getString(R.string.demo_disabled))
+                                .setPositiveButton(getString(R.string.ok),null)
                                 .setCancelable(true).create();
                         dialog.show();
                         return;
                     }
 
                     if (!NetworkHelper.isNetworkAvailable(getActivity())) {
-                        Utils.mkSnack(getActivity(),view,"Network not available. Please try again.");
+                        Utils.mkSnack(getActivity(),view,getString(R.string.network_down));
                     }
                     else {
                         if (!certBox.isChecked()) {
                             AlertDialog dialog = new MaterialAlertDialogBuilder(getActivity())
-                                    .setMessage("Please check the box to confirm this information is accurate")
-                                    .setNegativeButton("Cancel",null)
-                                    .setPositiveButton("Ok",null)
+                                    .setMessage(getString(R.string.check_box))
+                                    .setNegativeButton(getString(R.string.cancel),null)
+                                    .setPositiveButton(getString(R.string.ok),null)
                                     .setCancelable(true).create();
                             dialog.show();
                         }
@@ -112,21 +112,21 @@ public class DiagnosisFragment extends Fragment {
                                 input.setInputType(InputType.TYPE_CLASS_TEXT);
 
                                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity())
-                                        .setMessage("Reporting a positive diagnosis cannot be undone. Please be certain. Please enter the phrase \"I confirm\" in the box below to confirm that you have been officially diagnosed with COVID-19")
+                                        .setMessage(getString(R.string.confirm_diagnosis_sure))
                                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                Utils.mkSnack(getActivity(), view, "Diagnosis not submitted");
+                                                Utils.mkSnack(getActivity(), view, getString(R.string.diag_not_submitted));
                                             }
                                         })
                                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 String txt = input.getText().toString();
-                                                if (txt.trim().equals("I confirm")) {
+                                                if (txt.trim().equals(getString(R.string.confirm))) {
                                                     new SendInfectedUserData(getContext(), getActivity(), view).execute();
                                                 } else {
-                                                    Utils.mkSnack(getActivity(), view, "Diagnosis not submitted");
+                                                    Utils.mkSnack(getActivity(), view, getString(R.string.diag_not_submitted));
                                                 }
                                             }
                                         })
@@ -151,15 +151,15 @@ public class DiagnosisFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     AlertDialog dialog = new MaterialAlertDialogBuilder(getActivity())
-                            .setMessage("If you upload this diagnosis report, people you've recently been in contact with will be notified that they might have been exposed. Your identity will not be revealed.")
-                            .setNegativeButton("Learn more", new DialogInterface.OnClickListener() {
+                            .setMessage(getString(R.string.confirm_diagnosis))
+                            .setNegativeButton(getString(R.string.privacyText), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.covidSiteLink)));
                                     startActivity(browserIntent);
                                 }
                             })
-                            .setPositiveButton("Dismiss", null)
+                            .setPositiveButton(getString(R.string.dismiss_text), null)
                             .setCancelable(false).create();
                     dialog.show();
                     dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getContext().getResources().getColor(R.color.darkGray));
@@ -188,7 +188,7 @@ public class DiagnosisFragment extends Fragment {
                 public void onClick(View v) {
                     if (Constants.PUBLIC_DEMO) {
                         AlertDialog dialog = new MaterialAlertDialogBuilder(getActivity())
-                                .setMessage("This function is disabled in the demo version of the app.")
+                                .setMessage(getString(R.string.demo_disabled))
                                 .setPositiveButton("Ok",null)
                                 .setCancelable(true).create();
                         dialog.show();

@@ -35,8 +35,8 @@ public class ResourceRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     public ResourceRecyclerViewAdapter(Context cxt, Activity av) {
         this.cxt = cxt;
         this.av = av;
-        titles.add("CDC Guidance");
-        titles.add("Public Health - Seattle & King County");
+        titles.add(cxt.getString(R.string.cdc_guidance_text));
+        titles.add(cxt.getString(R.string.public_health));
         desc.add(cxt.getString(R.string.lipsum3));
         desc.add(cxt.getString(R.string.lipsum3));
         icons.add(cxt.getDrawable(R.drawable.res1));

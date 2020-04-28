@@ -51,7 +51,7 @@ public class ContactLogFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(header_str));
 
         Constants.contactLogViewPager = view.findViewById(R.id.pager);
-        adapter = new ContactLogPageAdapter(getChildFragmentManager());
+        adapter = new ContactLogPageAdapter(getChildFragmentManager(), getContext());
         Constants.contactLogViewPager.setAdapter(adapter);
 
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);

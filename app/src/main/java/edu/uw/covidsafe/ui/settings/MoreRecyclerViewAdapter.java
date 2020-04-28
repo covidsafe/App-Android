@@ -35,8 +35,8 @@ public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     public MoreRecyclerViewAdapter(Context cxt, Activity av) {
         this.cxt = cxt;
         this.av = av;
-        titles.add("Share");
-        titles.add("About CovidSafe");
+        titles.add(cxt.getString(R.string.share_text));
+        titles.add(cxt.getString(R.string.about_covidsafe));
         titles.add("FAQ");
 //        desc.add("Share a link of this app");
 //        desc.add("Learn more about the ");
