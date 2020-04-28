@@ -28,6 +28,7 @@
             android:text="@string/welcome_to_covidsafe_text"
             android:textColor="@color/white"
             android:textFontWeight="500"
+            android:layout_marginTop="10dp"
             android:textSize="28sp" />
 
         <TextView

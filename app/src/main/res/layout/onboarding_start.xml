@@ -46,6 +46,7 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textFontWeight="500"
+            android:layout_marginTop="10dp"
             android:textSize="28sp" />
 
         <com.google.android.material.button.MaterialButton
