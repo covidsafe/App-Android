@@ -188,6 +188,7 @@ public class LocationFragment extends Fragment {
         }
 
         if (cxt != null) {
+            Constants.contactLogCal.removeDecorators();
             Constants.contactLogCal.addDecorators(new LocationFragment.EventDecorator(cxt.getColor(R.color.purpleDark),
                     markedDays));
         }
