@@ -233,7 +233,7 @@ public class MainFragment extends Fragment {
         SimpleDateFormat format = new SimpleDateFormat("MMMM d");
         String ss = format.format(new Date(thresh));
 
-        String out = getString(R.string.card_data_storage_local_expiration1)+ss+".\n"+getString(R.string.card_data_storage_local_expiration2);
+        String out = getString(R.string.card_data_storage_local_expiration, ss);
         localDataStorageText.setText(out);
 
         TextView changeInSettings = (TextView) view.findViewById(R.id.changeInSettings);

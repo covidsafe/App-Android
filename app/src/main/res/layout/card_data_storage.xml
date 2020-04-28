@@ -112,7 +112,7 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="20dp"
                     android:gravity="center_vertical"
-                    android:text="@string/card_data_storage_local_expiration1"
+                    android:text="@string/card_data_storage_local_expiration"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
