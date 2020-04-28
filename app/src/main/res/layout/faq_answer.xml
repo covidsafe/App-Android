@@ -16,28 +16,24 @@
         app:layout_constraintGuide_percent=".05" />
 
     <TextView
-        android:id="@+id/textView12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="A: "
-        android:textColor="@color/purpleLight"
-        app:layout_constraintStart_toStartOf="@+id/guidelineV05"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/faqitem"
+        android:id="@+id/faqAnswer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
         android:layout_marginTop="15dp"
-        android:layout_marginEnd="20dp"
         android:layout_marginBottom="15dp"
         android:text="@string/lipsum4"
         android:textColor="@color/darkGray"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView12"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineV90"
+        app:layout_constraintStart_toStartOf="@+id/guidelineV05"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineV90"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent=".85" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

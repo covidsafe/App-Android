@@ -4,8 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothGattServer;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.util.Log;
 import android.view.Menu;
@@ -16,19 +14,18 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.covidsafe.R;
-import com.google.common.collect.Lists;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 
 import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.contact_trace.GpsHistoryRecyclerViewAdapter2;
 import edu.uw.covidsafe.contact_trace.HumanRecord;
-import edu.uw.covidsafe.contact_trace.NonSwipeableViewPager;
 import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.MainFragment;
 import edu.uw.covidsafe.ui.contact_log.LocationFragment;
 import edu.uw.covidsafe.ui.contact_log.PeopleFragment;
+import edu.uw.covidsafe.ui.faq.FaqFragment;
 import edu.uw.covidsafe.ui.health.TipRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.HistoryRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
@@ -47,7 +44,6 @@ import java.util.concurrent.ScheduledFuture;
 
 import javax.crypto.SecretKey;
 
-import edu.uw.covidsafe.ui.faq.FaqFragment;
 import edu.uw.covidsafe.ui.health.HealthFragment;
 import edu.uw.covidsafe.ui.settings.SettingsFragment;
 import edu.uw.covidsafe.ui.contact_log.ContactLogFragment;
@@ -65,8 +61,8 @@ public class Constants {
 
     public static boolean UI_AUTH = false;
     public static boolean WRITE_TO_DISK = false;
-    public static boolean DEBUG = true;
-    public static boolean PUBLIC_DEMO = false;
+    public static boolean DEBUG = false;
+    public static boolean PUBLIC_DEMO = true;
     public static boolean NARROWCAST_ENABLE = true;
     public static boolean USE_LAST_QUERY_TIME = true;
 

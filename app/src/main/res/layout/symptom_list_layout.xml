@@ -58,8 +58,8 @@
 
     <ImageView
         android:id="@+id/chevron"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:src="@drawable/ic_navigate_before_black_24dp"
         app:layout_constraintBottom_toBottomOf="@+id/symptom_desc"
         app:layout_constraintEnd_toEndOf="parent"

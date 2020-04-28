@@ -33,17 +33,12 @@ import java.util.List;
 
 public class FaqFragment extends Fragment {
 
-    ExpandableListView lv1;
-    ExpandableListView lv2;
-    ExpandableListView lv3;
-    ExpandableListView lv4;
-
     @SuppressLint("RestrictedApi")
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.e("logme","HELP");
-        View view = inflater.inflate(R.layout.fragment_faq, container, false);
+        View view = inflater.inflate(R.layout.fragment_faq2, container, false);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getActivity().getWindow();
@@ -64,8 +59,6 @@ public class FaqFragment extends Fragment {
         }
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(header_str));
 
-         lv1 = view.findViewById(R.id.faq);
-
         List<String> questions = new ArrayList<>();
         List<String> answers = new ArrayList<>();
         questions.add(getString(R.string.q1));
@@ -79,11 +72,7 @@ public class FaqFragment extends Fragment {
         questions.add(getString(R.string.q5));
         answers.add(getString(R.string.a5));
 
-        FaqListAdapter adapter = new FaqListAdapter(questions, answers);
-        lv1.setAdapter(adapter);
-
         //////////////////////////////////////////////////////////////////
-        lv2 = view.findViewById(R.id.faq2);
 
         List<String> questions2 = new ArrayList<>();
         List<String> answers2 = new ArrayList<>();
@@ -104,8 +93,6 @@ public class FaqFragment extends Fragment {
         questions2.add(getString(R.string.pq8));
         answers2.add(getString(R.string.pa8));
 
-        FaqListAdapter adapter2 = new FaqListAdapter(questions2, answers2);
-        lv2.setAdapter(adapter2);
         //////////////////////////////////////////////////////////////////
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerViewResources);
@@ -113,135 +100,19 @@ public class FaqFragment extends Fragment {
         recyclerView.setAdapter(resAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                view.getHeight(); //height is ready
+        RecyclerView recyclerView1 = view.findViewById(R.id.recyclerView1);
+        FaqRecyclerView faqAdapter = new FaqRecyclerView(getContext(),getActivity());
+        recyclerView1.setAdapter(faqAdapter);
+        recyclerView1.setLayoutManager(new LinearLayoutManager(getActivity()));
+        faqAdapter.setData(questions,answers);
 
-                setExpandableListViewHeight(lv1, -1);
-                lv1.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-                    @Override
-                    public boolean onGroupClick(ExpandableListView parent, View v, int position, long id) {
-                        setExpandableListViewHeight(parent, position);
-                        return false;
-                    }
-                });
-
-                setExpandableListViewHeight(lv2, -1);
-                lv2.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-                    @Override
-                    public boolean onGroupClick(ExpandableListView parent, View v, int position, long id) {
-                        setExpandableListViewHeight(parent, position);
-                        return false;
-                    }
-                });
-
-                lv1.setIndicatorBoundsRelative(lv1.getWidth() - GetDipsFromPixel(50),
-                        lv1.getWidth() - GetDipsFromPixel(10));
-                lv2.setIndicatorBoundsRelative(lv2.getWidth() - GetDipsFromPixel(50),
-                        lv2.getWidth() - GetDipsFromPixel(10));
-            }
-        });
+        RecyclerView recyclerView2 = view.findViewById(R.id.recyclerView2);
+        FaqRecyclerView faqAdapter2 = new FaqRecyclerView(getContext(),getActivity());
+        recyclerView2.setAdapter(faqAdapter2);
+        recyclerView2.setLayoutManager(new LinearLayoutManager(getActivity()));
+        faqAdapter2.setData(questions2,answers2);
 
         return view;
-    }
-
-    public int GetDipsFromPixel(float pixels) {
-        // Get the screen's density scale
-        final float scale = getResources().getDisplayMetrics().density;
-        // Convert the dps to pixels, based on density scale
-        return (int) (pixels * scale + 0.5f);
-    }
-
-    private void setExpandableListViewHeight(ExpandableListView listView,
-                                             int group) {
-        ExpandableListAdapter listAdapter = (ExpandableListAdapter) listView.getExpandableListAdapter();
-        int totalHeight = 0;
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),
-                View.MeasureSpec.EXACTLY);
-//        Log.e("state","desired width"+desiredWidth+","+listView.getWidth());
-        for (int i = 0; i < listAdapter.getGroupCount(); i++) {
-            View groupItem = listAdapter.getGroupView(i, false, null, listView);
-            groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-
-            totalHeight += groupItem.getMeasuredHeight();
-//            Log.e("state","group height "+groupItem.getMeasuredHeight()+","+totalHeight);
-            if (((listView.isGroupExpanded(i)) && (i != group))
-                    || ((!listView.isGroupExpanded(i)) && (i == group))) {
-                for (int j = 0; j < listAdapter.getChildrenCount(i); j++) {
-                    View listItem = listAdapter.getChildView(i, j, false, null,
-                            listView);
-                    listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-
-                    totalHeight += listItem.getMeasuredHeight();
-//                    Log.e("state","list height "+listItem.getMeasuredHeight()+","+totalHeight);
-                }
-            }
-        }
-//        Log.e("state","----------------------");
-
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        int height = totalHeight
-                + (listView.getDividerHeight() * (listAdapter.getGroupCount() - 1));
-        if (height < 10)
-            height = 200;
-        params.height = height;
-        listView.setLayoutParams(params);
-        listView.requestLayout();
-    }
-
-    private void setListViewHeight(ListView listView) {
-        ListAdapter listAdapter = listView.getAdapter();
-        int totalHeight = 0;
-        Log.e("STATE","count "+listAdapter.getCount());
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            View listItem = listAdapter.getView(i, null, listView);
-            listItem.measure(0, 0);
-            totalHeight += listItem.getMeasuredHeight();
-            Log.e("STATE","height "+i+","+listItem.getMeasuredHeight());
-        }
-//        totalHeight=800;
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight
-                + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        listView.setLayoutParams(params);
-        listView.requestLayout();
-    }
-
-
-    private void setListViewHeight(ExpandableListView listView,
-                                   int group) {
-        ExpandableListAdapter listAdapter = listView.getExpandableListAdapter();
-        int totalHeight = 0;
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),
-                View.MeasureSpec.AT_MOST);
-        for (int i = 0; i < listAdapter.getGroupCount(); i++) {
-            View groupItem = listAdapter.getGroupView(i, false, null, listView);
-            groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += groupItem.getMeasuredHeight();
-
-            if (((listView.isGroupExpanded(i)) && (i != group))
-                    || ((!listView.isGroupExpanded(i)) && (i == group))) {
-                for (int j = 0; j < listAdapter.getChildrenCount(i); j++) {
-                    View listItem = listAdapter.getChildView(i, j, false, null,
-                            listView);
-                    listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-
-                    totalHeight += listItem.getMeasuredHeight();
-                }
-            }
-        }
-
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        int height = totalHeight
-                + (listView.getDividerHeight() * (listAdapter.getGroupCount() - 1));
-        if (height < 10) {
-            height = 200;
-        }
-        params.height = height;
-        listView.setLayoutParams(params);
-        listView.requestLayout();
     }
 
     @Override
