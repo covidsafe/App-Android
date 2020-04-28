@@ -70,42 +70,6 @@ public class ContactTraceFragment extends Fragment {
             }
         }
 
-        Constants.contactLogViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                if (position == 0) {
-                    if (Constants.menu != null && Constants.menu.findItem(R.id.mybutton) != null) {
-                        Constants.menu.findItem(R.id.mybutton).setVisible(true);
-                    }
-                }
-                else {
-                    if (Constants.menu != null && Constants.menu.findItem(R.id.mybutton) != null) {
-                        Constants.menu.findItem(R.id.mybutton).setVisible(false);
-                    }
-                }
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-//                Log.e("time","onpageselected "+position);
-                if (position == 0) {
-                    if (Constants.menu != null && Constants.menu.findItem(R.id.mybutton) != null) {
-                        Constants.menu.findItem(R.id.mybutton).setVisible(true);
-                    }
-                }
-                else {
-                    if (Constants.menu != null && Constants.menu.findItem(R.id.mybutton) != null) {
-                        Constants.menu.findItem(R.id.mybutton).setVisible(false);
-                    }
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-//                Log.e("time","scrollstatechanged "+state);
-            }
-        });
-
         return view;
     }
 
