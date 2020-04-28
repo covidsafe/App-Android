@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:title="Edit"
+        android:title="@string/edit"
         android:id="@+id/editItem"
         android:icon="@drawable/ic_edit_gray_24dp"
         app:showAsAction="always"/>
     <item
-        android:title="Delete"
+        android:title="@string/delete"
         android:id="@+id/deleteItem"
         app:showAsAction="always"
         android:icon="@drawable/ic_delete_gray_24dp"/>

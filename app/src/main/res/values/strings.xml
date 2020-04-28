@@ -408,6 +408,8 @@ Contact tracing is a process that helps identify all the people who may have com
     <string name="we_have_detected_severe_symptoms_in_your_report">We’ve detected severe symptoms in your recent reports, and collected them below. We use this to determine lorem ipsum dolor consect. Learn More</string>
 
     <string name="confirm">I confirm</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 
     <string name="confirm_diagnosis_sure">Reporting a positive diagnosis cannot be undone. Please be certain. Please enter the phrase "I confirm" in the box below to confirm that you have been officially diagnosed with COVID-19</string>
     <string name="diag_not_submitted">Diagnosis not submitted.</string>
