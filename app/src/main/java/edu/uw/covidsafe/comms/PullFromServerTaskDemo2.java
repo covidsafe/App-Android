@@ -450,7 +450,7 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         // determine how many UUIDs to generate from the seed
         // based on time when the seed was generated and now.
         int diffBetweenNowAndTsInMinutes = 0;
-        if (end_ts == 0 || end_ts < 0) {
+        if (end_ts == 0 || end_ts < 0 || end_ts == start_ts) {
             diffBetweenNowAndTsInMinutes = (int) ((TimeUtils.getTime() - start_ts) / 1000 / 60);
         }
         else {
