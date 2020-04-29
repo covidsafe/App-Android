@@ -149,7 +149,7 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
             catch(Exception e) {
                 Log.e("err",e.getMessage());
             }
-            if (sizeOfPayload > Constants.MaxPayloadSize) {
+            if (sizeOfPayload > Constants.MaxPayloadSize && currentGpsPrecision != Constants.MaximumGpsPrecision) {
                 currentGpsPrecision += 1;
             }
             else {
@@ -157,7 +157,7 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
             }
         }
 
-        if (sizeOfPayload <= 0 || sizeOfPayload > Constants.MaxPayloadSize) {
+        if (sizeOfPayload <= 0 || (sizeOfPayload > Constants.MaxPayloadSize && Constants.PAYLOAD_CHECK)) {
             // potentially too many messages, set the last query time to now.
             // retry at another time
             lastQueryTime = TimeUtils.getTime();
@@ -233,7 +233,7 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         Log.e("pulldemo","we have seeds: "+seenSeeds.size());
         for (String seed : seenSeeds) {
             Log.e("pull","SEED "+seed);
-            if (seed.equals("09f5317c-4dd5-4a22-b282-1de229bcf061")) {
+            if (seed.equals("f5dfa70b-6e19-45d5-a78a-6470f8490682")) {
                 Log.e("pulldemo","got seed");
                 Log.e("pulldemo","start time "+format.format(new Date(startTimes.get(seed))));
                 Log.e("pulldemo","endtime "+format.format(new Date(endTimes.get(seed))));
@@ -279,6 +279,11 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         JSONObject response = NetworkHelper.sendRequest(messageListRequest, Request.Method.GET,null);
         try {
             if (response == null || (response.has("statusCode") && response.getInt("statusCode") != 200)) {
+                Log.e("err","get error "+(response==null));
+                if (response != null) {
+                    Log.e("err", "get error " + (response.has("statusCode")));
+                    Log.e("err", "get error " + (response.getInt("statusCode")));
+                }
                 return null;
             }
         }

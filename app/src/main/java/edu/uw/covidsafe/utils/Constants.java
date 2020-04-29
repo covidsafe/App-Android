@@ -64,7 +64,8 @@ public class Constants {
     public static boolean DEBUG = true;
     public static boolean PUBLIC_DEMO = false;
     public static boolean NARROWCAST_ENABLE = true;
-    public static boolean USE_LAST_QUERY_TIME = false;
+    public static boolean USE_LAST_QUERY_TIME = true;
+    public static boolean PAYLOAD_CHECK = true;
 
     public enum BleDatabaseOps {
         Insert,ViewAll,DeleteAll

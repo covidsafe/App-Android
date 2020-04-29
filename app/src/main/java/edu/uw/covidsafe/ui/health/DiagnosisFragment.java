@@ -219,11 +219,6 @@ public class DiagnosisFragment extends Fragment {
                 TextView date = view.findViewById(R.id.date);
                 if (justReported) {
                     Log.e("state","VISIBLE");
-//                    pos.setText(context.getString(R.string.pos_text));
-//                    pos.setVisibility(View.VISIBLE);
-//                    date.setText("");
-//                    date.setVisibility(View.GONE);
-//                    textView7
                 }
                 else {
                     pos.setText("");

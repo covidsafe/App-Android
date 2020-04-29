@@ -145,7 +145,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
             catch(Exception e) {
                 Log.e("err",e.getMessage());
             }
-            if (sizeOfPayload > Constants.MaxPayloadSize) {
+            if (sizeOfPayload > Constants.MaxPayloadSize && currentGpsPrecision != Constants.MaximumGpsPrecision) {
                 currentGpsPrecision += 1;
             }
             else {
