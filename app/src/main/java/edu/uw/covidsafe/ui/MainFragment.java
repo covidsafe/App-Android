@@ -234,22 +234,22 @@ public class MainFragment extends Fragment {
         SimpleDateFormat format = new SimpleDateFormat("MMMM d");
         String ss = format.format(new Date(thresh));
 
-        String out = getString(R.string.card_data_storage_local_expiration, ss);
-        localDataStorageText.setText(out);
-
-        TextView changeInSettings = (TextView) view.findViewById(R.id.changeInSettings);
-        changeInSettings.setText((Spannable)Html.fromHtml("<u>"+getString(R.string.change_in_settings_text)+"</u>"));
-        changeInSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.e("mainfragment","onclick");
-                FragmentTransaction tx = getActivity().getSupportFragmentManager().beginTransaction();
-                tx.setCustomAnimations(
-                        R.anim.enter_right_to_left,R.anim.exit_right_to_left,
-                        R.anim.enter_left_to_right,R.anim.exit_left_to_right);
-                tx.replace(R.id.fragment_container, Constants.SettingsFragment).commit();
-            }
-        });
+//        String out = getString(R.string.card_data_storage_local_expiration, ss);
+//        localDataStorageText.setText(out);
+//
+//        TextView changeInSettings = (TextView) view.findViewById(R.id.changeInSettings);
+//        changeInSettings.setText((Spannable)Html.fromHtml("<u>"+getString(R.string.change_in_settings_text)+"</u>"));
+//        changeInSettings.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.e("mainfragment","onclick");
+//                FragmentTransaction tx = getActivity().getSupportFragmentManager().beginTransaction();
+//                tx.setCustomAnimations(
+//                        R.anim.enter_right_to_left,R.anim.exit_right_to_left,
+//                        R.anim.enter_left_to_right,R.anim.exit_left_to_right);
+//                tx.replace(R.id.fragment_container, Constants.SettingsFragment).commit();
+//            }
+//        });
     }
 
     public void refreshTask() {

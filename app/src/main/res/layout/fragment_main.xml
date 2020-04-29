@@ -117,7 +117,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            app:layout_constraintTop_toBottomOf="@id/dataStorage" />
+            app:layout_constraintTop_toBottomOf="@id/container_header_lyt" />
 
         <TextView
             android:id="@+id/lastUpdated"
