@@ -32,11 +32,9 @@ public class FaqRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHolde
     List<String> q = new LinkedList<>();
     List<String> a = new LinkedList<>();
     private Context mContext;
-    private Activity av;
 
-    public FaqRecyclerView(Context mContext, Activity av) {
+    public FaqRecyclerView(Context mContext) {
         this.mContext = mContext;
-        this.av = av;
     }
 
     @NonNull

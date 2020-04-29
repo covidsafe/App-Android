@@ -132,7 +132,7 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         if (Constants.USE_LAST_QUERY_TIME) {
             lastQueryTime = prefs.getLong(context.getString(R.string.time_of_last_query_pkey), 0L);
         }
-        while (currentGpsPrecision < Constants.MaximumGpsPrecision) {
+        while (currentGpsPrecision <= Constants.MaximumGpsPrecision) {
             double preciseLat = Utils.getCoarseGpsCoord(lat, currentGpsPrecision);
             double preciseLong = Utils.getCoarseGpsCoord(lon, currentGpsPrecision);
 
@@ -140,12 +140,16 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
                 Log.e("pulldemo","HOW BIG "+currentGpsPrecision);
                 sizeOfPayload = howBig(preciseLat, preciseLong,
                         currentGpsPrecision, lastQueryTime);
+                if (sizeOfPayload < 0) {
+                    // something wrong with the request
+                    break;
+                }
                 Log.e("pulldemo","size of payload "+sizeOfPayload);
             }
             catch(Exception e) {
                 Log.e("err",e.getMessage());
             }
-            if (sizeOfPayload > Constants.MaxPayloadSize) {
+            if (sizeOfPayload > Constants.MaxPayloadSize && currentGpsPrecision != Constants.MaximumGpsPrecision) {
                 currentGpsPrecision += 1;
             }
             else {
@@ -153,7 +157,7 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
             }
         }
 
-        if (sizeOfPayload == 0 || sizeOfPayload > Constants.MaxPayloadSize) {
+        if (sizeOfPayload <= 0 || (sizeOfPayload > Constants.MaxPayloadSize && Constants.PAYLOAD_CHECK)) {
             // potentially too many messages, set the last query time to now.
             // retry at another time
             lastQueryTime = TimeUtils.getTime();
@@ -229,7 +233,7 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         Log.e("pulldemo","we have seeds: "+seenSeeds.size());
         for (String seed : seenSeeds) {
             Log.e("pull","SEED "+seed);
-            if (seed.equals("c2db5cac-9875-4ad7-acc7-ead49c76d1ec")) {
+            if (seed.equals("f5dfa70b-6e19-45d5-a78a-6470f8490682")) {
                 Log.e("pulldemo","got seed");
                 Log.e("pulldemo","start time "+format.format(new Date(startTimes.get(seed))));
                 Log.e("pulldemo","endtime "+format.format(new Date(endTimes.get(seed))));
@@ -255,6 +259,9 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         String messageSizeRequest = MessageSizeRequest.toHttpString(lat, longi, precision, ts);
         Log.e("pulldemo",messageSizeRequest);
         JSONObject jsonResp = NetworkHelper.sendRequest(messageSizeRequest, Request.Method.HEAD, null);
+        if (jsonResp == null || (jsonResp.has("statusCode") && jsonResp.getInt("statusCode") != 200)) {
+            return -1;
+        }
         MessageSizeResponse messageSizeResponse = MessageSizeResponse.parse(jsonResp);
         Log.e("pulldemo",jsonResp.toString(2));
         return messageSizeResponse.sizeOfQueryResponse;
@@ -270,9 +277,21 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         String messageListRequest = MessageListRequest.toHttpString(lat, longi, precision, lastQueryTime);
         Log.e("pulldemo","SEND MESSAGE LIST REQUEST ");
         JSONObject response = NetworkHelper.sendRequest(messageListRequest, Request.Method.GET,null);
-        if (response == null) {
+        try {
+            if (response == null || (response.has("statusCode") && response.getInt("statusCode") != 200)) {
+                Log.e("err","get error "+(response==null));
+                if (response != null) {
+                    Log.e("err", "get error " + (response.has("statusCode")));
+                    Log.e("err", "get error " + (response.getInt("statusCode")));
+                }
+                return null;
+            }
+        }
+        catch(Exception e) {
+            Log.e("err",e.getMessage());
             return null;
         }
+
         MessageListResponse messageListResponse = null;
         try {
             messageListResponse = MessageListResponse.parse(response);
@@ -301,7 +320,13 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         Log.e("pulldemo ","MESSAGE REQUEST num of messages: "+messageListResponse.messageInfo.length);
         Log.e("pulldemo ","MESSAGE REQUEST payload: "+messageRequestObj.toString());
         response = NetworkHelper.sendRequest(messageRequest, Request.Method.POST, messageRequestObj);
-        if (response == null) {
+        try {
+            if (response == null || (response.has("statusCode") && response.getInt("statusCode") != 200)) {
+                return null;
+            }
+        }
+        catch(Exception e) {
+            Log.e("err",e.getMessage());
             return null;
         }
 
@@ -425,7 +450,7 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         // determine how many UUIDs to generate from the seed
         // based on time when the seed was generated and now.
         int diffBetweenNowAndTsInMinutes = 0;
-        if (end_ts == 0 || end_ts < 0) {
+        if (end_ts == 0 || end_ts < 0 || end_ts == start_ts) {
             diffBetweenNowAndTsInMinutes = (int) ((TimeUtils.getTime() - start_ts) / 1000 / 60);
         }
         else {

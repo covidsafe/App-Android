@@ -128,7 +128,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         if (lastQueryTime == 0) {
             lastQueryTime = TimeUtils.getTime();
         }
-        while (currentGpsPrecision < Constants.MaximumGpsPrecision) {
+        while (currentGpsPrecision <= Constants.MaximumGpsPrecision) {
             double preciseLat = Utils.getCoarseGpsCoord(lat, currentGpsPrecision);
             double preciseLong = Utils.getCoarseGpsCoord(lon, currentGpsPrecision);
 
@@ -136,12 +136,16 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
                 Log.e("pull ","HOW BIG "+currentGpsPrecision);
                 sizeOfPayload = howBig(preciseLat, preciseLong,
                         currentGpsPrecision, lastQueryTime);
+                if (sizeOfPayload < 0) {
+                    // something wrong with the request
+                    break;
+                }
                 Log.e("pull ","size of payload "+sizeOfPayload);
             }
             catch(Exception e) {
                 Log.e("err",e.getMessage());
             }
-            if (sizeOfPayload > Constants.MaxPayloadSize) {
+            if (sizeOfPayload > Constants.MaxPayloadSize && currentGpsPrecision != Constants.MaximumGpsPrecision) {
                 currentGpsPrecision += 1;
             }
             else {
@@ -149,7 +153,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
             }
         }
 
-        if (sizeOfPayload == 0 || sizeOfPayload > Constants.MaxPayloadSize) {
+        if (sizeOfPayload <= 0 || sizeOfPayload > Constants.MaxPayloadSize) {
             // potentially too many messages, set the last query time to now.
             // retry at another time
             lastQueryTime = TimeUtils.getTime();
@@ -243,6 +247,9 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
     public int howBig(double lat, double longi, int precision, long ts) throws JSONException {
         String messageSizeRequest = MessageSizeRequest.toHttpString(lat, longi, precision, ts);
         JSONObject jsonResp = NetworkHelper.sendRequest(messageSizeRequest, Request.Method.HEAD, null);
+        if (jsonResp == null || (jsonResp.has("statusCode") && jsonResp.getInt("statusCode") != 200)) {
+            return -1;
+        }
         MessageSizeResponse messageSizeResponse = MessageSizeResponse.parse(jsonResp);
         return messageSizeResponse.sizeOfQueryResponse;
     }
@@ -257,9 +264,16 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         String messageListRequest = MessageListRequest.toHttpString(lat, longi, precision, lastQueryTime);
         Log.e("NET ","SEND MESSAGE LIST REQUEST ");
         JSONObject response = NetworkHelper.sendRequest(messageListRequest, Request.Method.GET,null);
-        if (response == null) {
+        try {
+            if (response == null || (response.has("statusCode") && response.getInt("statusCode") != 200)) {
+                return null;
+            }
+        }
+        catch(Exception e) {
+            Log.e("err",e.getMessage());
             return null;
         }
+
         MessageListResponse messageListResponse = null;
         try {
             messageListResponse = MessageListResponse.parse(response);
@@ -288,7 +302,13 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         Log.e("NET ","MESSAGE REQUEST num of messages: "+messageListResponse.messageInfo.length);
         Log.e("NET ","MESSAGE REQUEST payload: "+messageRequestObj.toString());
         response = NetworkHelper.sendRequest(messageRequest, Request.Method.POST, messageRequestObj);
-        if (response == null) {
+        try {
+            if (response == null || (response.has("statusCode") && response.getInt("statusCode") != 200)) {
+                return null;
+            }
+        }
+        catch(Exception e) {
+            Log.e("err",e.getMessage());
             return null;
         }
 
@@ -407,7 +427,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         // based on time when the seed was generated and now.
         int diffBetweenNowAndTsInMinutes = 0;
 
-        if (end_ts == 0 || end_ts < 0) {
+        if (end_ts == 0 || end_ts < 0 || end_ts == start_ts) {
             diffBetweenNowAndTsInMinutes = (int) ((TimeUtils.getTime() - start_ts) / 1000 / 60);
         }
         else {

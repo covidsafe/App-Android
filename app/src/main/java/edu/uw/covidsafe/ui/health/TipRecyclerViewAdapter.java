@@ -203,7 +203,7 @@ public class TipRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         else {
             ((ActionCard)holder).title.setText(titles.get(position));
             if (desc.get(position).getClass().toString().toLowerCase().contains("spannable")) {
-                Log.e("spannable",desc.get(position).toString());
+//                Log.e("spannable",desc.get(position).toString());
                 ((ActionCard) holder).desc.setText((Spannable) desc.get(position));
             }
             else {

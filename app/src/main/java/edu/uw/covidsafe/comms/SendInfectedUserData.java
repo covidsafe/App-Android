@@ -28,6 +28,7 @@ import edu.uw.covidsafe.utils.RegenerateSeedUponReport;
 import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
@@ -64,10 +65,10 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         int infectionWindowInDays = 0;
         if (Constants.DEBUG) {
-            prefs.getInt(context.getString(R.string.infection_window_in_days_pkeys), Constants.DefaultInfectionWindowInDaysDebug);
+            infectionWindowInDays = prefs.getInt(context.getString(R.string.infection_window_in_days_pkeys), Constants.DefaultInfectionWindowInDaysDebug);
         }
         else {
-            prefs.getInt(context.getString(R.string.infection_window_in_days_pkeys), Constants.DefaultInfectionWindowInDays);
+            infectionWindowInDays = prefs.getInt(context.getString(R.string.infection_window_in_days_pkeys), Constants.DefaultInfectionWindowInDays);
         }
 
         int infectionWindowInMilliseconds = 1000*60*60*24*infectionWindowInDays;
@@ -77,7 +78,13 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         }
 
         // find timestamp 14 days ago
-        long timestampAtBeginningOfInfectionWindow = TimeUtils.getTime() - infectionWindowInMilliseconds;
+        long timestampAtBeginningOfInfectionWindow = TimeUtils.getTime() - infectionWindowInMilliseconds -
+                Constants.InfectionWindowIntervalDeviationInMilliseconds;
+
+        Log.e("seeds","infectionWindowInMilliseconds "+infectionWindowInMilliseconds);
+        Log.e("seeds","UUIDGenerationIntervalInMiliseconds "+UUIDGenerationIntervalInMiliseconds);
+        Log.e("seeds","timestampAtBeginningOfInfectionWindow "+timestampAtBeginningOfInfectionWindow);
+
         // find 6 minutes past 14 days ago
         long timestampDeviation = timestampAtBeginningOfInfectionWindow +
                 UUIDGenerationIntervalInMiliseconds +
@@ -87,6 +94,23 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         SeedUUIDRecord generatedRecord = seedUUIDRepo.getRecordBetween(
                 timestampAtBeginningOfInfectionWindow,
                 timestampDeviation);
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm.ss");
+        Log.e("demo",format.format(timestampAtBeginningOfInfectionWindow));
+        Log.e("demo",format.format(timestampDeviation));
+        if (generatedRecord!=null) {
+            Log.e("demo", "gen seed between: " + generatedRecord.getSeed(context));
+            Log.e("demo", "gen timestamp between: " + format.format(generatedRecord.getRawTs()));
+        }
+        else {
+            Log.e("demo","gen record is null");
+        }
+        Log.e("demo","first seed is "+allRecords.get(allRecords.size()-1).getSeed(context));
+        Log.e("demo","first seed timestamp is "+format.format(allRecords.get(allRecords.size()-1).getRawTs()));
+
+//        for (SeedUUIDRecord seed : allRecords) {
+//            Log.e("seeds",format.format(seed.getRawTs()) + " ---- "+seed.getSeed(context));
+//        }
 
         // if user has less than 14 days of records, just get the earliest record
         SeedUUIDRecord recordToSend = generatedRecord;
@@ -157,10 +181,6 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
                     gpsResolution);
 
             Log.e("sendbug","trace data submitted");
-            mkSnack(av, view, context.getString(R.string.report_has_been_submitted));
-
-            DiagnosisFragment.updateSubmissionView(av, context, view, true);
-            status = true;
         }
         catch(Exception e) {
             Log.e("err",e.getMessage());
@@ -229,6 +249,10 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
     }
 
     public void sendRequest(String seed, long ts_start, long ts_end, double lat, double longi, int precision) {
+        if (ts_start > ts_end) {
+            ts_end = ts_start;
+        }
+
         JSONObject announceRequestObj = null;
         try {
              announceRequestObj =
@@ -256,8 +280,22 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         // if status code == 200, this will return at worst an empty json object
         // if resp is null, the status code != 200
         JSONObject resp = NetworkHelper.sendRequest(selfReportRequest, Request.Method.PUT, announceRequestObj);
-        if (resp == null) {
-            mkSnack(av, view, context.getString(R.string.error_submitting_data));
+        try {
+            if (resp == null || (resp.has("statusCode") && resp.getInt("statusCode") != 200)) {
+                mkSnack(av, view, context.getString(R.string.error_submitting_data));
+                status = false;
+                return;
+            }
+            else {
+                mkSnack(av, view, context.getString(R.string.report_has_been_submitted));
+
+                DiagnosisFragment.updateSubmissionView(av, context, view, true);
+                status = true;
+                return;
+            }
+        }
+        catch(Exception e) {
+            Log.e("status",e.getMessage());
             status = false;
             return;
         }

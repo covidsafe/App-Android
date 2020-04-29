@@ -20,13 +20,11 @@ import java.text.SimpleDateFormat;
 public class SymptomSummaryRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
-    private Activity av;
     View view;
     SymptomsRecord record = new SymptomsRecord();
 
-    public SymptomSummaryRecyclerViewAdapter(Context mContext, Activity av, View view, SymptomsRecord record) {
+    public SymptomSummaryRecyclerViewAdapter(Context mContext, View view, SymptomsRecord record) {
         this.mContext = mContext;
-        this.av = av;
         this.view = view;
         this.record = record;
     }

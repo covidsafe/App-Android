@@ -3,21 +3,11 @@ package edu.uw.covidsafe.utils;
 import android.content.Context;
 import android.util.Log;
 
-import edu.uw.covidsafe.ble.BleRecord;
-import edu.uw.covidsafe.gps.GpsRecord;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.Scanner;
-
-import unused.BlacklistRecord;
 
 public class FileOperations {
 

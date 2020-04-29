@@ -48,8 +48,8 @@ public class SymptomUtils {
 
         // view elements are null
         if (cxt==null) {return;}
-        amImage.setImageDrawable(cxt.getResources().getDrawable(R.drawable.symptom_edit));
-        pmImage.setImageDrawable(cxt.getResources().getDrawable(R.drawable.symptom_edit));
+        amImage.setImageDrawable(cxt.getDrawable(R.drawable.symptom_edit));
+        pmImage.setImageDrawable(cxt.getDrawable(R.drawable.symptom_edit));
         amStatus.setText(R.string.not_logged_text);
         pmStatus.setText(R.string.not_logged_text);
 

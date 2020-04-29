@@ -45,10 +45,10 @@ public class FaqFragment extends Fragment {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(getActivity().getResources().getColor(R.color.white));
+            window.setStatusBarColor(getActivity().getColor(R.color.white));
         }
 
-        ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getResources().getColor(R.color.white)));
+        ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getColor(R.color.white)));
         ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().show();
@@ -101,13 +101,13 @@ public class FaqFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         RecyclerView recyclerView1 = view.findViewById(R.id.recyclerView1);
-        FaqRecyclerView faqAdapter = new FaqRecyclerView(getContext(),getActivity());
+        FaqRecyclerView faqAdapter = new FaqRecyclerView(getContext());
         recyclerView1.setAdapter(faqAdapter);
         recyclerView1.setLayoutManager(new LinearLayoutManager(getActivity()));
         faqAdapter.setData(questions,answers);
 
         RecyclerView recyclerView2 = view.findViewById(R.id.recyclerView2);
-        FaqRecyclerView faqAdapter2 = new FaqRecyclerView(getContext(),getActivity());
+        FaqRecyclerView faqAdapter2 = new FaqRecyclerView(getContext());
         recyclerView2.setAdapter(faqAdapter2);
         recyclerView2.setLayoutManager(new LinearLayoutManager(getActivity()));
         faqAdapter2.setData(questions2,answers2);

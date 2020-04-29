@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.Switch;
@@ -39,14 +40,20 @@ public class PermissionLogic {
 
         SharedPreferences.Editor editor = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && permissions[0].equals(Manifest.permission.READ_CONTACTS) &&
-            ActivityCompat.checkSelfPermission(av, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            boolean shouldAsk;
-            shouldAsk = ActivityCompat.shouldShowRequestPermissionRationale(av, Manifest.permission.READ_CONTACTS);
-            if (shouldAsk) {
-                makeRationaleDialog(av, requestCode, Manifest.permission.READ_CONTACTS);
-            } else if (!shouldAsk) {
-                makeOpenSettingsDialog(av, Manifest.permission.READ_CONTACTS, requestCode);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && permissions[0].equals(Manifest.permission.READ_CONTACTS)) {
+            if (ActivityCompat.checkSelfPermission(av, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                boolean shouldAsk;
+                shouldAsk = ActivityCompat.shouldShowRequestPermissionRationale(av, Manifest.permission.READ_CONTACTS);
+                if (shouldAsk) {
+                    makeRationaleDialog(av, requestCode, Manifest.permission.READ_CONTACTS);
+                } else if (!shouldAsk) {
+                    makeOpenSettingsDialog(av, Manifest.permission.READ_CONTACTS, requestCode);
+                }
+            }
+            else {
+                Intent pickContact = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                pickContact.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+                ((MainActivity) av).startActivityForResult(pickContact, 2);
             }
             return;
         }
