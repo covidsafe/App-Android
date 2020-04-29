@@ -65,10 +65,10 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         int infectionWindowInDays = 0;
         if (Constants.DEBUG) {
-            prefs.getInt(context.getString(R.string.infection_window_in_days_pkeys), Constants.DefaultInfectionWindowInDaysDebug);
+            infectionWindowInDays = prefs.getInt(context.getString(R.string.infection_window_in_days_pkeys), Constants.DefaultInfectionWindowInDaysDebug);
         }
         else {
-            prefs.getInt(context.getString(R.string.infection_window_in_days_pkeys), Constants.DefaultInfectionWindowInDays);
+            infectionWindowInDays = prefs.getInt(context.getString(R.string.infection_window_in_days_pkeys), Constants.DefaultInfectionWindowInDays);
         }
 
         int infectionWindowInMilliseconds = 1000*60*60*24*infectionWindowInDays;
@@ -78,7 +78,13 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         }
 
         // find timestamp 14 days ago
-        long timestampAtBeginningOfInfectionWindow = TimeUtils.getTime() - infectionWindowInMilliseconds - Constants.InfectionWindowIntervalDeviationInMilliseconds;
+        long timestampAtBeginningOfInfectionWindow = TimeUtils.getTime() - infectionWindowInMilliseconds -
+                Constants.InfectionWindowIntervalDeviationInMilliseconds;
+
+        Log.e("seeds","infectionWindowInMilliseconds "+infectionWindowInMilliseconds);
+        Log.e("seeds","UUIDGenerationIntervalInMiliseconds "+UUIDGenerationIntervalInMiliseconds);
+        Log.e("seeds","timestampAtBeginningOfInfectionWindow "+timestampAtBeginningOfInfectionWindow);
+
         // find 6 minutes past 14 days ago
         long timestampDeviation = timestampAtBeginningOfInfectionWindow +
                 UUIDGenerationIntervalInMiliseconds +
@@ -89,14 +95,19 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
                 timestampAtBeginningOfInfectionWindow,
                 timestampDeviation);
 
-//        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm.ss");
-//        Log.e("demo",format.format(timestampAtBeginningOfInfectionWindow));
-//        Log.e("demo",format.format(timestampDeviation));
-//        Log.e("demo", "gen seed between: "+generatedRecord.getSeed(context));
-//        Log.e("demo", "gen timestamp between: "+format.format(generatedRecord.getRawTs()));
-//        Log.e("demo","first seed is "+allRecords.get(allRecords.size()-1).getSeed(context));
-//        Log.e("demo","first seed timestamp is "+format.format(allRecords.get(allRecords.size()-1).getRawTs()));
-//
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm.ss");
+        Log.e("demo",format.format(timestampAtBeginningOfInfectionWindow));
+        Log.e("demo",format.format(timestampDeviation));
+        if (generatedRecord!=null) {
+            Log.e("demo", "gen seed between: " + generatedRecord.getSeed(context));
+            Log.e("demo", "gen timestamp between: " + format.format(generatedRecord.getRawTs()));
+        }
+        else {
+            Log.e("demo","gen record is null");
+        }
+        Log.e("demo","first seed is "+allRecords.get(allRecords.size()-1).getSeed(context));
+        Log.e("demo","first seed timestamp is "+format.format(allRecords.get(allRecords.size()-1).getRawTs()));
+
 //        for (SeedUUIDRecord seed : allRecords) {
 //            Log.e("seeds",format.format(seed.getRawTs()) + " ---- "+seed.getSeed(context));
 //        }
