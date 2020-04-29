@@ -370,5 +370,7 @@
     <string name="monitor1">Si tiene síntomas como tos, fiebre u otros problemas respiratorios, comuníquese primero con su médico habitual.</string>
     <string name="monitor2">No vaya a la sala de emergencias.</string>
     <string name="monitor3">Las salas de emergencia deben poder atender a las personas con las necesidades más críticas. Si tiene dificultades para respirar, no significa que tenga un coronavirus nuevo, pero debe llamar al 911.</string>
-
+    <string name="language">Lenguaje</string>
+    <string name="english">English</string>
+    <string name="spanish">Español</string>
 </resources>

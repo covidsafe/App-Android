@@ -493,4 +493,7 @@ You can prepare a list of informaton they will ask about based on information co
     <string name="monitor1">If you have symptoms like cough, fever, or other respiratory problems, contact your regular doctor first.</string>
     <string name="monitor2">Do not go to the emergency room.</string>
     <string name="monitor3">Emergency rooms need to be able to serve those with the most critical needs. If you have difficulty breathing, it doesn’t mean you have novel coronavirus, but you should call 911.</string>
+    <string name="language">Language</string>
+    <string name="english">English</string>
+    <string name="spanish">Spanish</string>
 </resources>

@@ -32,7 +32,7 @@ import edu.uw.covidsafe.utils.Utils;
 
 import com.example.covidsafe.R;
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends Fragment implements TraceSettingsRecyclerViewAdapter.OnHeadlineSelectedListener {
 
     Button addButton;
     EditText addressText;
@@ -70,6 +70,7 @@ public class SettingsFragment extends Fragment {
 
         RecyclerView rviewTracesettings = view.findViewById(R.id.recyclerViewTraceSettings);
         TraceSettingsRecyclerViewAdapter adapterTraceSettings = new TraceSettingsRecyclerViewAdapter(getContext(),getActivity(), view);
+        adapterTraceSettings.setOnHeadlineSelectedListener(this);
         rviewTracesettings.setAdapter(adapterTraceSettings);
         rviewTracesettings.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -103,5 +104,10 @@ public class SettingsFragment extends Fragment {
         else {
             Utils.updateSwitchStates(getActivity());
         }
+    }
+
+    @Override
+    public void onRefreshSelected() {
+        ((MainActivity) getActivity()).refresh();
     }
 }

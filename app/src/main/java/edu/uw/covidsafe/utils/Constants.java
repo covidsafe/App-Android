@@ -240,6 +240,8 @@ public class Constants {
             Manifest.permission.INTERNET
     };
 
+    public static String LANGUAGUE_SELECTED = "languageSelected";
+
     public static void init(Activity av) {
         Log.e("logme","constants init");
 
