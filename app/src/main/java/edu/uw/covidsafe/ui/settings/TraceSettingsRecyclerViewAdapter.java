@@ -35,9 +35,9 @@ public class TraceSettingsRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         this.cxt = cxt;
         this.av = av;
         this.view = view;
-        this.names.add(cxt.getString(R.string.setting1));
-        this.descs.add(cxt.getString(R.string.setting1desc));
-        this.icons.add(cxt.getDrawable(R.drawable.datalength));
+//        this.names.add(cxt.getString(R.string.setting1));
+//        this.descs.add(cxt.getString(R.string.setting1desc));
+//        this.icons.add(cxt.getDrawable(R.drawable.datalength));
     }
 
     @NonNull

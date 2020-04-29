@@ -104,12 +104,12 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/rel" />
 
-        <include
-            android:id="@+id/dataStorage"
-            layout="@layout/card_data_storage"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/container_header_lyt" />
+<!--        <include-->
+<!--            android:id="@+id/dataStorage"-->
+<!--            layout="@layout/card_data_storage"-->
+<!--            android:layout_width="fill_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/container_header_lyt" />-->
 
         <include
             android:id="@+id/privacyDisclaimer"
