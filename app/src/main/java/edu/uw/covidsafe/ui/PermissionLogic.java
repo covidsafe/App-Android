@@ -39,14 +39,15 @@ public class PermissionLogic {
 
         SharedPreferences.Editor editor = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && permissions[0].equals(Manifest.permission.READ_CONTACTS) &&
-            ActivityCompat.checkSelfPermission(av, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            boolean shouldAsk;
-            shouldAsk = ActivityCompat.shouldShowRequestPermissionRationale(av, Manifest.permission.READ_CONTACTS);
-            if (shouldAsk) {
-                makeRationaleDialog(av, requestCode, Manifest.permission.READ_CONTACTS);
-            } else if (!shouldAsk) {
-                makeOpenSettingsDialog(av, Manifest.permission.READ_CONTACTS, requestCode);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && permissions[0].equals(Manifest.permission.READ_CONTACTS)) {
+            if (ActivityCompat.checkSelfPermission(av, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                boolean shouldAsk;
+                shouldAsk = ActivityCompat.shouldShowRequestPermissionRationale(av, Manifest.permission.READ_CONTACTS);
+                if (shouldAsk) {
+                    makeRationaleDialog(av, requestCode, Manifest.permission.READ_CONTACTS);
+                } else if (!shouldAsk) {
+                    makeOpenSettingsDialog(av, Manifest.permission.READ_CONTACTS, requestCode);
+                }
             }
             return;
         }
