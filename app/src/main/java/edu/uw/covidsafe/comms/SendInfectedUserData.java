@@ -256,8 +256,15 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         // if status code == 200, this will return at worst an empty json object
         // if resp is null, the status code != 200
         JSONObject resp = NetworkHelper.sendRequest(selfReportRequest, Request.Method.PUT, announceRequestObj);
-        if (resp == null) {
-            mkSnack(av, view, context.getString(R.string.error_submitting_data));
+        try {
+            if (resp == null || (resp.has("statusCode") && resp.getInt("statusCode") != 200)) {
+                mkSnack(av, view, context.getString(R.string.error_submitting_data));
+                status = false;
+                return;
+            }
+        }
+        catch(Exception e) {
+            Log.e("status",e.getMessage());
             status = false;
             return;
         }

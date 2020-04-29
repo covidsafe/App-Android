@@ -140,6 +140,10 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
                 Log.e("pulldemo","HOW BIG "+currentGpsPrecision);
                 sizeOfPayload = howBig(preciseLat, preciseLong,
                         currentGpsPrecision, lastQueryTime);
+                if (sizeOfPayload < 0) {
+                    // something wrong with the request
+                    break;
+                }
                 Log.e("pulldemo","size of payload "+sizeOfPayload);
             }
             catch(Exception e) {
@@ -153,7 +157,7 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
             }
         }
 
-        if (sizeOfPayload == 0 || sizeOfPayload > Constants.MaxPayloadSize) {
+        if (sizeOfPayload <= 0 || sizeOfPayload > Constants.MaxPayloadSize) {
             // potentially too many messages, set the last query time to now.
             // retry at another time
             lastQueryTime = TimeUtils.getTime();
@@ -255,6 +259,9 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         String messageSizeRequest = MessageSizeRequest.toHttpString(lat, longi, precision, ts);
         Log.e("pulldemo",messageSizeRequest);
         JSONObject jsonResp = NetworkHelper.sendRequest(messageSizeRequest, Request.Method.HEAD, null);
+        if (jsonResp == null || (jsonResp.has("statusCode") && jsonResp.getInt("statusCode") != 200)) {
+            return -1;
+        }
         MessageSizeResponse messageSizeResponse = MessageSizeResponse.parse(jsonResp);
         Log.e("pulldemo",jsonResp.toString(2));
         return messageSizeResponse.sizeOfQueryResponse;
@@ -270,9 +277,16 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         String messageListRequest = MessageListRequest.toHttpString(lat, longi, precision, lastQueryTime);
         Log.e("pulldemo","SEND MESSAGE LIST REQUEST ");
         JSONObject response = NetworkHelper.sendRequest(messageListRequest, Request.Method.GET,null);
-        if (response == null) {
+        try {
+            if (response == null || (response.has("statusCode") && response.getInt("statusCode") != 200)) {
+                return null;
+            }
+        }
+        catch(Exception e) {
+            Log.e("err",e.getMessage());
             return null;
         }
+
         MessageListResponse messageListResponse = null;
         try {
             messageListResponse = MessageListResponse.parse(response);
@@ -301,7 +315,13 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         Log.e("pulldemo ","MESSAGE REQUEST num of messages: "+messageListResponse.messageInfo.length);
         Log.e("pulldemo ","MESSAGE REQUEST payload: "+messageRequestObj.toString());
         response = NetworkHelper.sendRequest(messageRequest, Request.Method.POST, messageRequestObj);
-        if (response == null) {
+        try {
+            if (response == null || (response.has("statusCode") && response.getInt("statusCode") != 200)) {
+                return null;
+            }
+        }
+        catch(Exception e) {
+            Log.e("err",e.getMessage());
             return null;
         }
 
