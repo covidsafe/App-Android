@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.Switch;
@@ -48,6 +49,11 @@ public class PermissionLogic {
                 } else if (!shouldAsk) {
                     makeOpenSettingsDialog(av, Manifest.permission.READ_CONTACTS, requestCode);
                 }
+            }
+            else {
+                Intent pickContact = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                pickContact.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+                ((MainActivity) av).startActivityForResult(pickContact, 2);
             }
             return;
         }
