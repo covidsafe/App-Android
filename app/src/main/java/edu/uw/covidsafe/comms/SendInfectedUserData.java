@@ -225,6 +225,10 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
     }
 
     public void sendRequest(String seed, long ts_start, long ts_end, double lat, double longi, int precision) {
+        if (ts_start > ts_end) {
+            ts_end = ts_start;
+        }
+
         JSONObject announceRequestObj = null;
         try {
              announceRequestObj =
