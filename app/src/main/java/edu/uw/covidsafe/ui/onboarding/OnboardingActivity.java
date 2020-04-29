@@ -86,12 +86,12 @@ public class OnboardingActivity extends AppCompatActivity {
 
     public void insertDummyData() {
         Log.e("health","insert dummy data");
-        new SymptomsOpsAsyncTask(Constants.SymptomsDatabaseOps.DeleteAll, this).execute();
-        new GpsOpsAsyncTask(Constants.GpsDatabaseOps.DeleteAll, this).execute();
+//        new SymptomsOpsAsyncTask(Constants.SymptomsDatabaseOps.DeleteAll, this).execute();
+//        new GpsOpsAsyncTask(Constants.GpsDatabaseOps.DeleteAll, this).execute();
         new SeedUUIDOpsAsyncTask(Constants.UUIDDatabaseOps.DeleteAll, this).execute();
         // DONT DO THIS OTHERWISE PULL DEMO TASK WILL FAIL!!
 //        new BleOpsAsyncTask(this, Constants.BleDatabaseOps.DeleteAll).execute();
-        new HumanOpsAsyncTask(this, Constants.HumanDatabaseOps.DeleteAll).execute();
+//        new HumanOpsAsyncTask(this, Constants.HumanDatabaseOps.DeleteAll).execute();
 
         SharedPreferences prefs = activity.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
