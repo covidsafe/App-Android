@@ -244,25 +244,29 @@ public class Constants {
     public static void init(Activity av) {
         Log.e("logme","constants init");
 
-        symptomDesc.add(av.getString(R.string.fever_desc));
-        symptomDesc.add(av.getString(R.string.ab_pain_desc));
-        symptomDesc.add(av.getString(R.string.chills_desc));
-        symptomDesc.add(av.getString(R.string.cough_desc));
-        symptomDesc.add(av.getString(R.string.diarrhea_desc));
-        symptomDesc.add(av.getString(R.string.breathing_desc));
-        symptomDesc.add(av.getString(R.string.headache_desc));
-        symptomDesc.add(av.getString(R.string.sore_throat_desc));
-        symptomDesc.add(av.getString(R.string.vomiting_desc));
+        if (symptomDesc.size() == 0) {
+            symptomDesc.add(av.getString(R.string.fever_desc));
+            symptomDesc.add(av.getString(R.string.ab_pain_desc));
+            symptomDesc.add(av.getString(R.string.chills_desc));
+            symptomDesc.add(av.getString(R.string.cough_desc));
+            symptomDesc.add(av.getString(R.string.diarrhea_desc));
+            symptomDesc.add(av.getString(R.string.breathing_desc));
+            symptomDesc.add(av.getString(R.string.headache_desc));
+            symptomDesc.add(av.getString(R.string.sore_throat_desc));
+            symptomDesc.add(av.getString(R.string.vomiting_desc));
+        }
 
-        symptoms.add(av.getString(R.string.fever_txt));
-        symptoms.add(av.getString(R.string.abdominal_pain_txt));
-        symptoms.add(av.getString(R.string.chills_txt));
-        symptoms.add(av.getString(R.string.cough_text));
-        symptoms.add(av.getString(R.string.diarrhea_txt));
-        symptoms.add(av.getString(R.string.difficult_in_breathing_not_severe));
-        symptoms.add(av.getString(R.string.headache_txt));
-        symptoms.add(av.getString(R.string.sore_throat_txt));
-        symptoms.add(av.getString(R.string.vomitting_txt));
+        if (symptoms.size() == 0) {
+            symptoms.add(av.getString(R.string.fever_txt));
+            symptoms.add(av.getString(R.string.abdominal_pain_txt));
+            symptoms.add(av.getString(R.string.chills_txt));
+            symptoms.add(av.getString(R.string.cough_text));
+            symptoms.add(av.getString(R.string.diarrhea_txt));
+            symptoms.add(av.getString(R.string.difficult_in_breathing_not_severe));
+            symptoms.add(av.getString(R.string.headache_txt));
+            symptoms.add(av.getString(R.string.sore_throat_txt));
+            symptoms.add(av.getString(R.string.vomitting_txt));
+        }
 
         MainFragment = new MainFragment();
         MainFragmentState = MainFragment;

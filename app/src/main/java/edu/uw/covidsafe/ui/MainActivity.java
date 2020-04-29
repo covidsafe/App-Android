@@ -317,7 +317,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         Log.e("state","main activity onresume");
 
-        Constants.init(this);
+//        Constants.init(this);
         initView();
         initBottomNav();
 

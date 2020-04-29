@@ -120,7 +120,6 @@ public class SymptomUtils {
                 R.anim.enter_right_to_left,R.anim.exit_right_to_left,
                 R.anim.enter_left_to_right,R.anim.exit_left_to_right);
         tx.replace(R.id.fragment_container, AddEditSymptomsFragment.newInstance(date, ampm)).commit();
-
     }
 
     public static void editAction(Context context, Activity av, View view, SymptomsRecord record) {

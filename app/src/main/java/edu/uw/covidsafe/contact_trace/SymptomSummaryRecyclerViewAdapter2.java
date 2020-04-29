@@ -76,16 +76,16 @@ public class SymptomSummaryRecyclerViewAdapter2 extends RecyclerView.Adapter<Rec
 
         SymptomsRecord record = records.get(currentSymptomCounter);
         String symptom = "";
-        if (currentSubSymptomCounter < record.getSymptoms().size()) {
-            symptom = record.getSymptoms().get(currentSubSymptomCounter);
+        if (currentSubSymptomCounter < record.getSymptoms(mContext).size()) {
+            symptom = record.getSymptoms(mContext).get(currentSubSymptomCounter);
         }
 
         Log.e("adapter","currentSymptomCounter "+currentSymptomCounter);
         Log.e("adapter","currentSubSymptomCounter "+currentSubSymptomCounter);
-        Log.e("adapter","size "+record.getSymptoms().size());
+        Log.e("adapter","size "+record.getSymptoms(mContext).size());
 
         currentSubSymptomCounter++;
-        if (currentSubSymptomCounter >= record.getSymptoms().size()) {
+        if (currentSubSymptomCounter >= record.getSymptoms(mContext).size()) {
             currentSymptomCounter++;
             currentSubSymptomCounter = 0;
         }
@@ -93,7 +93,7 @@ public class SymptomSummaryRecyclerViewAdapter2 extends RecyclerView.Adapter<Rec
         ((SymptomSummaryHolder) holder).details.setText("");
         ((SymptomSummaryHolder) holder).details.setVisibility(View.GONE);
 
-        if (symptom.equals("fever")) {
+        if (symptom.equals(mContext.getString(R.string.fever_txt))) {
             ((SymptomSummaryHolder) holder).symptom.setText(R.string.fever_txt);
             String details = "";
             if (record.getFeverOnset() != 0) {
@@ -110,13 +110,13 @@ public class SymptomSummaryRecyclerViewAdapter2 extends RecyclerView.Adapter<Rec
                 ((SymptomSummaryHolder) holder).details.setVisibility(View.VISIBLE);
             }
         }
-        else if (symptom.equals("abdominal")) {
+        else if (symptom.equals(mContext.getString(R.string.abdominal_pain_txt))) {
             ((SymptomSummaryHolder) holder).symptom.setText(R.string.abdominal_pain_txt);
         }
-        else if (symptom.equals("chills")) {
+        else if (symptom.equals(mContext.getString(R.string.chills_txt))) {
             ((SymptomSummaryHolder) holder).symptom.setText(R.string.chills_txt);
         }
-        else if (symptom.equals("cough")) {
+        else if (symptom.equals(mContext.getString(R.string.cough_txt))) {
             ((SymptomSummaryHolder) holder).symptom.setText(R.string.cough_text);
             String details = "";
             if (record.getCoughOnset() != 0) {
@@ -133,22 +133,22 @@ public class SymptomSummaryRecyclerViewAdapter2 extends RecyclerView.Adapter<Rec
                 ((SymptomSummaryHolder) holder).details.setVisibility(View.VISIBLE);
             }
         }
-        else if (symptom.equals("diarrhea")) {
+        else if (symptom.equals(mContext.getString(R.string.diarrhea_txt))) {
             ((SymptomSummaryHolder) holder).symptom.setText(R.string.diarrhea_txt);
         }
-        else if (symptom.equals("breathing")) {
+        else if (symptom.equals(mContext.getString(R.string.trouble_breathing_txt))) {
             ((SymptomSummaryHolder) holder).symptom.setText(R.string.difficult_in_breathing);
         }
-        else if (symptom.equals("headache")) {
+        else if (symptom.equals(mContext.getString(R.string.headache_txt))) {
             ((SymptomSummaryHolder) holder).symptom.setText(R.string.headache_txt);
         }
-        else if (symptom.equals("chest")) {
+        else if (symptom.equals(mContext.getString(R.string.chest_pain_txt))) {
             ((SymptomSummaryHolder) holder).symptom.setText(R.string.chest_pain_txt);
         }
-        else if (symptom.equals("sore")) {
+        else if (symptom.equals(mContext.getString(R.string.sore_throat_txt))) {
             ((SymptomSummaryHolder) holder).symptom.setText(R.string.sore_throat_txt);
         }
-        else if (symptom.equals("vomiting")) {
+        else if (symptom.equals(mContext.getString(R.string.vomitting_txt))) {
             ((SymptomSummaryHolder) holder).symptom.setText(R.string.vomitting_txt);
         }
         else {
@@ -159,7 +159,7 @@ public class SymptomSummaryRecyclerViewAdapter2 extends RecyclerView.Adapter<Rec
     public void setRecords(List<SymptomsRecord> records) {
         this.records = records;
         for (SymptomsRecord record : records) {
-            count += record.getSymptoms().size();
+            count += record.getSymptoms(mContext).size();
         }
     }
 
