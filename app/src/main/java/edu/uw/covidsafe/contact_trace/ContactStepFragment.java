@@ -129,7 +129,7 @@ public class ContactStepFragment extends Fragment {
                 header2.setText(R.string.symptoms_text);
 
                 RecyclerView tipView = view.findViewById(R.id.recyclerView);
-                symptomAdapter = new SymptomSummaryRecyclerViewAdapter2(getActivity(),getActivity(), view);
+                symptomAdapter = new SymptomSummaryRecyclerViewAdapter2(getActivity(), view);
                 tipView.setAdapter(symptomAdapter);
                 tipView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -159,7 +159,7 @@ public class ContactStepFragment extends Fragment {
                 desc.setText(getContext().getString(R.string.contact_desc_2));
                 header2.setText(R.string.general_locations_txt);
 
-                Constants.contactGpsAdapter = new GpsHistoryRecyclerViewAdapter2(getContext(), getActivity(), view);
+                Constants.contactGpsAdapter = new GpsHistoryRecyclerViewAdapter2(getContext(), view);
                 RecyclerView tipView = view.findViewById(R.id.recyclerView);
                 tipView.setAdapter(Constants.contactGpsAdapter);
                 tipView.setLayoutManager(new LinearLayoutManager(getActivity()));

@@ -55,16 +55,14 @@ public class SymptomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     public SymptomsRecord dataIn = new SymptomsRecord();
     public SymptomsRecord dataOut = new SymptomsRecord();
     private Context mContext;
-    private Activity av;
     private String op;
     List<String> feverSpinner;
     List<String> coughSeverity;
     DatePickerDialog dialog;
     Calendar myCalendar = Calendar.getInstance();
 
-    public SymptomRecyclerViewAdapter(Context mContext, Activity av, String op) {
+    public SymptomRecyclerViewAdapter(Context mContext,  String op) {
         this.mContext = mContext;
-        this.av = av;
         this.op = op;
 
         feverSpinner = new LinkedList<>();

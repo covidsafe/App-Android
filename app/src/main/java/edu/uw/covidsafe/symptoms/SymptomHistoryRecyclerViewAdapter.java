@@ -42,15 +42,13 @@ import edu.uw.covidsafe.utils.Utils;
 public class SymptomHistoryRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
-    private Activity av;
     View view;
     int historySize = 0;
     List<SymptomsRecord> records = new LinkedList<SymptomsRecord>();
     Map<Integer, List<SymptomsRecord>> timestampToHistoryIndex = new HashMap<Integer,List<SymptomsRecord>>();
 
-    public SymptomHistoryRecyclerViewAdapter(Context mContext, Activity av, View view) {
+    public SymptomHistoryRecyclerViewAdapter(Context mContext, View view) {
         this.mContext = mContext;
-        this.av = av;
         this.view = view;
     }
 

@@ -369,8 +369,7 @@ Contact tracing is a process that helps identify all the people who may have com
     <string name="card_symptom_severity_severe" comment="Severity of the symptom">Severe</string>
 
     <string name="card_data_storage_local" comment="text if the storage is local">Local Data Storage</string>
-    <string name="card_data_storage_local_expiration1" comment="local data expiration1">Your data will expire on </string>
-    <string name="card_data_storage_local_expiration2" comment="local data expiration2">On this date your symptom logs and location data will be removed from the app. This action cannot be undone.\n</string>
+    <string name="card_data_storage_local_expiration" comment="local data expiration">Your data will expire on %1$s\nOn this date your symptom logs and location data will be removed from the app. This action cannot be undone.\n</string>
 
     <string name="change_in_settings_text" comment="text for changing settings">Change in Settings</string>
     <string name="highest_temperature_text">Highest temperature</string>

@@ -66,11 +66,12 @@ public class NetworkHelper {
                     Log.e("net","parse status code "+response.statusCode);
                     // response is just empty, return an empty json object
                     if (response.data.length == 0) {
-                        byte[] responseData = "{}".getBytes("UTF8");
+                        String payload = "{statusCode: "+response.statusCode+"}";
+                        byte[] responseData = payload.getBytes("UTF8");
                         if (method == Request.Method.HEAD) {
                             if (response.headers.containsKey("Content-Length")) {
                                 int len = Integer.parseInt(response.headers.get("Content-Length"));
-                                String json = "{sizeOfQueryResponse:"+len+"}";
+                                String json = "{statusCode: "+response.statusCode+", sizeOfQueryResponse:"+len+"}";
                                 responseData = json.getBytes("UTF-8");
                             }
                         }
@@ -84,6 +85,7 @@ public class NetworkHelper {
                             JSONObject obj = null;
                             try {
                                 obj = new JSONObject(jsonString);
+                                obj.put("statusCode",response.statusCode);
                             }
                             catch (JSONException e) {
                                 Log.e("err",e.getMessage());
@@ -91,6 +93,7 @@ public class NetworkHelper {
                                     JSONArray arr = new JSONArray(jsonString);
                                     obj = new JSONObject();
                                     obj.put("results", arr);
+                                    obj.put("statusCode",response.statusCode);
                                 }
                                 catch(JSONException e2) {
                                     Log.e("err",e2.getMessage());

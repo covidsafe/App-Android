@@ -61,7 +61,7 @@ public class AddEditSymptomsFragment extends Fragment {
         }
     }
 
-    public static final AddEditSymptomsFragment newInstance(Date date, String ampm) {
+    public static AddEditSymptomsFragment newInstance(Date date, String ampm) {
         AddEditSymptomsFragment f = new AddEditSymptomsFragment();
         Bundle bdl = new Bundle(3);
         bdl.putSerializable("date",date);
@@ -71,7 +71,7 @@ public class AddEditSymptomsFragment extends Fragment {
         return f;
     }
 
-    public static final AddEditSymptomsFragment newInstance(SymptomsRecord record) {
+    public static AddEditSymptomsFragment newInstance(SymptomsRecord record) {
         AddEditSymptomsFragment f = new AddEditSymptomsFragment();
         Bundle bdl = new Bundle(2);
         bdl.putSerializable("record",record);
@@ -87,7 +87,7 @@ public class AddEditSymptomsFragment extends Fragment {
         Log.e("health","symptom tracker fragment oncreate");
         View view = inflater.inflate(R.layout.add_symptoms_fragment, container, false);
 
-        ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getResources().getColor(R.color.white)));
+        ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getColor(R.color.white)));
         ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((MainActivity) getActivity()).getSupportActionBar().show();
@@ -96,7 +96,7 @@ public class AddEditSymptomsFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(getActivity().getDrawable(R.drawable.ic_close_black_24dp));
 
         RecyclerView rview = view.findViewById(R.id.recyclerViewSymptomBoxes);
-        symptomAdapter = new SymptomRecyclerViewAdapter(getActivity(),getActivity(), op);
+        symptomAdapter = new SymptomRecyclerViewAdapter(getActivity(), op);
         rview.setAdapter(symptomAdapter);
         rview.setLayoutManager(new LinearLayoutManager(getActivity()));
 

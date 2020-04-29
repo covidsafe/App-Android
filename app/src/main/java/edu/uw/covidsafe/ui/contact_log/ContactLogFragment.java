@@ -39,7 +39,7 @@ public class ContactLogFragment extends Fragment {
             window.setStatusBarColor(getActivity().getResources().getColor(R.color.white));
         }
 
-        ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getResources().getColor(R.color.white)));
+        ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getColor(R.color.white)));
         ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().show();
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);

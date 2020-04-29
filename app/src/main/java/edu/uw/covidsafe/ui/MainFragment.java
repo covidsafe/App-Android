@@ -40,6 +40,7 @@ import java.util.List;
 
 import edu.uw.covidsafe.comms.PullFromServerTask;
 import edu.uw.covidsafe.comms.PullFromServerTaskDemo;
+import edu.uw.covidsafe.comms.PullFromServerTaskDemo2;
 import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.symptoms.SymptomDbModel;
 import edu.uw.covidsafe.symptoms.SymptomUtils;
@@ -80,7 +81,7 @@ public class MainFragment extends Fragment {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(getActivity().getResources().getColor(R.color.white));
+            window.setStatusBarColor(getActivity().getColor(R.color.white));
         }
 
         refresh = (ImageView) view.findViewById(R.id.refresh);
@@ -233,7 +234,7 @@ public class MainFragment extends Fragment {
         SimpleDateFormat format = new SimpleDateFormat("MMMM d");
         String ss = format.format(new Date(thresh));
 
-        String out = getString(R.string.card_data_storage_local_expiration1)+ss+".\n"+getString(R.string.card_data_storage_local_expiration2);
+        String out = getString(R.string.card_data_storage_local_expiration, ss);
         localDataStorageText.setText(out);
 
         TextView changeInSettings = (TextView) view.findViewById(R.id.changeInSettings);
@@ -256,7 +257,7 @@ public class MainFragment extends Fragment {
         if (!Constants.PullFromServerTaskRunning) {
             if (!Constants.PUBLIC_DEMO) {
                 if (Constants.DEBUG) {
-                    new PullFromServerTaskDemo(getContext(), getActivity(), view).execute();
+                    new PullFromServerTaskDemo2(getContext(), getActivity(), view).execute();
                 } else {
                     new PullFromServerTask(getContext(), getActivity(), view).execute();
                 }
