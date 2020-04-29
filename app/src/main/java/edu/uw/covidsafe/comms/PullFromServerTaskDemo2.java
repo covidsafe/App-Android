@@ -132,7 +132,7 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         if (Constants.USE_LAST_QUERY_TIME) {
             lastQueryTime = prefs.getLong(context.getString(R.string.time_of_last_query_pkey), 0L);
         }
-        while (currentGpsPrecision < Constants.MaximumGpsPrecision) {
+        while (currentGpsPrecision <= Constants.MaximumGpsPrecision) {
             double preciseLat = Utils.getCoarseGpsCoord(lat, currentGpsPrecision);
             double preciseLong = Utils.getCoarseGpsCoord(lon, currentGpsPrecision);
 
@@ -233,7 +233,7 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         Log.e("pulldemo","we have seeds: "+seenSeeds.size());
         for (String seed : seenSeeds) {
             Log.e("pull","SEED "+seed);
-            if (seed.equals("c2db5cac-9875-4ad7-acc7-ead49c76d1ec")) {
+            if (seed.equals("09f5317c-4dd5-4a22-b282-1de229bcf061")) {
                 Log.e("pulldemo","got seed");
                 Log.e("pulldemo","start time "+format.format(new Date(startTimes.get(seed))));
                 Log.e("pulldemo","endtime "+format.format(new Date(endTimes.get(seed))));

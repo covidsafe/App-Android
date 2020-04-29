@@ -128,7 +128,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         if (lastQueryTime == 0) {
             lastQueryTime = TimeUtils.getTime();
         }
-        while (currentGpsPrecision < Constants.MaximumGpsPrecision) {
+        while (currentGpsPrecision <= Constants.MaximumGpsPrecision) {
             double preciseLat = Utils.getCoarseGpsCoord(lat, currentGpsPrecision);
             double preciseLong = Utils.getCoarseGpsCoord(lon, currentGpsPrecision);
 
