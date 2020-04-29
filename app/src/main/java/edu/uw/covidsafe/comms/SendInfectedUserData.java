@@ -28,6 +28,7 @@ import edu.uw.covidsafe.utils.RegenerateSeedUponReport;
 import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
@@ -77,7 +78,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         }
 
         // find timestamp 14 days ago
-        long timestampAtBeginningOfInfectionWindow = TimeUtils.getTime() - infectionWindowInMilliseconds;
+        long timestampAtBeginningOfInfectionWindow = TimeUtils.getTime() - infectionWindowInMilliseconds - Constants.InfectionWindowIntervalDeviationInMilliseconds;
         // find 6 minutes past 14 days ago
         long timestampDeviation = timestampAtBeginningOfInfectionWindow +
                 UUIDGenerationIntervalInMiliseconds +
@@ -87,6 +88,18 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         SeedUUIDRecord generatedRecord = seedUUIDRepo.getRecordBetween(
                 timestampAtBeginningOfInfectionWindow,
                 timestampDeviation);
+
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm.ss");
+//        Log.e("demo",format.format(timestampAtBeginningOfInfectionWindow));
+//        Log.e("demo",format.format(timestampDeviation));
+//        Log.e("demo", "gen seed between: "+generatedRecord.getSeed(context));
+//        Log.e("demo", "gen timestamp between: "+format.format(generatedRecord.getRawTs()));
+//        Log.e("demo","first seed is "+allRecords.get(allRecords.size()-1).getSeed(context));
+//        Log.e("demo","first seed timestamp is "+format.format(allRecords.get(allRecords.size()-1).getRawTs()));
+//
+//        for (SeedUUIDRecord seed : allRecords) {
+//            Log.e("seeds",format.format(seed.getRawTs()) + " ---- "+seed.getSeed(context));
+//        }
 
         // if user has less than 14 days of records, just get the earliest record
         SeedUUIDRecord recordToSend = generatedRecord;
