@@ -157,10 +157,6 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
                     gpsResolution);
 
             Log.e("sendbug","trace data submitted");
-            mkSnack(av, view, context.getString(R.string.report_has_been_submitted));
-
-            DiagnosisFragment.updateSubmissionView(av, context, view, true);
-            status = true;
         }
         catch(Exception e) {
             Log.e("err",e.getMessage());
@@ -260,6 +256,13 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
             if (resp == null || (resp.has("statusCode") && resp.getInt("statusCode") != 200)) {
                 mkSnack(av, view, context.getString(R.string.error_submitting_data));
                 status = false;
+                return;
+            }
+            else {
+                mkSnack(av, view, context.getString(R.string.report_has_been_submitted));
+
+                DiagnosisFragment.updateSubmissionView(av, context, view, true);
+                status = true;
                 return;
             }
         }
