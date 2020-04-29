@@ -27,7 +27,7 @@ public class ResourceRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
     private ArrayList<String> links = new ArrayList<>();
     private ArrayList<String> titles = new ArrayList<>();
-    private ArrayList<Object> desc = new ArrayList<>();
+//    private ArrayList<Object> desc = new ArrayList<>();
     private ArrayList<Drawable> icons = new ArrayList<>();
     Context cxt;
     Activity av;
@@ -37,8 +37,8 @@ public class ResourceRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         this.av = av;
         titles.add(cxt.getString(R.string.cdc_guidance_text));
         titles.add(cxt.getString(R.string.public_health));
-        desc.add(cxt.getString(R.string.lipsum3));
-        desc.add(cxt.getString(R.string.lipsum3));
+//        desc.add(cxt.getString(R.string.lipsum3));
+//        desc.add(cxt.getString(R.string.lipsum3));
         icons.add(cxt.getDrawable(R.drawable.res1));
         icons.add(cxt.getDrawable(R.drawable.kclogo));
         links.add("https://www.cdc.gov/");

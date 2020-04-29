@@ -17,7 +17,6 @@ public class ContactLogPageAdapter extends FragmentPagerAdapter {
     public ContactLogPageAdapter(@NonNull FragmentManager fm, Context cxt) {
         super(fm);
         this.cxt = cxt;
-
     }
 
     @NonNull

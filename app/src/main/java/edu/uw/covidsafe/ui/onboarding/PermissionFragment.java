@@ -58,18 +58,15 @@ public class PermissionFragment extends Fragment {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(getActivity().getResources().getColor(R.color.white));
+            window.setStatusBarColor(getActivity().getColor(R.color.white));
         }
 
-        ((OnboardingActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getResources().getColor(R.color.white)));
+        ((OnboardingActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getColor(R.color.white)));
         ((OnboardingActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
         ((OnboardingActivity) getActivity()).getSupportActionBar().show();
         ((OnboardingActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((OnboardingActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(getActivity().getString(R.string.permissions_header_text)));
-
-        final Drawable upArrow = getActivity().getDrawable(R.drawable.abc_ic_ab_back_material);
-        upArrow.setColorFilter(getActivity().getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
-        ((OnboardingActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        ((OnboardingActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(getActivity().getDrawable(R.drawable.ic_arrow_back_black_24dp));
 
         RecyclerView rview3 = view.findViewById(R.id.recyclerViewPerms);
         PermissionsRecyclerViewAdapter adapter3 = new PermissionsRecyclerViewAdapter(getContext(),getActivity(), view);

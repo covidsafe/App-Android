@@ -49,13 +49,11 @@ import edu.uw.covidsafe.utils.Utils;
 public class GpsHistoryRecyclerViewAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
-    private Activity av;
     View view;
     List<GpsRecord> records = new LinkedList<>();
 
-    public GpsHistoryRecyclerViewAdapter2(Context mContext, Activity av, View view) {
+    public GpsHistoryRecyclerViewAdapter2(Context mContext, View view) {
         this.mContext = mContext;
-        this.av = av;
         this.view = view;
     }
 

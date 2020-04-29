@@ -67,10 +67,10 @@ public class LocationFragment extends Fragment {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(getActivity().getResources().getColor(R.color.white));
+            window.setStatusBarColor(getActivity().getColor(R.color.white));
         }
 
-        ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getResources().getColor(R.color.white)));
+        ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getColor(R.color.white)));
         ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().show();
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);

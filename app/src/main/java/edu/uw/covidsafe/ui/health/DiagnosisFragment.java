@@ -55,17 +55,17 @@ public class DiagnosisFragment extends Fragment {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(getActivity().getResources().getColor(R.color.white));
+            window.setStatusBarColor(getActivity().getColor(R.color.white));
         }
 
-        ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getResources().getColor(R.color.white)));
+        ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getColor(R.color.white)));
         ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().show();
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-        final Drawable upArrow = getActivity().getDrawable(R.drawable.abc_ic_ab_back_material);
-        upArrow.setColorFilter(getActivity().getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
-        ((MainActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(upArrow);
+//        final Drawable upArrow = getActivity().getDrawable(R.drawable.abc_ic_ab_back_material);
+//        upArrow.setColorFilter(getActivity().getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
+//        ((MainActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(upArrow);
 
         String header_str = getActivity().getString(R.string.health_header_text);
         if (Constants.PUBLIC_DEMO) {
@@ -162,7 +162,7 @@ public class DiagnosisFragment extends Fragment {
                             .setPositiveButton(getString(R.string.dismiss_text), null)
                             .setCancelable(false).create();
                     dialog.show();
-                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getContext().getResources().getColor(R.color.darkGray));
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getContext().getColor(R.color.darkGray));
                 }
             });
         }

@@ -60,7 +60,7 @@ public class SymptomTrackerFragment extends Fragment {
         Log.e("health","symptom tracker fragment oncreate");
         view = inflater.inflate(R.layout.health_symptom_tracker, container, false);
 
-        ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getResources().getColor(R.color.white)));
+        ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getColor(R.color.white)));
         ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().show();
@@ -72,7 +72,7 @@ public class SymptomTrackerFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(header_str));
 
         RecyclerView rview = view.findViewById(R.id.recyclerViewSymptomHistory);
-        symptomHistoryAdapter = new SymptomHistoryRecyclerViewAdapter(getActivity(),getActivity(), view);
+        symptomHistoryAdapter = new SymptomHistoryRecyclerViewAdapter(getActivity(), view);
         rview.setAdapter(symptomHistoryAdapter);
         rview.setLayoutManager(new LinearLayoutManager(getActivity()));
 

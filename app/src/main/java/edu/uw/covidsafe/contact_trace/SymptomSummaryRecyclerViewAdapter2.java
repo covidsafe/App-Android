@@ -44,14 +44,12 @@ import edu.uw.covidsafe.utils.Utils;
 public class SymptomSummaryRecyclerViewAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
-    private Activity av;
     View view;
     List<SymptomsRecord> records = new LinkedList<>();
     int count = 0;
 
-    public SymptomSummaryRecyclerViewAdapter2(Context mContext, Activity av, View view) {
+    public SymptomSummaryRecyclerViewAdapter2(Context mContext, View view) {
         this.mContext = mContext;
-        this.av = av;
         this.view = view;
     }
 

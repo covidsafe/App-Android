@@ -81,7 +81,7 @@ public class MainFragment extends Fragment {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(getActivity().getResources().getColor(R.color.white));
+            window.setStatusBarColor(getActivity().getColor(R.color.white));
         }
 
         refresh = (ImageView) view.findViewById(R.id.refresh);

@@ -40,7 +40,7 @@ public class SymptomConfirmFragment extends Fragment {
         Log.e("health", "symptom tracker fragment oncreate");
         view = inflater.inflate(R.layout.fragment_symptom_confirmation, container, false);
 
-        ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getResources().getColor(R.color.white)));
+        ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getColor(R.color.white)));
         ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((MainActivity) getActivity()).getSupportActionBar().show();
@@ -50,7 +50,7 @@ public class SymptomConfirmFragment extends Fragment {
 
 
         RecyclerView tipView = view.findViewById(R.id.recyclerViewSymptomConfirm);
-        SymptomSummaryRecyclerViewAdapter symptomAdapter = new SymptomSummaryRecyclerViewAdapter(getActivity(),getActivity(), view, record);
+        SymptomSummaryRecyclerViewAdapter symptomAdapter = new SymptomSummaryRecyclerViewAdapter(getActivity(), view, record);
         tipView.setAdapter(symptomAdapter);
         tipView.setLayoutManager(new LinearLayoutManager(getActivity()));
         format();
