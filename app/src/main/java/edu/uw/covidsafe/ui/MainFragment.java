@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,14 +30,20 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.work.ListenableWorker;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 import com.example.covidsafe.R;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import edu.uw.covidsafe.comms.PullFromServerTask;
 import edu.uw.covidsafe.comms.PullFromServerTaskDemo;
@@ -53,6 +60,9 @@ import edu.uw.covidsafe.ui.settings.PermUtils;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
+import edu.uw.covidsafe.workmanager.workers.PullFromServerWorker;
+
+import static edu.uw.covidsafe.workmanager.workers.PullFromServerWorker.GPS_OFF;
 
 public class MainFragment extends Fragment {
 
@@ -256,10 +266,41 @@ public class MainFragment extends Fragment {
         Log.e("refresh","freshtask ");
         if (!Constants.PullFromServerTaskRunning) {
             if (!Constants.PUBLIC_DEMO) {
-                if (Constants.DEBUG) {
+                if (!Constants.DEBUG) {
                     new PullFromServerTaskDemo2(getContext(), getActivity(), view).execute();
                 } else {
-                    new PullFromServerTask(getContext(), getActivity(), view).execute();
+                    // TODO run the one time worker request to observe the status of it
+                    OneTimeWorkRequest oneTimePullRequest = new OneTimeWorkRequest.Builder(PullFromServerWorker.class).build();
+                    WorkManager.getInstance(Objects.requireNonNull(getActivity())).enqueue(oneTimePullRequest);
+                    WorkManager.getInstance(getActivity()).getWorkInfoByIdLiveData(oneTimePullRequest.getId()).observe(this, new Observer<WorkInfo>() {
+                        @Override
+                        public void onChanged(WorkInfo workInfo) {
+                            if(workInfo.getState() == WorkInfo.State.FAILED){
+                                Log.e("PullService", "Pull Service Failed");
+                                int status = workInfo.getOutputData().getInt(PullFromServerWorker.STATUS, -1);
+                                if(status == GPS_OFF){
+                                    showGPSOFFSnackbar();
+                                }
+                            }
+                            if(workInfo.getState().isFinished()){
+                                SharedPreferences prefs = Objects.requireNonNull(getContext()).getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = prefs.edit();
+                                long ts = TimeUtils.getTime();
+                                editor.putLong(Objects.requireNonNull(getActivity()).getString(R.string.last_refresh_date_pkey), ts);
+                                editor.apply();
+                                SwipeRefreshLayout swipeLayout = view.findViewById(R.id.swiperefresh);
+                                swipeLayout.setRefreshing(false);
+                                ImageView refresh = view.findViewById(R.id.refresh);
+                                refresh.clearAnimation();
+                                TextView lastUpdated = view.findViewById(R.id.lastUpdated);
+                                SimpleDateFormat format = new SimpleDateFormat("h:mm a");
+                                lastUpdated.setText(String.format("%s: %s", getContext().getString(R.string.last_updated_text), format.format(new Date(ts))));
+                                lastUpdated.setVisibility(View.VISIBLE);
+                                Constants.PullFromServerTaskRunning = false;
+                            }
+                        }
+                    });
+                   // new PullFromServerTask(getContext(), getActivity(), view).execute();
                 }
 
                 RotateAnimation rotate = new RotateAnimation(0,360,
@@ -275,6 +316,25 @@ public class MainFragment extends Fragment {
                 refresh.clearAnimation();
             }
         }
+    }
+
+    private void showGPSOFFSnackbar() {
+        SpannableStringBuilder builder = new SpannableStringBuilder();
+        builder.append(Objects.requireNonNull(getActivity()).getString(R.string.turn_loc_on2));
+        Snackbar snackBar = Snackbar.make(view, builder, Snackbar.LENGTH_LONG);
+
+        snackBar.setAction(Objects.requireNonNull(getActivity()).getString(R.string.dismiss_text), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snackBar.dismiss();
+            }
+        });
+
+        View snackbarView = snackBar.getView();
+        TextView textView = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
+        textView.setMaxLines(5);
+
+        snackBar.show();
     }
 
     public void broadcastSwitchLogic(boolean isChecked) {
