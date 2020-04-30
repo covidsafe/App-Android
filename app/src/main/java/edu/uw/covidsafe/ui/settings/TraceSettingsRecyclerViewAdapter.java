@@ -39,9 +39,10 @@ public class TraceSettingsRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         this.names.add(cxt.getString(R.string.setting1));
         this.names.add(cxt.getString(R.string.language));
         this.descs.add(cxt.getString(R.string.setting1desc));
-        this.descs.add(cxt.getString(R.string.english) + "/" + cxt.getString(R.string.spanish));
+//        this.descs.add(cxt.getString(R.string.english) + "/" + cxt.getString(R.string.spanish));
+        this.descs.add("");
         this.icons.add(cxt.getDrawable(R.drawable.datalength));
-        this.icons.add(cxt.getDrawable(R.drawable.datalength));
+        this.icons.add(cxt.getDrawable(R.drawable.lang));
     }
 
     @NonNull
@@ -94,19 +95,16 @@ public class TraceSettingsRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         }
 
         if (position == 1) {
-            List<String> languages = new LinkedList<>();
-            languages.add("en");
-            languages.add("es");
-
-            ((TracesettingsCard) holder).spinner.setItems(languages);
-            ((TracesettingsCard) holder).spinner.setSelectedIndex(languages.indexOf(prefs.getString(Constants.LANGUAGUE_SELECTED, "en")));
+            ((TracesettingsCard) holder).spinner.setItems(Constants.languages);
+            ((TracesettingsCard) holder).spinner.setSelectedIndex(
+                    Constants.languages.indexOf(prefs.getString(cxt.getString(R.string.lang_pkey), "en")));
 
             ((TracesettingsCard) holder).spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
                 @Override
                 public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
                     Log.e("setting ", "got " + item);
                     SharedPreferences.Editor editor = cxt.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
-                    editor.putString(Constants.LANGUAGUE_SELECTED, languages.get(position));
+                    editor.putString(cxt.getString(R.string.lang_pkey), Constants.languages.get(position));
                     editor.commit();
 
                     callback.onRefreshSelected();
@@ -141,7 +139,7 @@ public class TraceSettingsRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     }
 
     public interface OnHeadlineSelectedListener {
-        public void onRefreshSelected();
+        void onRefreshSelected();
     }
 }
 

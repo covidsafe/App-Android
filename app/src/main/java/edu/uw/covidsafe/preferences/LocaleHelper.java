@@ -6,6 +6,9 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
+import android.util.Log;
+
+import com.example.covidsafe.R;
 
 import java.util.Locale;
 
@@ -15,11 +18,29 @@ public class LocaleHelper {
 
     public static Context onAttach(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
 
-        String locale = prefs.getString(Constants.LANGUAGUE_SELECTED, "en");
-        return setLocale(context, locale);
+        Locale systemLocale = context.getResources().getConfiguration().locale;
+
+        String storedLocale = prefs.getString(context.getString(R.string.lang_pkey), "");
+        if (storedLocale.isEmpty()) {
+            if (Constants.languages.contains(systemLocale.getLanguage())) {
+                editor.putString(context.getString(R.string.lang_pkey),
+                        systemLocale.getLanguage());
+                editor.commit();
+                return setLocale(context, systemLocale.getLanguage());
+            }
+            else {
+                editor.putString(context.getString(R.string.lang_pkey),
+                        Constants.defaultLocale);
+                editor.commit();
+                return setLocale(context, Constants.defaultLocale);
+            }
+        }
+        else {
+            return setLocale(context, storedLocale);
+        }
     }
-
 
     /**
      * Set the app's locale to the one specified by the given String.
@@ -50,6 +71,7 @@ public class LocaleHelper {
         }
     }
 
+    // sets the locale in the context for the newer APIs
     @TargetApi(Build.VERSION_CODES.N)
     private static Context updateResources(Context context, Locale locale) {
         Configuration configuration = context.getResources().getConfiguration();
@@ -59,6 +81,7 @@ public class LocaleHelper {
         return context.createConfigurationContext(configuration);
     }
 
+    // sets the locale in the context for the older APIs
     @SuppressWarnings("deprecation")
     private static Context updateResourcesLegacy(Context context, Locale locale) {
         Resources resources = context.getResources();

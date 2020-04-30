@@ -90,6 +90,7 @@
     <string name="bluetooth_is_off">Bluetooth está actualmente desactivado.</string>
     <string name="pos_text">Diagnóstico positivo de COVID-19 informado</string>
 
+    <string name="lang_pkey">lang_pkey</string>
     <string name="min_api_check_pkey">min_api_check_pkey</string>
     <string name="public_key_pkey">public_key_pkey</string>
     <string name="last_refresh_date_pkey">last_refresh_date_pkey</string>
