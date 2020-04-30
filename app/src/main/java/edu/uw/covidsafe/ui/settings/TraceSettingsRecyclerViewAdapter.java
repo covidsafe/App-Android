@@ -57,8 +57,7 @@ public class TraceSettingsRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
         SharedPreferences prefs = cxt.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
 
-        if (position == 0) {
-
+        if (this.names.get(position).equals(cxt.getString(R.string.setting1))) {
             int currentDaysOfDataToKeep = 0;
             if (Constants.DEBUG) {
                 currentDaysOfDataToKeep = prefs.getInt(cxt.getString(R.string.infection_window_in_days_pkeys), Constants.DefaultDaysOfLogsToKeepDebug);
@@ -91,7 +90,7 @@ public class TraceSettingsRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             });
         }
 
-        if (position == 1) {
+        else if (this.names.get(position).equals(cxt.getString(R.string.language))) {
             ((TracesettingsCard) holder).spinner.setItems(Constants.languages);
             ((TracesettingsCard) holder).spinner.setSelectedIndex(
                     Constants.languages.indexOf(prefs.getString(cxt.getString(R.string.lang_pkey), "en")));
