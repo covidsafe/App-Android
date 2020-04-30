@@ -155,14 +155,14 @@ public class OnboardingActivity extends AppCompatActivity {
                     d4.getTime(), lats[4],lons[4],"",this
             ), this).execute();
 
-            new HumanOpsAsyncTask(this, "1234","Alice","").execute();
-            new HumanOpsAsyncTask(this, "5678","Bob","").execute();
-            new HumanOpsAsyncTask(this, "5678","Charlie","").execute();
-            new HumanOpsAsyncTask(this, "5678","David","").execute();
-            new HumanOpsAsyncTask(this, "5678","Ernie","").execute();
-            new HumanOpsAsyncTask(this, "5678","Francis","").execute();
-            new HumanOpsAsyncTask(this, "5678","George","").execute();
-            new HumanOpsAsyncTask(this, "5678","Harry","").execute();
+            new HumanOpsAsyncTask(this, "1234","Alice","", "alice@alice.com").execute();
+            new HumanOpsAsyncTask(this, "5678","Bob","","bob@bob.com").execute();
+            new HumanOpsAsyncTask(this, "5678","Charlie","","charlie@brown.com").execute();
+            new HumanOpsAsyncTask(this, "5678","David","","david@goliath.com").execute();
+            new HumanOpsAsyncTask(this, "5678","Ernie","","ernie@bert.com").execute();
+            new HumanOpsAsyncTask(this, "5678","Francis","","francis@bacon.com").execute();
+            new HumanOpsAsyncTask(this, "5678","George","","george@george.com").execute();
+            new HumanOpsAsyncTask(this, "5678","Harry","","harry@harry.com").execute();
         }
         catch(Exception e) {
             Log.e("err",e.getMessage());

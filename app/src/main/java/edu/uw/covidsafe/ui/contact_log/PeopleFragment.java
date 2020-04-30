@@ -110,7 +110,7 @@ public class PeopleFragment extends Fragment {
         smodel.getAllSorted().observe(getActivity(), new Observer<List<HumanRecord>>() {
             @Override
             public void onChanged(List<HumanRecord> humanRecords) {
-                Log.e("human","onchanged");
+                Log.e("human","onchanged "+humanRecords.size());
                 humanDbChanged = true;
                 Constants.changedContactHumanRecords = humanRecords;
 //                if (Constants.CurrentFragment.toString().toLowerCase().contains("people")) {

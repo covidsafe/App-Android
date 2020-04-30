@@ -89,40 +89,40 @@ public class SymptomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     // if cb is not null
     // update the checkbox with the contents of the object (when restoring results for edit op)
     public void updateCheckbox(int position, CheckBox cb, boolean isChecked) {
-        String symptom = Constants.symptoms.get(position).toLowerCase();
-        if (symptom.equals("fever")) {
+        String symptom = Constants.symptoms.get(position);
+        if (symptom.equals(mContext.getString(R.string.fever_txt))) {
             if (cb != null) { cb.setChecked(dataIn.isFever()); }
             else { dataOut.setFever(isChecked); }
         }
-        else if (symptom.contains("abdominal pain")) {
+        else if (symptom.contains(mContext.getString(R.string.abdominal_pain_txt))) {
             if (cb != null) { cb.setChecked(dataIn.isAbdominalPain()); }
             else { dataOut.setAbdominalPain(isChecked); }
         }
-        else if (symptom.contains("chills")) {
+        else if (symptom.contains(mContext.getString(R.string.chills_txt))) {
             if (cb != null) { cb.setChecked(dataIn.isChills()); }
             else { dataOut.setChills(isChecked); }
         }
-        else if (symptom.contains("cough")) {
+        else if (symptom.contains(mContext.getString(R.string.cough_txt))) {
             if (cb != null) { cb.setChecked(dataIn.isCough()); }
             else { dataOut.setCough(isChecked); }
         }
-        else if (symptom.contains("diarrhea")) {
+        else if (symptom.contains(mContext.getString(R.string.diarrhea_txt))) {
             if (cb != null) { cb.setChecked(dataIn.isDiarrhea()); }
             else { dataOut.setDiarrhea(isChecked); }
         }
-        else if (symptom.contains("difficult breathing")) {
+        else if (symptom.contains(mContext.getString(R.string.trouble_breathing_txt))) {
             if (cb != null) { cb.setChecked(dataIn.isTroubleBreathing()); }
             else { dataOut.setTroubleBreathing(isChecked); }
         }
-        else if (symptom.contains("headache")) {
+        else if (symptom.contains(mContext.getString(R.string.headache_txt))) {
             if (cb != null) { cb.setChecked(dataIn.isHeadache()); }
             else { dataOut.setHeadache(isChecked); }
         }
-        else if (symptom.contains("sore throat")) {
+        else if (symptom.contains(mContext.getString(R.string.sore_throat_txt))) {
             if (cb != null) { cb.setChecked(dataIn.isSoreThroat()); }
             else { dataOut.setSoreThroat(isChecked); }
         }
-        else if (symptom.contains("vomiting")) {
+        else if (symptom.contains(mContext.getString(R.string.vomitting_txt))) {
             if (cb != null) { cb.setChecked(dataIn.isVomiting()); }
             else { dataOut.setVomiting(isChecked); }
         }
@@ -184,7 +184,7 @@ public class SymptomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         ((SymptomHolder) holder).feverOnsetDate.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                calendarSetup(((SymptomHolder) holder), ((SymptomHolder) holder).feverOnsetDate, "fever");
+                calendarSetup(((SymptomHolder) holder), ((SymptomHolder) holder).feverOnsetDate, mContext.getString(R.string.fever_txt));
                 return false;
             }
         });
@@ -222,10 +222,10 @@ public class SymptomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         String date = sdf.format(myCalendar.getTime());
         tt.setText(date);
-        if (symptom.equals("cough")) {
+        if (symptom.equals(mContext.getString(R.string.cough_txt))) {
             dataOut.setCoughOnset(myCalendar.getTime().getTime());
         }
-        else if (symptom.equals("fever")) {
+        else if (symptom.equals(mContext.getString(R.string.fever_txt))) {
             dataOut.setFeverOnset(myCalendar.getTime().getTime());
         }
     }
@@ -296,17 +296,17 @@ public class SymptomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         ((SymptomHolder) holder).coughOnsetDate.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                calendarSetup(((SymptomHolder) holder), ((SymptomHolder) holder).coughOnsetDate, "cough");
+                calendarSetup(((SymptomHolder) holder), ((SymptomHolder) holder).coughOnsetDate, mContext.getString(R.string.cough_txt));
                 return false;
             }
         });
     }
 
     public void symptomCheck(String symptom, SymptomHolder holder) {
-        if(symptom.contains("fever")) {
+        if(symptom.contains(mContext.getString(R.string.fever_txt))) {
             checkFeverEmpty(holder);
         }
-        else if (symptom.contains("cough")){
+        else if (symptom.contains(mContext.getString(R.string.cough_txt))){
             checkCoughEmpty(holder);
         }
     }
@@ -353,11 +353,11 @@ public class SymptomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         ((SymptomHolder)holder).name.setText(Constants.symptoms.get(position));
         ((SymptomHolder)holder).desc.setText(Constants.symptomDesc.get(position));
 
-        String symptomName = Constants.symptoms.get(position).toLowerCase();
+        String symptomName = Constants.symptoms.get(position);
         ((SymptomHolder) holder).details.setVisibility(View.GONE);
         ((SymptomHolder) holder).details2.setVisibility(View.GONE);
 
-        if (symptomName.contains("fever") || symptomName.contains("cough")) {
+        if (symptomName.contains(mContext.getString(R.string.fever_txt)) || symptomName.contains(mContext.getString(R.string.cough_txt))) {
             ((SymptomHolder)holder).chevron.setVisibility(View.VISIBLE);
             ((SymptomHolder)holder).innerConstraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -367,21 +367,21 @@ public class SymptomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
                     if (state) {
                         ((SymptomHolder) holder).chevron.setImageDrawable(mContext.getDrawable(R.drawable.ic_keyboard_arrow_down_gray_24dp));
-                        if (symptomName.contains("fever")) {
+                        if (symptomName.contains(mContext.getString(R.string.fever_txt))) {
                             ((SymptomHolder) holder).details.setVisibility(View.VISIBLE);
                             initFeverForm(holder);
                         }
-                        else if (symptomName.contains("cough")){
+                        else if (symptomName.contains(mContext.getString(R.string.cough_txt))){
                             ((SymptomHolder) holder).details2.setVisibility(View.VISIBLE);
                             initCoughForm(holder);
                         }
                     }
                     else {
                         ((SymptomHolder) holder).chevron.setImageDrawable(mContext.getDrawable(R.drawable.ic_navigate_before_black_24dp));
-                        if (symptomName.contains("fever")) {
+                        if (symptomName.contains(mContext.getString(R.string.fever_txt))) {
                             ((SymptomHolder) holder).details.setVisibility(View.GONE);
                         }
-                        else if (symptomName.contains("cough")){
+                        else if (symptomName.contains(mContext.getString(R.string.cough_txt))){
                             ((SymptomHolder) holder).details2.setVisibility(View.GONE);
                         }
                     }
@@ -403,7 +403,7 @@ public class SymptomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         // restore states of checkboxes
         if (this.op.equals("edit") && dataIn != null) {
             updateCheckbox(position, ((SymptomHolder) holder).cb, false);
-            if (symptomName.contains("fever") && ((SymptomHolder) holder).detailsVisible) {
+            if (symptomName.contains(mContext.getString(R.string.fever_txt)) && ((SymptomHolder) holder).detailsVisible) {
                 ////////////////////////////////////////////////////////////////////////
                 int unitIndex = this.feverSpinner.indexOf(dataIn.getFeverUnit());
                 ((SymptomHolder) holder).feverSpinner.setSelectedIndex(unitIndex);
@@ -417,7 +417,7 @@ public class SymptomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 ((SymptomHolder) holder).feverTemp.setText(dataIn.getFeverTemp()+"");
                 ////////////////////////////////////////////////////////////////////////
             }
-            else if (symptomName.contains("cough") && ((SymptomHolder) holder).detailsVisible) {
+            else if (symptomName.contains(mContext.getString(R.string.cough_txt)) && ((SymptomHolder) holder).detailsVisible) {
                 ////////////////////////////////////////////////////////////////////////
                 SimpleDateFormat format = new SimpleDateFormat("MM/dd");
                 String date = format.format(new Date(dataIn.getCoughOnset()));

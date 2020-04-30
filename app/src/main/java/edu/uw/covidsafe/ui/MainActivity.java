@@ -220,7 +220,17 @@ public class MainActivity extends AppCompatActivity {
                     String phone = c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                     String name = c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                     String photo = c.getString(c.getColumnIndex(ContactsContract.Contacts.PHOTO_URI));
-                    new HumanOpsAsyncTask(this, phone, name, photo).execute();
+                    String id = c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID));
+
+                    String email = null;
+                    Cursor emails = getContentResolver().query(ContactsContract.CommonDataKinds.Email.CONTENT_URI,null,
+                            ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = " + id,null,null);
+                    while (emails.moveToNext()) {
+                        email = emails.getString(emails.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+                        break;
+                    }
+                    emails.close();
+                    new HumanOpsAsyncTask(this, phone, name, photo, email).execute();
                 }
                 c.close();
             }
@@ -318,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         Log.e("state","main activity onresume");
 
-        Constants.init(this);
+//        Constants.init(this);
         initView();
         initBottomNav();
 
