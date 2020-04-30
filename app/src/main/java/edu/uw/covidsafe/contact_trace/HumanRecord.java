@@ -19,6 +19,17 @@ public class HumanRecord {
     @ColumnInfo(name = "phoneNumber")
     private String phoneNumber;
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @ColumnInfo(name = "email")
+    private String email;
+
     @NonNull
     public String getImgUri() {
         return imgUri;
@@ -49,10 +60,11 @@ public class HumanRecord {
         this.phoneNumber = phoneNumber;
     }
 
-    public HumanRecord(@NonNull String phoneNumber, String name, String imgUri) {
+    public HumanRecord(@NonNull String phoneNumber, String name, String imgUri, String email) {
         this.phoneNumber = phoneNumber;
         this.name = name;
         this.imgUri = imgUri;
+        this.email = email;
     }
 
     public String toString() {

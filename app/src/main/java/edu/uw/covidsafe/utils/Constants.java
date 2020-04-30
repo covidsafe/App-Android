@@ -61,7 +61,7 @@ public class Constants {
 
     public static boolean UI_AUTH = false;
     public static boolean WRITE_TO_DISK = false;
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = true;
     public static boolean PUBLIC_DEMO = false;
     public static boolean NARROWCAST_ENABLE = true;
     public static boolean USE_LAST_QUERY_TIME = true;
