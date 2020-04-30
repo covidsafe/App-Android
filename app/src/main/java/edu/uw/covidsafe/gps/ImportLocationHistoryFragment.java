@@ -88,8 +88,6 @@ public class ImportLocationHistoryFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(getActivity().getString(R.string.settings_header_text)));
 
-        final String signin_url = "https://accounts.google.com/signin/v2/identifier?flowName=GlifWebSignIn&flowEntry=ServiceLogin";
-
         SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
         SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
         SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
@@ -102,9 +100,9 @@ public class ImportLocationHistoryFragment extends Fragment {
             begin = new Date(TimeUtils.getNDaysForward(-Constants.DefaultInfectionWindowInDays));
         }
 
-        final String download_url = "https://www.google.com/maps/timeline/kml?authuser=0&pb=!1m8!1m3!1i" +
-                yearFormat.format(begin) + "!2i" + monthFormat.format(begin) + "!3i" + dayFormat.format(begin) +
-                "!2m3!1i" + yearFormat.format(now) + "!2i" + monthFormat.format(now) + "!3i" + dayFormat.format(now);
+        String download_url = String.format(Constants.GOOGLE_KML_STRING_FORMAT,
+                yearFormat.format(begin), monthFormat.format(begin), dayFormat.format(begin),
+                yearFormat.format(now), monthFormat.format(now), dayFormat.format(now));
 
         final WebView myWebView = (WebView) view.findViewById(R.id.webview);
 
@@ -112,17 +110,17 @@ public class ImportLocationHistoryFragment extends Fragment {
         headers.put("content-type", "application/vnd.google-earth.kml+xml");
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
-        myWebView.loadUrl(signin_url);
+        myWebView.loadUrl(Constants.GOOGLE_SIGNIN_PAGE);
 
         myWebView.setWebViewClient(new MyWebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(myWebView, url);
                 Log.e("log","on page finished "+url);
-                if (url.contains(signin_url)) {
+                if (url.contains(Constants.GOOGLE_SIGNIN_PAGE)) {
                     Log.e("log","----------------------");
                 }
-                else if (url.contains("https://myaccount.google.com/?utm_source=sign_in_no_continue")) {
+                else if (url.contains(Constants.GOOGLE_DOWNLOAD_PAGE)) {
                     myWebView.setVisibility(View.GONE);
                     myWebView.clearFormData();
                     myWebView.clearCache(true);

@@ -63,8 +63,8 @@ public class Constants {
 
     public static boolean UI_AUTH = false;
     public static boolean WRITE_TO_DISK = false;
-    public static boolean DEBUG = false;
-    public static boolean PUBLIC_DEMO = false;
+    public static boolean DEBUG = true;
+    public static boolean PUBLIC_DEMO = true;
     public static boolean NARROWCAST_ENABLE = true;
     public static boolean USE_LAST_QUERY_TIME = true;
     public static boolean PAYLOAD_CHECK = true;
@@ -131,6 +131,10 @@ public class Constants {
     public static UUID CHARACTERISTIC_UUID = UUID.fromString("d945590b-5b09-4144-ace7-4063f95bd0bb");
     public static UUID BEACON_SERVICE_UUID = UUID.fromString("0000D028-0000-1000-8000-00805F9B34FB");
     public static UUID contactUUID = null;
+
+    public static String GOOGLE_SIGNIN_PAGE = "https://accounts.google.com/signin/v2/identifier?flowName=GlifWebSignIn&flowEntry=ServiceLogin";
+    public static String GOOGLE_DOWNLOAD_PAGE = "https://myaccount.google.com/?utm_source=sign_in_no_continue";
+    public static String GOOGLE_KML_STRING_FORMAT = "https://www.google.com/maps/timeline/kml?authuser=0&pb=!1m8!1m3!1i%s!2i%s!3i%s!2m3!1i%s!2i%s!3i%s";
 
     //GPS_TIME_INTERVAL and GPS_LOCATION_INTERVAL used to control frequency of location updates
     //to optimize for power, note that GPS_TIME_INTERVAL is the primary method by which
