@@ -7,6 +7,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.example.covidsafe.R;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Booleans;
 
@@ -301,34 +302,34 @@ public class SymptomsRecord implements Serializable {
         return Booleans.countTrue(Booleans.toArray(values));
     }
 
-    public List<String> getSymptoms() {
+    public List<String> getSymptoms(Context mContext) {
         List<String> values = new LinkedList<>();
         if (this.fever) {
-            values.add("fever");
+            values.add(mContext.getString(R.string.fever_txt));
         }
         if (this.abdominalPain) {
-            values.add("abdominal");
+            values.add(mContext.getString(R.string.abdominal_pain_txt));
         }
         if (this.chills) {
-            values.add("chills");
+            values.add(mContext.getString(R.string.chills_txt));
         }
         if (this.cough) {
-            values.add("cough");
+            values.add(mContext.getString(R.string.cough_txt));
         }
         if (this.diarrhea) {
-            values.add("diarrhea");
+            values.add(mContext.getString(R.string.diarrhea_txt));
         }
         if (this.troubleBreathing) {
-            values.add("breathing");
+            values.add(mContext.getString(R.string.trouble_breathing_txt));
         }
         if (this.headache) {
-            values.add("headache");
+            values.add(mContext.getString(R.string.headache_txt));
         }
         if (this.soreThroat) {
-            values.add("sore");
+            values.add(mContext.getString(R.string.sore_throat_txt));
         }
         if (this.vomiting) {
-            values.add("vomiting");
+            values.add(mContext.getString(R.string.vomitting_txt));
         }
         return values;
     }

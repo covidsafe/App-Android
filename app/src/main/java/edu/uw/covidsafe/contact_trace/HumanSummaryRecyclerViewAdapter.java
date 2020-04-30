@@ -84,6 +84,9 @@ public class HumanSummaryRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         if (record.getPhoneNumber() != null) {
             out += "\n"+record.getPhoneNumber();
         }
+        if (record.getEmail() != null) {
+            out += "\n"+record.getEmail();
+        }
         ((HumanSummaryHolder) holder).text.setText(out);
         ((HumanSummaryHolder) holder).bb.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -13,9 +13,9 @@ public class HumanOpsAsyncTask extends AsyncTask<Void, Void, Void> {
     private HumanRecord result;
     private Constants.HumanDatabaseOps op;
 
-    public HumanOpsAsyncTask(Context cxt, String phone, String name, String imageUri) {
+    public HumanOpsAsyncTask(Context cxt, String phone, String name, String imageUri, String email) {
         repo = new HumanDbRecordRepository(cxt);
-        this.result = new HumanRecord(phone, name, imageUri);
+        this.result = new HumanRecord(phone, name, imageUri, email);
         this.op = Constants.HumanDatabaseOps.Insert;
     }
 
