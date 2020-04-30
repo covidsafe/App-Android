@@ -33,6 +33,7 @@ import edu.uw.covidsafe.symptoms.SymptomTrackerFragment;
 import edu.uw.covidsafe.ui.health.DiagnosisFragment;
 
 import java.security.KeyStore;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -240,6 +241,9 @@ public class Constants {
             Manifest.permission.FOREGROUND_SERVICE,
             Manifest.permission.INTERNET
     };
+
+    public static List<String> languages = new LinkedList<>(Arrays.asList("en","es"));
+    public static String defaultLocale = "en";
 
     public static void init(Activity av) {
         Log.e("logme","constants init");

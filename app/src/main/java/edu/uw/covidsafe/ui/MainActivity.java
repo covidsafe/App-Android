@@ -31,6 +31,7 @@ import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.contact_trace.HumanOpsAsyncTask;
 import edu.uw.covidsafe.gps.GpsOpsAsyncTask;
 import edu.uw.covidsafe.gps.GpsRecord;
+import edu.uw.covidsafe.preferences.LocaleHelper;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDOpsAsyncTask;
 import edu.uw.covidsafe.symptoms.SymptomTrackerFragment;
 import edu.uw.covidsafe.symptoms.SymptomsOpsAsyncTask;
@@ -388,6 +389,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void reset(View v) {
         Utils.clearPreferences(this);
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
     public void initBottomNav() {

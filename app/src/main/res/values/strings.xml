@@ -172,6 +172,7 @@ Contact tracing is a process that helps identify all the people who may have com
     <string name="bluetooth_is_off">Bluetooth is currently turned off.</string>
     <string name="pos_text">Positive COVID-19 Diagnosis Reported</string>
 
+    <string name="lang_pkey">lang_pkey</string>
     <string name="min_api_check_pkey">min_api_check_pkey</string>
     <string name="public_key_pkey">public_key_pkey</string>
     <string name="last_refresh_date_pkey">last_refresh_date_pkey</string>
@@ -492,4 +493,7 @@ You can prepare a list of informaton they will ask about based on information co
     <string name="monitor1">If you have symptoms like cough, fever, or other respiratory problems, contact your regular doctor first.</string>
     <string name="monitor2">Do not go to the emergency room.</string>
     <string name="monitor3">Emergency rooms need to be able to serve those with the most critical needs. If you have difficulty breathing, it doesn’t mean you have novel coronavirus, but you should call 911.</string>
+    <string name="language">Language</string>
+    <string name="english">English</string>
+    <string name="spanish">Spanish</string>
 </resources>

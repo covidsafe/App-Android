@@ -90,6 +90,7 @@
     <string name="bluetooth_is_off">Bluetooth está actualmente desactivado.</string>
     <string name="pos_text">Diagnóstico positivo de COVID-19 informado</string>
 
+    <string name="lang_pkey">lang_pkey</string>
     <string name="min_api_check_pkey">min_api_check_pkey</string>
     <string name="public_key_pkey">public_key_pkey</string>
     <string name="last_refresh_date_pkey">last_refresh_date_pkey</string>
@@ -368,5 +369,7 @@
     <string name="monitor1">Si tiene síntomas como tos, fiebre u otros problemas respiratorios, comuníquese primero con su médico habitual.</string>
     <string name="monitor2">No vaya a la sala de emergencias.</string>
     <string name="monitor3">Las salas de emergencia deben poder atender a las personas con las necesidades más críticas. Si tiene dificultades para respirar, no significa que tenga un coronavirus nuevo, pero debe llamar al 911.</string>
-
+    <string name="language">Lenguaje</string>
+    <string name="english">English</string>
+    <string name="spanish">Español</string>
 </resources>
