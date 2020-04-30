@@ -1,8 +1,10 @@
 package edu.uw.covidsafe.ui.settings;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.method.LinkMovementMethod;
@@ -15,6 +17,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.covidsafe.R;
@@ -22,6 +26,9 @@ import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 
+import edu.uw.covidsafe.comms.NetworkHelper;
+import edu.uw.covidsafe.ui.MainActivity;
+import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
 
 public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -32,15 +39,22 @@ public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     Context cxt;
     Activity av;
 
-    public MoreRecyclerViewAdapter(Context cxt, Activity av) {
+    public MoreRecyclerViewAdapter(Context cxt, Activity av, int section) {
         this.cxt = cxt;
         this.av = av;
-        titles.add(cxt.getString(R.string.share_text));
-        titles.add(cxt.getString(R.string.about_covidsafe));
-        titles.add(cxt.getString(R.string.faq));
-        icons.add(cxt.getDrawable(R.drawable.icon_share2));
-        icons.add(cxt.getDrawable(R.drawable.logo2));
-        icons.add(cxt.getDrawable(R.drawable.icon_faq2));
+
+        if (section == 0) {
+            titles.add(cxt.getString(R.string.import_text));
+            icons.add(cxt.getDrawable(R.drawable.ic_file_download_black_24dp));
+        }
+        else if (section == 1) {
+            titles.add(cxt.getString(R.string.share_text));
+            titles.add(cxt.getString(R.string.about_covidsafe));
+            titles.add(cxt.getString(R.string.faq));
+            icons.add(cxt.getDrawable(R.drawable.icon_share2));
+            icons.add(cxt.getDrawable(R.drawable.logo2));
+            icons.add(cxt.getDrawable(R.drawable.icon_faq2));
+        }
     }
 
     @NonNull
@@ -84,6 +98,26 @@ public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 public void onClick(View v) {
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(av.getString(R.string.covidSiteFaqLink)));
                     av.startActivity(browserIntent);
+                }
+            });
+        }
+        else if (titles.get(position).contains(cxt.getString(R.string.import_text))) {
+            ((MoreCard)holder).card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!NetworkHelper.isNetworkAvailable(av)) {
+                        Toast.makeText(cxt,cxt.getString(R.string.network_down), Toast.LENGTH_LONG).show();
+                    }
+                    else if (ActivityCompat.checkSelfPermission(cxt, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                        FragmentTransaction tx = ((MainActivity)av).getSupportFragmentManager().beginTransaction();
+                        tx.setCustomAnimations(
+                                R.anim.enter_right_to_left,R.anim.exit_right_to_left,
+                                R.anim.enter_right_to_left,R.anim.exit_right_to_left);
+                        tx.replace(R.id.fragment_container, Constants.ImportLocationHistoryFragment).commit();
+                    }
+                    else {
+                        ActivityCompat.requestPermissions(av, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
+                    }
                 }
             });
         }

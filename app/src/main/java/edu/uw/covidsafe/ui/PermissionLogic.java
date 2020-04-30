@@ -17,6 +17,7 @@ import android.widget.Switch;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.covidsafe.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -58,8 +59,28 @@ public class PermissionLogic {
             return;
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+            permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            if (ActivityCompat.checkSelfPermission(av, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                FragmentTransaction tx = ((MainActivity)av).getSupportFragmentManager().beginTransaction();
+                tx.setCustomAnimations(
+                        R.anim.enter_right_to_left,R.anim.exit_right_to_left,
+                        R.anim.enter_right_to_left,R.anim.exit_right_to_left);
+                tx.replace(R.id.fragment_container, Constants.ImportLocationHistoryFragment).commit();
+            }
+            else {
+                boolean shouldAsk;
+                shouldAsk = ActivityCompat.shouldShowRequestPermissionRationale(av, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                if (shouldAsk) {
+                    makeRationaleDialog(av, requestCode, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                } else if (!shouldAsk) {
+                    makeOpenSettingsDialog(av, Manifest.permission.WRITE_EXTERNAL_STORAGE, requestCode);
+                }
+            }
+            return ;
+        }
 
-            // for Q, the only permission is GPS
+        // for Q, the only permission is GPS
         // for below Q, the permission can be for BLE (1) or GPS (2)
         if (androidSDKVersion >= Build.VERSION_CODES.Q) {
             if (backgroundResult == PackageManager.PERMISSION_DENIED) {
@@ -120,8 +141,11 @@ public class PermissionLogic {
         if (requestCode == 1) {
             msg = av.getString(R.string.perm_ble_ask);
         }
-        else {
+        else if (requestCode == 2){
             msg = av.getString(R.string.perm_gps_ask);
+        }
+        else {
+            msg = av.getString(R.string.perm_write_ask);
         }
 
         AlertDialog dialog = new MaterialAlertDialogBuilder(av)
@@ -168,6 +192,9 @@ public class PermissionLogic {
         String msg;
         if (perm.equals(Manifest.permission.READ_CONTACTS)) {
             msg = av.getString(R.string.perm_contacts_rationale);
+        }
+        else if (perm.equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            msg = av.getString(R.string.perm_write_rationale);
         }
         else {
             msg = av.getString(R.string.perm_ble_rationale);

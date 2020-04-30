@@ -195,14 +195,18 @@ Contact tracing is a process that helps identify all the people who may have com
     <string name="quarantine_end_time_pkey">quarantine_end_time_pkey</string>
     <string name="last_symptom_update_pkey">last_symptom_update_pkey</string>
 
+    <string name="downloading">Downloading file...</string>
+    <string name="download_complete">Download complete!</string>
     <string name="last_submitted">Last submitted</string>
     <string name="phone">911</string>
     <string name="privacyDisclaimer">Any information collected on CovidSafe is stored securely and locally in your app, and remain private to you.</string>
     <string name="privacyDisclaimer2">This information is stored securely and locally on your app, and remains private to you.</string>
     <string name="perm_gps_rationale">Without this permission, we will be unable to capture location information. Are you sure you want to deny this permission?</string>
     <string name="perm_gps_ask">We require access to location information when the app is closed. Would you like to open app settings to enable this?</string>
+    <string name="perm_write_ask">We require access to location information to import your history. Would you like to open app settings to enable this?</string>
 
     <string name="perm_ble_rationale">Without this permission, we will be unable to capture Bluetooth information of users around you. Are you sure you want to deny this permission?</string>
+    <string name="perm_write_rationale">Without this permission, we will be unable to import your location history. Are you sure you want to deny this permission?</string>
     <string name="perm_ble_ask">We require access to Bluetooth information when the app is closed. Would you like to open app settings to enable this?</string>
 
     <string name="perm_contacts_rationale">Without this permission, we will be unable to add contacts to the app. Are you sure you want to deny this permission?</string>
@@ -380,6 +384,7 @@ Contact tracing is a process that helps identify all the people who may have com
     <string name="privacy_text">Privacy</string>
     <string name="terms_text">Terms and Conditions</string>
     <string name="release_text">Release information</string>
+    <string name="import_text">Import location history</string>
     <string name="share_text">Share</string>
     <string name="you_might_have_exposed" comment="text shown to the user if they have been exposed to the virus">You might have been exposed</string>
     <string name="exposure_notification_description_text" comment="description for the notifcation">Based on your location history, we believe you might have been in the same place as people infected with COVID-19</string>

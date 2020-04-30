@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Scanner;
 
 public class FileOperations {
 
@@ -56,5 +58,17 @@ public class FileOperations {
         } catch(Exception e) {
             Log.e("logme",e.getMessage());
         }
+    }
+
+    public static String readrawasset(Context context, int id) {
+        Scanner inp = new Scanner(context.getResources().openRawResource(id));
+
+        String out = "";
+        while (inp.hasNextLine()) {
+            out += inp.nextLine();
+        }
+        inp.close();
+
+        return out;
     }
 }
