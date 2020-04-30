@@ -15,36 +15,38 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import edu.uw.covidsafe.workmanager.workers.LogPurgerWorker;
 import edu.uw.covidsafe.workmanager.workers.PullFromServerWorker;
 
 public class PeriodicTasksHandler {
 
     private static final String PULL_SERVICE_TAG = "pullservice";
+    private static final String LOG_PURGER_TAG = "logpurger";
     private Context context;
 
     public PeriodicTasksHandler(Context context) {
         this.context = context;
     }
 
-    Map<String, PeriodicWorkRequest> periodicWorkRequests = new HashMap<>();
-
-    PeriodicWorkRequest periodicWorkRequest =
-            new PeriodicWorkRequest.Builder(PullFromServerWorker.class, 1, TimeUnit.HOURS)
-                    .addTag(PULL_SERVICE_TAG)
-                    .build();
+    private Map<String, PeriodicWorkRequest> periodicWorkRequests = new HashMap<>();
 
     public void initAllPeriodicRequests() {
         PeriodicWorkRequest periodicPullServiceWorkRequest =
                 new PeriodicWorkRequest.Builder(PullFromServerWorker.class, 1, TimeUnit.HOURS)
                         .build();
+        PeriodicWorkRequest periodicLogPurgerWorkRequest =
+                new PeriodicWorkRequest.Builder(LogPurgerWorker.class, 1, TimeUnit.DAYS)
+                        .addTag(LOG_PURGER_TAG)
+                        .build();
         periodicWorkRequests.put(PULL_SERVICE_TAG, periodicPullServiceWorkRequest);
+        periodicWorkRequests.put(LOG_PURGER_TAG, periodicLogPurgerWorkRequest);
         startWorkIfNotScheduled();
     }
 
     private void startWorkIfNotScheduled() {
         for (Map.Entry<String, PeriodicWorkRequest> entry : periodicWorkRequests.entrySet()) {
             if (!isWorkScheduled(entry.getKey())) {
-                startUniqueWork(periodicWorkRequest, entry.getKey());
+                startUniqueWork(entry.getValue(), entry.getKey());
             }
         }
     }
