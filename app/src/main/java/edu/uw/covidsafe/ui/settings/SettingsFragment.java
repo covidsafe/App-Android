@@ -108,6 +108,6 @@ public class SettingsFragment extends Fragment implements TraceSettingsRecyclerV
 
     @Override
     public void onRefreshSelected() {
-        ((MainActivity) getActivity()).refresh();
+        ((MainActivity) getActivity()).recreate();
     }
 }
