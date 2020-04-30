@@ -72,9 +72,9 @@ public class PeopleFragment extends Fragment {
             window.setStatusBarColor(getActivity().getColor(R.color.white));
         }
 
-//        if (Constants.menu != null && Constants.menu.findItem(R.id.mybutton) != null) {
-//            Constants.menu.findItem(R.id.mybutton).setVisible(true);
-//        }
+        if (Constants.menu != null && Constants.menu.findItem(R.id.mybutton) != null) {
+            Constants.menu.findItem(R.id.mybutton).setVisible(true);
+        }
         ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getColor(R.color.white)));
         ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
