@@ -1,6 +1,5 @@
 package edu.uw.covidsafe.contact_trace;
 
-import android.app.Activity;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
@@ -8,43 +7,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.covidsafe.R;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import edu.uw.covidsafe.comms.NetworkHelper;
 import edu.uw.covidsafe.gps.GpsRecord;
-import edu.uw.covidsafe.symptoms.SymptomsOpsAsyncTask;
-import edu.uw.covidsafe.symptoms.SymptomsRecord;
-import edu.uw.covidsafe.ui.notif.NotifRecord;
-import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
-import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
-import edu.uw.covidsafe.utils.TimeUtils;
-import edu.uw.covidsafe.utils.Utils;
 
 public class GpsHistoryRecyclerViewAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -86,8 +67,8 @@ public class GpsHistoryRecyclerViewAdapter2 extends RecyclerView.Adapter<Recycle
 
         SimpleDateFormat format = new SimpleDateFormat("h:mm aa");
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd");
-        String time = format.format(record.getTs());
-        String date = dateFormat.format(record.getTs());
+        String time = format.format(record.getTs_start());
+        String date = dateFormat.format(record.getTs_start());
         if (!date.equals(currentDate)) {
             ((GpsHistoryHolder)holder).date.setVisibility(View.VISIBLE);
             ((GpsHistoryHolder)holder).date.setText(date);
@@ -111,7 +92,7 @@ public class GpsHistoryRecyclerViewAdapter2 extends RecyclerView.Adapter<Recycle
             lats.add(record.getRawLat());
             lons.add(record.getRawLongi());
             addresses.add(record.getRawAddress());
-            ts.add(record.getTs());
+            ts.add(record.getTs_start());
         }
 
         String[] decryptedLats = CryptoUtils.decryptBatch(cxt, lats);
@@ -128,7 +109,7 @@ public class GpsHistoryRecyclerViewAdapter2 extends RecyclerView.Adapter<Recycle
                     newRec.setRawLat(decryptedLats[i]);
                     newRec.setRawLongi(decryptedLons[i]);
                     newRec.setRawAddress(decryptedAddresses[i]);
-                    newRec.setTs(ts.get(i));
+                    newRec.setTs_start(ts.get(i));
                     filtRecords.add(newRec);
                     seenAddresses.add(decryptedAddresses[i]);
                 }

@@ -142,8 +142,8 @@ public class LogPurgerTask implements Runnable {
             List<GpsRecord> records = gpsRepo.getAllRecords();
             int counter = 1;
             for (GpsRecord rec : records) {
-                Date d = new Date(rec.getTs());
-                Log.e("ble", ">> " + counter + " " + rec.getTs() + "," + sdf.format(d));
+                Date d = new Date(rec.getTs_start());
+                Log.e("ble", ">> " + counter + " " + rec.getTs_start() + "," + sdf.format(d));
                 counter += 1;
             }
 
@@ -154,8 +154,8 @@ public class LogPurgerTask implements Runnable {
             records = gpsRepo.getAllRecords();
             counter = 1;
             for(GpsRecord rec : records) {
-                Date d = new Date(rec.getTs());
-                Log.e("ble","** "+counter+" "+rec.getTs()+","+sdf.format(d));
+                Date d = new Date(rec.getTs_start());
+                Log.e("ble","** "+counter+" "+rec.getTs_start()+","+sdf.format(d));
                 counter+=1;
             }
         }

@@ -155,8 +155,8 @@ public class LocationFragment extends Fragment {
 
             List<GpsRecord> filtRecords = new LinkedList<GpsRecord>();
             for (GpsRecord record : changedRecords) {
-                boolean dayMatch = Integer.parseInt(day.format(record.getTs())) == dd.getDay();
-                boolean monthMatch = Integer.parseInt(month.format(record.getTs())) == dd.getMonth();
+                boolean dayMatch = Integer.parseInt(day.format(record.getTs_start())) == dd.getDay();
+                boolean monthMatch = Integer.parseInt(month.format(record.getTs_start())) == dd.getMonth();
                 if (dayMatch&&monthMatch) {
                     filtRecords.add(record);
                 }
@@ -180,7 +180,7 @@ public class LocationFragment extends Fragment {
 
         if (changedRecords != null) {
             for (GpsRecord record : changedRecords) {
-                Date ts = new Date(record.getTs());
+                Date ts = new Date(record.getTs_start());
                 markedDays.add(CalendarDay.from(Integer.parseInt(year.format(ts)),
                         Integer.parseInt(month.format(ts)),
                         Integer.parseInt(day.format(ts))));

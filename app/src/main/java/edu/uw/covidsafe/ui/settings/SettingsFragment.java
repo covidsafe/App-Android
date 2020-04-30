@@ -78,8 +78,13 @@ public class SettingsFragment extends Fragment implements TraceSettingsRecyclerV
         rviewTracesettings.setAdapter(adapterTraceSettings);
         rviewTracesettings.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        RecyclerView importrview = view.findViewById(R.id.recyclerViewImport);
+        MoreRecyclerViewAdapter importAdapter = new MoreRecyclerViewAdapter(getContext(),getActivity(),0);
+        importrview.setAdapter(importAdapter);
+        importrview.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         RecyclerView rviewMore = view.findViewById(R.id.recyclerViewMore);
-        MoreRecyclerViewAdapter adapter4 = new MoreRecyclerViewAdapter(getContext(),getActivity());
+        MoreRecyclerViewAdapter adapter4 = new MoreRecyclerViewAdapter(getContext(),getActivity(),1);
         rviewMore.setAdapter(adapter4);
         rviewMore.setLayoutManager(new LinearLayoutManager(getActivity()));
 

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+    <Document>
+        <name> Location history from 2020-02-01 to 2020-04-05 </name>
+        <open>1</open>
+        <description></description>
+        <StyleMap id="multiTrack">
+            <Pair>
+                <key>normal</key>
+                <styleUrl>#multiTrack_n</styleUrl>
+            </Pair>
+            <Pair>
+                <key>highlight</key>
+                <styleUrl>#multiTrack_h</styleUrl>
+            </Pair>
+        </StyleMap>
+        <Style id="multiTrack_n">
+            <IconStyle>
+                <Icon>
+                    <href>https://earth.google.com/images/kml-icons/track-directional/track-0.png</href>
+                </Icon>
+            </IconStyle>
+            <LineStyle>
+                <color>99ffac59</color>
+                <width>6</width>
+            </LineStyle>
+        </Style>
+        <Style id="multiTrack_h">
+            <IconStyle>
+                <scale>1.2</scale>
+                <Icon><href>https://earth.google.com/images/kml-icons/track-directional/track-0.png</href></Icon>
+            </IconStyle>
+            <LineStyle>
+                <color>99ffac59</color>
+                <width>8</width>
+            </LineStyle>
+        </Style>
+        <Placemark>
+            <name>Seattle</name>
+            <address>Seattle, WA 98105</address>
+            <ExtendedData>
+                <Data name="Email">
+                    <value></value>
+                </Data>
+                <Data name="Category">
+                    <value></value>
+                </Data>
+                <Data name="Distance">
+                    <value>0</value>
+                </Data>
+            </ExtendedData>
+            <description>  from 2020-02-01T04:15:34.272Z to 2020-02-01T15:04:45.595Z. Distance 0m </description>
+            <Point>
+                <coordinates>-122.303574,47.6592687,0</coordinates>
+            </Point>
+            <TimeSpan>
+                <begin>2020-04-28T04:15:34.272Z</begin>
+                <end>2020-04-28T15:04:45.595Z</end>
+            </TimeSpan>
+        </Placemark>
+        <Placemark>
+            <name>Walking</name>
+            <address></address>
+            <ExtendedData>
+                <Data name="Email">
+                    <value></value>
+                </Data>
+                <Data name="Category">
+                    <value>Walking</value>
+                </Data>
+                <Data name="Distance">
+                    <value>406</value>
+                </Data>
+            </ExtendedData>
+            <description> Walking from 2020-02-01T15:04:45.595Z to 2020-02-01T15:12:44.514Z. Distance 406m </description>
+            <LineString>
+                <altitudeMode>clampToGround</altitudeMode>
+                <extrude>1</extrude>
+                <tesselate>1</tesselate>
+                <coordinates>-122.30357400000001,47.6592687,0 -122.30357400000001,47.6592687,0 -122.3067069,47.6604698,0 -122.3077869,47.6595376,0 -122.3077231988925,47.65953259854007,0 -122.3077231988925,47.65953259854007,0 </coordinates>
+            </LineString>
+            <TimeSpan>
+                <begin>2020-04-29T15:04:45.595Z</begin>
+                <end>2020-04-29T15:12:44.514Z</end>
+            </TimeSpan>
+        </Placemark>
+    </Document>
+</kml>

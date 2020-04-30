@@ -31,6 +31,7 @@ import edu.uw.covidsafe.ui.notif.HistoryRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
 import edu.uw.covidsafe.symptoms.SymptomTrackerFragment;
 import edu.uw.covidsafe.ui.health.DiagnosisFragment;
+import edu.uw.covidsafe.gps.ImportLocationHistoryFragment;
 
 import java.security.KeyStore;
 import java.util.Arrays;
@@ -62,7 +63,7 @@ public class Constants {
 
     public static boolean UI_AUTH = false;
     public static boolean WRITE_TO_DISK = false;
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
     public static boolean PUBLIC_DEMO = false;
     public static boolean NARROWCAST_ENABLE = true;
     public static boolean USE_LAST_QUERY_TIME = true;
@@ -190,6 +191,7 @@ public class Constants {
     public static Fragment PermissionsFragment;
     public static Fragment PagerFragment;
     public static Fragment ContactTraceFragment;
+    public static Fragment ImportLocationHistoryFragment;
     public static String notifDirName = "notif";
     public static String gpsDirName = "gps";
     public static String bleDirName = "ble";
@@ -292,6 +294,7 @@ public class Constants {
         ContactTraceFragment = new ContactTraceFragment();
         PeopleFragment = new PeopleFragment();
         LocationFragment = new LocationFragment();
+        ImportLocationHistoryFragment = new ImportLocationHistoryFragment();
 
         if (!DEBUG) {
             LOG_TO_DISK = false;

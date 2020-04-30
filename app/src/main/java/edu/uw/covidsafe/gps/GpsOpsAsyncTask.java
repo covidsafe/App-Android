@@ -43,6 +43,11 @@ GpsOpsAsyncTask extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+    }
+
+    @Override
     protected Void doInBackground(Void... params) {
         Log.e("gps","doinbackground gps "+this.op);
         GpsDbRecordRepository repo = new GpsDbRecordRepository(context);
@@ -54,7 +59,7 @@ GpsOpsAsyncTask extends AsyncTask<Void, Void, Void> {
                     this.record.setAddress(addresses.get(0).getAddressLine(0), context);
                 }
                 catch(Exception e) {
-                    Log.e("err",e.getMessage());
+                    Log.e("err","gc "+e.getMessage());
                 }
             }
             repo.insert(this.record);
