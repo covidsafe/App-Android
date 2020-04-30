@@ -22,18 +22,18 @@ public interface GpsDbRecordDao {
     @Query("DELETE FROM gps_record_table")
     void deleteAll();
 
-    @Query("DELETE FROM gps_record_table WHERE ts == :ts")
+    @Query("DELETE FROM gps_record_table WHERE ts_start == :ts")
     void delete(long ts);
 
-    @Query("DELETE FROM gps_record_table WHERE ts <= :ts_thresh")
+    @Query("DELETE FROM gps_record_table WHERE ts_start <= :ts_thresh")
     void deleteEarlierThan(long ts_thresh);
 
-    @Query("SELECT * from gps_record_table ORDER BY ts DESC")
+    @Query("SELECT * from gps_record_table ORDER BY ts_start DESC")
     LiveData<List<GpsRecord>> getSortedRecords();
 
-    @Query("SELECT * from gps_record_table ORDER BY ts DESC")
+    @Query("SELECT * from gps_record_table ORDER BY ts_start DESC")
     List<GpsRecord> getSortedRecordsSync();
 
-    @Query("SELECT * from gps_record_table WHERE ts BETWEEN :ts1 AND :ts2")
+    @Query("SELECT * from gps_record_table WHERE ts_start BETWEEN :ts1 AND :ts2")
     List<GpsRecord> getRecordsBetweenTimestamp(long ts1, long ts2);
 }

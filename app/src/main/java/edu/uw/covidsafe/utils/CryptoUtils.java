@@ -57,7 +57,7 @@ public class CryptoUtils {
 
     // this is used by uuid generator
     // it generates enough UUIDs to fill the gap between the last time this method was called and now
-    public static UUID generateSeedHelper(Context context, long mostRecentSeedTimestamp) {
+    public static UUID generateSeedHelperWithMostRecent(Context context, long mostRecentSeedTimestamp) {
         Log.e("crypto","generate seed helper");
         int UUIDGenerationIntervalInMiliseconds = Constants.UUIDGenerationIntervalInMinutes*60*1000;
 
@@ -65,7 +65,7 @@ public class CryptoUtils {
             UUIDGenerationIntervalInMiliseconds = Constants.UUIDGenerationIntervalInSecondsDebug*1000;
         }
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm aa");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm.ss aa");
 
         long curTime = TimeUtils.getTime();
 
@@ -79,6 +79,7 @@ public class CryptoUtils {
         }
 
         if (numSeedsToGenerate <= 0) {
+            Log.e("crypto","done 1 "+format.format(TimeUtils.getTime()));
             return null;
         }
 
@@ -108,6 +109,7 @@ public class CryptoUtils {
                     }
                 }
                 if (beforeList.size() == 0) {
+                    Log.e("crypto","done 2 "+format.format(TimeUtils.getTime()));
                     return null;
                 }
 
@@ -118,6 +120,7 @@ public class CryptoUtils {
                     Log.e("regen", "done with inserts " + afterList.size()+","+maxSeedsToGenerate);
                     Thread.sleep(1000);
                     if (afterList.size() >=  maxSeedsToGenerate) {
+                        Log.e("crypto","done 3 "+format.format(TimeUtils.getTime()));
                         return UUID.fromString(afterList.get(1).getUUID(context));
                     }
                 }
@@ -145,18 +148,27 @@ public class CryptoUtils {
                     new SeedUUIDOpsAsyncTask(context, mostRecentRecord).execute();
                     new SeedUUIDOpsAsyncTask(context, newRecord).execute();
 
+                    SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putLong(context.getString(R.string.most_recent_seed_timestamp_pkey), TimeUtils.getTime());
+                    editor.commit();
+
+                    Log.e("crypto","done 4 "+format.format(TimeUtils.getTime()));
                     return UUID.fromString(dummyRecord.getRawUUID());
                 }
                 catch(Exception e) {
                     Log.e("err",e.getMessage());
                 }
+                Log.e("crypto","done 5 "+format.format(TimeUtils.getTime()));
                 return null;
             }
             else {
+                Log.e("crypto","done 6 "+format.format(TimeUtils.getTime()));
                 return batchFillInRecords(context, numSeedsToGenerate);
             }
         }
 
+        Log.e("crypto","done 7 "+format.format(TimeUtils.getTime()));
         return null;
     }
 

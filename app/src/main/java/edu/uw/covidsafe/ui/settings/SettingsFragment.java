@@ -32,7 +32,7 @@ import edu.uw.covidsafe.utils.Utils;
 
 import com.example.covidsafe.R;
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends Fragment implements TraceSettingsRecyclerViewAdapter.OnHeadlineSelectedListener {
 
     Button addButton;
     EditText addressText;
@@ -55,6 +55,10 @@ public class SettingsFragment extends Fragment {
             window.setStatusBarColor(getActivity().getColor(R.color.white));
         }
 
+        if (Constants.menu != null && Constants.menu.findItem(R.id.mybutton) != null) {
+            Constants.menu.findItem(R.id.mybutton).setVisible(false);
+        }
+
         ((MainActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(getActivity().getDrawable(R.drawable.ic_close_black_24dp));
 
         ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getColor(R.color.white)));
@@ -70,11 +74,17 @@ public class SettingsFragment extends Fragment {
 
         RecyclerView rviewTracesettings = view.findViewById(R.id.recyclerViewTraceSettings);
         TraceSettingsRecyclerViewAdapter adapterTraceSettings = new TraceSettingsRecyclerViewAdapter(getContext(),getActivity(), view);
+        adapterTraceSettings.setOnHeadlineSelectedListener(this);
         rviewTracesettings.setAdapter(adapterTraceSettings);
         rviewTracesettings.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        RecyclerView importrview = view.findViewById(R.id.recyclerViewImport);
+        MoreRecyclerViewAdapter importAdapter = new MoreRecyclerViewAdapter(getContext(),getActivity(),0);
+        importrview.setAdapter(importAdapter);
+        importrview.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         RecyclerView rviewMore = view.findViewById(R.id.recyclerViewMore);
-        MoreRecyclerViewAdapter adapter4 = new MoreRecyclerViewAdapter(getContext(),getActivity());
+        MoreRecyclerViewAdapter adapter4 = new MoreRecyclerViewAdapter(getContext(),getActivity(),1);
         rviewMore.setAdapter(adapter4);
         rviewMore.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -103,5 +113,10 @@ public class SettingsFragment extends Fragment {
         else {
             Utils.updateSwitchStates(getActivity());
         }
+    }
+
+    @Override
+    public void onRefreshSelected() {
+        ((MainActivity) getActivity()).recreate();
     }
 }

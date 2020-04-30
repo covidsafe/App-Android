@@ -16,8 +16,19 @@ public class GpsRecord {
 
     @PrimaryKey
     @NonNull
-    @ColumnInfo(name = "ts")
-    private long ts;
+    @ColumnInfo(name = "ts_start")
+    private long ts_start;
+
+    public long getTs_end() {
+        return ts_end;
+    }
+
+    public void setTs_end(long ts_end) {
+        this.ts_end = ts_end;
+    }
+
+    @ColumnInfo(name = "ts_end")
+    private long ts_end;
 
     @NonNull
     @ColumnInfo(name = "lat")
@@ -31,7 +42,6 @@ public class GpsRecord {
     @ColumnInfo(name = "provider")
     private String provider;
 
-    @NonNull
     @ColumnInfo(name = "address")
     private String addressEncrypted;
 
@@ -39,8 +49,12 @@ public class GpsRecord {
 
     }
 
-    public GpsRecord(@NonNull long ts, String latEncrypted, String longiEncrypted, String provider, String addressEncrypted) {
-        this.ts = ts;
+    public GpsRecord(@NonNull long ts_start, long ts_end, String latEncrypted, String longiEncrypted, String provider, String addressEncrypted) {
+        // don't use
+    }
+
+    public GpsRecord(@NonNull long ts_start, String latEncrypted, String longiEncrypted, String provider, String addressEncrypted) {
+        this.ts_start = ts_start;
         this.latEncrypted = latEncrypted;
         this.longiEncrypted = longiEncrypted;
         this.provider = provider;
@@ -48,8 +62,8 @@ public class GpsRecord {
     }
 
     // accepts plaintext inputs
-    public GpsRecord(@NonNull long ts, String latEncrypted, String longiEncrypted, String provider, Context cxt) {
-        this.ts = ts;
+    public GpsRecord(@NonNull long ts_start, String latEncrypted, String longiEncrypted, String provider, Context cxt) {
+        this.ts_start = ts_start;
 
         if (latEncrypted.length() > 0) {
             if (latEncrypted.charAt(latEncrypted.length()-1) == '\n') {
@@ -71,8 +85,8 @@ public class GpsRecord {
         this.provider = provider;
     }
 
-    public GpsRecord(@NonNull long ts, double lat, double longi, String provider, Context cxt) {
-        setTs(ts);
+    public GpsRecord(@NonNull long ts_start, double lat, double longi, String provider, Context cxt) {
+        setTs_start(ts_start);
         setLat(lat, cxt);
         setLongi(longi, cxt);
         this.provider = provider;
@@ -80,8 +94,8 @@ public class GpsRecord {
 
     ////////////////////////////////////////////////////////////////////////////////////////
     // get encrypted properties
-    public long getTs() {
-        return this.ts;
+    public long getTs_start() {
+        return this.ts_start;
     }
 
     public String getRawLat() {
@@ -132,8 +146,8 @@ public class GpsRecord {
     }
     ////////////////////////////////////////////////////////////////////////////////////////
     // sets pre-encrypted properties
-    public void setTs(long ts) {
-        this.ts = ts;
+    public void setTs_start(long ts_start) {
+        this.ts_start = ts_start;
     }
 
     public void setRawLat(String lat) {
@@ -158,7 +172,7 @@ public class GpsRecord {
     ////////////////////////////////////////////////////////////////////////////////////////
     public String toString() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm");
-        String ts = format.format(this.getTs());
+        String ts = format.format(this.getTs_start());
         return ts+" - "+this.getRawAddress()+" ("+this.getRawLat()+", "+this.getRawLongi()+")\n";
     }
 }

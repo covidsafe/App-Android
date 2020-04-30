@@ -2,6 +2,7 @@ package edu.uw.covidsafe.gps;
 
 import android.content.Context;
 
+import androidx.annotation.WorkerThread;
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class GpsDbRecordRepository {
         return mRecordDao.getSortedRecords();
     }
 
+    @WorkerThread
     public List<GpsRecord> getSortedRecordsSync() {
         return mRecordDao.getSortedRecordsSync();
     }

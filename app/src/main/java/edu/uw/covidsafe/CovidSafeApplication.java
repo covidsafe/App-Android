@@ -5,6 +5,8 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
 
+import edu.uw.covidsafe.workmanager.periodictasks.PeriodicTasksHandler;
+
 public class CovidSafeApplication extends Application {
 
     public static final String LOGGING_SERVICE_CHANNEL_ID = "loggingServiceChannel";
@@ -13,6 +15,8 @@ public class CovidSafeApplication extends Application {
     public void onCreate() {
         super.onCreate();
         createNotificationChannels();
+        PeriodicTasksHandler periodicTasksHandler = new PeriodicTasksHandler(this);
+        periodicTasksHandler.initAllPeriodicRequests();
     }
 
     private void createNotificationChannels() {

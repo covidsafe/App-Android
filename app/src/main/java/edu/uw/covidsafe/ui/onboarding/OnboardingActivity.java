@@ -26,6 +26,7 @@ import edu.uw.covidsafe.contact_trace.HumanOpsAsyncTask;
 import edu.uw.covidsafe.gps.GpsOpsAsyncTask;
 import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.preferences.AppPreferencesHelper;
+import edu.uw.covidsafe.preferences.LocaleHelper;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDOpsAsyncTask;
 import edu.uw.covidsafe.symptoms.SymptomsOpsAsyncTask;
 import edu.uw.covidsafe.symptoms.SymptomsRecord;
@@ -87,7 +88,7 @@ public class OnboardingActivity extends AppCompatActivity {
     public void insertDummyData() {
         Log.e("health","insert dummy data");
 //        new SymptomsOpsAsyncTask(Constants.SymptomsDatabaseOps.DeleteAll, this).execute();
-//        new GpsOpsAsyncTask(Constants.GpsDatabaseOps.DeleteAll, this).execute();
+        new GpsOpsAsyncTask(Constants.GpsDatabaseOps.DeleteAll, this).execute();
         new SeedUUIDOpsAsyncTask(Constants.UUIDDatabaseOps.DeleteAll, this).execute();
         // DONT DO THIS OTHERWISE PULL DEMO TASK WILL FAIL!!
 //        new BleOpsAsyncTask(this, Constants.BleDatabaseOps.DeleteAll).execute();
@@ -229,6 +230,11 @@ public class OnboardingActivity extends AppCompatActivity {
                 Utils.updateSwitchStates(this);
             }
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
     @Override

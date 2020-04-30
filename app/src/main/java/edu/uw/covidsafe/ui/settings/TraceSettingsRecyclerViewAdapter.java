@@ -30,14 +30,16 @@ public class TraceSettingsRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     List<String> names = new LinkedList<>();
     List<String> descs = new LinkedList<>();
     List<Drawable> icons = new LinkedList<>();
+    OnHeadlineSelectedListener callback;
 
     public TraceSettingsRecyclerViewAdapter(Context cxt, Activity av, View view) {
         this.cxt = cxt;
         this.av = av;
         this.view = view;
-//        this.names.add(cxt.getString(R.string.setting1));
-//        this.descs.add(cxt.getString(R.string.setting1desc));
-//        this.icons.add(cxt.getDrawable(R.drawable.datalength));
+      
+        this.names.add(cxt.getString(R.string.language));
+        this.descs.add("");
+        this.icons.add(cxt.getDrawable(R.drawable.lang));
     }
 
     @NonNull
@@ -53,8 +55,9 @@ public class TraceSettingsRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         ((TracesettingsCard)holder).desc.setText(this.descs.get(position));
         ((TracesettingsCard)holder).icon.setImageDrawable(this.icons.get(position));
 
-        if (position == 0) {
-            SharedPreferences prefs = cxt.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences prefs = cxt.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+
+        if (this.names.get(position).equals(cxt.getString(R.string.setting1))) {
             int currentDaysOfDataToKeep = 0;
             if (Constants.DEBUG) {
                 currentDaysOfDataToKeep = prefs.getInt(cxt.getString(R.string.infection_window_in_days_pkeys), Constants.DefaultDaysOfLogsToKeepDebug);
@@ -86,6 +89,24 @@ public class TraceSettingsRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                 }
             });
         }
+
+        else if (this.names.get(position).equals(cxt.getString(R.string.language))) {
+            ((TracesettingsCard) holder).spinner.setItems(Constants.languages);
+            ((TracesettingsCard) holder).spinner.setSelectedIndex(
+                    Constants.languages.indexOf(prefs.getString(cxt.getString(R.string.lang_pkey), "en")));
+
+            ((TracesettingsCard) holder).spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+                @Override
+                public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+                    Log.e("setting ", "got " + item);
+                    SharedPreferences.Editor editor = cxt.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
+                    editor.putString(cxt.getString(R.string.lang_pkey), Constants.languages.get(position));
+                    editor.commit();
+
+                    callback.onRefreshSelected();
+                }
+            });
+        }
     }
 
     @Override
@@ -107,6 +128,14 @@ public class TraceSettingsRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             this.spinner = itemView.findViewById(R.id.spinner);
             this.icon = itemView.findViewById(R.id.icon);
         }
+    }
+
+    public void setOnHeadlineSelectedListener(OnHeadlineSelectedListener callback) {
+        this.callback = callback;
+    }
+
+    public interface OnHeadlineSelectedListener {
+        void onRefreshSelected();
     }
 }
 

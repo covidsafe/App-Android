@@ -31,8 +31,10 @@ import edu.uw.covidsafe.ui.notif.HistoryRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
 import edu.uw.covidsafe.symptoms.SymptomTrackerFragment;
 import edu.uw.covidsafe.ui.health.DiagnosisFragment;
+import edu.uw.covidsafe.gps.ImportLocationHistoryFragment;
 
 import java.security.KeyStore;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -62,7 +64,7 @@ public class Constants {
     public static boolean UI_AUTH = false;
     public static boolean WRITE_TO_DISK = false;
     public static boolean DEBUG = true;
-    public static boolean PUBLIC_DEMO = false;
+    public static boolean PUBLIC_DEMO = true;
     public static boolean NARROWCAST_ENABLE = true;
     public static boolean USE_LAST_QUERY_TIME = true;
     public static boolean PAYLOAD_CHECK = true;
@@ -130,6 +132,10 @@ public class Constants {
     public static UUID BEACON_SERVICE_UUID = UUID.fromString("0000D028-0000-1000-8000-00805F9B34FB");
     public static UUID contactUUID = null;
 
+    public static String GOOGLE_SIGNIN_PAGE = "https://accounts.google.com/signin/v2/identifier?flowName=GlifWebSignIn&flowEntry=ServiceLogin";
+    public static String GOOGLE_DOWNLOAD_PAGE = "https://myaccount.google.com/?utm_source=sign_in_no_continue";
+    public static String GOOGLE_KML_STRING_FORMAT = "https://www.google.com/maps/timeline/kml?authuser=0&pb=!1m8!1m3!1i%s!2i%s!3i%s!2m3!1i%s!2i%s!3i%s";
+
     //GPS_TIME_INTERVAL and GPS_LOCATION_INTERVAL used to control frequency of location updates
     //to optimize for power, note that GPS_TIME_INTERVAL is the primary method by which
     // power is conserverd.
@@ -189,6 +195,7 @@ public class Constants {
     public static Fragment PermissionsFragment;
     public static Fragment PagerFragment;
     public static Fragment ContactTraceFragment;
+    public static Fragment ImportLocationHistoryFragment;
     public static String notifDirName = "notif";
     public static String gpsDirName = "gps";
     public static String bleDirName = "ble";
@@ -241,6 +248,9 @@ public class Constants {
             Manifest.permission.INTERNET
     };
 
+    public static List<String> languages = new LinkedList<>(Arrays.asList("en","es"));
+    public static String defaultLocale = "en";
+
     public static void init(Activity av) {
         Log.e("logme","constants init");
 
@@ -288,6 +298,7 @@ public class Constants {
         ContactTraceFragment = new ContactTraceFragment();
         PeopleFragment = new PeopleFragment();
         LocationFragment = new LocationFragment();
+        ImportLocationHistoryFragment = new ImportLocationHistoryFragment();
 
         if (!DEBUG) {
             LOG_TO_DISK = false;

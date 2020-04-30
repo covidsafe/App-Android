@@ -11,10 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -23,33 +20,19 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import edu.uw.covidsafe.comms.NetworkHelper;
-import edu.uw.covidsafe.contact_trace.HumanOpsAsyncTask;
-import edu.uw.covidsafe.contact_trace.HumanRecord;
-import edu.uw.covidsafe.symptoms.SymptomsOpsAsyncTask;
-import edu.uw.covidsafe.symptoms.SymptomsRecord;
-import edu.uw.covidsafe.ui.notif.NotifRecord;
-import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
-import edu.uw.covidsafe.utils.TimeUtils;
-import edu.uw.covidsafe.utils.Utils;
 
 public class GpsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -91,7 +74,7 @@ public class GpsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         }
 
         SimpleDateFormat format = new SimpleDateFormat("h:mm aa");
-        String time = format.format(record.getTs());
+        String time = format.format(record.getTs_start());
         ((GpsHistoryHolder)holder).loc.setText(address);
         ((GpsHistoryHolder)holder).time.setText(time);
         ((GpsHistoryHolder) holder).bb.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +95,7 @@ public class GpsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             lats.add(record.getRawLat());
             lons.add(record.getRawLongi());
             addresses.add(record.getRawAddress());
-            ts.add(record.getTs());
+            ts.add(record.getTs_start());
         }
 
         String[] decryptedLats = CryptoUtils.decryptBatch(cxt, lats);
@@ -128,7 +111,7 @@ public class GpsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 newRec.setRawLat(decryptedLats[i]);
                 newRec.setRawLongi(decryptedLons[i]);
                 newRec.setRawAddress(decryptedAddresses[i]);
-                newRec.setTs(ts.get(i));
+                newRec.setTs_start(ts.get(i));
                 filtRecords.add(newRec);
                 seenAddresses.add(decryptedAddresses[i]);
             }
@@ -177,7 +160,7 @@ public class GpsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         SimpleDateFormat outformat = new SimpleDateFormat("MM/dd h:mm aa");
-                                        new GpsOpsAsyncTask(mContext, Constants.GpsDatabaseOps.Delete, record.getTs()).execute();
+                                        new GpsOpsAsyncTask(mContext, Constants.GpsDatabaseOps.Delete, record.getTs_start()).execute();
                                     }
                                 })
                                 .setCancelable(true).create();
