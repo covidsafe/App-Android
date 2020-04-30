@@ -139,21 +139,21 @@ public class OnboardingActivity extends AppCompatActivity {
             double[] lats = new double[]{47.6537211,47.6536759,47.6358822,47.6306149,47.6221534};
             double[] lons = new double[]{-122.3080918,-122.3155732,-122.2954408,-122.2982472,-122.2793301};
 
-//            new GpsOpsAsyncTask(new GpsRecord(
-//                    d0.getTime(), lats[0],lons[0],"",this
-//            ), this).execute();
-//            new GpsOpsAsyncTask(new GpsRecord(
-//                    d1.getTime(), lats[1],lons[1],"",this
-//            ), this).execute();
-//            new GpsOpsAsyncTask(new GpsRecord(
-//                    d2.getTime(), lats[2],lons[2],"",this
-//            ), this).execute();
-//            new GpsOpsAsyncTask(new GpsRecord(
-//                    d3.getTime(), lats[3],lons[3],"",this
-//            ), this).execute();
-//            new GpsOpsAsyncTask(new GpsRecord(
-//                    d4.getTime(), lats[4],lons[4],"",this
-//            ), this).execute();
+            new GpsOpsAsyncTask(new GpsRecord(
+                    d0.getTime(), lats[0],lons[0],"",this
+            ), this).execute();
+            new GpsOpsAsyncTask(new GpsRecord(
+                    d1.getTime(), lats[1],lons[1],"",this
+            ), this).execute();
+            new GpsOpsAsyncTask(new GpsRecord(
+                    d2.getTime(), lats[2],lons[2],"",this
+            ), this).execute();
+            new GpsOpsAsyncTask(new GpsRecord(
+                    d3.getTime(), lats[3],lons[3],"",this
+            ), this).execute();
+            new GpsOpsAsyncTask(new GpsRecord(
+                    d4.getTime(), lats[4],lons[4],"",this
+            ), this).execute();
 
             new HumanOpsAsyncTask(this, "1234","Alice","", "alice@alice.com").execute();
             new HumanOpsAsyncTask(this, "5678","Bob","","bob@bob.com").execute();
