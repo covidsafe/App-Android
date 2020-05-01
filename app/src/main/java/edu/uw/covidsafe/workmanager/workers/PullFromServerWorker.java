@@ -34,8 +34,8 @@ import edu.uw.covidsafe.gps.GpsUtils;
 import edu.uw.covidsafe.json.Area;
 import edu.uw.covidsafe.json.AreaMatch;
 import edu.uw.covidsafe.json.BlueToothSeed;
-import edu.uw.covidsafe.json.BluetoothMatch;
 import edu.uw.covidsafe.json.MatchMessage;
+import edu.uw.covidsafe.json.MatchMessageResponse;
 import edu.uw.covidsafe.json.MessageListRequest;
 import edu.uw.covidsafe.json.MessageListResponse;
 import edu.uw.covidsafe.json.MessageRequest;
@@ -142,9 +142,9 @@ public class PullFromServerWorker extends Worker {
         double preciseLong = Utils.getCoarseGpsCoord(lon, currentGpsPrecision);
 
         Log.e("pull ", "GET MESSAGES " + sizeOfPayload);
-        List<BluetoothMatch> bluetoothMatches = getMessages(preciseLat, preciseLong,
+        List<BlueToothSeed> bluetoothSeeds = getMessages(preciseLat, preciseLong,
                 currentGpsPrecision, lastQueryTime);
-        if (bluetoothMatches == null || bluetoothMatches.size() == 0) {
+        if (bluetoothSeeds == null || bluetoothSeeds.size() == 0) {
             // TODO fail the work
             // TODO success with no matches details
             return Result.failure(resultData.build());
@@ -174,19 +174,18 @@ public class PullFromServerWorker extends Worker {
         Map<String, Long> endTimes = new HashMap<>();
         Map<String, String> userMessage = new HashMap<>();
 
-        for (BluetoothMatch bluetoothMatch : bluetoothMatches) {
-            for (BlueToothSeed seed : bluetoothMatch.seeds) {
-                if (!seenSeeds.contains(seed.seed)) {
-                    seenSeeds.add(seed.seed);
+        for (BlueToothSeed seed : bluetoothSeeds) {
+            if (!seenSeeds.contains(seed.seed)) {
+                seenSeeds.add(seed.seed);
+                startTimes.put(seed.seed, seed.sequenceStartTime);
+                endTimes.put(seed.seed,seed.sequenceEndTime);
+                userMessage.put(seed.seed, seed.msg);
+            }
+            else {
+                if (seed.sequenceEndTime > endTimes.get(seed.seed)) {
                     startTimes.put(seed.seed, seed.sequenceStartTime);
-                    endTimes.put(seed.seed, seed.sequenceEndTime);
-                    userMessage.put(seed.seed, bluetoothMatch.userMessage);
-                } else {
-                    if (seed.sequenceEndTime > endTimes.get(seed.seed)) {
-                        startTimes.put(seed.seed, seed.sequenceStartTime);
-                        endTimes.put(seed.seed, seed.sequenceEndTime);
-                        userMessage.put(seed.seed, bluetoothMatch.userMessage);
-                    }
+                    endTimes.put(seed.seed,seed.sequenceEndTime);
+                    userMessage.put(seed.seed, seed.msg);
                 }
             }
         }
@@ -353,7 +352,7 @@ public class PullFromServerWorker extends Worker {
         }
     }
 
-    public List<BluetoothMatch> getMessages(double lat, double longi, int precision, long lastQueryTime) {
+    public List<BlueToothSeed> getMessages(double lat, double longi, int precision, long lastQueryTime) {
         // return list of seeds and timestamps
         // check if the areas returned in these messages match our GPS timestamps
 
@@ -409,18 +408,15 @@ public class PullFromServerWorker extends Worker {
             return null;
         }
 
-        MatchMessage[] matchMessages = null;
+        MatchMessageResponse matchMessageResponse = null;
         try {
-            JSONArray matchMessagesArr = response.getJSONArray("results");
-            matchMessages = new MatchMessage[matchMessagesArr.length()];
-            for (int i = 0; i < matchMessagesArr.length(); i++) {
-                matchMessages[i] = MatchMessage.parse(matchMessagesArr.getJSONObject(i));
-            }
+            matchMessageResponse = MatchMessageResponse.parse(response.getJSONObject("results"));
         } catch (Exception e) {
             Log.e("err", e.getMessage());
             return null;
         }
-        if (matchMessages == null || matchMessages.length == 0) {
+        if (matchMessageResponse == null || matchMessageResponse.match_messages == null ||
+            matchMessageResponse.match_messages.length == 0) {
             resultData.putInt(STATUS, NO_MATCH_FOUND);
             return null;
         }
@@ -428,12 +424,6 @@ public class PullFromServerWorker extends Worker {
         /////////////////////////////////////////////////////////////////////////
         // (3) update last query time to server
         /////////////////////////////////////////////////////////////////////////
-//        ArrayList<Long> queryTimes = new ArrayList<Long>();
-//        for (MessageInfo messageInfo : messageListResponse.messageInfo) {
-//            queryTimes.add(messageInfo.MessageTimestamp);
-//        }
-//        Collections.sort(queryTimes, Collections.reverseOrder());
-
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         if (messageListResponse.maxResponseTimestamp > 0) {
@@ -445,12 +435,27 @@ public class PullFromServerWorker extends Worker {
         /////////////////////////////////////////////////////////////////////////
         // (4) narrowcast messages: check for area intersection and record matched messages
         /////////////////////////////////////////////////////////////////////////
+        narrowcast(matchMessageResponse);
+        /////////////////////////////////////////////////////////////////////////
+
+        List<BlueToothSeed> bluetoothSeeds = new ArrayList<>();
+        for (int i = 0; i < matchMessageResponse.match_messages.length; i++) {
+            for (BlueToothSeed seed : matchMessageResponse.match_messages[i].bluetoothSeeds) {
+                seed.msg = matchMessageResponse.match_messages[i].blue_tooth_match_message;
+                bluetoothSeeds.add(seed);
+            }
+        }
+
+        return bluetoothSeeds;
+    }
+
+    public void narrowcast(MatchMessageResponse matchMessageResponse) {
         List<String> narrowCastMessages = new ArrayList<String>();
         List<Long> narrowCastMessageStartTimes = new ArrayList<>();
         List<Long> narrowCastMessageEndTimes = new ArrayList<>();
-        for (int i = 0; i < matchMessages.length; i++) {
-            if (matchMessages[i].areaMatches != null) {
-                for (AreaMatch areaMatch : matchMessages[i].areaMatches) {
+        for (int i = 0; i < matchMessageResponse.match_messages.length; i++) {
+            if (matchMessageResponse.match_messages[i].areaMatches != null) {
+                for (AreaMatch areaMatch : matchMessageResponse.match_messages[i].areaMatches) {
                     Area[] areas = areaMatch.areas;
                     if (!Utils.hasGpsPermissions(context)) {
                         // TODO if the permissions are not on, send the back with GPS needs to be on
@@ -470,16 +475,6 @@ public class PullFromServerWorker extends Worker {
         }
         Log.e("msg", "notify bulk narrowcast " + narrowCastMessages.size());
         notifyBulk(Constants.MessageType.NarrowCast, narrowCastMessages, narrowCastMessageStartTimes, narrowCastMessageEndTimes);
-        /////////////////////////////////////////////////////////////////////////
-
-        List<BluetoothMatch> bluetoothMatches = new ArrayList<>();
-        for (int i = 0; i < matchMessages.length; i++) {
-            for (BluetoothMatch match : matchMessages[i].bluetoothMatches) {
-                bluetoothMatches.add(match);
-            }
-        }
-
-        return bluetoothMatches;
     }
 
     public boolean intersect(Area area) {

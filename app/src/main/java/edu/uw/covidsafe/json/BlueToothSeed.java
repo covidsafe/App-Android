@@ -8,6 +8,7 @@ public class BlueToothSeed {
     public String seed;
     public long sequenceStartTime;
     public long sequenceEndTime;
+    public String msg;
 
     public static BlueToothSeed parse(JSONObject obj) throws JSONException {
         BlueToothSeed bluetoothSeed = new BlueToothSeed();

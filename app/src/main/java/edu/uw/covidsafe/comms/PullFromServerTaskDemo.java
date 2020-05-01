@@ -28,8 +28,8 @@ import edu.uw.covidsafe.gps.GpsDbRecordRepository;
 import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.json.AreaMatch;
 import edu.uw.covidsafe.json.BlueToothSeed;
-import edu.uw.covidsafe.json.BluetoothMatch;
 import edu.uw.covidsafe.json.MatchMessage;
+import edu.uw.covidsafe.json.MatchMessageResponse;
 import edu.uw.covidsafe.json.MessageListRequest;
 import edu.uw.covidsafe.json.MessageListResponse;
 import edu.uw.covidsafe.json.MessageRequest;
@@ -154,9 +154,9 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
 //        double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(), currentGpsPrecision);
 
         Log.e("NET ","GET MESSAGES "+sizeOfPayload);
-        List<BluetoothMatch> bluetoothMatches = getMessages(preciseLat,preciseLong,
+        List<BlueToothSeed> bluetoothSeeds = getMessages(preciseLat, preciseLong,
                 currentGpsPrecision, lastQueryTime);
-        if (bluetoothMatches == null || bluetoothMatches.size() == 0) {
+        if (bluetoothSeeds == null || bluetoothSeeds.size() == 0) {
             return null;
         }
 
@@ -196,19 +196,17 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
         List<Long> contactStartTimes = new ArrayList<>();
         List<Long> contactEndTimes = new ArrayList<>();
         Set<String> seenSeeds = new HashSet<>();
-        for (BluetoothMatch bluetoothMatch : bluetoothMatches) {
-            for (BlueToothSeed seed : bluetoothMatch.seeds) {
-                if (seed.seed.equals("1e5e15cc-d622-aa39-d81b-03c79e3857ef") && !seenSeeds.contains(seed.seed)) {
-                    Log.e("demo","SEED "+seed.seed);
-                    long[] exposedStatus = isExposed(seed.seed,
-                            seed.sequenceStartTime,
-                            scannedBleMap);
-                    if (exposedStatus != null) {
-                        seenSeeds.add(seed.seed);
-                        exposedMessages.add(bluetoothMatch.userMessage);
-                        contactStartTimes.add(exposedStatus[0]);
-                        contactEndTimes.add(exposedStatus[1]);
-                    }
+        for (BlueToothSeed seed : bluetoothSeeds) {
+            if (seed.seed.equals("1e5e15cc-d622-aa39-d81b-03c79e3857ef") && !seenSeeds.contains(seed.seed)) {
+                Log.e("demo","SEED "+seed.seed);
+                long[] exposedStatus = isExposed(seed.seed,
+                        seed.sequenceStartTime,
+                        scannedBleMap);
+                if (exposedStatus != null) {
+                    seenSeeds.add(seed.seed);
+                    exposedMessages.add(seed.msg);
+                    contactStartTimes.add(exposedStatus[0]);
+                    contactEndTimes.add(exposedStatus[1]);
                 }
             }
         }
@@ -229,7 +227,7 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
         return messageSizeResponse.sizeOfQueryResponse;
     }
 
-    public List<BluetoothMatch> getMessages(double lat, double longi, int precision, long lastQueryTime) {
+    public List<BlueToothSeed> getMessages(double lat, double longi, int precision, long lastQueryTime) {
         // return list of seeds and timestamps
         // check if the areas returned in these messages match our GPS timestamps
 
@@ -287,36 +285,23 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
             return null;
         }
 
-        MatchMessage[] matchMessages = null;
+
+        MatchMessageResponse matchMessageResponse = null;
         try {
-            JSONArray matchMessagesArr = response.getJSONArray("results");
-            matchMessages = new MatchMessage[matchMessagesArr.length()];
-            for (int i = 0; i < matchMessagesArr.length(); i++) {
-                matchMessages[i] = MatchMessage.parse(matchMessagesArr.getJSONObject(i));
-            }
+            matchMessageResponse = MatchMessageResponse.parse(response.getJSONObject("results"));
         }
         catch (Exception e) {
             Log.e("err",e.getMessage());
             return null;
         }
-        if (matchMessages == null || matchMessages.length == 0) {
+        if (matchMessageResponse == null || matchMessageResponse.match_messages == null ||
+                matchMessageResponse.match_messages.length == 0) {
             return null;
-        }
-
-        for (int i = 0; i < matchMessages.length; i++) {
-            Log.e("DEMO ", "area match size: " + matchMessages[i].areaMatches.length);
-            Log.e("DEMO ", "bluetooth match size: " + matchMessages[i].bluetoothMatches.length);
         }
 
         /////////////////////////////////////////////////////////////////////////
         // (3) update last query time to server
         /////////////////////////////////////////////////////////////////////////
-//        ArrayList<Long> queryTimes = new ArrayList<Long>();
-//        for (MessageInfo messageInfo : messageListResponse.messageInfo) {
-//            queryTimes.add(messageInfo.MessageTimestamp);
-//        }
-//        Collections.sort(queryTimes, Collections.reverseOrder());
-
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         if (messageListResponse.maxResponseTimestamp > 0) {
@@ -328,12 +313,27 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
         /////////////////////////////////////////////////////////////////////////
         // (4) narrowcast messages: check for area intersection and record matched messages
         /////////////////////////////////////////////////////////////////////////
+        narrowcast(matchMessageResponse);
+        /////////////////////////////////////////////////////////////////////////
+
+        List<BlueToothSeed> bluetoothSeeds = new ArrayList<>();
+        for (int i = 0; i < matchMessageResponse.match_messages.length; i++) {
+            for (BlueToothSeed seed : matchMessageResponse.match_messages[i].bluetoothSeeds) {
+                seed.msg = matchMessageResponse.match_messages[i].blue_tooth_match_message;
+                bluetoothSeeds.add(seed);
+            }
+        }
+
+        return bluetoothSeeds;
+    }
+
+    public void narrowcast(MatchMessageResponse matchMessageResponse) {
         List<String> narrowCastMessages = new ArrayList<String>();
         List<Long> narrowCastMessageStartTimes = new ArrayList<>();
         List<Long> narrowCastMessageEndTimes = new ArrayList<>();
-        for (int i = 0; i < matchMessages.length; i++) {
-            if (matchMessages[i].areaMatches != null) {
-                for (AreaMatch areaMatch : matchMessages[i].areaMatches) {
+        for (int i = 0; i < matchMessageResponse.match_messages.length; i++) {
+            if (matchMessageResponse.match_messages[i].areaMatches != null) {
+                for (AreaMatch areaMatch : matchMessageResponse.match_messages[i].areaMatches) {
                     Area[] areas = areaMatch.areas;
                     for (Area area : areas) {
                         if (intersect(area)) {
@@ -348,16 +348,6 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
             }
         }
         notifyBulk(Constants.MessageType.NarrowCast, narrowCastMessages,narrowCastMessageStartTimes,narrowCastMessageEndTimes);
-        /////////////////////////////////////////////////////////////////////////
-
-        List<BluetoothMatch> bluetoothMatches = new ArrayList<>();
-        for (int i = 0; i < matchMessages.length; i++) {
-            for (BluetoothMatch match : matchMessages[i].bluetoothMatches) {
-                bluetoothMatches.add(match);
-            }
-        }
-
-        return bluetoothMatches;
     }
 
     public boolean intersect(Area area) {

@@ -4,22 +4,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.uw.covidsafe.comms.NetworkConstant;
-
 public class MatchMessage {
     public String boolExpression;
     public AreaMatch[] areaMatches;
-    public BluetoothMatch[] bluetoothMatches;
+    public BlueToothSeed[] bluetoothSeeds;
+    public String blue_tooth_match_message;
 
     public JSONObject toJSON() throws JSONException {
         JSONObject matchMessage = new JSONObject();
 
-        if (bluetoothMatches != null) {
+        if (bluetoothSeeds != null) {
             JSONArray arr = new JSONArray();
-            for (BluetoothMatch bmatch : bluetoothMatches) {
-                arr.put(bmatch.toJson());
+            for (BlueToothSeed bseed : bluetoothSeeds) {
+                arr.put(bseed.toJson());
             }
-            matchMessage.put("bluetoothMatches", arr);
+            matchMessage.put("bluetoothSeeds", arr);
         }
 
         if (areaMatches != null) {
@@ -28,6 +27,9 @@ public class MatchMessage {
                 arr2.put(amatch.toJson());
             }
             matchMessage.put("areaMatches", arr2);
+        }
+        if (blue_tooth_match_message != null) {
+            matchMessage.put("blue_tooth_match_message", blue_tooth_match_message);
         }
 
         return matchMessage;
@@ -45,12 +47,15 @@ public class MatchMessage {
                 matchMessage.areaMatches[i] = AreaMatch.parse(arr.getJSONObject(i));
             }
         }
-        if (obj.has("bluetoothMatches")) {
-            JSONArray arr = obj.getJSONArray("bluetoothMatches");
-            matchMessage.bluetoothMatches = new BluetoothMatch[arr.length()];
+        if (obj.has("bluetoothSeeds")) {
+            JSONArray arr = obj.getJSONArray("bluetoothSeeds");
+            matchMessage.bluetoothSeeds = new BlueToothSeed[arr.length()];
             for (int i = 0; i < arr.length(); i++) {
-                matchMessage.bluetoothMatches[i] = BluetoothMatch.parse(arr.getJSONObject(i));
+                matchMessage.bluetoothSeeds[i] = BlueToothSeed.parse(arr.getJSONObject(i));
             }
+        }
+        if (obj.has("blue_tooth_match_message")) {
+            matchMessage.blue_tooth_match_message = obj.getString("blue_tooth_match_message");
         }
         return matchMessage;
     }
