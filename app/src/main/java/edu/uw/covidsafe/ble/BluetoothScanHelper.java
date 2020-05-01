@@ -1,5 +1,6 @@
 package edu.uw.covidsafe.ble;
 
+import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.ScanCallback;
@@ -49,7 +50,12 @@ public class BluetoothScanHelper implements Runnable {
         Constants.scannedUUIDsRSSIs = new HashMap<String,Integer>();
         Constants.scannedUUIDsTimes = new HashMap<String,Long>();
 
-        Constants.blueAdapter.getBluetoothLeScanner().startScan(filters, builder.build(), mLeScanCallback);
+        BluetoothManager bluetoothManager =
+                (BluetoothManager) cxt.getSystemService(Context.BLUETOOTH_SERVICE);
+        if (Constants.blueAdapter != null && bluetoothManager != null && BluetoothUtils.isBluetoothOn() &&
+                Constants.blueAdapter.getBluetoothLeScanner() != null) {
+            Constants.blueAdapter.getBluetoothLeScanner().startScan(filters, builder.build(), mLeScanCallback);
+        }
 
         try {
             Thread.sleep(Constants.BluetoothScanPeriodInSeconds*1000);
