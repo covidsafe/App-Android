@@ -120,20 +120,25 @@ public class BluetoothUtils {
     }
 
     public static void finishScan(Context cxt) {
-        if (Constants.blueAdapter != null && Constants.blueAdapter.getBluetoothLeScanner() != null) {
-            Constants.blueAdapter.getBluetoothLeScanner().stopScan(BluetoothScanHelper.mLeScanCallback);
-        }
-        Log.e("blebug","finish scan");
-        Log.e("blebug",(Constants.scannedUUIDs==null)+","+(Constants.scannedUUIDsRSSIs==null)+","+(Constants.scannedUUIDsTimes==null));
-        if (Constants.scannedUUIDs != null && Constants.scannedUUIDsRSSIs != null &&
-                Constants.scannedUUIDsTimes != null) {
-            Log.e("blebug",(Constants.scannedUUIDs.size())+","+(Constants.scannedUUIDsRSSIs.keySet().size())+","+(Constants.scannedUUIDsTimes.keySet().size()));
-            for (String uuid : Constants.scannedUUIDs) {
-                if (Constants.scannedUUIDsRSSIs.containsKey(uuid) &&
-                    Constants.scannedUUIDsTimes.containsKey(uuid)) {
-                    int rssi = Constants.scannedUUIDsRSSIs.get(uuid);
-                    long ts = Constants.scannedUUIDsTimes.get(uuid);
-                    Utils.bleLogToDatabase(cxt, uuid, rssi, ts);
+        if (cxt != null) {
+            BluetoothManager bluetoothManager =
+                    (BluetoothManager) cxt.getSystemService(Context.BLUETOOTH_SERVICE);
+            if (Constants.blueAdapter != null && bluetoothManager != null && isBluetoothOn() &&
+                Constants.blueAdapter.getBluetoothLeScanner() != null) {
+                Constants.blueAdapter.getBluetoothLeScanner().stopScan(BluetoothScanHelper.mLeScanCallback);
+            }
+            Log.e("blebug", "finish scan");
+            Log.e("blebug", (Constants.scannedUUIDs == null) + "," + (Constants.scannedUUIDsRSSIs == null) + "," + (Constants.scannedUUIDsTimes == null));
+            if (Constants.scannedUUIDs != null && Constants.scannedUUIDsRSSIs != null &&
+                    Constants.scannedUUIDsTimes != null) {
+                Log.e("blebug", (Constants.scannedUUIDs.size()) + "," + (Constants.scannedUUIDsRSSIs.keySet().size()) + "," + (Constants.scannedUUIDsTimes.keySet().size()));
+                for (String uuid : Constants.scannedUUIDs) {
+                    if (Constants.scannedUUIDsRSSIs.containsKey(uuid) &&
+                            Constants.scannedUUIDsTimes.containsKey(uuid)) {
+                        int rssi = Constants.scannedUUIDsRSSIs.get(uuid);
+                        long ts = Constants.scannedUUIDsTimes.get(uuid);
+                        Utils.bleLogToDatabase(cxt, uuid, rssi, ts);
+                    }
                 }
             }
         }
@@ -213,7 +218,7 @@ public class BluetoothUtils {
         return true;
     }
 
-    public static boolean isBluetoothOn(Activity av) {
+    public static boolean isBluetoothOn() {
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter != null) {
             if (!mBluetoothAdapter.isEnabled()) {
