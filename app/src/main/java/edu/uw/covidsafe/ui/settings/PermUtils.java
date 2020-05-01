@@ -66,7 +66,7 @@ public class PermUtils {
 
         boolean hasBle = Utils.hasBlePermissions(av);
 
-        if (hasBle && BluetoothUtils.isBluetoothOn(av)) {
+        if (hasBle && BluetoothUtils.isBluetoothOn()) {
             AppPreferencesHelper.setBluetoothEnabled(av);
             if (!Constants.LoggingServiceRunning) {
                 Utils.startLoggingService(av);
