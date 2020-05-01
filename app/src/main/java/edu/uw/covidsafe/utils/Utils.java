@@ -38,6 +38,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import edu.uw.covidsafe.AppStatusManager;
 import edu.uw.covidsafe.LoggingServiceV2;
 import edu.uw.covidsafe.PullService;
 import edu.uw.covidsafe.ble.BleOpsAsyncTask;
@@ -215,20 +216,14 @@ public class Utils {
     public static void mkSnack(Activity av, View v, String msg) {
         av.runOnUiThread(new Runnable() {
             public void run() {
-                final Snackbar snackBar = Snackbar.make(v, msg, Snackbar.LENGTH_LONG);
-
-                snackBar.setAction(av.getString(R.string.dismiss_text), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        snackBar.dismiss();
-                    }
-                });
-
-                View snackbarView = snackBar.getView();
-                TextView textView = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
-                textView.setMaxLines(5);
-
-                snackBar.show();
+                AppStatusManager appStatusManager = new AppStatusManager();
+                appStatusManager.makeSnackBar(v, msg, Snackbar.LENGTH_LONG)
+                        .setAction(av.getString(R.string.dismiss_text), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                appStatusManager.getmSnackBar().dismiss();
+                            }
+                        });
             }
         });
     }

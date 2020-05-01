@@ -31,6 +31,15 @@ public class AppStatusManager {
         return this;
     }
 
+    public AppStatusManager makeSnackBar(View view,
+                                         String stringText,
+                                         int snackbarDuration) {
+        if (view != null && stringText != null) {
+            mSnackBar = Snackbar.make(view, stringText, snackbarDuration);
+        }
+        return this;
+    }
+
     public AppStatusManager setAction(String actionText, View.OnClickListener onClickListener) {
         if(mSnackBar != null){
             mSnackBar.setAction(actionText, onClickListener);
