@@ -184,6 +184,14 @@ public class MainActivity extends AppCompatActivity {
             tx.replace(R.id.fragment_container, Constants.HealthFragment).commit();
             return true;
         }
+        else if (Constants.CurrentFragment.toString().toLowerCase().contains("importlocationhistory")) {
+            FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+            tx.setCustomAnimations(
+                    R.anim.enter_left_to_right,R.anim.exit_left_to_right,
+                    R.anim.enter_left_to_right,R.anim.exit_left_to_right);
+            tx.replace(R.id.fragment_container, Constants.SettingsFragment).commit();
+            return true;
+        }
         return false;
     }
 
