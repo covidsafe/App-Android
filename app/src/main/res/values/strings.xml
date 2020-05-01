@@ -501,4 +501,5 @@ You can prepare a list of informaton they will ask about based on information co
     <string name="language">Language</string>
     <string name="english">English</string>
     <string name="spanish">Spanish</string>
+    <string name="select_contact">Select Contacts</string>
 </resources>

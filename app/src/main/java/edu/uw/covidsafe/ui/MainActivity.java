@@ -54,10 +54,13 @@ import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.wafflecopter.multicontactpicker.ContactResult;
+import com.wafflecopter.multicontactpicker.MultiContactPicker;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -234,6 +237,31 @@ public class MainActivity extends AppCompatActivity {
                 }
                 c.close();
             }
+        } else {
+            if (resultCode == -1) {
+                List<ContactResult> results = MultiContactPicker.obtainResult(data);
+                String email = null;
+                String uri;
+                for (ContactResult contactResult : results) {
+                    if (!contactResult.getEmails().isEmpty()) {
+                        email = contactResult.getEmails().get(0);
+                    } else {
+                        email = null;
+                    }
+
+                    if (contactResult.getPhoto() == null)
+                    {
+                        uri = null;
+                    } else {
+                        uri = contactResult.getPhoto().toString();
+                    }
+
+
+
+                    new HumanOpsAsyncTask(this, contactResult.getPhoneNumbers().get(0).getNumber(), contactResult.getDisplayName(), uri, email).execute();
+                }
+            }
+
         }
     }
 

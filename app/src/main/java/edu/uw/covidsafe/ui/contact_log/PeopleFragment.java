@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -43,6 +45,9 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+import com.wafflecopter.multicontactpicker.ContactResult;
+import com.wafflecopter.multicontactpicker.LimitColumn;
+import com.wafflecopter.multicontactpicker.MultiContactPicker;
 
 import org.threeten.bp.DayOfWeek;
 
@@ -50,12 +55,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+//using https://github.com/broakenmedia/MultiContactPicker
+
 public class PeopleFragment extends Fragment {
 
     View view;
     boolean humanDbChanged;
     HumanSummaryRecyclerViewAdapter humanAdapter;
     static List<HumanRecord> changedRecords;
+    int CONTACT_PICKER_REQUEST = 1;
 
     @SuppressLint("RestrictedApi")
     @Nullable
@@ -88,9 +96,10 @@ public class PeopleFragment extends Fragment {
                     requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 0);
                 }
                 else {
-                    Intent pickContact = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-                    pickContact.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
-                    ((MainActivity) getActivity()).startActivityForResult(pickContact, 2);
+                    //Intent pickContact = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                    //pickContact.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+                    //((MainActivity) getActivity()).startActivityForResult(pickContact, 2);
+                    contacts();
                 }
             }
         });
@@ -138,4 +147,30 @@ public class PeopleFragment extends Fragment {
             humanDbChanged = false;
         }
     }
+
+    private void contacts() {
+        new MultiContactPicker.Builder(this) //Activity/fragment context
+                .theme(R.style.MyCustomPickerTheme)//Optional - default: MultiContactPicker.Azure
+                .hideScrollbar(true) //Optional - default: false
+                .showTrack(false) //Optional - default: true
+                .searchIconColor(Color.BLACK) //Option - default: White
+                .setChoiceMode(MultiContactPicker.CHOICE_MODE_MULTIPLE) //Optional - default: CHOICE_MODE_MULTIPLE
+
+
+                .bubbleTextColor(Color.WHITE) //Optional - default: White
+                .setTitleText(getContext().getString(R.string.select_contact)) //Optional - default: Select Contacts
+                //Optional - will pre-select contacts of your choice. String... or List<ContactResult>
+                .setLoadingType(MultiContactPicker.LOAD_ASYNC) //Optional - default LOAD_ASYNC (wait till all loaded vs stream results)
+                .limitToColumn(LimitColumn.NONE) //Optional - default NONE (Include phone + email, limiting to one can improve loading time)
+                .setActivityAnimations(android.R.anim.fade_in, android.R.anim.fade_out,
+                        android.R.anim.fade_in,
+                        android.R.anim.fade_out) //Optional - default: No animation overrides
+                .showPickerForResult(2);
+    }
+
+
+
+
+
+
 }
