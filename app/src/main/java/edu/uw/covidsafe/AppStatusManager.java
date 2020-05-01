@@ -32,7 +32,9 @@ public class AppStatusManager {
     }
 
     public AppStatusManager setAction(String actionText, View.OnClickListener onClickListener) {
-        mSnackBar.setAction(actionText, onClickListener);
+        if(mSnackBar != null){
+            mSnackBar.setAction(actionText, onClickListener);
+        }
         return this;
     }
 
