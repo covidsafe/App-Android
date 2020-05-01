@@ -380,12 +380,18 @@ public class MainActivity extends AppCompatActivity {
         }else if (Constants.CurrentFragment != null&&Constants.CurrentFragment.toString().toLowerCase().contains("people")) {
             Bundle data = new Bundle();
             data.putInt("pg", 1);
+            if (Constants.ContactLogFragment == null) {
+                Constants.ContactLogFragment = new ContactLogFragment();
+            }
             Constants.ContactLogFragment.setArguments(data);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.ContactLogFragment).commit();
         }
         else if (Constants.CurrentFragment != null&&Constants.CurrentFragment.toString().toLowerCase().contains("location")) {
             Bundle data = new Bundle();
             data.putInt("pg", 0);
+            if (Constants.ContactLogFragment == null) {
+                Constants.ContactLogFragment = new ContactLogFragment();
+            }
             Constants.ContactLogFragment.setArguments(data);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.ContactLogFragment).commit();
         }
