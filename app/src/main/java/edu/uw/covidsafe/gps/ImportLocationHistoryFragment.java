@@ -37,7 +37,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.utils.Constants;
@@ -55,7 +54,7 @@ public class ImportLocationHistoryFragment extends Fragment {
     BroadcastReceiver onComplete = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             Log.e("log", "DONE");
-            if(context != null){
+            if (context != null) {
                 Utils.mkSnack(getActivity(), view, context.getString(R.string.download_complete));
                 LocationDataXMLParser parser = new LocationDataXMLParser();
                 Tasks.call(() -> {
