@@ -59,9 +59,7 @@ public class PeriodicTasksHandler {
 
         periodicWorkRequests.put(PULL_SERVICE_TAG, periodicPullServiceWorkRequest);
         periodicWorkRequests.put(LOG_PURGER_TAG, periodicLogPurgerWorkRequest);
-        if(Utils.hasBlePermissions(context)){
-            periodicWorkRequests.put(UUID_GENERATOR_TAG, periodicUUIDGeneratorWorkRequest);
-        }
+        periodicWorkRequests.put(UUID_GENERATOR_TAG, periodicUUIDGeneratorWorkRequest);
         startWorkIfNotScheduled();
     }
 
