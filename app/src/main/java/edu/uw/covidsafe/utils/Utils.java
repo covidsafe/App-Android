@@ -35,23 +35,17 @@ import com.example.covidsafe.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import edu.uw.covidsafe.AppStatusManager;
-import edu.uw.covidsafe.LoggingServiceV2;
+import edu.uw.covidsafe.LoggingService;
 import edu.uw.covidsafe.ble.BleOpsAsyncTask;
-import edu.uw.covidsafe.ble.BleRecord;
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.gps.GpsOpsAsyncTask;
-import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.gps.GpsUtils;
 import edu.uw.covidsafe.preferences.AppPreferencesHelper;
-import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
-import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.MainActivity;
-import edu.uw.covidsafe.ui.notif.NotifRecord;
 
 public class Utils {
 
@@ -62,7 +56,7 @@ public class Utils {
 
         Log.e("logme", "stop service");
         if (Constants.LoggingServiceRunning) {
-            av.stopService(new Intent(av, LoggingServiceV2.class));
+            av.stopService(new Intent(av, LoggingService.class));
         }
 
         GpsUtils.haltGps();
@@ -254,9 +248,9 @@ public class Utils {
         Log.e("service", "logging service -- utils start");
         if (!Constants.LoggingServiceRunning) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                av.startForegroundService(new Intent(av, LoggingServiceV2.class));
+                av.startForegroundService(new Intent(av, LoggingService.class));
             } else {
-                av.startService(new Intent(av, LoggingServiceV2.class));
+                av.startService(new Intent(av, LoggingService.class));
             }
         }
     }
