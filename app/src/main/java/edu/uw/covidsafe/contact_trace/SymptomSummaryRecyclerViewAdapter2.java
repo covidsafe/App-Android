@@ -1,45 +1,25 @@
 package edu.uw.covidsafe.contact_trace;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.covidsafe.R;
 import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import edu.uw.covidsafe.comms.NetworkHelper;
-import edu.uw.covidsafe.symptoms.SymptomsOpsAsyncTask;
 import edu.uw.covidsafe.symptoms.SymptomsRecord;
-import edu.uw.covidsafe.ui.notif.NotifRecord;
-import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
-import edu.uw.covidsafe.utils.Constants;
-import edu.uw.covidsafe.utils.TimeUtils;
-import edu.uw.covidsafe.utils.Utils;
 
 public class SymptomSummaryRecyclerViewAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -148,8 +128,8 @@ public class SymptomSummaryRecyclerViewAdapter2 extends RecyclerView.Adapter<Rec
         else if (symptom.equals(mContext.getString(R.string.sore_throat_txt))) {
             ((SymptomSummaryHolder) holder).symptom.setText(R.string.sore_throat_txt);
         }
-        else if (symptom.equals(mContext.getString(R.string.vomitting_txt))) {
-            ((SymptomSummaryHolder) holder).symptom.setText(R.string.vomitting_txt);
+        else if (symptom.equals(mContext.getString(R.string.vomiting_txt))) {
+            ((SymptomSummaryHolder) holder).symptom.setText(R.string.vomiting_txt);
         }
         else {
             ((SymptomSummaryHolder) holder).layout.setVisibility(View.GONE);

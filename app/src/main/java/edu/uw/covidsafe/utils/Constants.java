@@ -63,7 +63,7 @@ public class Constants {
 
     public static boolean UI_AUTH = false;
     public static boolean WRITE_TO_DISK = false;
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
     public static boolean PUBLIC_DEMO = true;
     public static boolean NARROWCAST_ENABLE = true;
     public static boolean USE_LAST_QUERY_TIME = true;
@@ -275,7 +275,7 @@ public class Constants {
             symptoms.add(av.getString(R.string.difficult_in_breathing_not_severe));
             symptoms.add(av.getString(R.string.headache_txt));
             symptoms.add(av.getString(R.string.sore_throat_txt));
-            symptoms.add(av.getString(R.string.vomitting_txt));
+            symptoms.add(av.getString(R.string.vomiting_txt));
         }
 
         MainFragment = new MainFragment();
