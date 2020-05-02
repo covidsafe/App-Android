@@ -91,7 +91,7 @@ public class ImportLocationHistoryFragment extends Fragment {
             Constants.menu.findItem(R.id.mybutton).setVisible(false);
         }
 
-        context.registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        getContext().registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
 
         ((MainActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(getActivity().getDrawable(R.drawable.ic_close_black_24dp));
 
@@ -193,7 +193,7 @@ public class ImportLocationHistoryFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        context.unregisterReceiver(onComplete);
+        getContext().unregisterReceiver(onComplete);
     }
 
     private static class MyWebViewClient extends WebViewClient {
