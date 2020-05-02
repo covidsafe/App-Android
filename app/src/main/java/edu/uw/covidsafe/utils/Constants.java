@@ -219,6 +219,7 @@ public class Constants {
     public static ViewPager contactLogViewPager;
     public static Calendar contactLogMonthCalendar = Calendar.getInstance();
     public static Calendar symptomTrackerMonthCalendar = Calendar.getInstance();
+    public static String KML_FILE_NAME = "CovidSafe_Google_Location_History.kml";
 
     public static GpsHistoryRecyclerViewAdapter2 contactGpsAdapter;
     public static List<HumanRecord> changedContactHumanRecords;
