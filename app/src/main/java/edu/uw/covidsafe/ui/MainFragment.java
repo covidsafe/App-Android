@@ -293,12 +293,6 @@ public class MainFragment extends Fragment {
                 .build();
 
         WorkManager.getInstance(Objects.requireNonNull(getActivity())).enqueue(oneTimePullRequest);
-        View.OnClickListener onClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        };
         WorkManager.getInstance(getActivity()).getWorkInfoByIdLiveData(oneTimePullRequest.getId()).observe(this, new Observer<WorkInfo>() {
             @Override
             public void onChanged(WorkInfo workInfo) {

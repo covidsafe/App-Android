@@ -54,9 +54,9 @@ public class PeriodicTasksHandler {
 
     private void startWorkIfNotScheduled() {
         for (Map.Entry<String, PeriodicWorkRequest> entry : periodicWorkRequests.entrySet()) {
-            if (!isWorkScheduled(entry.getKey())) {
+//            if (!isWorkScheduled(entry.getKey())) {
                 startUniqueWork(entry.getValue(), entry.getKey());
-            }
+//            }
         }
     }
 
