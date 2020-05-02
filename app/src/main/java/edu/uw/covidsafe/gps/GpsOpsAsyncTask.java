@@ -63,9 +63,6 @@ GpsOpsAsyncTask extends AsyncTask<Void, Void, Void> {
                 }
             }
             repo.insert(this.record);
-            if (Constants.WRITE_TO_DISK) {
-                Utils.gpsLogToFile(this.context, this.record);
-            }
         }
         else if (this.op == Constants.GpsDatabaseOps.ViewAll) {
             List<GpsRecord> records = repo.getAllRecords();

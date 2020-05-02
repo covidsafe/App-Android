@@ -397,10 +397,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void reset(View v) {
-        Utils.clearPreferences(this);
-    }
-
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));

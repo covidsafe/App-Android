@@ -90,6 +90,44 @@ public class GpsUtils {
         }
     }
 
+    public static double getCoarseGpsCoord(double d, int precision) {
+        double shift = (1 << 16); //16 is some number that 1 << 32 > 180 and bigger than maximum precision value that we are using
+        return (getCoarseGpsCoordHelper(d + shift, precision) - shift);
+    }
+
+    public static double getCoarseGpsCoordHelper(double d, int precision) {
+//        Log.e("ERR ",d+","+precision);
+        long bits = Double.doubleToLongBits(d);
+//        Log.e("ERR ",d+","+precision);
+
+        long negative = bits & (1L << 63);
+        int exponent = (int) ((bits >> 52) & 0x7ffL);
+        long mantissa = bits & 0xfffffffffffffL;
+
+        int mantissaLog = 52;
+        if (exponent == 0) {
+            mantissaLog = (int) Utils.log(mantissa, 2);
+        } else {
+            mantissa = mantissa | (1L << 52);
+        }
+
+        int precisionShift = mantissaLog + exponent - 1075;
+
+        int maskLength = Math.min(precision + precisionShift, 52);
+
+        mantissa = mantissa >> (52 - maskLength);
+        mantissa = mantissa << (52 - maskLength);
+
+        if (mantissa == 0) {
+            exponent = 0;
+        }
+        long result = negative |
+                ((long) (exponent & 0x7ffL) << 52) |
+                (mantissa & 0xfffffffffffffL);
+
+        return Double.longBitsToDouble(result);
+    }
+
     public static void startGps(Context cxt) {
         initializeLocationManager(cxt);
         getLastLocation(cxt);
