@@ -65,23 +65,4 @@ public class PeriodicTasksHandler {
         instance.enqueueUniquePeriodicWork(pullServiceTag, ExistingPeriodicWorkPolicy.KEEP, periodicWorkRequest);
     }
 
-    private boolean isWorkScheduled(String tag) {
-        WorkManager instance = WorkManager.getInstance(context);
-        ListenableFuture<List<WorkInfo>> statuses = instance.getWorkInfosByTag(tag);
-        try {
-            boolean running = false;
-            List<WorkInfo> workInfoList = statuses.get();
-            for (WorkInfo workInfo : workInfoList) {
-                WorkInfo.State state = workInfo.getState();
-                running = state == WorkInfo.State.RUNNING | state == WorkInfo.State.ENQUEUED;
-            }
-            return running;
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-            return false;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
 }
