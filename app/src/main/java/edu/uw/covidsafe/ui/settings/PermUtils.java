@@ -43,7 +43,6 @@ public class PermUtils {
             AppPreferencesHelper.setGPSEnabled(av);
             if (!Constants.LoggingServiceRunning) {
                 Utils.startLoggingService(av);
-                GpsUtils.startGps(av);
                 PermUtils.transition(false,av);
             }
             else {
@@ -71,7 +70,6 @@ public class PermUtils {
             if (!Constants.LoggingServiceRunning) {
                 Utils.startLoggingService(av);
                 Log.e("ble","ble switch logic");
-                BluetoothUtils.startBle(av);
                 PermUtils.transition(false,av);
             }
             else {

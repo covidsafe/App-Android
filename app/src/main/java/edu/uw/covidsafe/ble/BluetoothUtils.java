@@ -26,6 +26,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import edu.uw.covidsafe.preferences.AppPreferencesHelper;
+import edu.uw.covidsafe.seed_uuid.UUIDGeneratorTask;
 import edu.uw.covidsafe.utils.ByteUtils;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
@@ -160,10 +161,22 @@ public class BluetoothUtils {
         // run this once to get a seed and broadcast it
         // have the generator be triggered at synchronized fixed 15 minute intervals:
         // e.g. 10:15, 10:30, 10:45
-        OneTimeWorkRequest oneTimePullRequest = new OneTimeWorkRequest.Builder(
-                UUIDGeneratorWorker.class)
-                .build();
-        WorkManager.getInstance(cxt).enqueue(oneTimePullRequest);
+//        OneTimeWorkRequest oneTimePullRequest = new OneTimeWorkRequest.Builder(
+//                UUIDGeneratorWorker.class)
+//                .build();
+//        WorkManager.getInstance(cxt).enqueue(oneTimePullRequest);
+
+        if (Constants.uuidGeneartionTask == null || Constants.uuidGeneartionTask.isDone()) {
+            ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
+            if (Constants.DEBUG) {
+                Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(
+                        new UUIDGeneratorTask(cxt), 0, Constants.UUIDGenerationIntervalInSecondsDebug, TimeUnit.SECONDS);
+            }
+            else {
+                Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(
+                        new UUIDGeneratorTask(cxt), 0, Constants.UUIDGenerationIntervalInSeconds, TimeUnit.SECONDS);
+            }
+        }
     }
 
     public static void mkBeacon(Context context) {
