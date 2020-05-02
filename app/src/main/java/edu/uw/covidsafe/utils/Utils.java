@@ -39,12 +39,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import edu.uw.covidsafe.AppStatusManager;
-import edu.uw.covidsafe.service.LoggingService;
 import edu.uw.covidsafe.ble.BleOpsAsyncTask;
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.gps.GpsOpsAsyncTask;
 import edu.uw.covidsafe.gps.GpsUtils;
 import edu.uw.covidsafe.preferences.AppPreferencesHelper;
+import edu.uw.covidsafe.service.LoggingService;
 import edu.uw.covidsafe.ui.MainActivity;
 
 public class Utils {
