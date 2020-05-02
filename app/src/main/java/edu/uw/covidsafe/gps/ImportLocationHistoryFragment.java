@@ -25,6 +25,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -47,15 +48,24 @@ public class ImportLocationHistoryFragment extends Fragment {
 
     View view;
 
+    Context context;
+
     BroadcastReceiver onComplete = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             Log.e("log", "DONE");
-            Utils.mkSnack(getActivity(), view, getContext().getString(R.string.download_complete));
-
-            LocationDataXMLParser parser = new LocationDataXMLParser();
-            parser.getLinks(context, context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS));
+            if(context != null){
+                Utils.mkSnack(getActivity(), view, context.getString(R.string.download_complete));
+                LocationDataXMLParser parser = new LocationDataXMLParser();
+                parser.getLinks(context, context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS));
+            }
         }
     };
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
 
     @SuppressLint("RestrictedApi")
     @Nullable
@@ -76,7 +86,7 @@ public class ImportLocationHistoryFragment extends Fragment {
             Constants.menu.findItem(R.id.mybutton).setVisible(false);
         }
 
-        getContext().registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        context.registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
 
         ((MainActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(getActivity().getDrawable(R.drawable.ic_close_black_24dp));
 
@@ -173,6 +183,12 @@ public class ImportLocationHistoryFragment extends Fragment {
         } else {
             Utils.updateSwitchStates(getActivity());
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        context.unregisterReceiver(onComplete);
     }
 
     private static class MyWebViewClient extends WebViewClient {
