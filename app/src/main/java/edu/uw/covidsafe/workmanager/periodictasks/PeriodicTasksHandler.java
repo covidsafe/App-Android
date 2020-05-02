@@ -2,6 +2,7 @@ package edu.uw.covidsafe.workmanager.periodictasks;
 
 import android.content.Context;
 
+import androidx.work.Configuration;
 import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.NetworkType;
@@ -18,13 +19,16 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import edu.uw.covidsafe.utils.Constants;
+import edu.uw.covidsafe.utils.Utils;
 import edu.uw.covidsafe.workmanager.workers.LogPurgerWorker;
 import edu.uw.covidsafe.workmanager.workers.PullFromServerWorker;
+import edu.uw.covidsafe.workmanager.workers.UUIDGeneratorWorker;
 
 public class PeriodicTasksHandler {
 
     private static final String PULL_SERVICE_TAG = "pullservice";
     private static final String LOG_PURGER_TAG = "logpurger";
+    private static final String UUID_GENERATOR_TAG = "uuidgenerator";
     private Context context;
 
     public PeriodicTasksHandler(Context context) {
@@ -47,8 +51,17 @@ public class PeriodicTasksHandler {
                 new PeriodicWorkRequest.Builder(LogPurgerWorker.class, Constants.LogPurgerIntervalInDays, TimeUnit.DAYS)
                         .addTag(LOG_PURGER_TAG)
                         .build();
+
+        PeriodicWorkRequest periodicUUIDGeneratorWorkRequest =
+                new PeriodicWorkRequest.Builder(UUIDGeneratorWorker.class, Constants.UUIDGenerationIntervalInSecondsDebug, TimeUnit.SECONDS)
+                        .addTag(UUID_GENERATOR_TAG)
+                        .build();
+
         periodicWorkRequests.put(PULL_SERVICE_TAG, periodicPullServiceWorkRequest);
         periodicWorkRequests.put(LOG_PURGER_TAG, periodicLogPurgerWorkRequest);
+        if(Utils.hasBlePermissions(context)){
+            periodicWorkRequests.put(UUID_GENERATOR_TAG, periodicUUIDGeneratorWorkRequest);
+        }
         startWorkIfNotScheduled();
     }
 
