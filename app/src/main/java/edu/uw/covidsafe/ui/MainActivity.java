@@ -351,9 +351,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        if (!Constants.PullServiceRunning) {
-            Utils.startPullService(this);
-        }
+//        if (!Constants.PullServiceRunning) {
+//            Utils.startPullService(this);
+//        }
     }
 
     @Override
