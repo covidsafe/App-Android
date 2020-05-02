@@ -196,9 +196,6 @@ public class PullFromServerWorker extends Worker {
         List<Long> contactEndTimes = new ArrayList<>();
         for (String seed : seenSeeds) {
             Log.e("pull", "SEED " + seed);
-            if (seed.equals("c2db5cac-9875-4ad7-acc7-ead49c76d1ec")) {
-                Log.e("pull", "got seed");
-            }
             long[] exposedStatus = isExposed(seed,
                     startTimes.get(seed),
                     endTimes.get(seed),

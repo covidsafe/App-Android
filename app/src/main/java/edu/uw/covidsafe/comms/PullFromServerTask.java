@@ -80,6 +80,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
             swipeLayout.setRefreshing(false);
             ImageView refresh = view.findViewById(R.id.refresh);
             refresh.clearAnimation();
+
             TextView lastUpdated = view.findViewById(R.id.lastUpdated);
             SimpleDateFormat format = new SimpleDateFormat("h:mm a");
             lastUpdated.setText(context.getString(R.string.last_updated_text)+": " + format.format(new Date(ts)));
@@ -224,9 +225,6 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         List<Long> contactEndTimes = new ArrayList<>();
         for (String seed : seenSeeds) {
             Log.e("pull","SEED "+seed);
-            if (seed.equals("c2db5cac-9875-4ad7-acc7-ead49c76d1ec")) {
-                Log.e("pull","got seed");
-            }
             long[] exposedStatus = isExposed(seed,
                     startTimes.get(seed),
                     endTimes.get(seed),

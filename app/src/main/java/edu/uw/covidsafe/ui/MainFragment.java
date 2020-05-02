@@ -28,6 +28,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.work.Constraints;
+import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
@@ -259,51 +261,10 @@ public class MainFragment extends Fragment {
         Log.e("refresh", "freshtask ");
         if (!Constants.PullFromServerTaskRunning) {
             if (!Constants.PUBLIC_DEMO) {
-                if (!Constants.DEBUG) {
+                if (Constants.DEBUG) {
                     new PullFromServerTaskDemo2(getContext(), getActivity(), view).execute();
                 } else {
-                    // TODO run the one time worker request to observe the status of it
-                    OneTimeWorkRequest oneTimePullRequest = new OneTimeWorkRequest.Builder(PullFromServerWorker.class).build();
-                    WorkManager.getInstance(Objects.requireNonNull(getActivity())).enqueue(oneTimePullRequest);
-                    View.OnClickListener onClickListener = new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                        }
-                    };
-                    WorkManager.getInstance(getActivity()).getWorkInfoByIdLiveData(oneTimePullRequest.getId()).observe(this, new Observer<WorkInfo>() {
-                        @Override
-                        public void onChanged(WorkInfo workInfo) {
-                            if (workInfo.getState() == WorkInfo.State.FAILED) {
-                                Log.e("PullService", "Pull Service Failed");
-                                int status = workInfo.getOutputData().getInt(PullFromServerWorker.STATUS, -1);
-                                if (status == GPS_OFF) {
-                                    SpannableStringBuilder snackbarText = new SpannableStringBuilder();
-                                    snackbarText.append(Objects.requireNonNull(getActivity()).getString(R.string.turn_loc_on2));
-                                    AppStatusManager appStatusManager = new AppStatusManager();
-                                    appStatusManager.makeSnackBar(view, snackbarText, Snackbar.LENGTH_LONG)
-                                            .setAction(getActivity().getString(R.string.dismiss_text), v -> appStatusManager.getmSnackBar().dismiss())
-                                            .show();
-                                }
-                            }
-                            if (workInfo.getState().isFinished()) {
-                                SharedPreferences prefs = Objects.requireNonNull(getContext()).getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = prefs.edit();
-                                long ts = TimeUtils.getTime();
-                                editor.putLong(Objects.requireNonNull(getActivity()).getString(R.string.last_refresh_date_pkey), ts);
-                                editor.apply();
-                                SwipeRefreshLayout swipeLayout = view.findViewById(R.id.swiperefresh);
-                                swipeLayout.setRefreshing(false);
-                                ImageView refresh = view.findViewById(R.id.refresh);
-                                refresh.clearAnimation();
-                                TextView lastUpdated = view.findViewById(R.id.lastUpdated);
-                                SimpleDateFormat format = new SimpleDateFormat("h:mm a");
-                                lastUpdated.setText(String.format("%s: %s", getContext().getString(R.string.last_updated_text), format.format(new Date(ts))));
-                                lastUpdated.setVisibility(View.VISIBLE);
-                                Constants.PullFromServerTaskRunning = false;
-                            }
-                        }
-                    });
+                    startPullFromServerTask();
                     // new PullFromServerTask(getContext(), getActivity(), view).execute();
                 }
 
@@ -319,6 +280,62 @@ public class MainFragment extends Fragment {
                 refresh.clearAnimation();
             }
         }
+    }
+
+    public void startPullFromServerTask() {
+        // TODO run the one time worker request to observe the status of it
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        OneTimeWorkRequest oneTimePullRequest = new OneTimeWorkRequest.Builder(
+                PullFromServerWorker.class)
+                .setConstraints(constraints)
+                .build();
+
+        WorkManager.getInstance(Objects.requireNonNull(getActivity())).enqueue(oneTimePullRequest);
+        View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        };
+        WorkManager.getInstance(getActivity()).getWorkInfoByIdLiveData(oneTimePullRequest.getId()).observe(this, new Observer<WorkInfo>() {
+            @Override
+            public void onChanged(WorkInfo workInfo) {
+                if (workInfo.getState() == WorkInfo.State.FAILED) {
+                    Log.e("PullService", "Pull Service Failed");
+                    int status = workInfo.getOutputData().getInt(PullFromServerWorker.STATUS, -1);
+                    if (status == GPS_OFF) {
+                        SpannableStringBuilder snackbarText = new SpannableStringBuilder();
+                        snackbarText.append(Objects.requireNonNull(getActivity()).getString(R.string.turn_loc_on2));
+                        AppStatusManager appStatusManager = new AppStatusManager();
+                        appStatusManager.makeSnackBar(view, snackbarText, Snackbar.LENGTH_LONG)
+                                .setAction(getActivity().getString(R.string.dismiss_text), v -> appStatusManager.getmSnackBar().dismiss())
+                                .show();
+                    }
+                }
+                if (workInfo.getState().isFinished()) {
+                    SharedPreferences prefs = Objects.requireNonNull(getContext()).getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+
+                    long ts = TimeUtils.getTime();
+                    editor.putLong(Objects.requireNonNull(getActivity()).getString(R.string.last_refresh_date_pkey), ts);
+                    editor.apply();
+
+                    SwipeRefreshLayout swipeLayout = view.findViewById(R.id.swiperefresh);
+                    swipeLayout.setRefreshing(false);
+                    ImageView refresh = view.findViewById(R.id.refresh);
+                    refresh.clearAnimation();
+
+                    TextView lastUpdated = view.findViewById(R.id.lastUpdated);
+                    SimpleDateFormat format = new SimpleDateFormat("h:mm a");
+                    lastUpdated.setText(String.format("%s: %s", getContext().getString(R.string.last_updated_text), format.format(new Date(ts))));
+                    lastUpdated.setVisibility(View.VISIBLE);
+
+                    Constants.PullFromServerTaskRunning = false;
+                }
+            }
+        });
     }
 
     public void broadcastSwitchLogic(boolean isChecked) {
