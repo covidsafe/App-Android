@@ -164,11 +164,6 @@ public class BluetoothUtils {
                 UUIDGeneratorWorker.class)
                 .build();
         WorkManager.getInstance(cxt).enqueue(oneTimePullRequest);
-        WorkManager.getInstance(cxt).getWorkInfoByIdLiveData(oneTimePullRequest.getId()).observe((LifecycleOwner) cxt, workInfo -> {
-            if (workInfo.getState() == WorkInfo.State.FAILED) {
-                Log.e("UUIDGeneratorTask", "UUID Generator Task Failed");
-            }
-        });
     }
 
     public static void mkBeacon(Context context) {
