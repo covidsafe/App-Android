@@ -35,7 +35,6 @@ import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 import com.example.covidsafe.R;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -44,7 +43,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import edu.uw.covidsafe.AppStatusManager;
 import edu.uw.covidsafe.comms.PullFromServerTaskDemo2;
 import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.symptoms.SymptomDbModel;
