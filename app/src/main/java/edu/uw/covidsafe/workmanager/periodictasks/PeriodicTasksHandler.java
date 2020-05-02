@@ -2,24 +2,17 @@ package edu.uw.covidsafe.workmanager.periodictasks;
 
 import android.content.Context;
 
-import androidx.work.Configuration;
 import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
-import com.google.common.util.concurrent.ListenableFuture;
-
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import edu.uw.covidsafe.utils.Constants;
-import edu.uw.covidsafe.utils.Utils;
 import edu.uw.covidsafe.workmanager.workers.LogPurgerWorker;
 import edu.uw.covidsafe.workmanager.workers.PullFromServerWorker;
 import edu.uw.covidsafe.workmanager.workers.UUIDGeneratorWorker;
@@ -65,7 +58,7 @@ public class PeriodicTasksHandler {
 
     private void startWorkIfNotScheduled() {
         for (Map.Entry<String, PeriodicWorkRequest> entry : periodicWorkRequests.entrySet()) {
-                startUniqueWork(entry.getValue(), entry.getKey());
+            startUniqueWork(entry.getValue(), entry.getKey());
         }
     }
 
