@@ -1,4 +1,4 @@
-package edu.uw.covidsafe;
+package edu.uw.covidsafe.service;
 
 import android.app.Notification;
 import android.app.Service;
