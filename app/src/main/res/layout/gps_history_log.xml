@@ -15,30 +15,49 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2V80"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="20dp"
+            app:layout_constraintGuide_percent=".85" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="20dp"
+            app:layout_constraintGuide_percent=".01" />
+
         <TextView
             android:id="@+id/loc"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:gravity="center_vertical"
-            android:text="Seattle, WA, 98112"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Seattle, WA, 98112Seattle, WA, 98112Seattle, WA, 98112Seattle, WA, 98112Seattle, WA, 98112Seattle, WA, 98112Seattle, WA, 98112Seattle, WA, 98112Seattle, WA, 98112"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2V80"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline5"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/time"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:text="3:15 - 3:30pm"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2V80"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline5"
             app:layout_constraintTop_toBottomOf="@+id/loc" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/overflow"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:background="@color/white"
-            android:src="@drawable/ic_more_vert_gray_24dp"
+            android:src="@drawable/rubbish"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
             app:layout_constraintTop_toTopOf="parent" />

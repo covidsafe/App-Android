@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -80,7 +81,8 @@ public class GpsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         ((GpsHistoryHolder) holder).bb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                makeMenu(((GpsHistoryHolder) holder).bb, record);
+                showDialog(record);
+//                makeMenu(((GpsHistoryHolder) holder).bb, record);
             }
         });
     }
@@ -131,7 +133,7 @@ public class GpsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     public class GpsHistoryHolder extends RecyclerView.ViewHolder {
         TextView loc;
         TextView time;
-        ImageButton bb;
+        ImageView bb;
 
         GpsHistoryHolder(@NonNull View itemView) {
             super(itemView);
@@ -153,23 +155,26 @@ public class GpsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.deleteItem:
-                        AlertDialog dialog = new MaterialAlertDialogBuilder(av)
-                                .setTitle(mContext.getString(R.string.sure_delete))
-                                .setNegativeButton(mContext.getString(R.string.cancel), null)
-                                .setPositiveButton(mContext.getString(R.string.yes), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        SimpleDateFormat outformat = new SimpleDateFormat("MM/dd h:mm aa");
-                                        new GpsOpsAsyncTask(mContext, Constants.GpsDatabaseOps.Delete, record.getTs_start()).execute();
-                                    }
-                                })
-                                .setCancelable(true).create();
-                        dialog.show();
+                        showDialog(record);
                         break;
                 }
                 return true;
             }
         });
         popup.show();
+    }
+
+    public void showDialog(GpsRecord record) {
+        AlertDialog dialog = new MaterialAlertDialogBuilder(av)
+                .setTitle(mContext.getString(R.string.sure_delete))
+                .setNegativeButton(mContext.getString(R.string.cancel), null)
+                .setPositiveButton(mContext.getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new GpsOpsAsyncTask(mContext, Constants.GpsDatabaseOps.Delete, record.getTs_start()).execute();
+                    }
+                })
+                .setCancelable(true).create();
+        dialog.show();
     }
 }

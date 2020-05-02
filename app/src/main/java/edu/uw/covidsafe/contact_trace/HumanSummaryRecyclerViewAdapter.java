@@ -91,7 +91,8 @@ public class HumanSummaryRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         ((HumanSummaryHolder) holder).bb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                makeMenu(((HumanSummaryHolder) holder).bb, record);
+                showDialog(record);
+//                makeMenu(((HumanSummaryHolder) holder).bb, record);
             }
         });
     }
@@ -109,7 +110,7 @@ public class HumanSummaryRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     public class HumanSummaryHolder extends RecyclerView.ViewHolder {
         ImageView imageView11;
         TextView text;
-        ImageButton bb;
+        ImageView bb;
 
         HumanSummaryHolder(@NonNull View itemView) {
             super(itemView);
@@ -131,23 +132,27 @@ public class HumanSummaryRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.deleteItem:
-                        AlertDialog dialog = new MaterialAlertDialogBuilder(av)
-                                .setTitle(mContext.getString(R.string.sure_delete))
-                                .setNegativeButton(mContext.getString(R.string.cancel), null)
-                                .setPositiveButton(mContext.getString(R.string.yes), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        SimpleDateFormat outformat = new SimpleDateFormat("MM/dd h:mm aa");
-                                        new HumanOpsAsyncTask(mContext, Constants.HumanDatabaseOps.Delete, record).execute();
-                                    }
-                                })
-                                .setCancelable(true).create();
-                        dialog.show();
+                        showDialog(record);
                         break;
                 }
                 return true;
             }
         });
         popup.show();
+    }
+
+    public void showDialog(HumanRecord record) {
+        AlertDialog dialog = new MaterialAlertDialogBuilder(mContext)
+                .setTitle(mContext.getString(R.string.sure_delete))
+                .setNegativeButton(mContext.getString(R.string.cancel), null)
+                .setPositiveButton(mContext.getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SimpleDateFormat outformat = new SimpleDateFormat("MM/dd h:mm aa");
+                        new HumanOpsAsyncTask(mContext, Constants.HumanDatabaseOps.Delete, record).execute();
+                    }
+                })
+                .setCancelable(true).create();
+        dialog.show();
     }
 }
