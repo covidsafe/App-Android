@@ -24,7 +24,6 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -35,7 +34,6 @@ import com.example.covidsafe.R;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import edu.uw.covidsafe.ui.MainActivity;
@@ -49,9 +47,9 @@ public class ImportLocationHistoryFragment extends Fragment {
 
     View view;
 
-    BroadcastReceiver onComplete=new BroadcastReceiver() {
+    BroadcastReceiver onComplete = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
-            Log.e("log","DONE");
+            Log.e("log", "DONE");
             Utils.mkSnack(getActivity(), view, getContext().getString(R.string.download_complete));
 
             LocationDataXMLParser parser = new LocationDataXMLParser();
@@ -95,8 +93,7 @@ public class ImportLocationHistoryFragment extends Fragment {
         Date begin = null;
         if (Constants.DEBUG) {
             begin = new Date(TimeUtils.getNDaysForward(-Constants.DefaultInfectionWindowInDaysDebug));
-        }
-        else {
+        } else {
             begin = new Date(TimeUtils.getNDaysForward(-Constants.DefaultInfectionWindowInDays));
         }
 
@@ -116,16 +113,15 @@ public class ImportLocationHistoryFragment extends Fragment {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(myWebView, url);
-                Log.e("log","on page finished "+url);
+                Log.e("log", "on page finished " + url);
                 if (url.contains(Constants.GOOGLE_SIGNIN_PAGE)) {
-                    Log.e("log","----------------------");
-                }
-                else if (url.contains(Constants.GOOGLE_DOWNLOAD_PAGE)) {
+                    Log.e("log", "----------------------");
+                } else if (url.contains(Constants.GOOGLE_DOWNLOAD_PAGE)) {
                     myWebView.setVisibility(View.GONE);
                     myWebView.clearFormData();
                     myWebView.clearCache(true);
                     myWebView.loadUrl(download_url, headers);
-                    Log.e("log","*************************");
+                    Log.e("log", "*************************");
                 }
             }
         });
@@ -135,7 +131,7 @@ public class ImportLocationHistoryFragment extends Fragment {
             public void onDownloadStart(String url, String userAgent,
                                         String contentDisposition, String mimetype,
                                         long contentLength) {
-                Log.e("log","set download listener");
+                Log.e("log", "set download listener");
                 DownloadManager.Request request = new DownloadManager.Request(
                         Uri.parse(url));
                 String cookie = CookieManager.getInstance().getCookie(url);
@@ -151,8 +147,8 @@ public class ImportLocationHistoryFragment extends Fragment {
 
                 FragmentTransaction tx = getActivity().getSupportFragmentManager().beginTransaction();
                 tx.setCustomAnimations(
-                        R.anim.enter_left_to_right,R.anim.exit_left_to_right,
-                        R.anim.enter_left_to_right,R.anim.exit_left_to_right);
+                        R.anim.enter_left_to_right, R.anim.exit_left_to_right,
+                        R.anim.enter_left_to_right, R.anim.exit_left_to_right);
                 tx.replace(R.id.fragment_container, Constants.SettingsFragment).commit();
             }
         });
@@ -182,7 +178,7 @@ public class ImportLocationHistoryFragment extends Fragment {
     private class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-            view.loadUrl (request.getUrl().toString());
+            view.loadUrl(request.getUrl().toString());
             return true;
         }
         //        @Override
