@@ -31,11 +31,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.covidsafe.R;
+import com.google.android.gms.tasks.Tasks;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.utils.Constants;
@@ -56,7 +58,11 @@ public class ImportLocationHistoryFragment extends Fragment {
             if(context != null){
                 Utils.mkSnack(getActivity(), view, context.getString(R.string.download_complete));
                 LocationDataXMLParser parser = new LocationDataXMLParser();
-                parser.getLinks(context, context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS));
+                Tasks.call(() -> {
+                    parser.getLinks(context, context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS));
+                    return null;
+                });
+
             }
         }
     };
