@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.text.Html;
 import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
@@ -223,7 +224,23 @@ public class Utils {
                             public void onClick(View v) {
                                 appStatusManager.getmSnackBar().dismiss();
                             }
-                        });
+                        }).show();
+            }
+        });
+    }
+
+
+    public static void mkSnack(Activity av, View v, SpannableStringBuilder msg) {
+        av.runOnUiThread(new Runnable() {
+            public void run() {
+                AppStatusManager appStatusManager = new AppStatusManager();
+                appStatusManager.makeSnackBar(v, msg, Snackbar.LENGTH_LONG)
+                        .setAction(av.getString(R.string.dismiss_text), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                appStatusManager.getmSnackBar().dismiss();
+                            }
+                        }).show();
             }
         });
     }

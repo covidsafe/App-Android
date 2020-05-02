@@ -385,7 +385,7 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
         if (gpsRecords.size() == 0) {
             if (!Utils.hasGpsPermissions(context)) {
                 if (view != null) {
-                    mkSnack(av, view, context.getString(R.string.turn_loc_on2));
+                    Utils.mkSnack(av, view, context.getString(R.string.turn_loc_on2));
                 }
                 return false;
             }
@@ -575,31 +575,6 @@ public class PullFromServerTask extends AsyncTask<Void, Void, Void> {
                     Utils.sendNotification(context, context.getString(R.string.announcement_txt), msgs.get(i), R.drawable.ic_info_outline_black_24dp);
                 }
             }
-        }
-    }
-
-    public static void mkSnack(Activity av, View v, String msg) {
-        if (av != null) {
-            av.runOnUiThread(new Runnable() {
-                public void run() {
-                    SpannableStringBuilder builder = new SpannableStringBuilder();
-                    builder.append(msg);
-                    Snackbar snackBar = Snackbar.make(v, builder, Snackbar.LENGTH_LONG);
-
-                    snackBar.setAction(av.getString(R.string.dismiss_text), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            snackBar.dismiss();
-                        }
-                    });
-
-                    View snackbarView = snackBar.getView();
-                    TextView textView = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
-                    textView.setMaxLines(5);
-
-                    snackBar.show();
-                }
-            });
         }
     }
 }

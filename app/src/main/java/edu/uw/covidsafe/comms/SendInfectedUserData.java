@@ -117,7 +117,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         if (generatedRecord == null) {
             Log.e("demo","get zeroth seed");
             if (allRecords.size() == 0) {
-                mkSnack(av, view, av.getString(R.string.gen_error));
+                Utils.mkSnack(av, view, av.getString(R.string.gen_error));
                 status = false;
                 return null;
             }
@@ -136,14 +136,14 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         if (sortedGpsRecords.size() == 0) {
             Log.e("sendbug","need to get last location");
             if (!Utils.hasGpsPermissions(context)) {
-                mkSnack(av, view, context.getString(R.string.turn_loc_on));
+                Utils.mkSnack(av, view, context.getString(R.string.turn_loc_on));
                 status = false;
                 return null;
             }
             else {
                 Location loc = GpsUtils.getLastLocation(context);
                 if (loc == null) {
-                    mkSnack(av, view, context.getString(R.string.turn_loc_on));
+                    Utils.mkSnack(av, view, context.getString(R.string.turn_loc_on));
                     status = false;
                     return null;
                 }
@@ -187,28 +187,6 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         }
 
         return null;
-    }
-
-    public static void mkSnack(Activity av, View v, String msg) {
-        av.runOnUiThread(new Runnable() {
-            public void run() {
-                SpannableStringBuilder builder = new SpannableStringBuilder();
-                builder.append(msg);
-                Snackbar snackBar = Snackbar.make(v, builder, Snackbar.LENGTH_LONG);
-
-                snackBar.setAction(av.getString(R.string.dismiss_text), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        snackBar.dismiss();
-                    }
-                });
-
-                View snackbarView = snackBar.getView();
-                TextView textView = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
-                textView.setMaxLines(5);
-
-                snackBar.show();
-        }});
     }
 
     public int log(long x, int base) {
@@ -282,12 +260,12 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         JSONObject resp = NetworkHelper.sendRequest(selfReportRequest, Request.Method.PUT, announceRequestObj);
         try {
             if (resp == null || (resp.has("statusCode") && resp.getInt("statusCode") != 200)) {
-                mkSnack(av, view, context.getString(R.string.error_submitting_data));
+                Utils.mkSnack(av, view, context.getString(R.string.error_submitting_data));
                 status = false;
                 return;
             }
             else {
-                mkSnack(av, view, context.getString(R.string.report_has_been_submitted));
+                Utils.mkSnack(av, view, context.getString(R.string.report_has_been_submitted));
 
                 DiagnosisFragment.updateSubmissionView(av, context, view, true);
                 status = true;

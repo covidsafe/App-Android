@@ -41,7 +41,7 @@ public class AppStatusManager {
     }
 
     public AppStatusManager setAction(String actionText, View.OnClickListener onClickListener) {
-        if(mSnackBar != null){
+        if(mSnackBar != null && actionText != null && onClickListener != null){
             mSnackBar.setAction(actionText, onClickListener);
         }
         return this;
@@ -50,12 +50,12 @@ public class AppStatusManager {
     public void show() {
         if (mSnackBar != null) {
             View snackbarView = mSnackBar.getView();
-            TextView textView = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
-            textView.setMaxLines(5);
+            if (snackbarView != null) {
+                TextView textView = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
+                textView.setMaxLines(5);
 
-            mSnackBar.show();
+                mSnackBar.show();
+            }
         }
     }
-
-
 }

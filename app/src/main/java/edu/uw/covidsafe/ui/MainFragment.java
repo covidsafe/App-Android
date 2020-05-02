@@ -308,10 +308,7 @@ public class MainFragment extends Fragment {
                     if (status == GPS_OFF) {
                         SpannableStringBuilder snackbarText = new SpannableStringBuilder();
                         snackbarText.append(Objects.requireNonNull(getActivity()).getString(R.string.turn_loc_on2));
-                        AppStatusManager appStatusManager = new AppStatusManager();
-                        appStatusManager.makeSnackBar(view, snackbarText, Snackbar.LENGTH_LONG)
-                                .setAction(getActivity().getString(R.string.dismiss_text), v -> appStatusManager.getmSnackBar().dismiss())
-                                .show();
+                        Utils.mkSnack(getActivity(), view, snackbarText);
                     }
                 }
                 if (workInfo.getState().isFinished()) {
