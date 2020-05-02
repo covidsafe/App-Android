@@ -1,4 +1,4 @@
-package edu.uw.covidsafe;
+package edu.uw.covidsafe.broadcastreceivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

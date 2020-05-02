@@ -61,7 +61,7 @@
         <service android:name="edu.uw.covidsafe.service.LoggingService" />
 
         <receiver
-            android:name="edu.uw.covidsafe.AutoStartWorkReceiver"
+            android:name="edu.uw.covidsafe.broadcastreceivers.AutoStartWorkReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
