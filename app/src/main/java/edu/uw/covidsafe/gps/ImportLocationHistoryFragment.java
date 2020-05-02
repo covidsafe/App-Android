@@ -49,7 +49,7 @@ public class ImportLocationHistoryFragment extends Fragment {
 
     BroadcastReceiver onComplete = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
-            Log.e("log", "DONE");
+            Log.e("log", "DONE ");
             Utils.mkSnack(getActivity(), view, getContext().getString(R.string.download_complete));
 
             LocationDataXMLParser parser = new LocationDataXMLParser();
