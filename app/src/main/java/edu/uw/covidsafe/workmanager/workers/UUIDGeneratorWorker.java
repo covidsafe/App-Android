@@ -14,6 +14,7 @@ import com.example.covidsafe.R;
 import java.util.UUID;
 
 import edu.uw.covidsafe.ble.BluetoothUtils;
+import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
 import edu.uw.covidsafe.utils.Utils;
@@ -35,7 +36,7 @@ public class UUIDGeneratorWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        if (Constants.EnableUUIDGeneration && Utils.hasBlePermissions(context)) {
+        if (Constants.EnableUUIDGeneration && AppPreferencesHelper.isBluetoothEnabled(context)) {
             Log.e("crypto","generate uuid");
             // get the most recently generated seed
             SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
