@@ -41,7 +41,6 @@ import java.util.Date;
 
 import edu.uw.covidsafe.AppStatusManager;
 import edu.uw.covidsafe.LoggingServiceV2;
-import edu.uw.covidsafe.PullService;
 import edu.uw.covidsafe.ble.BleOpsAsyncTask;
 import edu.uw.covidsafe.ble.BleRecord;
 import edu.uw.covidsafe.ble.BluetoothUtils;

@@ -58,8 +58,6 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"></activity>
 
-        <service android:name="edu.uw.covidsafe.PullService" />
-
         <service android:name="edu.uw.covidsafe.LoggingServiceV2" />
 
         <receiver
