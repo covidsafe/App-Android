@@ -175,17 +175,11 @@ public class ImportLocationHistoryFragment extends Fragment {
         }
     }
 
-    private class MyWebViewClient extends WebViewClient {
+    private static class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
             view.loadUrl(request.getUrl().toString());
             return true;
         }
-        //        @Override
-//        //show the web page in webview but not in web browser
-//        public boolean shouldOverrideUrlLoading(@org.jetbrains.annotations.NotNull WebView view, String url) {
-//            view.loadUrl (url);
-//            return true;
-//        }
     }
 }
