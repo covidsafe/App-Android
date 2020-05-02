@@ -350,10 +350,6 @@ public class MainActivity extends AppCompatActivity {
                 PermUtils.bleSwitchLogic(this);
             }
         }
-
-//        if (!Constants.PullServiceRunning) {
-//            Utils.startPullService(this);
-//        }
     }
 
     @Override

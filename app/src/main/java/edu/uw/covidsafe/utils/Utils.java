@@ -305,16 +305,6 @@ public class Utils {
         }
     }
 
-    public static void startPullService(Activity av) {
-        Utils.createNotificationChannel(av);
-        Log.e("service", "pull service -- utils start");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            av.startForegroundService(new Intent(av, PullService.class));
-        } else {
-            av.startService(new Intent(av, PullService.class));
-        }
-    }
-
     public static double getCoarseGpsCoord(double d, int precision) {
         double shift = (1 << 16); //16 is some number that 1 << 32 > 180 and bigger than maximum precision value that we are using
         return (getCoarseGpsCoordHelper(d + shift, precision) - shift);
