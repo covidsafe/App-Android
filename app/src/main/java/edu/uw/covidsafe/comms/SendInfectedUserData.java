@@ -166,8 +166,8 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
             long ts_end = TimeUtils.getTime();
 
             String seed = recordToSend.getSeed(context);
-            double coarseLat = getCoarseGpsCoord(lat, gpsResolution);
-            double coarseLon = getCoarseGpsCoord(longi, gpsResolution);
+            double coarseLat = GpsUtils.getCoarseGpsCoord(lat, gpsResolution);
+            double coarseLon = GpsUtils.getCoarseGpsCoord(longi, gpsResolution);
             Log.e("sendbug","seed "+seed);
             Log.e("sendbug","ts_start "+ts_start);
             Log.e("sendbug","ts_end "+ts_end);
@@ -187,43 +187,6 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         }
 
         return null;
-    }
-
-    public int log(long x, int base) {
-        return (int) (Math.log(x) / Math.log(base));
-    }
-
-    public double getCoarseGpsCoord(double d, int precision) {
-        long bits = Double.doubleToLongBits(d);
-
-        long negative = bits & (1L << 63);
-        int exponent = (int)((bits >> 52) & 0x7ffL);
-        long mantissa = bits & 0xfffffffffffffL;
-
-        int mantissaLog = 52;
-        if (exponent == 0) {
-            mantissaLog = (int)log(mantissa, 2);
-        }
-        else {
-            mantissa = mantissa | (1L<<52);
-        }
-
-        int precisionShift = mantissaLog + exponent - 1075;
-
-        int maskLength = Math.min(precision + precisionShift, 52);
-
-        mantissa = mantissa >> (52 - maskLength);
-        mantissa = mantissa << (52 - maskLength);
-
-        if (mantissa == 0)
-        {
-            exponent = 0;
-        }
-        long result = negative |
-                ((long)(exponent & 0x7ffL) << 52) |
-                (mantissa & 0xfffffffffffffL);
-
-        return Double.longBitsToDouble(result);
     }
 
     public void sendRequest(String seed, long ts_start, long ts_end, double lat, double longi, int precision) {

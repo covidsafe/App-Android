@@ -133,8 +133,8 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
             lastQueryTime = prefs.getLong(context.getString(R.string.time_of_last_query_pkey), 0L);
         }
         while (currentGpsPrecision <= Constants.MaximumGpsPrecision) {
-            double preciseLat = Utils.getCoarseGpsCoord(lat, currentGpsPrecision);
-            double preciseLong = Utils.getCoarseGpsCoord(lon, currentGpsPrecision);
+            double preciseLat = GpsUtils.getCoarseGpsCoord(lat, currentGpsPrecision);
+            double preciseLong = GpsUtils.getCoarseGpsCoord(lon, currentGpsPrecision);
 
             try {
                 Log.e("pulldemo","HOW BIG "+currentGpsPrecision);
@@ -171,8 +171,8 @@ public class PullFromServerTaskDemo2 extends AsyncTask<Void, Void, Void> {
         //////////////////////////////////////////////////////////////////////////////////////////
         // get list of UUIDs that intersect with our movements and what the server has sent us
         //////////////////////////////////////////////////////////////////////////////////////////
-        double preciseLat = Utils.getCoarseGpsCoord(lat, currentGpsPrecision);
-        double preciseLong = Utils.getCoarseGpsCoord(lon, currentGpsPrecision);
+        double preciseLat = GpsUtils.getCoarseGpsCoord(lat, currentGpsPrecision);
+        double preciseLong = GpsUtils.getCoarseGpsCoord(lon, currentGpsPrecision);
 
         Log.e("pulldemo","GET MESSAGES "+sizeOfPayload);
         List<BluetoothMatch> bluetoothMatches = getMessages(preciseLat,preciseLong,
