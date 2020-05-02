@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.workmanager.workers.LogPurgerWorker;
 import edu.uw.covidsafe.workmanager.workers.PullFromServerWorker;
 
@@ -32,10 +33,11 @@ public class PeriodicTasksHandler {
 
     public void initAllPeriodicRequests() {
         PeriodicWorkRequest periodicPullServiceWorkRequest =
-                new PeriodicWorkRequest.Builder(PullFromServerWorker.class, 1, TimeUnit.HOURS)
+                new PeriodicWorkRequest.Builder(PullFromServerWorker.class, Constants.PullFromServerIntervalInMilliseconds, TimeUnit.MILLISECONDS)
+                        .addTag(PULL_SERVICE_TAG)
                         .build();
         PeriodicWorkRequest periodicLogPurgerWorkRequest =
-                new PeriodicWorkRequest.Builder(LogPurgerWorker.class, 1, TimeUnit.DAYS)
+                new PeriodicWorkRequest.Builder(LogPurgerWorker.class, Constants.LogPurgerIntervalInDays, TimeUnit.DAYS)
                         .addTag(LOG_PURGER_TAG)
                         .build();
         periodicWorkRequests.put(PULL_SERVICE_TAG, periodicPullServiceWorkRequest);
