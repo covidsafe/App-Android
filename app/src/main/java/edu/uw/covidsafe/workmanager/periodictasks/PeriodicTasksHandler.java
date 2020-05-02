@@ -46,7 +46,7 @@ public class PeriodicTasksHandler {
                         .build();
 
         PeriodicWorkRequest periodicUUIDGeneratorWorkRequest =
-                new PeriodicWorkRequest.Builder(UUIDGeneratorWorker.class, Constants.UUIDGenerationIntervalInSecondsDebug, TimeUnit.SECONDS)
+                new PeriodicWorkRequest.Builder(UUIDGeneratorWorker.class, getUUIDInterval(), TimeUnit.SECONDS)
                         .addTag(UUID_GENERATOR_TAG)
                         .build();
 
@@ -62,9 +62,20 @@ public class PeriodicTasksHandler {
         }
     }
 
-    private void startUniqueWork(PeriodicWorkRequest periodicWorkRequest, String pullServiceTag) {
+    private void startUniqueWork(PeriodicWorkRequest periodicWorkRequest, String workTag) {
         WorkManager instance = WorkManager.getInstance(context);
-        instance.enqueueUniquePeriodicWork(pullServiceTag, ExistingPeriodicWorkPolicy.KEEP, periodicWorkRequest);
+        if (workTag.equalsIgnoreCase(UUID_GENERATOR_TAG)) {
+            instance.enqueueUniquePeriodicWork(workTag, ExistingPeriodicWorkPolicy.REPLACE, periodicWorkRequest);
+        } else
+            instance.enqueueUniquePeriodicWork(workTag, ExistingPeriodicWorkPolicy.KEEP, periodicWorkRequest);
+    }
+
+    private int getUUIDInterval() {
+        if (Constants.DEBUG) {
+            return Constants.UUIDGenerationIntervalInSecondsDebug;
+        } else {
+            return Constants.UUIDGenerationIntervalInSeconds;
+        }
     }
 
 }

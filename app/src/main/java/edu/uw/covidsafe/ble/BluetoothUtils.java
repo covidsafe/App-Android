@@ -12,27 +12,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.Handler;
 import android.os.ParcelUuid;
 import android.util.Log;
 
+import androidx.lifecycle.LifecycleOwner;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
+
 import com.example.covidsafe.R;
 
-import edu.uw.covidsafe.preferences.AppPreferencesHelper;
-import edu.uw.covidsafe.seed_uuid.UUIDGeneratorTask;
-import edu.uw.covidsafe.utils.ByteUtils;
-import edu.uw.covidsafe.utils.Constants;
-import edu.uw.covidsafe.utils.TimeUtils;
-import edu.uw.covidsafe.utils.Utils;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import edu.uw.covidsafe.preferences.AppPreferencesHelper;
+import edu.uw.covidsafe.utils.ByteUtils;
+import edu.uw.covidsafe.utils.Constants;
+import edu.uw.covidsafe.utils.Utils;
+import edu.uw.covidsafe.workmanager.workers.UUIDGeneratorWorker;
 
 import static android.content.Context.BLUETOOTH_SERVICE;
 
@@ -41,7 +38,7 @@ public class BluetoothUtils {
     public static AdvertiseCallback advertiseCallback = new AdvertiseCallback() {
         @Override
         public void onStartSuccess(AdvertiseSettings settingsInEffect) {
-            Log.e("ble", "BLE advertisement added successfully "+settingsInEffect.toString());
+            Log.e("ble", "BLE advertisement added successfully " + settingsInEffect.toString());
         }
 
         @Override
@@ -71,7 +68,7 @@ public class BluetoothUtils {
                     if (Constants.LoggingServiceRunning) {
                         BluetoothUtils.haltBle(context);
                     }
-                    AppPreferencesHelper.setBluetoothEnabled(context,false);
+                    AppPreferencesHelper.setBluetoothEnabled(context, false);
                     if (Constants.bleSwitch != null) {
                         Constants.bleSwitch.setChecked(false);
                     }
@@ -81,7 +78,7 @@ public class BluetoothUtils {
                     return;
                 }
                 if (Constants.blueAdapter.getState() == BluetoothAdapter.STATE_ON) {
-                    Log.e("ble","BLE TURNED ON");
+                    Log.e("ble", "BLE TURNED ON");
                     if (Constants.LoggingServiceRunning) {
                         // the bluetooth sensor is turned on
                         BluetoothUtils.startBluetoothScan(context);
@@ -89,7 +86,7 @@ public class BluetoothUtils {
                         mkBeacon(context);
                     }
 
-                    if (Utils.hasBlePermissions(context)){
+                    if (Utils.hasBlePermissions(context)) {
                         AppPreferencesHelper.setBluetoothEnabled(context);
                         if (Constants.bleSwitch != null) {
                             Constants.bleSwitch.setChecked(true);
@@ -106,13 +103,12 @@ public class BluetoothUtils {
 
     public static void startBluetoothScan(Context context) {
         if (Constants.bluetoothScanTask == null || Constants.bluetoothScanTask.isDone()) {
-            Log.e("blebug","start bluetooth scan ");
+            Log.e("blebug", "start bluetooth scan ");
             ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
             if (Constants.DEBUG) {
                 Constants.bluetoothScanTask = exec.scheduleWithFixedDelay(new BluetoothScanHelper(context),
                         0, Constants.BluetoothScanIntervalInSecondsDebug, TimeUnit.SECONDS);
-            }
-            else {
+            } else {
                 Constants.bluetoothScanTask = exec.scheduleWithFixedDelay(new BluetoothScanHelper(context),
                         0, Constants.BluetoothScanIntervalInMinutes, TimeUnit.MINUTES);
             }
@@ -124,7 +120,7 @@ public class BluetoothUtils {
             BluetoothManager bluetoothManager =
                     (BluetoothManager) cxt.getSystemService(Context.BLUETOOTH_SERVICE);
             if (Constants.blueAdapter != null && bluetoothManager != null && isBluetoothOn() &&
-                Constants.blueAdapter.getBluetoothLeScanner() != null) {
+                    Constants.blueAdapter.getBluetoothLeScanner() != null) {
                 Constants.blueAdapter.getBluetoothLeScanner().stopScan(BluetoothScanHelper.mLeScanCallback);
             }
             Log.e("blebug", "finish scan");
@@ -157,32 +153,29 @@ public class BluetoothUtils {
     }
 
     public static void startBle(Context cxt) {
-        Log.e("ble","spin out task ");
+        Log.e("ble", "spin out task ");
         BluetoothUtils.startBluetoothScan(cxt);
         BluetoothServerHelper.createServer(cxt);
-        Log.e("ble","make beacon");
+        Log.e("ble", "make beacon");
         // run this once to get a seed and broadcast it
         // have the generator be triggered at synchronized fixed 15 minute intervals:
         // e.g. 10:15, 10:30, 10:45
-
-        if (Constants.uuidGeneartionTask == null || Constants.uuidGeneartionTask.isDone()) {
-            ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
-            if (Constants.DEBUG) {
-                Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(
-                        new UUIDGeneratorTask(cxt), 0, Constants.UUIDGenerationIntervalInSecondsDebug, TimeUnit.SECONDS);
+        OneTimeWorkRequest oneTimePullRequest = new OneTimeWorkRequest.Builder(
+                UUIDGeneratorWorker.class)
+                .build();
+        WorkManager.getInstance(cxt).enqueue(oneTimePullRequest);
+        WorkManager.getInstance(cxt).getWorkInfoByIdLiveData(oneTimePullRequest.getId()).observe((LifecycleOwner) cxt, workInfo -> {
+            if (workInfo.getState() == WorkInfo.State.FAILED) {
+                Log.e("UUIDGeneratorTask", "UUID Generator Task Failed");
             }
-            else {
-                Constants.uuidGeneartionTask = exec.scheduleWithFixedDelay(
-                        new UUIDGeneratorTask(cxt), 0, Constants.UUIDGenerationIntervalInSeconds, TimeUnit.SECONDS);
-            }
-        }
+        });
     }
 
     public static void mkBeacon(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         boolean bleEnabled = AppPreferencesHelper.isBluetoothEnabled(context);
-        Log.e("ble","mkbeacon "+bleEnabled);
-        Log.e("blebug","mkbeacon contactUUID "+Constants.contactUUID);
+        Log.e("ble", "mkbeacon " + bleEnabled);
+        Log.e("blebug", "mkbeacon contactUUID " + Constants.contactUUID);
         if (bleEnabled) {
             AdvertiseSettings settings = new AdvertiseSettings.Builder()
                     .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
@@ -190,16 +183,16 @@ public class BluetoothUtils {
                     .setConnectable(true)
                     .build();
 
-            Log.e("ble","contact uuid "+Constants.contactUUID);
+            Log.e("ble", "contact uuid " + Constants.contactUUID);
             byte[] contactUUID = ByteUtils.uuid2bytes(Constants.contactUUID);
-            Log.e("ble","converted uuid to bytes");
+            Log.e("ble", "converted uuid to bytes");
             AdvertiseData advertiseData = new AdvertiseData.Builder()
                     .setIncludeDeviceName(false)
                     .addServiceUuid(new ParcelUuid(Constants.BEACON_SERVICE_UUID))
                     .addServiceData(new ParcelUuid(Constants.BEACON_SERVICE_UUID), contactUUID)
                     .build();
             BluetoothLeAdvertiser bluetoothLeAdvertiser = Constants.blueAdapter.getBluetoothLeAdvertiser();
-            Log.e("ble","start advertising");
+            Log.e("ble", "start advertising");
             bluetoothLeAdvertiser.startAdvertising(settings, advertiseData, BluetoothUtils.advertiseCallback);
         }
     }
