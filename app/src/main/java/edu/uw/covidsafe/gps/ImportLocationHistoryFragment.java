@@ -150,7 +150,7 @@ public class ImportLocationHistoryFragment extends Fragment {
                 request.setMimeType("application/vnd.google-earth.kml+xml");
                 request.addRequestHeader("content-type", "application/vnd.google-earth.kml+xml");
                 request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED); //Notify client once download is completed!
-                request.setDestinationInExternalFilesDir(getContext(), Environment.DIRECTORY_DOWNLOADS, "covidSafe_loc_history.kml");
+                request.setDestinationInExternalFilesDir(getContext(), Environment.DIRECTORY_DOWNLOADS, Constants.KML_FILE_NAME);
                 DownloadManager dm = (DownloadManager) getContext().getSystemService(DOWNLOAD_SERVICE);
                 dm.enqueue(request);
                 Utils.mkSnack(getActivity(), view, getContext().getString(R.string.downloading));

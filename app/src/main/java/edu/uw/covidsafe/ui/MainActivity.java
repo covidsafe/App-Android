@@ -207,7 +207,6 @@ public class MainActivity extends AppCompatActivity {
                     if (!Constants.LoggingServiceRunning) {
                         Utils.startLoggingService(this);
                         Log.e("ble","ble switch logic");
-                        BluetoothUtils.startBle(this);
                         PermUtils.transition(false,this);
                     }
                     else {

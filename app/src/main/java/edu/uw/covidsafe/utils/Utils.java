@@ -191,18 +191,30 @@ public class Utils {
     }
 
     public static void mkSnack(Activity av, View v, String msg) {
-        av.runOnUiThread(new Runnable() {
-            public void run() {
-                AppStatusManager appStatusManager = new AppStatusManager();
-                appStatusManager.makeSnackBar(v, msg, Snackbar.LENGTH_LONG)
-                        .setAction(av.getString(R.string.dismiss_text), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                appStatusManager.getmSnackBar().dismiss();
-                            }
-                        }).show();
-            }
-        });
+        if (av != null) {
+            av.runOnUiThread(new Runnable() {
+                public void run() {
+                    AppStatusManager appStatusManager = new AppStatusManager();
+                    appStatusManager.makeSnackBar(v, msg, Snackbar.LENGTH_LONG)
+                            .setAction(av.getString(R.string.dismiss_text), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    appStatusManager.getmSnackBar().dismiss();
+                                }
+                            }).show();
+                }
+            });
+        }
+        else {
+            AppStatusManager appStatusManager = new AppStatusManager();
+            appStatusManager.makeSnackBar(v, msg, Snackbar.LENGTH_LONG)
+                    .setAction(av.getString(R.string.dismiss_text), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            appStatusManager.getmSnackBar().dismiss();
+                        }
+                    }).show();
+        }
     }
 
     public static void mkSnack(Activity av, View v, SpannableStringBuilder msg) {

@@ -47,7 +47,7 @@ public class LocationDataXMLParser {
             XmlPullParser xpp = factory.newPullParser();
 
             // XML data
-            File file = new File(path.getAbsolutePath(), "covidSafe_loc_history.kml");
+            File file = new File(path.getAbsolutePath(), Constants.KML_FILE_NAME);
             Log.e("log","file exists? "+file.exists());
             String inputXML = getDataString(file);
             if (Constants.DEBUG) {
