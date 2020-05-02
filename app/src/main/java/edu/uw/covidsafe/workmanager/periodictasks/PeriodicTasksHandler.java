@@ -2,7 +2,9 @@ package edu.uw.covidsafe.workmanager.periodictasks;
 
 import android.content.Context;
 
+import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
@@ -32,9 +34,14 @@ public class PeriodicTasksHandler {
     private Map<String, PeriodicWorkRequest> periodicWorkRequests = new HashMap<>();
 
     public void initAllPeriodicRequests() {
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+
         PeriodicWorkRequest periodicPullServiceWorkRequest =
                 new PeriodicWorkRequest.Builder(PullFromServerWorker.class, Constants.PullFromServerIntervalInMilliseconds, TimeUnit.MILLISECONDS)
                         .addTag(PULL_SERVICE_TAG)
+                        .setConstraints(constraints)
                         .build();
         PeriodicWorkRequest periodicLogPurgerWorkRequest =
                 new PeriodicWorkRequest.Builder(LogPurgerWorker.class, Constants.LogPurgerIntervalInDays, TimeUnit.DAYS)
