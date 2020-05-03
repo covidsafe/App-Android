@@ -17,6 +17,7 @@ import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
+import edu.uw.covidsafe.utils.Utils;
 
 public class UUIDGeneratorWorker extends Worker {
 

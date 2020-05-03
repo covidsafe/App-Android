@@ -24,17 +24,23 @@ public class BleRecord {
     @ColumnInfo(name = "rssi")
     private int rssi;
 
+    @NonNull
+    @ColumnInfo(name = "model")
+    private int model;
+
     public BleRecord(@NonNull String ss) {
         String[] elts = ss.split(",");
         this.uuid = elts[0];
         this.ts = Long.parseLong(elts[1]);
         this.rssi = Integer.parseInt(elts[2]);
+        this.model = Integer.parseInt(elts[3]);
     }
 
-    public BleRecord(@NonNull String uuid, long ts, int rssi) {
+    public BleRecord(@NonNull String uuid, long ts, int rssi, int model) {
         this.uuid = uuid;
         this.ts = ts;
         this.rssi = rssi;
+        this.model = model;
     }
 
     public String getUuid() { return this.uuid; }
@@ -44,6 +50,14 @@ public class BleRecord {
     }
 
     public int getRssi() { return this.rssi; }
+
+    public int getModel() {
+        return model;
+    }
+
+    public void setModel(int model) {
+        this.model = model;
+    }
 
     public String toString() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

@@ -67,11 +67,13 @@ public class ContactLogFragment extends Fragment {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 if (position == 0) {
+                    Constants.CurrentFragment = Constants.LocationFragment;
                     if (Constants.menu != null && Constants.menu.findItem(R.id.mybutton) != null) {
                         Constants.menu.findItem(R.id.mybutton).setVisible(true);
                     }
                 }
                 else {
+                    Constants.CurrentFragment = Constants.PeopleFragment;
                     if (Constants.menu != null && Constants.menu.findItem(R.id.mybutton) != null) {
                         Constants.menu.findItem(R.id.mybutton).setVisible(false);
                     }
@@ -82,11 +84,13 @@ public class ContactLogFragment extends Fragment {
             public void onPageSelected(int position) {
 //                Log.e("time","onpageselected "+position);
                 if (position == 0) {
+                    Constants.CurrentFragment = Constants.LocationFragment;
                     if (Constants.menu != null && Constants.menu.findItem(R.id.mybutton) != null) {
                         Constants.menu.findItem(R.id.mybutton).setVisible(true);
                     }
                 }
                 else {
+                    Constants.CurrentFragment = Constants.PeopleFragment;
                     if (Constants.menu != null && Constants.menu.findItem(R.id.mybutton) != null) {
                         Constants.menu.findItem(R.id.mybutton).setVisible(false);
                     }

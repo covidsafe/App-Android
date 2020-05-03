@@ -236,9 +236,9 @@ public class Utils {
         new GpsOpsAsyncTask(cxt, loc, TimeUtils.getTime()).execute();
     }
 
-    public static void bleLogToDatabase(Context cxt, String id, int rssi, long ts) {
+    public static void bleLogToDatabase(Context cxt, String id, int rssi, long ts, int model) {
         Log.e("ble", "ble log to database");
-        new BleOpsAsyncTask(cxt, id, rssi, ts).execute();
+        new BleOpsAsyncTask(cxt, id, rssi, ts, model).execute();
     }
 
     public static String formatDate(String s) {

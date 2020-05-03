@@ -30,6 +30,7 @@ public class UUIDGeneratorTask implements Runnable {
 
             Log.e("crypto","most recent seed timestamp "+mostRecentSeedTimestamp);
             UUID uuid = CryptoUtils.generateSeedHelperWithMostRecent(context, mostRecentSeedTimestamp);
+
             Log.e("ble", "changing contact uuid now");
             if (uuid != null) {
                 Log.e("ble", "changing contact uuid now to " + uuid.toString());
