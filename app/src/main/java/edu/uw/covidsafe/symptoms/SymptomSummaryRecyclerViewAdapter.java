@@ -1,18 +1,16 @@
 package edu.uw.covidsafe.symptoms;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.covidsafe.R;
-import com.google.android.material.card.MaterialCardView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.covidsafe.R;
+import com.google.android.material.card.MaterialCardView;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -102,8 +100,8 @@ public class SymptomSummaryRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         else if (symptom.equals(mContext.getString(R.string.sore_throat_txt))) {
             ((SymptomSummaryHolder) holder).symptom.setText(mContext.getResources().getString(R.string.sore_throat_txt));
         }
-        else if (symptom.equals(mContext.getString(R.string.vomitting_txt))) {
-            ((SymptomSummaryHolder) holder).symptom.setText(mContext.getResources().getString(R.string.vomitting_txt));
+        else if (symptom.equals(mContext.getString(R.string.vomiting_txt))) {
+            ((SymptomSummaryHolder) holder).symptom.setText(mContext.getResources().getString(R.string.vomiting_txt));
         }
         else {
             ((SymptomSummaryHolder) holder).layout.setVisibility(View.GONE);

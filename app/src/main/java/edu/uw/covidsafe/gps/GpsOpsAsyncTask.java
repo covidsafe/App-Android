@@ -6,9 +6,10 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.util.Log;
-import edu.uw.covidsafe.utils.Constants;
-import edu.uw.covidsafe.utils.Utils;
+
 import java.util.List;
+
+import edu.uw.covidsafe.utils.Constants;
 
 public class
 
@@ -63,9 +64,6 @@ GpsOpsAsyncTask extends AsyncTask<Void, Void, Void> {
                 }
             }
             repo.insert(this.record);
-            if (Constants.WRITE_TO_DISK) {
-                Utils.gpsLogToFile(this.context, this.record);
-            }
         }
         else if (this.op == Constants.GpsDatabaseOps.ViewAll) {
             List<GpsRecord> records = repo.getAllRecords();

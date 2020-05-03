@@ -5,16 +5,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.AsyncTask;
-import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.example.covidsafe.R;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 import edu.uw.covidsafe.gps.GpsDbRecordRepository;
 import edu.uw.covidsafe.gps.GpsRecord;
@@ -27,9 +27,6 @@ import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.RegenerateSeedUponReport;
 import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
-
-import java.text.SimpleDateFormat;
-import java.util.List;
 
 public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
 
@@ -117,7 +114,7 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         if (generatedRecord == null) {
             Log.e("demo","get zeroth seed");
             if (allRecords.size() == 0) {
-                mkSnack(av, view, av.getString(R.string.gen_error));
+                Utils.mkSnack(av, view, av.getString(R.string.gen_error));
                 status = false;
                 return null;
             }
@@ -136,14 +133,14 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         if (sortedGpsRecords.size() == 0) {
             Log.e("sendbug","need to get last location");
             if (!Utils.hasGpsPermissions(context)) {
-                mkSnack(av, view, context.getString(R.string.turn_loc_on));
+                Utils.mkSnack(av, view, context.getString(R.string.turn_loc_on));
                 status = false;
                 return null;
             }
             else {
                 Location loc = GpsUtils.getLastLocation(context);
                 if (loc == null) {
-                    mkSnack(av, view, context.getString(R.string.turn_loc_on));
+                    Utils.mkSnack(av, view, context.getString(R.string.turn_loc_on));
                     status = false;
                     return null;
                 }
@@ -166,8 +163,8 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
             long ts_end = TimeUtils.getTime();
 
             String seed = recordToSend.getSeed(context);
-            double coarseLat = getCoarseGpsCoord(lat, gpsResolution);
-            double coarseLon = getCoarseGpsCoord(longi, gpsResolution);
+            double coarseLat = GpsUtils.getCoarseGpsCoord(lat, gpsResolution);
+            double coarseLon = GpsUtils.getCoarseGpsCoord(longi, gpsResolution);
             Log.e("sendbug","seed "+seed);
             Log.e("sendbug","ts_start "+ts_start);
             Log.e("sendbug","ts_end "+ts_end);
@@ -187,65 +184,6 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         }
 
         return null;
-    }
-
-    public static void mkSnack(Activity av, View v, String msg) {
-        av.runOnUiThread(new Runnable() {
-            public void run() {
-                SpannableStringBuilder builder = new SpannableStringBuilder();
-                builder.append(msg);
-                Snackbar snackBar = Snackbar.make(v, builder, Snackbar.LENGTH_LONG);
-
-                snackBar.setAction(av.getString(R.string.dismiss_text), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        snackBar.dismiss();
-                    }
-                });
-
-                View snackbarView = snackBar.getView();
-                TextView textView = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
-                textView.setMaxLines(5);
-
-                snackBar.show();
-        }});
-    }
-
-    public int log(long x, int base) {
-        return (int) (Math.log(x) / Math.log(base));
-    }
-
-    public double getCoarseGpsCoord(double d, int precision) {
-        long bits = Double.doubleToLongBits(d);
-
-        long negative = bits & (1L << 63);
-        int exponent = (int)((bits >> 52) & 0x7ffL);
-        long mantissa = bits & 0xfffffffffffffL;
-
-        int mantissaLog = 52;
-        if (exponent == 0) {
-            mantissaLog = (int)log(mantissa, 2);
-        }
-        else {
-            mantissa = mantissa | (1L<<52);
-        }
-
-        int precisionShift = mantissaLog + exponent - 1075;
-
-        int maskLength = Math.min(precision + precisionShift, 52);
-
-        mantissa = mantissa >> (52 - maskLength);
-        mantissa = mantissa << (52 - maskLength);
-
-        if (mantissa == 0)
-        {
-            exponent = 0;
-        }
-        long result = negative |
-                ((long)(exponent & 0x7ffL) << 52) |
-                (mantissa & 0xfffffffffffffL);
-
-        return Double.longBitsToDouble(result);
     }
 
     public void sendRequest(String seed, long ts_start, long ts_end, double lat, double longi, int precision) {
@@ -282,12 +220,12 @@ public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
         JSONObject resp = NetworkHelper.sendRequest(selfReportRequest, Request.Method.PUT, announceRequestObj);
         try {
             if (resp == null || (resp.has("statusCode") && resp.getInt("statusCode") != 200)) {
-                mkSnack(av, view, context.getString(R.string.error_submitting_data));
+                Utils.mkSnack(av, view, context.getString(R.string.error_submitting_data));
                 status = false;
                 return;
             }
             else {
-                mkSnack(av, view, context.getString(R.string.report_has_been_submitted));
+                Utils.mkSnack(av, view, context.getString(R.string.report_has_been_submitted));
 
                 DiagnosisFragment.updateSubmissionView(av, context, view, true);
                 status = true;

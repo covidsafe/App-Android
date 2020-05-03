@@ -4,11 +4,9 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import edu.uw.covidsafe.utils.Constants;
-import edu.uw.covidsafe.utils.Utils;
-
 import java.util.List;
-import java.util.UUID;
+
+import edu.uw.covidsafe.utils.Constants;
 
 public class SeedUUIDOpsAsyncTask extends AsyncTask<Void, Void, Void> {
     private SeedUUIDDbRecordRepository repo;

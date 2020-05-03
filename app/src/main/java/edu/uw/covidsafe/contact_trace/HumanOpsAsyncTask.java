@@ -3,10 +3,8 @@ package edu.uw.covidsafe.contact_trace;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+
 import edu.uw.covidsafe.utils.Constants;
-import edu.uw.covidsafe.utils.TimeUtils;
-import edu.uw.covidsafe.utils.Utils;
-import java.util.List;
 
 public class HumanOpsAsyncTask extends AsyncTask<Void, Void, Void> {
     private HumanDbRecordRepository repo;

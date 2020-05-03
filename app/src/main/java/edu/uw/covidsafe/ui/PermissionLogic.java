@@ -2,7 +2,6 @@ package edu.uw.covidsafe.ui;
 
 import android.Manifest;
 import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,7 +12,6 @@ import android.os.Build;
 import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.util.Log;
-import android.widget.Switch;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
@@ -23,9 +21,7 @@ import com.example.covidsafe.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import edu.uw.covidsafe.preferences.AppPreferencesHelper;
-import edu.uw.covidsafe.ui.settings.PermissionsRecyclerViewAdapter;
 import edu.uw.covidsafe.utils.Constants;
-import edu.uw.covidsafe.utils.Utils;
 
 public class PermissionLogic {
     public static void permissionLogic(int requestCode, String[] permissions, int[] grantResults, final Activity av) {

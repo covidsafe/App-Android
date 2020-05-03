@@ -12,13 +12,11 @@ import android.provider.ContactsContract;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -27,16 +25,16 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import com.example.covidsafe.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.List;
 
 import edu.uw.covidsafe.contact_trace.HumanDbModel;
 import edu.uw.covidsafe.contact_trace.HumanRecord;
 import edu.uw.covidsafe.contact_trace.HumanSummaryRecyclerViewAdapter;
-import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.ui.MainActivity;
-import edu.uw.covidsafe.ui.onboarding.OnboardingStateAdapter;
 import edu.uw.covidsafe.utils.Constants;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;

@@ -1,20 +1,13 @@
 package edu.uw.covidsafe.ble;
 
-import android.bluetooth.le.AdvertiseCallback;
-import android.bluetooth.le.AdvertiseSettings;
+import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.content.Context;
-import android.os.Handler;
 import android.os.ParcelUuid;
 import android.util.Log;
-
-import edu.uw.covidsafe.utils.ByteUtils;
-import edu.uw.covidsafe.utils.Constants;
-import edu.uw.covidsafe.utils.TimeUtils;
-import edu.uw.covidsafe.utils.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,6 +16,10 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import edu.uw.covidsafe.utils.ByteUtils;
+import edu.uw.covidsafe.utils.Constants;
+import edu.uw.covidsafe.utils.TimeUtils;
 
 public class BluetoothScanHelper implements Runnable {
 
@@ -49,7 +46,12 @@ public class BluetoothScanHelper implements Runnable {
         Constants.scannedUUIDsRSSIs = new HashMap<String,Integer>();
         Constants.scannedUUIDsTimes = new HashMap<String,Long>();
 
-        Constants.blueAdapter.getBluetoothLeScanner().startScan(filters, builder.build(), mLeScanCallback);
+        BluetoothManager bluetoothManager =
+                (BluetoothManager) cxt.getSystemService(Context.BLUETOOTH_SERVICE);
+        if (Constants.blueAdapter != null && bluetoothManager != null && BluetoothUtils.isBluetoothOn() &&
+                Constants.blueAdapter.getBluetoothLeScanner() != null) {
+            Constants.blueAdapter.getBluetoothLeScanner().startScan(filters, builder.build(), mLeScanCallback);
+        }
 
         try {
             Thread.sleep(Constants.BluetoothScanPeriodInSeconds*1000);

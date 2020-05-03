@@ -1,10 +1,10 @@
 package edu.uw.covidsafe.comms;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.AsyncTask;
-import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,18 +14,26 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Request;
 import com.example.covidsafe.R;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.uw.covidsafe.gps.GpsUtils;
-import edu.uw.covidsafe.json.Area;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import edu.uw.covidsafe.ble.BleDbRecordRepository;
 import edu.uw.covidsafe.ble.BleRecord;
 import edu.uw.covidsafe.gps.GpsDbRecordRepository;
 import edu.uw.covidsafe.gps.GpsRecord;
+import edu.uw.covidsafe.gps.GpsUtils;
+import edu.uw.covidsafe.json.Area;
 import edu.uw.covidsafe.json.AreaMatch;
 import edu.uw.covidsafe.json.BlueToothSeed;
 import edu.uw.covidsafe.json.BluetoothMatch;
@@ -41,15 +49,6 @@ import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
 import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 
 // this has fixed gps data
 // this has hard-coded set of seeds to match against with server results
@@ -113,8 +112,8 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
 //        long lastQueryTime = prefs.getLong(context.getString(R.string.time_of_last_query_pkey), 0L);
         long lastQueryTime = 0;
 //        while (currentGpsPrecision < Constants.MaximumGpsPrecision) {
-            double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(context), currentGpsPrecision);
-            double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(context), currentGpsPrecision);
+            double preciseLat = GpsUtils.getCoarseGpsCoord(gpsRecord.getLat(context), currentGpsPrecision);
+            double preciseLong = GpsUtils.getCoarseGpsCoord(gpsRecord.getLongi(context), currentGpsPrecision);
 
             try {
                 Log.e("NET ","HOW BIG "+currentGpsPrecision);
@@ -150,8 +149,8 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
         //////////////////////////////////////////////////////////////////////////////////////////
         // get list of UUIDs that intersect with our movements and what the server has sent us
         //////////////////////////////////////////////////////////////////////////////////////////
-//        double preciseLat = Utils.getCoarseGpsCoord(gpsRecord.getLat(), currentGpsPrecision);
-//        double preciseLong = Utils.getCoarseGpsCoord(gpsRecord.getLongi(), currentGpsPrecision);
+//        double preciseLat = GpsUtils.getCoarseGpsCoord(gpsRecord.getLat(), currentGpsPrecision);
+//        double preciseLong = GpsUtils.getCoarseGpsCoord(gpsRecord.getLongi(), currentGpsPrecision);
 
         Log.e("NET ","GET MESSAGES "+sizeOfPayload);
         List<BluetoothMatch> bluetoothMatches = getMessages(preciseLat,preciseLong,
@@ -365,7 +364,7 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
         List<GpsRecord> gpsRecords = gpsRepo.getRecordsBetweenTimestamps(area.beginTime, area.endTime);
         if (gpsRecords.size() == 0) {
             if (!Utils.hasGpsPermissions(context)) {
-                mkSnack(av, view, "We need location services enabled to check for announcements. Please enable location services permission.");
+                Utils.mkSnack(av, view, context.getString(R.string.turn_loc_on2));
                 return false;
             }
             else {
@@ -549,27 +548,5 @@ public class PullFromServerTaskDemo extends AsyncTask<Void, Void, Void> {
                 }
             }
         }
-    }
-
-    public static void mkSnack(Activity av, View v, String msg) {
-        av.runOnUiThread(new Runnable() {
-            public void run() {
-                SpannableStringBuilder builder = new SpannableStringBuilder();
-                builder.append(msg);
-                Snackbar snackBar = Snackbar.make(v, builder, Snackbar.LENGTH_LONG);
-
-                snackBar.setAction(av.getString(R.string.dismiss_text), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        snackBar.dismiss();
-                    }
-                });
-
-                View snackbarView = snackBar.getView();
-                TextView textView = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
-                textView.setMaxLines(5);
-
-                snackBar.show();
-            }});
     }
 }

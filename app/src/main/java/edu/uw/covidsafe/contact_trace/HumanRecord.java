@@ -5,9 +5,6 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 @Entity(tableName = "human_record_table")
 public class HumanRecord {
 
