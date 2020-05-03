@@ -17,6 +17,7 @@ import android.util.Log;
 
 import com.example.covidsafe.R;
 
+import java.util.HashMap;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -27,6 +28,7 @@ import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
 
 import static android.content.Context.BLUETOOTH_SERVICE;
+import java.util.Collection;
 
 public class BluetoothUtils {
 
@@ -96,21 +98,53 @@ public class BluetoothUtils {
         }
     };
 
-    public static void startBluetoothScan(Context context) {
+    public static void startBluetoothScan(Context cxt) {
+        if (Constants.BLE_PROTOCOL_VERSION == 1) {
+            startBluetoothScanV1(cxt);
+        }
+        else if (Constants.BLE_PROTOCOL_VERSION == 2) {
+            startBluetoothScanV2(cxt);
+        }
+    }
+
+    public static void startBluetoothScanV1(Context cxt) {
         if (Constants.bluetoothScanTask == null || Constants.bluetoothScanTask.isDone()) {
             Log.e("blebug", "start bluetooth scan ");
             ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
             if (Constants.DEBUG) {
-                Constants.bluetoothScanTask = exec.scheduleWithFixedDelay(new BluetoothScanHelper(context),
+                Constants.bluetoothScanTask = exec.scheduleWithFixedDelay(new BluetoothScanHelper(cxt),
                         0, Constants.BluetoothScanIntervalInSecondsDebug, TimeUnit.SECONDS);
             } else {
-                Constants.bluetoothScanTask = exec.scheduleWithFixedDelay(new BluetoothScanHelper(context),
+                Constants.bluetoothScanTask = exec.scheduleWithFixedDelay(new BluetoothScanHelper(cxt),
+                        0, Constants.BluetoothScanIntervalInMinutes, TimeUnit.MINUTES);
+            }
+        }
+    }
+
+    public static void startBluetoothScanV2(Context cxt) {
+        if (Constants.bluetoothScanTask == null || Constants.bluetoothScanTask.isDone()) {
+            Log.e("blebug", "start bluetooth scan ");
+            ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
+            if (Constants.DEBUG) {
+                Constants.bluetoothScanTask = exec.scheduleWithFixedDelay(new BluetoothScanHelperV2(cxt),
+                        0, Constants.BluetoothScanIntervalInSecondsDebug, TimeUnit.SECONDS);
+            } else {
+                Constants.bluetoothScanTask = exec.scheduleWithFixedDelay(new BluetoothScanHelperV2(cxt),
                         0, Constants.BluetoothScanIntervalInMinutes, TimeUnit.MINUTES);
             }
         }
     }
 
     public static void finishScan(Context cxt) {
+        if (Constants.BLE_PROTOCOL_VERSION == 1) {
+            finishScanV1(cxt);
+        }
+        else if (Constants.BLE_PROTOCOL_VERSION == 2) {
+            finishScanV2(cxt);
+        }
+    }
+
+    public static void finishScanV1(Context cxt) {
         if (cxt != null) {
             BluetoothManager bluetoothManager =
                     (BluetoothManager) cxt.getSystemService(Context.BLUETOOTH_SERVICE);
@@ -128,10 +162,23 @@ public class BluetoothUtils {
                             Constants.scannedUUIDsTimes.containsKey(uuid)) {
                         int rssi = Constants.scannedUUIDsRSSIs.get(uuid);
                         long ts = Constants.scannedUUIDsTimes.get(uuid);
-                        Utils.bleLogToDatabase(cxt, uuid, rssi, ts);
+                        Utils.bleLogToDatabase(cxt, uuid, rssi, ts, 0);
                     }
                 }
             }
+        }
+    }
+
+    public static void finishScanV2(Context cxt) {
+        if (cxt != null) {
+            BluetoothManager bluetoothManager =
+                    (BluetoothManager) cxt.getSystemService(Context.BLUETOOTH_SERVICE);
+            if (Constants.blueAdapter != null && bluetoothManager != null && isBluetoothOn() &&
+                    Constants.blueAdapter.getBluetoothLeScanner() != null) {
+                Constants.blueAdapter.getBluetoothLeScanner().stopScan(BluetoothScanHelperV2.mLeScanCallback);
+            }
+            Log.e("blebug", "finish scan");
+            Log.e("blebug", (Constants.scannedUUIDs == null) + "," + (Constants.scannedUUIDsRSSIs == null) + "," + (Constants.scannedUUIDsTimes == null));
         }
     }
 
@@ -144,6 +191,15 @@ public class BluetoothUtils {
 
         if (Constants.uuidGeneartionTask != null) {
             Constants.uuidGeneartionTask.cancel(true);
+        }
+    }
+
+    public static boolean rssiThresholdCheck(int rssi, int device) {
+        if (device == 0 || !Constants.bleThresholds.containsKey(device)) {
+            return rssi >= Constants.rssiCutoff;
+        }
+        else {
+            return rssi >= Constants.bleThresholds.get(device);
         }
     }
 

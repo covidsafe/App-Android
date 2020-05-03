@@ -82,17 +82,20 @@ public class BluetoothServerHelper {
                     Constants.gattServer.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, offset, null);
                 }
 
+                // 0-15: UUID
+                // 16: RSSI
+                // 17: phone model
                 if (value != null) {
                     Log.e("bleserver","data len "+value.length);
-                    if (value.length == 16 || value.length == 17) {
+                    if (value.length == 16 || value.length == 17 || value.length == 18) {
+                        //
                         byte[] uuidByte = Arrays.copyOfRange(value,0,16);
                         String contactUuid = ByteUtils.byte2UUIDstring(uuidByte);
                         Log.e("bleserver","contactuuid "+contactUuid);
-                        int rssi = 0;
-                        String[] elts = contactUuid.split("-");
 
+                        int rssi = 0;
                         // byte[-128,127] => int[0,255] => rssi[-255,0]
-                        if (value.length == 17) {
+                        if (value.length >= 17) {
                             rssi = -ByteUtils.byteConvert(value[16]);
                             Log.e("bleserver","received an rssi value of "+rssi);
                         }
@@ -101,10 +104,15 @@ public class BluetoothServerHelper {
                         }
                         Log.e("bleserver","rssi "+rssi+","+device.getAddress());
 
+                        int deviceID = 0;
+                        if (value.length == 18) {
+                            deviceID = value[17];
+                        }
+
                         if (!Constants.writtenUUIDs.contains(contactUuid) &&
-                            rssi > Constants.rssiCutoff) {
+                            BluetoothUtils.rssiThresholdCheck(rssi,deviceID)) {
                             Constants.writtenUUIDs.add(contactUuid);
-                            Utils.bleLogToDatabase(cxt, contactUuid, rssi, TimeUtils.getTime());
+                            Utils.bleLogToDatabase(cxt, contactUuid, rssi, TimeUtils.getTime(), deviceID);
                         }
                     }
                     else {
