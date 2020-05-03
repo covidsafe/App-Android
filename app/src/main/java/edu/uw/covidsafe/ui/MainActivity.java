@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.DatePicker;
+import android.widget.TableLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -24,6 +25,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.covidsafe.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.tabs.TabLayout;
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
@@ -39,6 +41,7 @@ import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.preferences.LocaleHelper;
 import edu.uw.covidsafe.symptoms.SymptomTrackerFragment;
 import edu.uw.covidsafe.ui.contact_log.ContactLogFragment;
+import edu.uw.covidsafe.ui.contact_log.ContactLogPageAdapter;
 import edu.uw.covidsafe.ui.contact_log.LocationFragment;
 import edu.uw.covidsafe.ui.health.TipRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.HistoryRecyclerViewAdapter;
@@ -306,10 +309,20 @@ public class MainActivity extends AppCompatActivity {
                 int month = finalMyCalendar.get(Calendar.MONTH)+1;
                 int day = finalMyCalendar.get(Calendar.DAY_OF_MONTH);
                 Log.e("date","ok "+year+","+month+","+day);
-                if (Constants.CurrentFragment.toString().toLowerCase().contains("location")) {
-                    Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                    if(fragment instanceof ContactLogFragment && fragment.isVisible()){
-                         ((LocationFragment) fragment).updateLocationView(CalendarDay.from(year, month, day), getApplicationContext());
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                if (fragment instanceof ContactLogFragment && fragment.isVisible()) {
+                    TabLayout layout =fragment.getView().findViewById(R.id.tabLayout);
+                    if(layout != null){
+                        int position = layout.getSelectedTabPosition();
+                        TabLayout.Tab tab =layout.getTabAt(0);
+
+                        if(position == 0){
+                            ContactLogPageAdapter adapter =((ContactLogPageAdapter)Constants.contactLogViewPager.getAdapter());
+                            Fragment fragment1 = adapter.getItem(0);
+                            if(fragment1 instanceof LocationFragment){
+                                ((LocationFragment) fragment1).updateLocationView(CalendarDay.from(year, month, day), getApplicationContext());
+                            }
+                        }
                     }
                 }
                 else if (Constants.CurrentFragment.toString().toLowerCase().contains("health")) {
