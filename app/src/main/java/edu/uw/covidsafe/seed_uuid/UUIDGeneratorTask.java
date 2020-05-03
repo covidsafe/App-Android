@@ -30,22 +30,25 @@ public class UUIDGeneratorTask implements Runnable {
 
             Log.e("crypto","most recent seed timestamp "+mostRecentSeedTimestamp);
             UUID uuid = CryptoUtils.generateSeedHelperWithMostRecent(context, mostRecentSeedTimestamp);
+
             Log.e("ble", "changing contact uuid now");
             if (uuid != null) {
                 Log.e("ble", "changing contact uuid now to " + uuid.toString());
                 Constants.contactUUID = UUID.fromString(uuid.toString());
             }
 
-            Log.e("ble", "can we broadcast?" + (Constants.blueAdapter != null));
-            if (Constants.blueAdapter != null) {
-                Log.e("ble", "is advertiser null?" + (Constants.blueAdapter.getBluetoothLeAdvertiser() == null));
-            }
-            if (Constants.blueAdapter != null && Constants.blueAdapter.getBluetoothLeAdvertiser() != null) {
-                Log.e("ble", "about to stop advertising");
-                Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothUtils.advertiseCallback);
-                //restart beacon after UUID generation
-                Log.e("ble", "about to mkbeacon");
-                BluetoothUtils.mkBeacon(context);
+            if (Constants.BLE_PROTOCOL_VERSION == 1) {
+                Log.e("ble", "can we broadcast?" + (Constants.blueAdapter != null));
+                if (Constants.blueAdapter != null) {
+                    Log.e("ble", "is advertiser null?" + (Constants.blueAdapter.getBluetoothLeAdvertiser() == null));
+                }
+                if (Constants.blueAdapter != null && Constants.blueAdapter.getBluetoothLeAdvertiser() != null) {
+                    Log.e("ble", "about to stop advertising");
+                    Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothUtils.advertiseCallback);
+                    //restart beacon after UUID generation
+                    Log.e("ble", "about to mkbeacon");
+                    BluetoothUtils.mkBeacon(context);
+                }
             }
         }
     }

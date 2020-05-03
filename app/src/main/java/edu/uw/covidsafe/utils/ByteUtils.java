@@ -20,6 +20,21 @@ public class ByteUtils {
         return buffer.getLong();
     }
 
+    public static byte[] uuid2bytes(UUID uuid, byte rssi, byte deviceID) {
+        ByteBuffer bb = ByteBuffer.wrap(new byte[16]);
+        bb.putLong(uuid.getMostSignificantBits());
+        bb.putLong(uuid.getLeastSignificantBits());
+        byte[] uuidbytes=bb.array();
+        byte[] dataout=new byte[18];
+        for(int i = 0; i < 16; i++) {
+            dataout[i]=uuidbytes[i];
+        }
+        dataout[16]=rssi;
+        dataout[17]=deviceID;
+
+        return dataout;
+    }
+
     public static byte[] uuid2bytes(UUID uuid) {
         ByteBuffer bb = ByteBuffer.wrap(new byte[16]);
         bb.putLong(uuid.getMostSignificantBits());

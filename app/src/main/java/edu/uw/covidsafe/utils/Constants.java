@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothGattServer;
 import android.location.LocationManager;
+import android.os.Build;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.Switch;
@@ -128,6 +129,7 @@ public class Constants {
     public static UUID CHARACTERISTIC_UUID = UUID.fromString("d945590b-5b09-4144-ace7-4063f95bd0bb");
     public static UUID BEACON_SERVICE_UUID = UUID.fromString("0000D028-0000-1000-8000-00805F9B34FB");
     public static UUID contactUUID = null;
+    public static int BLE_PROTOCOL_VERSION =  1;
 
     public static String GOOGLE_SIGNIN_PAGE = "https://accounts.google.com/signin/v2/identifier?flowName=GlifWebSignIn&flowEntry=ServiceLogin";
     public static String GOOGLE_DOWNLOAD_PAGE = "https://myaccount.google.com/?utm_source=sign_in_no_continue";
@@ -217,6 +219,8 @@ public class Constants {
     public static Calendar contactLogMonthCalendar = Calendar.getInstance();
     public static Calendar symptomTrackerMonthCalendar = Calendar.getInstance();
     public static String KML_FILE_NAME = "CovidSafe_Google_Location_History.kml";
+    public static List<String> bleDeviceBlacklist;
+    public static int deviceID;
 
     public static GpsHistoryRecyclerViewAdapter2 contactGpsAdapter;
     public static List<HumanRecord> changedContactHumanRecords;
@@ -238,8 +242,8 @@ public class Constants {
             Manifest.permission.ACCESS_COARSE_LOCATION
     };
     public static String[] blePermissions= {
-        Manifest.permission.BLUETOOTH_ADMIN,
-        Manifest.permission.BLUETOOTH,
+            Manifest.permission.BLUETOOTH_ADMIN,
+            Manifest.permission.BLUETOOTH,
     };
     public static String[] miscPermissions= {
             Manifest.permission.FOREGROUND_SERVICE,
@@ -248,6 +252,38 @@ public class Constants {
 
     public static List<String> languages = new LinkedList<>(Arrays.asList("en","es"));
     public static String defaultLocale = "en";
+    public static HashMap<Integer,Integer> bleThresholds = new HashMap<>();
+    public static List<String> deviceNames = new LinkedList<>();
+    public static List<String> manufacturerNames = new LinkedList<>();
+
+    public static void getDeviceID() {
+        String manufacturer = Build.MANUFACTURER.toLowerCase();
+
+        String model = Build.MODEL.toLowerCase();
+        model = model.replace("-","");
+        model = model.replace(manufacturer,"");
+
+        if (!Constants.manufacturerNames.contains(manufacturer)) {
+            Constants.deviceID = 0;
+        }
+        else {
+            int counter = 1;
+            for (String deviceName : Constants.deviceNames) {
+                // we are a samsung model
+                if (model.startsWith("sm")) {
+                    // trim off the last character, which is the carrier designator
+                    deviceName = deviceName.substring(0, deviceName.length()-1);
+                    model = model.substring(0, model.length()-1);
+
+                }
+                if (model.equals(deviceName)) {
+                    deviceID = counter;
+                    break;
+                }
+                counter++;
+            }
+        }
+    }
 
     public static void init(Activity av) {
         Log.e("logme","constants init");
@@ -275,6 +311,14 @@ public class Constants {
             symptoms.add(av.getString(R.string.sore_throat_txt));
             symptoms.add(av.getString(R.string.vomiting_txt));
         }
+
+        if (bleThresholds.keySet().size() == 0) {
+            bleThresholds = FileOperations.readDeviceThresholds(av, R.raw.device_data);
+            deviceNames = FileOperations.readDeviceList(av, R.raw.device_data);
+            manufacturerNames = FileOperations.readManufacturerList(av, R.raw.device_data);
+        }
+
+        getDeviceID();
 
         MainFragment = new MainFragment();
         MainFragmentState = MainFragment;
