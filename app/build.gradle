@@ -128,8 +128,6 @@ dependencies {
 
     // (Java only)
     implementation "androidx.work:work-runtime:$work_version"
-
-    implementation 'com.github.broakenmedia:MultiContactPicker:1.8.5'
 }
 
 protobuf {

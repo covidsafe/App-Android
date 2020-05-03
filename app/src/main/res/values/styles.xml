@@ -14,17 +14,4 @@
         <item name="android:textSize">15sp</item>
     </style>
 
-
-    <style name="MyCustomPickerTheme" parent="MultiContactPicker.Azure">
-        <item name="colorPrimary">@color/white</item>
-        <item name="colorPrimaryDark">@color/white</item>
-        <item name="mcpToolbarTheme">@style/MyCustomToolbarTheme</item>
-        <item name="mcpListPopupWindowStyleTheme">@style/MyCustomToolbarTheme</item>
-    </style>
-
-    <style name="MyCustomToolbarTheme" parent="ThemeOverlay.AppCompat.Light">
-        <item name="android:textColorPrimary">@color/black</item>
-        <item name="android:textColorSecondary">@color/black</item>
-    </style>
-
 </resources>
