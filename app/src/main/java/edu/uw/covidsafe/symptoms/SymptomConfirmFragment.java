@@ -1,9 +1,7 @@
 package edu.uw.covidsafe.symptoms;
 
 import android.annotation.SuppressLint;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;

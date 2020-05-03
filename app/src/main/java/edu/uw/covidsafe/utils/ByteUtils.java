@@ -39,6 +39,14 @@ public class ByteUtils {
         return new UUID(bb.getLong(),bb.getLong());
     }
 
+    public static int byteConvert(byte i) {
+        if (i > 0) {
+            return i;
+        } else {
+            return i & 0xff;
+        }
+    }
+
     public static String byte2prefstring(byte[] bb) {
         return Arrays.toString(bb);
     }

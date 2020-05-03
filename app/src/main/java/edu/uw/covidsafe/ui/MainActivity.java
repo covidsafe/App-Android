@@ -1,8 +1,5 @@
 package edu.uw.covidsafe.ui;
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
+
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -17,25 +14,29 @@ import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import edu.uw.covidsafe.ble.BleOpsAsyncTask;
+import com.example.covidsafe.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.microsoft.appcenter.AppCenter;
+import com.microsoft.appcenter.analytics.Analytics;
+import com.microsoft.appcenter.crashes.Crashes;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+
+import java.util.Calendar;
+import java.util.Date;
+
 import edu.uw.covidsafe.ble.BluetoothUtils;
-import edu.uw.covidsafe.comms.NetworkConstant;
-import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.contact_trace.HumanOpsAsyncTask;
-import edu.uw.covidsafe.gps.GpsOpsAsyncTask;
-import edu.uw.covidsafe.gps.GpsRecord;
+import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.preferences.LocaleHelper;
-import edu.uw.covidsafe.seed_uuid.SeedUUIDOpsAsyncTask;
 import edu.uw.covidsafe.symptoms.SymptomTrackerFragment;
-import edu.uw.covidsafe.symptoms.SymptomsOpsAsyncTask;
-import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.contact_log.ContactLogFragment;
 import edu.uw.covidsafe.ui.contact_log.LocationFragment;
 import edu.uw.covidsafe.ui.health.TipRecyclerViewAdapter;
@@ -43,9 +44,6 @@ import edu.uw.covidsafe.ui.notif.HistoryRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.settings.PermUtils;
 import edu.uw.covidsafe.utils.Constants;
-
-import com.example.covidsafe.R;
-
 import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -184,6 +182,14 @@ public class MainActivity extends AppCompatActivity {
             tx.replace(R.id.fragment_container, Constants.HealthFragment).commit();
             return true;
         }
+        else if (Constants.CurrentFragment.toString().toLowerCase().contains("importlocationhistory")) {
+            FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+            tx.setCustomAnimations(
+                    R.anim.enter_left_to_right,R.anim.exit_left_to_right,
+                    R.anim.enter_left_to_right,R.anim.exit_left_to_right);
+            tx.replace(R.id.fragment_container, Constants.SettingsFragment).commit();
+            return true;
+        }
         return false;
     }
 
@@ -199,7 +205,6 @@ public class MainActivity extends AppCompatActivity {
                     if (!Constants.LoggingServiceRunning) {
                         Utils.startLoggingService(this);
                         Log.e("ble","ble switch logic");
-                        BluetoothUtils.startBle(this);
                         PermUtils.transition(false,this);
                     }
                     else {
@@ -342,10 +347,6 @@ public class MainActivity extends AppCompatActivity {
                 PermUtils.bleSwitchLogic(this);
             }
         }
-
-        if (!Constants.PullServiceRunning) {
-            Utils.startPullService(this);
-        }
     }
 
     @Override
@@ -372,12 +373,18 @@ public class MainActivity extends AppCompatActivity {
         }else if (Constants.CurrentFragment != null&&Constants.CurrentFragment.toString().toLowerCase().contains("people")) {
             Bundle data = new Bundle();
             data.putInt("pg", 1);
+            if (Constants.ContactLogFragment == null) {
+                Constants.ContactLogFragment = new ContactLogFragment();
+            }
             Constants.ContactLogFragment.setArguments(data);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.ContactLogFragment).commit();
         }
         else if (Constants.CurrentFragment != null&&Constants.CurrentFragment.toString().toLowerCase().contains("location")) {
             Bundle data = new Bundle();
             data.putInt("pg", 0);
+            if (Constants.ContactLogFragment == null) {
+                Constants.ContactLogFragment = new ContactLogFragment();
+            }
             Constants.ContactLogFragment.setArguments(data);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.ContactLogFragment).commit();
         }
@@ -385,10 +392,6 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.MainFragment).commit();
 //            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.HealthFragment).commit();
         }
-    }
-
-    public void reset(View v) {
-        Utils.clearPreferences(this);
     }
 
     @Override

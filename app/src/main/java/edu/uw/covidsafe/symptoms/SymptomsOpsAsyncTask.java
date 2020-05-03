@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import edu.uw.covidsafe.utils.Constants;
-import edu.uw.covidsafe.utils.Utils;
 
 public class SymptomsOpsAsyncTask extends AsyncTask<Void, Void, Void> {
     private SymptomsDbRecordRepository repo;

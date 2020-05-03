@@ -341,7 +341,7 @@
     <string name="headache_txt">Dolor de cabeza</string>
     <string name="chest_pain_txt">Dolores en el pecho</string>
     <string name="sore_throat_txt">Dolor de garganta</string>
-    <string name="vomitting_txt">Vómito</string>
+    <string name="vomiting_txt">Vómito</string>
     <string name="announcement_txt">Anuncio</string>
     <string name="bluetooth_is_disabled_on_this_device">Bluetooth está deshabilitado en este dispositivo</string>
     <string name="not_logged_txt">No registrado</string>

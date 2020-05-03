@@ -7,8 +7,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,13 +28,13 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.work.ListenableWorker;
+import androidx.work.Constraints;
+import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 import com.example.covidsafe.R;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -45,8 +43,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import edu.uw.covidsafe.comms.PullFromServerTask;
-import edu.uw.covidsafe.comms.PullFromServerTaskDemo;
 import edu.uw.covidsafe.comms.PullFromServerTaskDemo2;
 import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.symptoms.SymptomDbModel;
@@ -121,14 +117,13 @@ public class MainFragment extends Fragment {
         ImageView xall = (ImageView) view.findViewById(R.id.xall);
         if (Constants.DEBUG) {
             xall.setAlpha(1f);
-        }
-        else {
+        } else {
             xall.setAlpha(0f);
         }
         xall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new NotifOpsAsyncTask(getContext(),Constants.NotifDatabaseOps.DeleteAll).execute();
+                new NotifOpsAsyncTask(getContext(), Constants.NotifDatabaseOps.DeleteAll).execute();
             }
         });
 
@@ -138,14 +133,14 @@ public class MainFragment extends Fragment {
             public void onClick(View v) {
                 FragmentTransaction tx = getActivity().getSupportFragmentManager().beginTransaction();
                 tx.setCustomAnimations(
-                        R.anim.enter_right_to_left,R.anim.exit_right_to_left,
-                        R.anim.enter_left_to_right,R.anim.exit_left_to_right);
+                        R.anim.enter_right_to_left, R.anim.exit_right_to_left,
+                        R.anim.enter_left_to_right, R.anim.exit_left_to_right);
                 tx.replace(R.id.fragment_container, Constants.SettingsFragment).commit();
             }
         });
 
         RecyclerView resourceView = view.findViewById(R.id.recyclerViewResources);
-        ResourceRecyclerViewAdapter resourceAdapter = new ResourceRecyclerViewAdapter(getContext(),getActivity());
+        ResourceRecyclerViewAdapter resourceAdapter = new ResourceRecyclerViewAdapter(getContext(), getActivity());
         resourceView.setAdapter(resourceAdapter);
         resourceView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -167,8 +162,7 @@ public class MainFragment extends Fragment {
                 for (NotifRecord notif : notifRecords) {
                     if (notif.getCurrent()) {
                         currentNotifs.add(notif);
-                    }
-                    else {
+                    } else {
                         historyNotifs.add(notif);
                     }
                 }
@@ -190,9 +184,9 @@ public class MainFragment extends Fragment {
                 symptomDbChanged = true;
                 changedRecords = symptomRecords;
                 Constants.symptomRecords = symptomRecords;
-                Log.e("symptom","mainfragment - symptom list changed");
+                Log.e("symptom", "mainfragment - symptom list changed");
                 if (Constants.CurrentFragment.toString().toLowerCase().contains("mainfragment")) {
-                    Log.e("symptom","mainfragment - symptom list changing");
+                    Log.e("symptom", "mainfragment - symptom list changing");
                     SymptomUtils.updateTodaysLogs(view, symptomRecords, getContext(), getActivity(),
                             new Date(TimeUtils.getTime()), "main");
                     symptomDbChanged = false;
@@ -215,7 +209,7 @@ public class MainFragment extends Fragment {
                 boolean bleEnabled = AppPreferencesHelper.isBluetoothEnabled(getActivity());
 
                 // flip switch to inverse of current broadcasting state
-                broadcastSwitchLogic(!(gpsEnabled||bleEnabled));
+                broadcastSwitchLogic(!(gpsEnabled || bleEnabled));
             }
         });
 
@@ -226,12 +220,11 @@ public class MainFragment extends Fragment {
 
     public void initDataStorageLengthUI() {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-        TextView localDataStorageText = (TextView)view.findViewById(R.id.localDataStorageText);
+        TextView localDataStorageText = (TextView) view.findViewById(R.id.localDataStorageText);
         int currentDaysOfDataToKeep = 0;
         if (Constants.DEBUG) {
             currentDaysOfDataToKeep = prefs.getInt(getActivity().getString(R.string.infection_window_in_days_pkeys), Constants.DefaultDaysOfLogsToKeepDebug);
-        }
-        else {
+        } else {
             currentDaysOfDataToKeep = prefs.getInt(getActivity().getString(R.string.infection_window_in_days_pkeys), Constants.DefaultDaysOfLogsToKeep);
         }
 
@@ -243,107 +236,86 @@ public class MainFragment extends Fragment {
 
         SimpleDateFormat format = new SimpleDateFormat("MMMM d");
         String ss = format.format(new Date(thresh));
-
-//        String out = getString(R.string.card_data_storage_local_expiration, ss);
-//        localDataStorageText.setText(out);
-//
-//        TextView changeInSettings = (TextView) view.findViewById(R.id.changeInSettings);
-//        changeInSettings.setText((Spannable)Html.fromHtml("<u>"+getString(R.string.change_in_settings_text)+"</u>"));
-//        changeInSettings.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.e("mainfragment","onclick");
-//                FragmentTransaction tx = getActivity().getSupportFragmentManager().beginTransaction();
-//                tx.setCustomAnimations(
-//                        R.anim.enter_right_to_left,R.anim.exit_right_to_left,
-//                        R.anim.enter_left_to_right,R.anim.exit_left_to_right);
-//                tx.replace(R.id.fragment_container, Constants.SettingsFragment).commit();
-//            }
-//        });
     }
 
     public void refreshTask() {
-        Log.e("refresh","freshtask ");
+        Log.e("refresh", "freshtask ");
         if (!Constants.PullFromServerTaskRunning) {
             if (!Constants.PUBLIC_DEMO) {
-                if (!Constants.DEBUG) {
+                if (Constants.DEBUG) {
                     new PullFromServerTaskDemo2(getContext(), getActivity(), view).execute();
                 } else {
-                    // TODO run the one time worker request to observe the status of it
-                    OneTimeWorkRequest oneTimePullRequest = new OneTimeWorkRequest.Builder(PullFromServerWorker.class).build();
-                    WorkManager.getInstance(Objects.requireNonNull(getActivity())).enqueue(oneTimePullRequest);
-                    WorkManager.getInstance(getActivity()).getWorkInfoByIdLiveData(oneTimePullRequest.getId()).observe(this, new Observer<WorkInfo>() {
-                        @Override
-                        public void onChanged(WorkInfo workInfo) {
-                            if(workInfo.getState() == WorkInfo.State.FAILED){
-                                Log.e("PullService", "Pull Service Failed");
-                                int status = workInfo.getOutputData().getInt(PullFromServerWorker.STATUS, -1);
-                                if(status == GPS_OFF){
-                                    showGPSOFFSnackbar();
-                                }
-                            }
-                            if(workInfo.getState().isFinished()){
-                                SharedPreferences prefs = Objects.requireNonNull(getContext()).getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = prefs.edit();
-                                long ts = TimeUtils.getTime();
-                                editor.putLong(Objects.requireNonNull(getActivity()).getString(R.string.last_refresh_date_pkey), ts);
-                                editor.apply();
-                                SwipeRefreshLayout swipeLayout = view.findViewById(R.id.swiperefresh);
-                                swipeLayout.setRefreshing(false);
-                                ImageView refresh = view.findViewById(R.id.refresh);
-                                refresh.clearAnimation();
-                                TextView lastUpdated = view.findViewById(R.id.lastUpdated);
-                                SimpleDateFormat format = new SimpleDateFormat("h:mm a");
-                                lastUpdated.setText(String.format("%s: %s", getContext().getString(R.string.last_updated_text), format.format(new Date(ts))));
-                                lastUpdated.setVisibility(View.VISIBLE);
-                                Constants.PullFromServerTaskRunning = false;
-                            }
-                        }
-                    });
-                   // new PullFromServerTask(getContext(), getActivity(), view).execute();
+                    startPullFromServerTask();
+                    // new PullFromServerTask(getContext(), getActivity(), view).execute();
                 }
 
-                RotateAnimation rotate = new RotateAnimation(0,360,
+                RotateAnimation rotate = new RotateAnimation(0, 360,
                         Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
                 rotate.setDuration(1000);
                 rotate.setRepeatCount(Animation.INFINITE);
                 rotate.setRepeatMode(Animation.INFINITE);
                 rotate.setInterpolator(new LinearInterpolator());
                 refresh.startAnimation(rotate);
-            }
-            else {
+            } else {
                 swipeLayout.setRefreshing(false);
                 refresh.clearAnimation();
             }
         }
     }
 
-    private void showGPSOFFSnackbar() {
-        SpannableStringBuilder builder = new SpannableStringBuilder();
-        builder.append(Objects.requireNonNull(getActivity()).getString(R.string.turn_loc_on2));
-        Snackbar snackBar = Snackbar.make(view, builder, Snackbar.LENGTH_LONG);
+    public void startPullFromServerTask() {
+        // TODO run the one time worker request to observe the status of it
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        OneTimeWorkRequest oneTimePullRequest = new OneTimeWorkRequest.Builder(
+                PullFromServerWorker.class)
+                .setConstraints(constraints)
+                .build();
 
-        snackBar.setAction(Objects.requireNonNull(getActivity()).getString(R.string.dismiss_text), new View.OnClickListener() {
+        WorkManager.getInstance(Objects.requireNonNull(getActivity())).enqueue(oneTimePullRequest);
+        WorkManager.getInstance(getActivity()).getWorkInfoByIdLiveData(oneTimePullRequest.getId()).observe(this, new Observer<WorkInfo>() {
             @Override
-            public void onClick(View v) {
-                snackBar.dismiss();
+            public void onChanged(WorkInfo workInfo) {
+                if (workInfo.getState() == WorkInfo.State.FAILED) {
+                    Log.e("PullService", "Pull Service Failed");
+                    int status = workInfo.getOutputData().getInt(PullFromServerWorker.STATUS, -1);
+                    if (status == GPS_OFF) {
+                        SpannableStringBuilder snackbarText = new SpannableStringBuilder();
+                        snackbarText.append(Objects.requireNonNull(getActivity()).getString(R.string.turn_loc_on2));
+                        Utils.mkSnack(getActivity(), view, snackbarText);
+                    }
+                }
+                if (workInfo.getState().isFinished()) {
+                    SharedPreferences prefs = Objects.requireNonNull(getContext()).getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+
+                    long ts = TimeUtils.getTime();
+                    editor.putLong(Objects.requireNonNull(getActivity()).getString(R.string.last_refresh_date_pkey), ts);
+                    editor.apply();
+
+                    SwipeRefreshLayout swipeLayout = view.findViewById(R.id.swiperefresh);
+                    swipeLayout.setRefreshing(false);
+                    ImageView refresh = view.findViewById(R.id.refresh);
+                    refresh.clearAnimation();
+
+                    TextView lastUpdated = view.findViewById(R.id.lastUpdated);
+                    SimpleDateFormat format = new SimpleDateFormat("h:mm a");
+                    lastUpdated.setText(String.format("%s: %s", getContext().getString(R.string.last_updated_text), format.format(new Date(ts))));
+                    lastUpdated.setVisibility(View.VISIBLE);
+
+                    Constants.PullFromServerTaskRunning = false;
+                }
             }
         });
-
-        View snackbarView = snackBar.getView();
-        TextView textView = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
-        textView.setMaxLines(5);
-
-        snackBar.show();
     }
 
     public void broadcastSwitchLogic(boolean isChecked) {
-        Log.e("state","broadcast switch logic");
+        Log.e("state", "broadcast switch logic");
         if (isChecked) {
             PermUtils.gpsSwitchLogic(getActivity());
             PermUtils.bleSwitchLogic(getActivity());
-        }
-        else {
+        } else {
             Utils.haltLoggingService(getActivity(), null);
             PermUtils.transition(true, getActivity());
         }
@@ -354,7 +326,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.e("state","main fragment on resume "+Constants.PullServiceRunning+","+Constants.LoggingServiceRunning);
+        Log.e("state", "main fragment on resume " + Constants.PullServiceRunning + "," + Constants.LoggingServiceRunning);
         Constants.CurrentFragment = this;
         Constants.MainFragment = this;
         Constants.MainFragmentState = this;
@@ -368,15 +340,14 @@ public class MainFragment extends Fragment {
         long ts = prefs.getLong(getActivity().getString(R.string.last_refresh_date_pkey), 0);
         if (ts != 0) {
             SimpleDateFormat format = new SimpleDateFormat("h:mm a");
-            lastUpdated.setText(getContext().getString(R.string.last_updated_text)+": "+format.format(new Date(ts)));
-        }
-        else {
+            lastUpdated.setText(getContext().getString(R.string.last_updated_text) + ": " + format.format(new Date(ts)));
+        } else {
             lastUpdated.setText("");
             lastUpdated.setVisibility(View.GONE);
         }
 
         if (symptomDbChanged) {
-            Log.e("symptoms","db changed ");
+            Log.e("symptoms", "db changed ");
             SymptomUtils.updateTodaysLogs(view, changedRecords, getContext(),
                     getActivity(), new Date(TimeUtils.getTime()), "main");
             symptomDbChanged = false;
@@ -384,7 +355,7 @@ public class MainFragment extends Fragment {
     }
 
     public void updateBroadcastUI(boolean animate) {
-        Log.e("state","update broadcast ui");
+        Log.e("state", "update broadcast ui");
         boolean hasGpsPerms = Utils.hasGpsPermissions(getActivity());
         boolean hasBlePerms = Utils.hasBlePermissions(getActivity());
 
@@ -392,26 +363,26 @@ public class MainFragment extends Fragment {
         boolean bleEnabled = AppPreferencesHelper.isBluetoothEnabled(getActivity());
 
         if (!hasGpsPerms) {
-            Log.e("state","no gps");
+            Log.e("state", "no gps");
             AppPreferencesHelper.setGPSEnabled(getActivity(), false);
         }
         if (!hasBlePerms) {
-            Log.e("state","no ble");
+            Log.e("state", "no ble");
             AppPreferencesHelper.setBluetoothEnabled(getActivity(), false);
         }
 
         if ((!hasGpsPerms && !hasBlePerms) || (!gpsEnabled && !bleEnabled)) {
-            Log.e("state","no perms");
-            AppPreferencesHelper.setGPSEnabled(getActivity(),  false);
+            Log.e("state", "no perms");
+            AppPreferencesHelper.setGPSEnabled(getActivity(), false);
             AppPreferencesHelper.setBluetoothEnabled(getActivity(), false);
 
             if (animate) {
-                Log.e("transition","set to off");
+                Log.e("transition", "set to off");
                 broadcastSwitch.setImageDrawable(getActivity().getDrawable(R.drawable.switch_off));
                 broadcastRing.setAlpha(0f);
 
-                PropertyValuesHolder a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f,0f);
-                PropertyValuesHolder a2 = PropertyValuesHolder.ofFloat(View.ALPHA, 0f,1f);
+                PropertyValuesHolder a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f, 0f);
+                PropertyValuesHolder a2 = PropertyValuesHolder.ofFloat(View.ALPHA, 0f, 1f);
                 ObjectAnimator anim1 = ObjectAnimator.ofPropertyValuesHolder(broadcastTitle, a1);
                 anim1.setDuration(1000);
                 ObjectAnimator anim2 = ObjectAnimator.ofPropertyValuesHolder(broadcastTitle, a2);
@@ -420,32 +391,30 @@ public class MainFragment extends Fragment {
                 broadcastTitle.setText(getString(R.string.broadcasting_on_text));
                 anim2.start();
 
-                a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f,0f);
-                a2 = PropertyValuesHolder.ofFloat(View.ALPHA, 0f,1f);
+                a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f, 0f);
+                a2 = PropertyValuesHolder.ofFloat(View.ALPHA, 0f, 1f);
                 anim1 = ObjectAnimator.ofPropertyValuesHolder(broadcastProp, a1);
                 anim1.setDuration(1000);
                 anim2 = ObjectAnimator.ofPropertyValuesHolder(broadcastProp, a2);
                 anim2.setDuration(1000);
                 anim1.start();
-                Utils.linkify(broadcastProp,getString(R.string.stopping));
+                Utils.linkify(broadcastProp, getString(R.string.stopping));
                 anim2.start();
-            }
-            else {
+            } else {
                 broadcastSwitch.setImageDrawable(getActivity().getDrawable(R.drawable.switch_off));
                 broadcastRing.setAlpha(0f);
                 broadcastTitle.setText(getString(R.string.broadcasting_off_text));
-                Utils.linkify(broadcastProp,getString(R.string.stopping));
+                Utils.linkify(broadcastProp, getString(R.string.stopping));
             }
-        }
-        else if (gpsEnabled || bleEnabled) {
-            Log.e("state","has one enabled");
+        } else if (gpsEnabled || bleEnabled) {
+            Log.e("state", "has one enabled");
             if (animate) {
-                Log.e("transition","set to on");
+                Log.e("transition", "set to on");
                 broadcastSwitch.setImageDrawable(getActivity().getDrawable(R.drawable.switch_on));
                 broadcastRing.setAlpha(1f);
 
-                PropertyValuesHolder a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f,0f);
-                PropertyValuesHolder a2 = PropertyValuesHolder.ofFloat(View.ALPHA, 0f,1f);
+                PropertyValuesHolder a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f, 0f);
+                PropertyValuesHolder a2 = PropertyValuesHolder.ofFloat(View.ALPHA, 0f, 1f);
                 ObjectAnimator anim1 = ObjectAnimator.ofPropertyValuesHolder(broadcastTitle, a1);
                 anim1.setDuration(1000);
                 ObjectAnimator anim2 = ObjectAnimator.ofPropertyValuesHolder(broadcastTitle, a2);
@@ -454,21 +423,20 @@ public class MainFragment extends Fragment {
                 broadcastTitle.setText(getString(R.string.broadcasting_on_text));
                 anim2.start();
 
-                a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f,0f);
-                a2 = PropertyValuesHolder.ofFloat(View.ALPHA, 0f,1f);
+                a1 = PropertyValuesHolder.ofFloat(View.ALPHA, 1f, 0f);
+                a2 = PropertyValuesHolder.ofFloat(View.ALPHA, 0f, 1f);
                 anim1 = ObjectAnimator.ofPropertyValuesHolder(broadcastProp, a1);
                 anim1.setDuration(1000);
                 anim2 = ObjectAnimator.ofPropertyValuesHolder(broadcastProp, a2);
                 anim2.setDuration(1000);
                 anim1.start();
-                Utils.linkify(broadcastProp,getString(R.string.logging));
+                Utils.linkify(broadcastProp, getString(R.string.logging));
                 anim2.start();
-            }
-            else {
+            } else {
                 broadcastSwitch.setImageDrawable(getActivity().getDrawable(R.drawable.switch_on));
                 broadcastRing.setAlpha(1f);
                 broadcastTitle.setText(getString(R.string.broadcasting_on_text));
-                Utils.linkify(broadcastProp,getString(R.string.logging));
+                Utils.linkify(broadcastProp, getString(R.string.logging));
             }
         }
     }

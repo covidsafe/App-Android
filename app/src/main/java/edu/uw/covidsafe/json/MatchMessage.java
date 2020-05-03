@@ -4,8 +4,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.uw.covidsafe.comms.NetworkConstant;
-
 public class MatchMessage {
     public String boolExpression;
     public AreaMatch[] areaMatches;

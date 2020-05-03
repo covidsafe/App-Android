@@ -1,7 +1,4 @@
 package edu.uw.covidsafe.ui.onboarding;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -14,12 +11,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.example.covidsafe.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import edu.uw.covidsafe.ble.BleOpsAsyncTask;
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.comms.NetworkConstant;
 import edu.uw.covidsafe.contact_trace.HumanOpsAsyncTask;

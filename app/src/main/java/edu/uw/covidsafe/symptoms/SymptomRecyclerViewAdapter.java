@@ -1,12 +1,9 @@
 package edu.uw.covidsafe.symptoms;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -15,41 +12,31 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.covidsafe.R;
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.textfield.TextInputEditText;
-import com.jaredrummler.materialspinner.MaterialSpinner;
-
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.covidsafe.R;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.textfield.TextInputEditText;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-import edu.uw.covidsafe.comms.NetworkHelper;
-import edu.uw.covidsafe.symptoms.SymptomsOpsAsyncTask;
-import edu.uw.covidsafe.symptoms.SymptomsRecord;
-import edu.uw.covidsafe.ui.settings.TraceSettingsRecyclerViewAdapter;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.TimeUtils;
-import edu.uw.covidsafe.utils.Utils;
 
 public class SymptomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public SymptomsRecord dataIn = new SymptomsRecord();
@@ -122,7 +109,7 @@ public class SymptomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             if (cb != null) { cb.setChecked(dataIn.isSoreThroat()); }
             else { dataOut.setSoreThroat(isChecked); }
         }
-        else if (symptom.contains(mContext.getString(R.string.vomitting_txt))) {
+        else if (symptom.contains(mContext.getString(R.string.vomiting_txt))) {
             if (cb != null) { cb.setChecked(dataIn.isVomiting()); }
             else { dataOut.setVomiting(isChecked); }
         }

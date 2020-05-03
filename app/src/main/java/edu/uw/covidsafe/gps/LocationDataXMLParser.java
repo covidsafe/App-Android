@@ -1,9 +1,9 @@
 package edu.uw.covidsafe.gps;
 
 import android.content.Context;
-import android.os.Environment;
-import android.os.FileUtils;
 import android.util.Log;
+
+import com.example.covidsafe.R;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -22,7 +21,6 @@ import java.util.List;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
 import edu.uw.covidsafe.utils.FileOperations;
-import com.example.covidsafe.R;
 
 public class LocationDataXMLParser {
 
@@ -47,7 +45,7 @@ public class LocationDataXMLParser {
             XmlPullParser xpp = factory.newPullParser();
 
             // XML data
-            File file = new File(path.getAbsolutePath(), "covidSafe_loc_history.kml");
+            File file = new File(path.getAbsolutePath(), Constants.KML_FILE_NAME);
             Log.e("log","file exists? "+file.exists());
             String inputXML = getDataString(file);
             if (Constants.DEBUG) {

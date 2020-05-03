@@ -1,11 +1,8 @@
 package edu.uw.covidsafe;
 
-import org.junit.Rule;
 import org.junit.Test;
 
-import edu.uw.covidsafe.ui.MainActivity;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Example local unit test, which will execute on the development machine (host).

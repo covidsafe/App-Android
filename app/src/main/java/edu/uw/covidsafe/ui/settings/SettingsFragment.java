@@ -1,10 +1,7 @@
 package edu.uw.covidsafe.ui.settings;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
@@ -17,20 +14,17 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
-import edu.uw.covidsafe.ui.onboarding.OnboardingActivity;
-import edu.uw.covidsafe.utils.Constants;
-import edu.uw.covidsafe.ui.MainActivity;
-import edu.uw.covidsafe.utils.Utils;
-
 import com.example.covidsafe.R;
+
+import edu.uw.covidsafe.ui.MainActivity;
+import edu.uw.covidsafe.utils.Constants;
+import edu.uw.covidsafe.utils.Utils;
 
 public class SettingsFragment extends Fragment implements TraceSettingsRecyclerViewAdapter.OnHeadlineSelectedListener {
 
