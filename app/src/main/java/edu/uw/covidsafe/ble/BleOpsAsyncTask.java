@@ -13,9 +13,9 @@ public class BleOpsAsyncTask extends AsyncTask<Void, Void, Void> {
     private BleRecord result;
     private Constants.BleDatabaseOps op;
 
-    public BleOpsAsyncTask(Context cxt, String id, int rssi, long ts, int model) {
+    public BleOpsAsyncTask(Context cxt, String id, int rssi, long ts) {
         repo = new BleDbRecordRepository(cxt);
-        this.result = new BleRecord(id, ts, rssi, model);
+        this.result = new BleRecord(id, ts, rssi);
         this.op = Constants.BleDatabaseOps.Insert;
     }
 

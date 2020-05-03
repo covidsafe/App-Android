@@ -33,7 +33,6 @@ public class BluetoothScanHelper implements Runnable {
     public void run() {
         Log.e("blebug","bluetooth scan helper");
 
-        Constants.bleDeviceBlacklist = new LinkedList<>();
         ScanSettings.Builder builder = new ScanSettings.Builder();
         builder.setScanMode(ScanSettings.SCAN_MODE_LOW_POWER);
 
@@ -77,7 +76,7 @@ public class BluetoothScanHelper implements Runnable {
 //                        Log.e("uuid","CONTACT "+contactUuid);
                         int rssi = result.getRssi();
                         if (Constants.scannedUUIDs != null &&
-                            BluetoothUtils.rssiThresholdCheck(rssi,0)) {
+                            rssi >= Constants.rssiCutoff) {
                             if (!Constants.scannedUUIDs.contains(contactUuid)) {
                                 Log.e("blebug", "found contact uuid " + contactUuid+","+format.format(new Date(TimeUtils.getTime())));
 //                            String[] elts = contactUuid.split("-");
