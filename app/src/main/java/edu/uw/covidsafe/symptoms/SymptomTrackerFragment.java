@@ -170,8 +170,12 @@ public class SymptomTrackerFragment extends Fragment {
     }
 
     public static void updateFeaturedDate(CalendarDay calDay, Context cxt, Activity av) {
-        cal.setSelectedDate(calDay);
-        cal.setCurrentDate(calDay);
+        if (!cal.getMinimumDate().isAfter(calDay) &&
+            !cal.getMaximumDate().isBefore(calDay)) {
+            cal.setSelectedDate(calDay);
+            cal.setCurrentDate(calDay);
+        }
+
         Log.e("symptom","update featured date");
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         try {

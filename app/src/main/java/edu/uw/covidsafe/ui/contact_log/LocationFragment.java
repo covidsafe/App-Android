@@ -138,8 +138,11 @@ public class LocationFragment extends Fragment {
     }
 
     public static void updateLocationView(CalendarDay dd, Context cxt) {
-        Constants.contactLogCal.setCurrentDate(dd);
-        Constants.contactLogCal.setSelectedDate(dd);
+        if (!Constants.contactLogCal.getMinimumDate().isAfter(dd) &&
+            !Constants.contactLogCal.getMaximumDate().isBefore(dd)) {
+            Constants.contactLogCal.setCurrentDate(dd);
+            Constants.contactLogCal.setSelectedDate(dd);
+        }
 
         markDays(cxt);
         try {
@@ -195,7 +198,6 @@ public class LocationFragment extends Fragment {
     }
 
     private static class EventDecorator implements DayViewDecorator {
-
         private final int color;
         private final HashSet<CalendarDay> dates;
 
