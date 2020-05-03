@@ -4,27 +4,51 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.covidsafe.R;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
+
+
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import edu.uw.covidsafe.comms.NetworkHelper;
+import edu.uw.covidsafe.symptoms.AddEditSymptomsFragment;
+import edu.uw.covidsafe.symptoms.SymptomsOpsAsyncTask;
+import edu.uw.covidsafe.symptoms.SymptomsRecord;
+import edu.uw.covidsafe.ui.MainActivity;
+import edu.uw.covidsafe.ui.notif.NotifRecord;
+import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
 import edu.uw.covidsafe.utils.Constants;
+import edu.uw.covidsafe.utils.TimeUtils;
+import edu.uw.covidsafe.utils.Utils;
 
 public class HumanSummaryRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -67,8 +91,7 @@ public class HumanSummaryRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         ((HumanSummaryHolder) holder).bb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(record);
-//                makeMenu(((HumanSummaryHolder) holder).bb, record);
+                makeMenu(((HumanSummaryHolder) holder).bb, record);
             }
         });
     }
@@ -86,7 +109,7 @@ public class HumanSummaryRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     public class HumanSummaryHolder extends RecyclerView.ViewHolder {
         ImageView imageView11;
         TextView text;
-        ImageView bb;
+        ImageButton bb;
 
         HumanSummaryHolder(@NonNull View itemView) {
             super(itemView);
@@ -108,27 +131,23 @@ public class HumanSummaryRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.deleteItem:
-                        showDialog(record);
+                        AlertDialog dialog = new MaterialAlertDialogBuilder(av)
+                                .setTitle(mContext.getString(R.string.sure_delete))
+                                .setNegativeButton(mContext.getString(R.string.cancel), null)
+                                .setPositiveButton(mContext.getString(R.string.yes), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        SimpleDateFormat outformat = new SimpleDateFormat("MM/dd h:mm aa");
+                                        new HumanOpsAsyncTask(mContext, Constants.HumanDatabaseOps.Delete, record).execute();
+                                    }
+                                })
+                                .setCancelable(true).create();
+                        dialog.show();
                         break;
                 }
                 return true;
             }
         });
         popup.show();
-    }
-
-    public void showDialog(HumanRecord record) {
-        AlertDialog dialog = new MaterialAlertDialogBuilder(mContext)
-                .setTitle(mContext.getString(R.string.sure_delete))
-                .setNegativeButton(mContext.getString(R.string.cancel), null)
-                .setPositiveButton(mContext.getString(R.string.yes), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        SimpleDateFormat outformat = new SimpleDateFormat("MM/dd h:mm aa");
-                        new HumanOpsAsyncTask(mContext, Constants.HumanDatabaseOps.Delete, record).execute();
-                    }
-                })
-                .setCancelable(true).create();
-        dialog.show();
     }
 }

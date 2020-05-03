@@ -1,18 +1,29 @@
 package edu.uw.covidsafe.crypto;
 
+import edu.uw.covidsafe.crypto.AES256;
+import edu.uw.covidsafe.crypto.AESPair;
+import edu.uw.covidsafe.crypto.ByteHelper;
+import edu.uw.covidsafe.crypto.SHA256;
+
 import org.junit.Test;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
 
 public class TestAES256 {
     @Test

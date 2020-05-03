@@ -9,22 +9,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import edu.uw.covidsafe.ui.MainActivity;
+import edu.uw.covidsafe.ui.health.ResourceRecyclerViewAdapter;
+import edu.uw.covidsafe.utils.Constants;
+
 import com.example.covidsafe.R;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import edu.uw.covidsafe.ui.MainActivity;
-import edu.uw.covidsafe.ui.health.ResourceRecyclerViewAdapter;
-import edu.uw.covidsafe.utils.Constants;
 
 public class FaqFragment extends Fragment {
 

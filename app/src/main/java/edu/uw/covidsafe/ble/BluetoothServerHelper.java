@@ -10,6 +10,7 @@ import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.util.Log;
 
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -93,7 +94,7 @@ public class BluetoothServerHelper {
 
                         // byte[-128,127] => int[0,255] => rssi[-255,0]
                         if (value.length == 17) {
-                            rssi = -ByteUtils.byteConvert(value[16]);
+                            rssi = -Utils.byteConvert(value[16]);
                             Log.e("bleserver","received an rssi value of "+rssi);
                         }
                         else {

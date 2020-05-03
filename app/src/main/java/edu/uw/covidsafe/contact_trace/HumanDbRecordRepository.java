@@ -6,6 +6,11 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import edu.uw.covidsafe.ble.BleDbRecordDao;
+import edu.uw.covidsafe.ble.BleDbRecordRoomDatabase;
+import edu.uw.covidsafe.ble.BleRecord;
+import edu.uw.covidsafe.gps.GpsRecord;
+
 public class HumanDbRecordRepository {
     private HumanDbRecordDao mRecordDao;
 

@@ -1,5 +1,7 @@
 package edu.uw.covidsafe.ui.notif;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

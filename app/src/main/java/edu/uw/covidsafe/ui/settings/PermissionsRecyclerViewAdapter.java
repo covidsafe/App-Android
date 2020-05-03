@@ -111,7 +111,7 @@ public class PermissionsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                 ((PermissionCard)holder).desc.setText(R.string.bluetooth_is_disabled_on_this_device);
                 AppPreferencesHelper.setBluetoothEnabled(av, false);
             }
-            else if (!BluetoothUtils.isBluetoothOn()) {
+            else if (!BluetoothUtils.isBluetoothOn(av)) {
                 ((PermissionCard)holder).desc.setText(cxt.getString(R.string.bluetooth_is_off));
                 AppPreferencesHelper.setBluetoothEnabled(av, false);
             }

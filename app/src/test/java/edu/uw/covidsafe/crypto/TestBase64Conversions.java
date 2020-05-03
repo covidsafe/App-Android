@@ -2,6 +2,7 @@ package edu.uw.covidsafe.crypto;
 
 import org.junit.Test;
 
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Base64;
 

@@ -1,5 +1,7 @@
 package edu.uw.covidsafe.comms;
 
+import android.location.Location;
+
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
@@ -12,8 +14,7 @@ import java.util.List;
 import edu.uw.covidsafe.ble.BleRecord;
 import edu.uw.covidsafe.utils.CryptoUtils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 public class PullFromServerTaskTest {
 

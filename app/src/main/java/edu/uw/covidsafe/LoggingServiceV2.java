@@ -1,4 +1,4 @@
-package edu.uw.covidsafe.service;
+package edu.uw.covidsafe;
 
 import android.app.Notification;
 import android.app.Service;
@@ -18,7 +18,7 @@ import edu.uw.covidsafe.utils.Constants;
 
 import static edu.uw.covidsafe.CovidSafeApplication.LOGGING_SERVICE_CHANNEL_ID;
 
-public class LoggingService extends Service {
+public class LoggingServiceV2 extends Service {
 
     private static final String TAG = "LoggingServiceV2";
 

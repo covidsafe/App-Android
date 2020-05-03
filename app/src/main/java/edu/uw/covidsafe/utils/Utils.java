@@ -15,7 +15,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.text.Html;
 import android.text.Spannable;
-import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
@@ -35,19 +34,28 @@ import com.example.covidsafe.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import edu.uw.covidsafe.AppStatusManager;
+import edu.uw.covidsafe.LoggingServiceV2;
+import edu.uw.covidsafe.PullService;
 import edu.uw.covidsafe.ble.BleOpsAsyncTask;
+import edu.uw.covidsafe.ble.BleRecord;
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.gps.GpsOpsAsyncTask;
+import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.gps.GpsUtils;
 import edu.uw.covidsafe.preferences.AppPreferencesHelper;
-import edu.uw.covidsafe.service.LoggingService;
+import edu.uw.covidsafe.seed_uuid.SeedUUIDRecord;
+import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.MainActivity;
+import edu.uw.covidsafe.ui.notif.NotifRecord;
 
 public class Utils {
+
+    public static int gpsLines = 0;
+    public static int bleLines = 0;
 
     public static void haltLoggingService(Activity av, View view) {
         if (Constants.LoggingServiceRunning && view != null) {
@@ -56,7 +64,7 @@ public class Utils {
 
         Log.e("logme", "stop service");
         if (Constants.LoggingServiceRunning) {
-            av.stopService(new Intent(av, LoggingService.class));
+            av.stopService(new Intent(av, LoggingServiceV2.class));
         }
 
         GpsUtils.haltGps();
@@ -71,7 +79,7 @@ public class Utils {
         SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         boolean doCheck = prefs.getBoolean(av.getString(R.string.min_api_check_pkey), true);
 
-        if (android.os.Build.VERSION.SDK_INT < Constants.MIN_API && doCheck) {
+        if (android.os.Build.VERSION.SDK_INT < Constants.MIN_API) {
             SharedPreferences.Editor editor = prefs.edit();
 
             View checkBoxView = View.inflate(av, R.layout.checkbox, null);
@@ -130,7 +138,7 @@ public class Utils {
         }
         if (Constants.bleSwitch != null) {
             boolean hasBlePerms = Utils.hasBlePermissions(av);
-            boolean isBluetoothOn = BluetoothUtils.isBluetoothOn();
+            boolean isBluetoothOn = BluetoothUtils.isBluetoothOn(av);
             Log.e("perm", "ble get " + hasBlePerms);
 //            editor.putBoolean(av.getString(R.string.ble_enabled_pkey),hasBlePerms);
             if (!hasBlePerms || !isBluetoothOn) {
@@ -140,6 +148,20 @@ public class Utils {
                 AppPreferencesHelper.setBluetoothEnabled(av, false);
             }
         }
+    }
+
+    public static void markDiagnosisSubmitted(Activity av) {
+        SharedPreferences.Editor editor = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
+        editor.putLong(av.getString(R.string.diagnosis_pkey), TimeUtils.getTime());
+        editor.commit();
+    }
+
+    public static boolean isDiagnosisSubmitted(Activity av) {
+        SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        if (prefs.getLong(av.getString(R.string.diagnosis_pkey), 0L) == 0) {
+            return false;
+        }
+        return true;
     }
 
     public static void sendNotification(Context mContext, String title, String message, int icon) {
@@ -191,54 +213,59 @@ public class Utils {
     }
 
     public static void mkSnack(Activity av, View v, String msg) {
-        if (av != null) {
-            av.runOnUiThread(new Runnable() {
-                public void run() {
-                    AppStatusManager appStatusManager = new AppStatusManager();
-                    appStatusManager.makeSnackBar(v, msg, Snackbar.LENGTH_LONG)
-                            .setAction(av.getString(R.string.dismiss_text), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    appStatusManager.getmSnackBar().dismiss();
-                                }
-                            }).show();
-                }
-            });
-        }
-        else {
-            AppStatusManager appStatusManager = new AppStatusManager();
-            appStatusManager.makeSnackBar(v, msg, Snackbar.LENGTH_LONG)
-                    .setAction(av.getString(R.string.dismiss_text), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            appStatusManager.getmSnackBar().dismiss();
-                        }
-                    }).show();
-        }
-    }
-
-    public static void mkSnack(Activity av, View v, SpannableStringBuilder msg) {
         av.runOnUiThread(new Runnable() {
             public void run() {
-                AppStatusManager appStatusManager = new AppStatusManager();
-                appStatusManager.makeSnackBar(v, msg, Snackbar.LENGTH_LONG)
-                        .setAction(av.getString(R.string.dismiss_text), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                appStatusManager.getmSnackBar().dismiss();
-                            }
-                        }).show();
+                final Snackbar snackBar = Snackbar.make(v, msg, Snackbar.LENGTH_LONG);
+
+                snackBar.setAction(av.getString(R.string.dismiss_text), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        snackBar.dismiss();
+                    }
+                });
+
+                View snackbarView = snackBar.getView();
+                TextView textView = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
+                textView.setMaxLines(5);
+
+                snackBar.show();
             }
         });
+    }
+
+    public static void gpsLogToFile(Context cxt, GpsRecord rec) {
+        FileOperations.append(rec.toString(),
+                cxt, Constants.gpsDirName, Utils.getGpsLogName());
+    }
+
+    public static void notifLogToFile(Context cxt, NotifRecord rec) {
+        FileOperations.append(rec.toString(),
+                cxt, Constants.notifDirName, Utils.getNotifLogName());
     }
 
     public static void gpsLogToDatabase(Context cxt, Location loc) {
         new GpsOpsAsyncTask(cxt, loc, TimeUtils.getTime()).execute();
     }
 
+    public static void bleLogToFile(Context cxt, BleRecord rec) {
+        FileOperations.append(rec.toString(),
+                cxt, Constants.bleDirName, Utils.getBleLogName());
+    }
+
+    public static void symptomsLogToFile(Context cxt, SymptomsRecord rec) {
+        FileOperations.append(rec.toString(),
+                cxt, Constants.symptomsDirName, Utils.getSymptomsLogName());
+    }
+
     public static void bleLogToDatabase(Context cxt, String id, int rssi, long ts) {
         Log.e("ble", "ble log to database");
         new BleOpsAsyncTask(cxt, id, rssi, ts).execute();
+    }
+
+    public static void uuidLogToFile(Context cxt, SeedUUIDRecord rec) {
+        Log.e("uuid", "uuid log to file");
+        FileOperations.append(rec.toString(),
+                cxt, Constants.uuidDirName, Utils.getUuidLogName());
     }
 
     public static String formatDate(String s) {
@@ -260,11 +287,59 @@ public class Utils {
         Log.e("service", "logging service -- utils start");
         if (!Constants.LoggingServiceRunning) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                av.startForegroundService(new Intent(av, LoggingService.class));
+                av.startForegroundService(new Intent(av, LoggingServiceV2.class));
             } else {
-                av.startService(new Intent(av, LoggingService.class));
+                av.startService(new Intent(av, LoggingServiceV2.class));
             }
         }
+    }
+
+    public static void startPullService(Activity av) {
+        Utils.createNotificationChannel(av);
+        Log.e("service", "pull service -- utils start");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            av.startForegroundService(new Intent(av, PullService.class));
+        } else {
+            av.startService(new Intent(av, PullService.class));
+        }
+    }
+
+    public static double getCoarseGpsCoord(double d, int precision) {
+        double shift = (1 << 16); //16 is some number that 1 << 32 > 180 and bigger than maximum precision value that we are using
+        return (getCoarseGpsCoordHelper(d + shift, precision) - shift);
+    }
+
+    public static double getCoarseGpsCoordHelper(double d, int precision) {
+//        Log.e("ERR ",d+","+precision);
+        long bits = Double.doubleToLongBits(d);
+//        Log.e("ERR ",d+","+precision);
+
+        long negative = bits & (1L << 63);
+        int exponent = (int) ((bits >> 52) & 0x7ffL);
+        long mantissa = bits & 0xfffffffffffffL;
+
+        int mantissaLog = 52;
+        if (exponent == 0) {
+            mantissaLog = (int) log(mantissa, 2);
+        } else {
+            mantissa = mantissa | (1L << 52);
+        }
+
+        int precisionShift = mantissaLog + exponent - 1075;
+
+        int maskLength = Math.min(precision + precisionShift, 52);
+
+        mantissa = mantissa >> (52 - maskLength);
+        mantissa = mantissa << (52 - maskLength);
+
+        if (mantissa == 0) {
+            exponent = 0;
+        }
+        long result = negative |
+                ((long) (exponent & 0x7ffL) << 52) |
+                (mantissa & 0xfffffffffffffL);
+
+        return Double.longBitsToDouble(result);
     }
 
     public static int log(long x, int base) {
@@ -351,6 +426,12 @@ public class Utils {
         tv.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
+    public static String time() {
+        DateFormat dateFormat = new SimpleDateFormat("hh:mm.ss aa");
+        Date date = new Date(TimeUtils.getTime());
+        return dateFormat.format(date);
+    }
+
     public static void createNotificationChannel(Context cxt) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel serviceChannel = new NotificationChannel(
@@ -360,6 +441,102 @@ public class Utils {
             );
             NotificationManager manager = cxt.getSystemService(NotificationManager.class);
             manager.createNotificationChannel(serviceChannel);
+        }
+    }
+
+    public static String getGpsLogName() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date(TimeUtils.getTime());
+        return dateFormat.format(date) + ".txt";
+    }
+
+    public static String getNotifLogName() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date(TimeUtils.getTime());
+        return dateFormat.format(date) + ".txt";
+    }
+
+    public static String getBleLogName() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date(TimeUtils.getTime());
+        return dateFormat.format(date) + ".txt";
+    }
+
+    public static String getSymptomsLogName() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date(TimeUtils.getTime());
+        return dateFormat.format(date) + ".txt";
+    }
+
+    public static String getUuidLogName() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date(TimeUtils.getTime());
+        return dateFormat.format(date) + ".txt";
+    }
+
+    public static String getFormRecordName() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date date = new Date(TimeUtils.getTime());
+        return dateFormat.format(date);
+    }
+
+    public static boolean canSubmitSymptoms(Context av, int submitThresh) {
+        SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        long subDate = prefs.getLong(av.getString(R.string.symptom_submission_date_pkey), 0L);
+        if (subDate == 0) {
+            return true;
+        }
+        Date dd = new Date(subDate);
+        return compareDates(dd, submitThresh);
+    }
+
+    public static String getLastSymptomReportDate(Context av) {
+        DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy hh:mm aa");
+        SharedPreferences prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        long subDate = prefs.getLong(av.getString(R.string.symptom_submission_date_pkey), 0L);
+        if (subDate == 0) {
+            return "";
+        }
+        return av.getString(R.string.last_submitted)+": " + dateFormat.format(subDate);
+    }
+
+    public static void updateSymptomSubmitTime(Activity av) {
+        SharedPreferences.Editor prefs = av.getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
+        prefs.putLong(av.getString(R.string.symptom_submission_date_pkey), TimeUtils.getTime());
+        prefs.commit();
+    }
+
+    public static boolean compareDates(Date d1, int submitThresh) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        try {
+            Date d2 = new Date(TimeUtils.getTime());
+
+            int diff = Utils.daysBetween(d2, d1);
+            Log.e("logme", "days betweeen " + diff);
+
+            return diff >= submitThresh;
+        } catch (Exception e) {
+            Log.e("logme", e.getMessage());
+        }
+        return false;
+    }
+
+    public static int daysBetween(Date d1, Date d2) {
+        return (int) ((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
+    }
+
+    public static void clearPreferences(Context cxt) {
+        SharedPreferences.Editor sharedPref = cxt.getSharedPreferences(
+                Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE).edit();
+        sharedPref.remove(Constants.lastSentName);
+        sharedPref.commit();
+    }
+
+    public static int byteConvert(byte i) {
+        if (i > 0) {
+            return i;
+        } else {
+            return i & 0xff;
         }
     }
 }

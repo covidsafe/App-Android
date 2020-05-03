@@ -6,11 +6,15 @@ import android.util.Log;
 
 import com.example.covidsafe.R;
 
-import java.util.UUID;
-
+import edu.uw.covidsafe.ble.BluetoothScanHelper;
 import edu.uw.covidsafe.ble.BluetoothUtils;
+import edu.uw.covidsafe.utils.ByteUtils;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
+import edu.uw.covidsafe.utils.TimeUtils;
+import edu.uw.covidsafe.utils.Utils;
+
+import java.util.UUID;
 
 public class UUIDGeneratorTask implements Runnable {
 

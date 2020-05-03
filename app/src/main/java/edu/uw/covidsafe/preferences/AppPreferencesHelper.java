@@ -3,6 +3,9 @@ package edu.uw.covidsafe.preferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import edu.uw.covidsafe.crypto.Constant;
+import edu.uw.covidsafe.utils.Constants;
+
 public class AppPreferencesHelper {
 
     public static final String ONBOARDING_PAGER_SHOWN = "onboardingshownalready";
@@ -10,6 +13,7 @@ public class AppPreferencesHelper {
     public static final String GPS_ENABLED = "gpsEnabled";
     public static final String NOTIFICATION_ENABLED = "prefs_notifs";
     public static String SHARED_PREFENCE_NAME = "preferences";
+
 
 
     public static final SharedPreferences getSharedPreferences(Context context) {
@@ -45,11 +49,11 @@ public class AppPreferencesHelper {
     }
 
     public static boolean isGPSEnabled(Context context) {
-        return getSharedPreferences(context).getBoolean(GPS_ENABLED, false);
+        return getSharedPreferences(context).getBoolean(GPS_ENABLED,false);
     }
 
     public static boolean isGPSEnabled(Context context, boolean defaultValue) {
-        return getSharedPreferences(context).getBoolean(GPS_ENABLED, defaultValue);
+        return getSharedPreferences(context).getBoolean(GPS_ENABLED,defaultValue);
     }
 
     public static void setGPSEnabled(Context context, boolean gpsFlagVal) {
@@ -61,11 +65,11 @@ public class AppPreferencesHelper {
     }
 
     public static boolean areNotificationsEnabled(Context context) {
-        return getSharedPreferences(context).getBoolean(NOTIFICATION_ENABLED, false);
+        return getSharedPreferences(context).getBoolean(NOTIFICATION_ENABLED,false);
     }
 
     public static boolean areNotificationsEnabled(Context context, boolean defaultValue) {
-        return getSharedPreferences(context).getBoolean(NOTIFICATION_ENABLED, defaultValue);
+        return getSharedPreferences(context).getBoolean(NOTIFICATION_ENABLED,defaultValue);
     }
 
     public static void setNotificationEnabled(Context context, boolean notificationFlagVal) {

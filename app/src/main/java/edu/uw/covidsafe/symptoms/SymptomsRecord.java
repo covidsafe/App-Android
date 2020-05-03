@@ -11,8 +11,12 @@ import com.example.covidsafe.R;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Booleans;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -325,7 +329,7 @@ public class SymptomsRecord implements Serializable {
             values.add(mContext.getString(R.string.sore_throat_txt));
         }
         if (this.vomiting) {
-            values.add(mContext.getString(R.string.vomiting_txt));
+            values.add(mContext.getString(R.string.vomitting_txt));
         }
         return values;
     }

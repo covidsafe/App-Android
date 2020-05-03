@@ -3,6 +3,8 @@ package edu.uw.covidsafe.json;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import edu.uw.covidsafe.ui.onboarding.PagerFragment;
+
 public class Location {
     public double latitude;
     public double longitude;

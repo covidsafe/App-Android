@@ -9,8 +9,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.covidsafe.R;
+
+import edu.uw.covidsafe.ui.onboarding.StoryFragment;
+import edu.uw.covidsafe.utils.Constants;
 
 public class ContactPageAdapter extends FragmentPagerAdapter {
     Context cxt;

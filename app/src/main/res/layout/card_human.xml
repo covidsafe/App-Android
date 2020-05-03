@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/cardMore"
@@ -32,7 +33,6 @@
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@+id/view"
-                app:layout_constraintEnd_toStartOf="@+id/guideline2V80"
                 app:layout_constraintStart_toEndOf="@+id/imageView11"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -89,12 +89,12 @@
                 app:layout_constraintGuide_begin="20dp"
                 app:layout_constraintGuide_percent=".05" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/overflow"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="@color/white"
-                android:src="@drawable/rubbish"
+                android:src="@drawable/ic_more_vert_gray_24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
                 app:layout_constraintTop_toTopOf="parent" />

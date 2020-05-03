@@ -6,6 +6,8 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import edu.uw.covidsafe.ui.notif.NotifRecord;
+
 public class SymptomsDbRecordRepository {
     private SymptomsDbRecordDao mRecordDao;
 

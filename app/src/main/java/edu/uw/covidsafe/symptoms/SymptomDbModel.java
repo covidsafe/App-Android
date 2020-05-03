@@ -8,6 +8,9 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import edu.uw.covidsafe.ui.notif.NotifDbRecordRepository;
+import edu.uw.covidsafe.ui.notif.NotifRecord;
+
 public class SymptomDbModel extends AndroidViewModel {
     SymptomsDbRecordRepository repo;
     public LiveData<List<SymptomsRecord>> records;

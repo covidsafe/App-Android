@@ -11,16 +11,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+
+import com.example.covidsafe.R;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.covidsafe.R;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -49,7 +50,7 @@ public class GpsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view;
+        View view ;
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.gps_history_log, parent, false);
         return new GpsHistoryHolder(view);
     }
@@ -66,32 +67,31 @@ public class GpsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                             record.getLongi(mContext), 1);
                     address = addresses.get(0).getAddressLine(0);
                 } catch (IOException e) {
-                    Log.e("err", e.getMessage());
-                    ((GpsHistoryHolder) holder).loc.setText(R.string.unknown_address_txt);
+                    Log.e("err",e.getMessage());
+                    ((GpsHistoryHolder)holder).loc.setText(R.string.unknown_address_txt);
                 }
             }
         }
 
         SimpleDateFormat format = new SimpleDateFormat("h:mm aa");
         String time = format.format(record.getTs_start());
-        ((GpsHistoryHolder) holder).loc.setText(address);
-        ((GpsHistoryHolder) holder).time.setText(time);
+        ((GpsHistoryHolder)holder).loc.setText(address);
+        ((GpsHistoryHolder)holder).time.setText(time);
         ((GpsHistoryHolder) holder).bb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(record);
-//                makeMenu(((GpsHistoryHolder) holder).bb, record);
+                makeMenu(((GpsHistoryHolder) holder).bb, record);
             }
         });
     }
 
     public void setRecords(List<GpsRecord> records, Context cxt) {
-        Log.e("contact", "set records");
+        Log.e("contact","set records");
         List<String> lats = new LinkedList<>();
         List<String> lons = new LinkedList<>();
         List<String> addresses = new LinkedList<>();
         List<Long> ts = new LinkedList<>();
-        for (GpsRecord record : records) {
+        for(GpsRecord record : records) {
             lats.add(record.getRawLat());
             lons.add(record.getRawLongi());
             addresses.add(record.getRawAddress());
@@ -105,7 +105,7 @@ public class GpsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         Set<String> seenAddresses = new HashSet<>();
 
         List<GpsRecord> filtRecords = new LinkedList<>();
-        for (int i = 0; i < decryptedAddresses.length; i++) {
+        for(int i = 0; i <decryptedAddresses.length; i++) {
             if (!seenAddresses.contains(decryptedAddresses[i])) {
                 GpsRecord newRec = new GpsRecord();
                 newRec.setRawLat(decryptedLats[i]);
@@ -131,7 +131,7 @@ public class GpsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     public class GpsHistoryHolder extends RecyclerView.ViewHolder {
         TextView loc;
         TextView time;
-        ImageView bb;
+        ImageButton bb;
 
         GpsHistoryHolder(@NonNull View itemView) {
             super(itemView);
@@ -153,26 +153,23 @@ public class GpsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.deleteItem:
-                        showDialog(record);
+                        AlertDialog dialog = new MaterialAlertDialogBuilder(av)
+                                .setTitle(mContext.getString(R.string.sure_delete))
+                                .setNegativeButton(mContext.getString(R.string.cancel), null)
+                                .setPositiveButton(mContext.getString(R.string.yes), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        SimpleDateFormat outformat = new SimpleDateFormat("MM/dd h:mm aa");
+                                        new GpsOpsAsyncTask(mContext, Constants.GpsDatabaseOps.Delete, record.getTs_start()).execute();
+                                    }
+                                })
+                                .setCancelable(true).create();
+                        dialog.show();
                         break;
                 }
                 return true;
             }
         });
         popup.show();
-    }
-
-    public void showDialog(GpsRecord record) {
-        AlertDialog dialog = new MaterialAlertDialogBuilder(av)
-                .setTitle(mContext.getString(R.string.sure_delete))
-                .setNegativeButton(mContext.getString(R.string.cancel), null)
-                .setPositiveButton(mContext.getString(R.string.yes), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        new GpsOpsAsyncTask(mContext, Constants.GpsDatabaseOps.Delete, record.getTs_start()).execute();
-                    }
-                })
-                .setCancelable(true).create();
-        dialog.show();
     }
 }

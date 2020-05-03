@@ -470,7 +470,7 @@ You can prepare a list of informaton they will ask about based on information co
     <string name="headache_txt">Headache</string>
     <string name="chest_pain_txt">Chest pains</string>
     <string name="sore_throat_txt">Sore throat</string>
-    <string name="vomiting_txt">Vomtting</string>
+    <string name="vomitting_txt">Vomitting</string>
     <string name="announcement_txt">Announcement</string>
     <string name="bluetooth_is_disabled_on_this_device">Bluetooth is disabled on this device</string>
     <string name="not_logged_txt">Not logged</string>

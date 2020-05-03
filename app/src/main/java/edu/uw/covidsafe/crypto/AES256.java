@@ -1,14 +1,14 @@
 package edu.uw.covidsafe.crypto;
 
+import com.example.covidsafe.R;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
-
-import com.example.covidsafe.R;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
@@ -32,6 +32,7 @@ import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import edu.uw.covidsafe.utils.ByteUtils;
 import edu.uw.covidsafe.utils.Constants;
 
 public class AES256 {
