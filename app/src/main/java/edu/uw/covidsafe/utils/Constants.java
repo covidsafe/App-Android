@@ -61,7 +61,7 @@ public class Constants {
 
     public static boolean UI_AUTH = false;
     public static boolean WRITE_TO_DISK = false;
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
     public static boolean PUBLIC_DEMO = true;
     public static boolean NARROWCAST_ENABLE = true;
     public static boolean USE_LAST_QUERY_TIME = true;
@@ -129,7 +129,6 @@ public class Constants {
     public static UUID CHARACTERISTIC_UUID = UUID.fromString("d945590b-5b09-4144-ace7-4063f95bd0bb");
     public static UUID BEACON_SERVICE_UUID = UUID.fromString("0000D028-0000-1000-8000-00805F9B34FB");
     public static UUID contactUUID = null;
-    public static int BLE_PROTOCOL_VERSION =  1;
 
     public static String GOOGLE_SIGNIN_PAGE = "https://accounts.google.com/signin/v2/identifier?flowName=GlifWebSignIn&flowEntry=ServiceLogin";
     public static String GOOGLE_DOWNLOAD_PAGE = "https://myaccount.google.com/?utm_source=sign_in_no_continue";
@@ -219,7 +218,6 @@ public class Constants {
     public static Calendar contactLogMonthCalendar = Calendar.getInstance();
     public static Calendar symptomTrackerMonthCalendar = Calendar.getInstance();
     public static String KML_FILE_NAME = "CovidSafe_Google_Location_History.kml";
-    public static List<String> bleDeviceBlacklist;
     public static int deviceID;
 
     public static GpsHistoryRecyclerViewAdapter2 contactGpsAdapter;

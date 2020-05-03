@@ -110,7 +110,7 @@ public class BluetoothServerHelper {
                             }
 
                             if (!Constants.writtenUUIDs.contains(contactUuid) &&
-                                    BluetoothUtils.rssiThresholdCheck(rssi,deviceID)) {
+                                BluetoothUtils.rssiThresholdCheck(rssi,deviceID)) {
                                 Constants.writtenUUIDs.add(contactUuid);
                                 Utils.bleLogToDatabase(cxt, contactUuid, rssi, TimeUtils.getTime(), deviceID);
                             }

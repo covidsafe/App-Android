@@ -37,18 +37,16 @@ public class UUIDGeneratorTask implements Runnable {
                 Constants.contactUUID = UUID.fromString(uuid.toString());
             }
 
-            if (Constants.BLE_PROTOCOL_VERSION == 1) {
-                Log.e("ble", "can we broadcast?" + (Constants.blueAdapter != null));
-                if (Constants.blueAdapter != null) {
-                    Log.e("ble", "is advertiser null?" + (Constants.blueAdapter.getBluetoothLeAdvertiser() == null));
-                }
-                if (Constants.blueAdapter != null && Constants.blueAdapter.getBluetoothLeAdvertiser() != null) {
-                    Log.e("ble", "about to stop advertising");
-                    Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothUtils.advertiseCallback);
-                    //restart beacon after UUID generation
-                    Log.e("ble", "about to mkbeacon");
-                    BluetoothUtils.mkBeacon(context);
-                }
+            Log.e("ble", "can we broadcast?" + (Constants.blueAdapter != null));
+            if (Constants.blueAdapter != null) {
+                Log.e("ble", "is advertiser null?" + (Constants.blueAdapter.getBluetoothLeAdvertiser() == null));
+            }
+            if (Constants.blueAdapter != null && Constants.blueAdapter.getBluetoothLeAdvertiser() != null) {
+                Log.e("ble", "about to stop advertising");
+                Constants.blueAdapter.getBluetoothLeAdvertiser().stopAdvertising(BluetoothUtils.advertiseCallback);
+                //restart beacon after UUID generation
+                Log.e("ble", "about to mkbeacon");
+                BluetoothUtils.mkBeacon(context);
             }
         }
     }

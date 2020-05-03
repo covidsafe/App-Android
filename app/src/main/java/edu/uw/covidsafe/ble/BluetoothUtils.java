@@ -99,15 +99,6 @@ public class BluetoothUtils {
     };
 
     public static void startBluetoothScan(Context cxt) {
-        if (Constants.BLE_PROTOCOL_VERSION == 1) {
-            startBluetoothScanV1(cxt);
-        }
-        else if (Constants.BLE_PROTOCOL_VERSION == 2) {
-            startBluetoothScanV2(cxt);
-        }
-    }
-
-    public static void startBluetoothScanV1(Context cxt) {
         if (Constants.bluetoothScanTask == null || Constants.bluetoothScanTask.isDone()) {
             Log.e("blebug", "start bluetooth scan ");
             ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
@@ -116,35 +107,12 @@ public class BluetoothUtils {
                         0, Constants.BluetoothScanIntervalInSecondsDebug, TimeUnit.SECONDS);
             } else {
                 Constants.bluetoothScanTask = exec.scheduleWithFixedDelay(new BluetoothScanHelper(cxt),
-                        0, Constants.BluetoothScanIntervalInMinutes, TimeUnit.MINUTES);
-            }
-        }
-    }
-
-    public static void startBluetoothScanV2(Context cxt) {
-        if (Constants.bluetoothScanTask == null || Constants.bluetoothScanTask.isDone()) {
-            Log.e("blebug", "start bluetooth scan ");
-            ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
-            if (Constants.DEBUG) {
-                Constants.bluetoothScanTask = exec.scheduleWithFixedDelay(new BluetoothScanHelperV2(cxt),
-                        0, Constants.BluetoothScanIntervalInSecondsDebug, TimeUnit.SECONDS);
-            } else {
-                Constants.bluetoothScanTask = exec.scheduleWithFixedDelay(new BluetoothScanHelperV2(cxt),
                         0, Constants.BluetoothScanIntervalInMinutes, TimeUnit.MINUTES);
             }
         }
     }
 
     public static void finishScan(Context cxt) {
-        if (Constants.BLE_PROTOCOL_VERSION == 1) {
-            finishScanV1(cxt);
-        }
-        else if (Constants.BLE_PROTOCOL_VERSION == 2) {
-            finishScanV2(cxt);
-        }
-    }
-
-    public static void finishScanV1(Context cxt) {
         if (cxt != null) {
             BluetoothManager bluetoothManager =
                     (BluetoothManager) cxt.getSystemService(Context.BLUETOOTH_SERVICE);
@@ -155,30 +123,17 @@ public class BluetoothUtils {
             Log.e("blebug", "finish scan");
             Log.e("blebug", (Constants.scannedUUIDs == null) + "," + (Constants.scannedUUIDsRSSIs == null) + "," + (Constants.scannedUUIDsTimes == null));
             if (Constants.scannedUUIDs != null && Constants.scannedUUIDsRSSIs != null &&
-                    Constants.scannedUUIDsTimes != null) {
+                Constants.scannedUUIDsTimes != null) {
                 Log.e("blebug", (Constants.scannedUUIDs.size()) + "," + (Constants.scannedUUIDsRSSIs.keySet().size()) + "," + (Constants.scannedUUIDsTimes.keySet().size()));
                 for (String uuid : Constants.scannedUUIDs) {
                     if (Constants.scannedUUIDsRSSIs.containsKey(uuid) &&
-                            Constants.scannedUUIDsTimes.containsKey(uuid)) {
+                        Constants.scannedUUIDsTimes.containsKey(uuid)) {
                         int rssi = Constants.scannedUUIDsRSSIs.get(uuid);
                         long ts = Constants.scannedUUIDsTimes.get(uuid);
-                        Utils.bleLogToDatabase(cxt, uuid, rssi, ts, 0);
+                        Utils.bleLogToDatabase(cxt, uuid, rssi, ts, Constants.deviceID);
                     }
                 }
             }
-        }
-    }
-
-    public static void finishScanV2(Context cxt) {
-        if (cxt != null) {
-            BluetoothManager bluetoothManager =
-                    (BluetoothManager) cxt.getSystemService(Context.BLUETOOTH_SERVICE);
-            if (Constants.blueAdapter != null && bluetoothManager != null && isBluetoothOn() &&
-                    Constants.blueAdapter.getBluetoothLeScanner() != null) {
-                Constants.blueAdapter.getBluetoothLeScanner().stopScan(BluetoothScanHelperV2.mLeScanCallback);
-            }
-            Log.e("blebug", "finish scan");
-            Log.e("blebug", (Constants.scannedUUIDs == null) + "," + (Constants.scannedUUIDsRSSIs == null) + "," + (Constants.scannedUUIDsTimes == null));
         }
     }
 
