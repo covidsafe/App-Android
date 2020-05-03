@@ -55,15 +55,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-//using https://github.com/broakenmedia/MultiContactPicker
-
 public class PeopleFragment extends Fragment {
 
     View view;
     boolean humanDbChanged;
     HumanSummaryRecyclerViewAdapter humanAdapter;
     static List<HumanRecord> changedRecords;
-    int CONTACT_PICKER_REQUEST = 1;
 
     @SuppressLint("RestrictedApi")
     @Nullable
@@ -99,7 +96,7 @@ public class PeopleFragment extends Fragment {
                     //Intent pickContact = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
                     //pickContact.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
                     //((MainActivity) getActivity()).startActivityForResult(pickContact, 2);
-                    contacts();
+                    selectContacts();
                 }
             }
         });
@@ -148,14 +145,14 @@ public class PeopleFragment extends Fragment {
         }
     }
 
-    private void contacts() {
+    private void selectContacts() {
+        Log.e("justin","select contacts");
         new MultiContactPicker.Builder(this) //Activity/fragment context
                 .theme(R.style.MyCustomPickerTheme)//Optional - default: MultiContactPicker.Azure
                 .hideScrollbar(true) //Optional - default: false
                 .showTrack(false) //Optional - default: true
                 .searchIconColor(Color.BLACK) //Option - default: White
                 .setChoiceMode(MultiContactPicker.CHOICE_MODE_MULTIPLE) //Optional - default: CHOICE_MODE_MULTIPLE
-
 
                 .bubbleTextColor(Color.WHITE) //Optional - default: White
                 .setTitleText(getContext().getString(R.string.select_contact)) //Optional - default: Select Contacts
@@ -167,10 +164,4 @@ public class PeopleFragment extends Fragment {
                         android.R.anim.fade_out) //Optional - default: No animation overrides
                 .showPickerForResult(2);
     }
-
-
-
-
-
-
 }

@@ -194,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
         Log.e("state","onactivityresult "+requestCode+","+resultCode);
+        Log.e("justin",requestCode+","+resultCode);
         boolean hasBlePerms = Utils.hasBlePermissions(getApplicationContext());
         if (requestCode == 0) {
             if (resultCode == -1) {
@@ -249,19 +250,15 @@ public class MainActivity extends AppCompatActivity {
                         email = null;
                     }
 
-                    if (contactResult.getPhoto() == null)
-                    {
+                    if (contactResult.getPhoto() == null) {
                         uri = null;
                     } else {
                         uri = contactResult.getPhoto().toString();
                     }
 
-
-
                     new HumanOpsAsyncTask(this, contactResult.getPhoneNumbers().get(0).getNumber(), contactResult.getDisplayName(), uri, email).execute();
                 }
             }
-
         }
     }
 
