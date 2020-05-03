@@ -222,8 +222,6 @@ public class Constants {
     public static List<HumanRecord> changedContactHumanRecords;
     public static List<SymptomsRecord> changedContactSympRecords;
     public static List<GpsRecord> changedContactGpsRecords;
-    public static MaterialCalendarView contactLogCal;
-
     public static List<String> symptoms = new LinkedList<>();
     public static List<String> symptomDesc = new LinkedList<>();
 
