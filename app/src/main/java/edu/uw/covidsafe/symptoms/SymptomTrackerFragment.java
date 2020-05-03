@@ -40,6 +40,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.uw.covidsafe.ui.MainActivity;
+import edu.uw.covidsafe.ui.health.HealthFragment;
 import edu.uw.covidsafe.utils.Constants;
 
 public class SymptomTrackerFragment extends Fragment {
@@ -86,7 +87,7 @@ public class SymptomTrackerFragment extends Fragment {
                 changedRecords = symptomRecords;
                 Constants.symptomRecords = symptomRecords;
                 Log.e("symptom", "symptomtracker - symptom list changed");
-                if (Constants.CurrentFragment.toString().toLowerCase().contains("health")) {
+                if (Constants.CurrentFragment.getClass().toString().contains(HealthFragment.class.toString())) {
                     markDays();
                     Log.e("symptom", "symptomtracker - symptom list changing");
                     updateFeaturedDate(cal.getSelectedDate(), getContext(), getActivity());

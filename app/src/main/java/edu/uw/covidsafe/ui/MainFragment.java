@@ -185,7 +185,7 @@ public class MainFragment extends Fragment {
                 changedRecords = symptomRecords;
                 Constants.symptomRecords = symptomRecords;
                 Log.e("symptom", "mainfragment - symptom list changed");
-                if (Constants.CurrentFragment.toString().toLowerCase().contains("mainfragment")) {
+                if (Constants.CurrentFragment.getClass().toString().contains(MainFragment.class.toString())) {
                     Log.e("symptom", "mainfragment - symptom list changing");
                     SymptomUtils.updateTodaysLogs(view, symptomRecords, getContext(), getActivity(),
                             new Date(TimeUtils.getTime()), "main");
