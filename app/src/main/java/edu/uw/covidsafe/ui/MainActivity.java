@@ -356,6 +356,7 @@ public class MainActivity extends AppCompatActivity {
                 int month = finalMyCalendar.get(Calendar.MONTH)+1;
                 int day = finalMyCalendar.get(Calendar.DAY_OF_MONTH);
                 Log.e("date","ok "+year+","+month+","+day);
+                Log.e("justin",Constants.CurrentFragment.getClass().toString());
                 if (Constants.CurrentFragment.getClass().toString().contains(Constants.LocationFragment.getClass().toString())) {
                     LocationFragment.updateLocationView(CalendarDay.from(year,month,day),
                             getApplicationContext());

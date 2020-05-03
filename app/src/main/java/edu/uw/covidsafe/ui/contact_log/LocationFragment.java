@@ -131,8 +131,10 @@ public class LocationFragment extends Fragment {
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 Log.e("contact","on date selected "+date.toString());
                 Log.e("contact","on date selected "+date.getYear()+","+date.getMonth()+","+date.getDay());
-                Constants.contactLogMonthCalendar.set(date.getYear(),date.getMonth()-1,date.getDay());
-                updateLocationView(date, getContext());
+                if (selected) {
+                    Constants.contactLogMonthCalendar.set(date.getYear(), date.getMonth() - 1, date.getDay());
+                    updateLocationView(date, getContext());
+                }
             }
         });
     }

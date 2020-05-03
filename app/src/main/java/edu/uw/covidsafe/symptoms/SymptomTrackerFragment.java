@@ -122,8 +122,10 @@ public class SymptomTrackerFragment extends Fragment {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 Log.e("symptom","on date selected "+date.toString());
-                Constants.symptomTrackerMonthCalendar.set(date.getYear(),date.getMonth()-1,date.getDay());
-                updateFeaturedDate(date, getContext(), getActivity());
+                if (selected) {
+                    Constants.symptomTrackerMonthCalendar.set(date.getYear(), date.getMonth() - 1, date.getDay());
+                    updateFeaturedDate(date, getContext(), getActivity());
+                }
             }
         });
     }
