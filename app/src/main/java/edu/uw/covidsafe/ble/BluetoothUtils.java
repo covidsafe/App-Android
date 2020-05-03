@@ -16,6 +16,11 @@ import android.os.Handler;
 import android.os.ParcelUuid;
 import android.util.Log;
 
+import androidx.lifecycle.LifecycleOwner;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
+
 import com.example.covidsafe.R;
 
 import edu.uw.covidsafe.preferences.AppPreferencesHelper;
@@ -24,6 +29,7 @@ import edu.uw.covidsafe.utils.ByteUtils;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
+import edu.uw.covidsafe.workmanager.workers.UUIDGeneratorWorker;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

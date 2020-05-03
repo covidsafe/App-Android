@@ -37,6 +37,19 @@ import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.ui.onboarding.OnboardingStateAdapter;
 import edu.uw.covidsafe.utils.Constants;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.CalendarMode;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+
+import org.threeten.bp.DayOfWeek;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
 public class PeopleFragment extends Fragment {
 
     View view;
