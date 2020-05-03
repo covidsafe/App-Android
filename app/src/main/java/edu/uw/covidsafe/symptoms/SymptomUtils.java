@@ -1,11 +1,9 @@
 package edu.uw.covidsafe.symptoms;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,7 +12,6 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.covidsafe.R;

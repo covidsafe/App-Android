@@ -1,14 +1,12 @@
 package edu.uw.covidsafe.ui.notif;
 
 import android.content.Context;
-import android.location.Location;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
+
+import java.util.List;
 
 import edu.uw.covidsafe.utils.Constants;
-import edu.uw.covidsafe.utils.Utils;
-import java.util.List;
 
 public class NotifOpsAsyncTask extends AsyncTask<Void, Void, Void> {
     private NotifDbRecordRepository repo;

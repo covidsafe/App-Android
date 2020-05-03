@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,10 +19,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import edu.uw.covidsafe.ui.MainActivity;
-import edu.uw.covidsafe.utils.Constants;
-import edu.uw.covidsafe.utils.TimeUtils;
 
 import com.example.covidsafe.R;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -43,6 +38,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+
+import edu.uw.covidsafe.ui.MainActivity;
+import edu.uw.covidsafe.utils.Constants;
 
 public class SymptomTrackerFragment extends Fragment {
 

@@ -1,7 +1,5 @@
 package edu.uw.covidsafe.utils;
 
-import android.util.Log;
-
 import com.instacart.library.truetime.TrueTime;
 
 import java.text.ParseException;

@@ -1,8 +1,5 @@
 package edu.uw.covidsafe.crypto;
 
-import edu.uw.covidsafe.crypto.ByteHelper;
-import edu.uw.covidsafe.crypto.SHA256;
-
 import org.junit.Test;
 
 import java.security.NoSuchAlgorithmException;

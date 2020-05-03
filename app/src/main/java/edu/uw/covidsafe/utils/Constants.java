@@ -16,23 +16,6 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.covidsafe.R;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
-
-import edu.uw.covidsafe.preferences.AppPreferencesHelper;
-import edu.uw.covidsafe.contact_trace.GpsHistoryRecyclerViewAdapter2;
-import edu.uw.covidsafe.contact_trace.HumanRecord;
-import edu.uw.covidsafe.gps.GpsRecord;
-import edu.uw.covidsafe.symptoms.SymptomsRecord;
-import edu.uw.covidsafe.ui.MainFragment;
-import edu.uw.covidsafe.ui.contact_log.LocationFragment;
-import edu.uw.covidsafe.ui.contact_log.PeopleFragment;
-import edu.uw.covidsafe.ui.faq.FaqFragment;
-import edu.uw.covidsafe.ui.health.TipRecyclerViewAdapter;
-import edu.uw.covidsafe.ui.notif.HistoryRecyclerViewAdapter;
-import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
-import edu.uw.covidsafe.symptoms.SymptomTrackerFragment;
-import edu.uw.covidsafe.ui.health.DiagnosisFragment;
-import edu.uw.covidsafe.gps.ImportLocationHistoryFragment;
-
 import java.security.KeyStore;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -46,13 +29,27 @@ import java.util.concurrent.ScheduledFuture;
 
 import javax.crypto.SecretKey;
 
-import edu.uw.covidsafe.ui.health.HealthFragment;
-import edu.uw.covidsafe.ui.settings.SettingsFragment;
-import edu.uw.covidsafe.ui.contact_log.ContactLogFragment;
 import edu.uw.covidsafe.contact_trace.ContactTraceFragment;
-
-import edu.uw.covidsafe.ui.onboarding.PermissionFragment;
+import edu.uw.covidsafe.contact_trace.GpsHistoryRecyclerViewAdapter2;
+import edu.uw.covidsafe.contact_trace.HumanRecord;
+import edu.uw.covidsafe.gps.GpsRecord;
+import edu.uw.covidsafe.gps.ImportLocationHistoryFragment;
+import edu.uw.covidsafe.preferences.AppPreferencesHelper;
+import edu.uw.covidsafe.symptoms.SymptomTrackerFragment;
+import edu.uw.covidsafe.symptoms.SymptomsRecord;
+import edu.uw.covidsafe.ui.MainFragment;
+import edu.uw.covidsafe.ui.contact_log.ContactLogFragment;
+import edu.uw.covidsafe.ui.contact_log.LocationFragment;
+import edu.uw.covidsafe.ui.contact_log.PeopleFragment;
+import edu.uw.covidsafe.ui.faq.FaqFragment;
+import edu.uw.covidsafe.ui.health.DiagnosisFragment;
+import edu.uw.covidsafe.ui.health.HealthFragment;
+import edu.uw.covidsafe.ui.health.TipRecyclerViewAdapter;
+import edu.uw.covidsafe.ui.notif.HistoryRecyclerViewAdapter;
+import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.onboarding.PagerFragment;
+import edu.uw.covidsafe.ui.onboarding.PermissionFragment;
+import edu.uw.covidsafe.ui.settings.SettingsFragment;
 
 public class Constants {
 

@@ -14,12 +14,10 @@ import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
 import com.example.covidsafe.R;
 
 import edu.uw.covidsafe.ui.MainActivity;
-import edu.uw.covidsafe.ui.health.HealthPageAdapter;
 import edu.uw.covidsafe.utils.Constants;
 
 public class ContactTraceFragment extends Fragment {

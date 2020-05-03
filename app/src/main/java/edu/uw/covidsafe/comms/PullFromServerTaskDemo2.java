@@ -1,10 +1,10 @@
 package edu.uw.covidsafe.comms;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.AsyncTask;
-import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,18 +14,27 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Request;
 import com.example.covidsafe.R;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.uw.covidsafe.gps.GpsUtils;
-import edu.uw.covidsafe.json.Area;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import edu.uw.covidsafe.ble.BleDbRecordRepository;
 import edu.uw.covidsafe.ble.BleRecord;
 import edu.uw.covidsafe.gps.GpsDbRecordRepository;
 import edu.uw.covidsafe.gps.GpsRecord;
+import edu.uw.covidsafe.gps.GpsUtils;
+import edu.uw.covidsafe.json.Area;
 import edu.uw.covidsafe.json.AreaMatch;
 import edu.uw.covidsafe.json.BlueToothSeed;
 import edu.uw.covidsafe.json.BluetoothMatch;
@@ -41,16 +50,6 @@ import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.CryptoUtils;
 import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 // this is a demo file, but the only difference is that it uses 30 seconds as exposure time
 // and has some other debug logging statements

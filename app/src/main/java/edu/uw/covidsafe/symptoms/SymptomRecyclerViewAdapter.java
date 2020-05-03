@@ -18,16 +18,15 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.covidsafe.R;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.jaredrummler.materialspinner.MaterialSpinner;
-
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.RecyclerView;
-
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

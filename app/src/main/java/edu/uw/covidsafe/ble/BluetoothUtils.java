@@ -15,11 +15,6 @@ import android.content.pm.PackageManager;
 import android.os.ParcelUuid;
 import android.util.Log;
 
-import androidx.lifecycle.LifecycleOwner;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkInfo;
-import androidx.work.WorkManager;
-
 import com.example.covidsafe.R;
 
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -30,7 +25,6 @@ import edu.uw.covidsafe.seed_uuid.UUIDGeneratorTask;
 import edu.uw.covidsafe.utils.ByteUtils;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
-import edu.uw.covidsafe.workmanager.workers.UUIDGeneratorWorker;
 
 import static android.content.Context.BLUETOOTH_SERVICE;
 

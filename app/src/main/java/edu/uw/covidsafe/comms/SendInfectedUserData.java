@@ -5,16 +5,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.AsyncTask;
-import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.example.covidsafe.R;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 import edu.uw.covidsafe.gps.GpsDbRecordRepository;
 import edu.uw.covidsafe.gps.GpsRecord;
@@ -27,9 +27,6 @@ import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.RegenerateSeedUponReport;
 import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
-
-import java.text.SimpleDateFormat;
-import java.util.List;
 
 public class SendInfectedUserData extends AsyncTask<Void, Void, Void> {
 

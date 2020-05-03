@@ -1,8 +1,5 @@
 package edu.uw.covidsafe.ui;
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
+
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -17,25 +14,29 @@ import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import edu.uw.covidsafe.ble.BleOpsAsyncTask;
+import com.example.covidsafe.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.microsoft.appcenter.AppCenter;
+import com.microsoft.appcenter.analytics.Analytics;
+import com.microsoft.appcenter.crashes.Crashes;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+
+import java.util.Calendar;
+import java.util.Date;
+
 import edu.uw.covidsafe.ble.BluetoothUtils;
-import edu.uw.covidsafe.comms.NetworkConstant;
-import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.contact_trace.HumanOpsAsyncTask;
-import edu.uw.covidsafe.gps.GpsOpsAsyncTask;
-import edu.uw.covidsafe.gps.GpsRecord;
+import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.preferences.LocaleHelper;
-import edu.uw.covidsafe.seed_uuid.SeedUUIDOpsAsyncTask;
 import edu.uw.covidsafe.symptoms.SymptomTrackerFragment;
-import edu.uw.covidsafe.symptoms.SymptomsOpsAsyncTask;
-import edu.uw.covidsafe.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.contact_log.ContactLogFragment;
 import edu.uw.covidsafe.ui.contact_log.LocationFragment;
 import edu.uw.covidsafe.ui.health.TipRecyclerViewAdapter;
@@ -43,21 +44,8 @@ import edu.uw.covidsafe.ui.notif.HistoryRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.settings.PermUtils;
 import edu.uw.covidsafe.utils.Constants;
-
-import com.example.covidsafe.R;
-
 import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.datepicker.MaterialDatePicker;
-import com.microsoft.appcenter.AppCenter;
-import com.microsoft.appcenter.analytics.Analytics;
-import com.microsoft.appcenter.crashes.Crashes;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity {

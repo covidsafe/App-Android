@@ -1,7 +1,5 @@
 package edu.uw.covidsafe.json;
 
-import android.net.Network;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
