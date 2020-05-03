@@ -308,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("date","ok "+year+","+month+","+day);
                 if (Constants.CurrentFragment.toString().toLowerCase().contains("location")) {
                     Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                    if(fragment instanceof LocationFragment && fragment.isVisible()){
+                    if(fragment instanceof ContactLogFragment && fragment.isVisible()){
                          ((LocationFragment) fragment).updateLocationView(CalendarDay.from(year, month, day), getApplicationContext());
                     }
                 }
