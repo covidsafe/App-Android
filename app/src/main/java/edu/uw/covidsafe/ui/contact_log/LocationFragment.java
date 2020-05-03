@@ -29,7 +29,6 @@ import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
-import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.spans.DotSpan;
 
 import org.threeten.bp.DayOfWeek;
@@ -41,6 +40,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import edu.uw.covidsafe.gps.GpsDbModel;
 import edu.uw.covidsafe.gps.GpsHistoryRecyclerViewAdapter;
@@ -50,18 +50,25 @@ import edu.uw.covidsafe.utils.Constants;
 
 public class LocationFragment extends Fragment {
 
-    static View view;
     boolean gpsDbChanged = false;
     static List<GpsRecord> changedRecords;
     static GpsHistoryRecyclerViewAdapter gpsHistoryAdapter;
+    MaterialCalendarView calendarView;
+    View inflatedView;
 
     @SuppressLint("RestrictedApi")
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Constants.CurrentFragment = this;
-        view = inflater.inflate(R.layout.fragment_locations, container, false);
+        inflatedView = inflater.inflate(R.layout.fragment_locations, container, false);
+        return inflatedView;
+    }
 
+    @SuppressLint("RestrictedApi")
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getActivity().getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -71,7 +78,7 @@ public class LocationFragment extends Fragment {
         }
 
         ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getColor(R.color.white)));
-        ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
+        Objects.requireNonNull(((MainActivity) getActivity()).getSupportActionBar()).setShowHideAnimationEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().show();
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
@@ -85,7 +92,7 @@ public class LocationFragment extends Fragment {
         gpsHistoryAdapter = new GpsHistoryRecyclerViewAdapter(getActivity(),getActivity(), view);
         rview.setAdapter(gpsHistoryAdapter);
         rview.setLayoutManager(new LinearLayoutManager(getActivity()));
-        initCal();
+        initCal(view);
 
         GpsDbModel smodel = ViewModelProviders.of(getActivity()).get(GpsDbModel.class);
         smodel.getAllSorted().observe(getActivity(), new Observer<List<GpsRecord>>() {
@@ -96,20 +103,18 @@ public class LocationFragment extends Fragment {
                 changedRecords = gpsRecords;
                 Log.e("contact","db on changed "+(changedRecords.size()));
 //                if (Constants.CurrentFragment.toString().toLowerCase().contains("location")) {
-                    Log.e("contact","db on changing");
-                    updateLocationView(Constants.contactLogCal.getSelectedDate(), getContext());
-                    gpsDbChanged = false;
+                Log.e("contact","db on changing");
+                updateLocationView(calendarView.getSelectedDate(), getContext());
+                gpsDbChanged = false;
 //                }
             }
         });
-
-        return view;
     }
 
-    public void initCal() {
-        Constants.contactLogCal = view.findViewById(R.id.calendarView);
+    private void initCal(View view) {
+        calendarView = view.findViewById(R.id.calendarView);
         /////////////////////////////////////////////////////////////////
-        SharedPreferences prefs = getContext().getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences prefs = Objects.requireNonNull(getContext()).getSharedPreferences(Constants.SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
         int days = prefs.getInt(getContext().getString(R.string.infection_window_in_days_pkeys), Constants.DefaultInfectionWindowInDays);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
@@ -117,33 +122,30 @@ public class LocationFragment extends Fragment {
         /////////////////////////////////////////////////////////////////
         Log.e("health","minimum "+calendar.get(Calendar.YEAR)+","+(calendar.get(Calendar.MONTH)+1)+","+calendar.get(Calendar.DAY_OF_MONTH));
         CalendarDay d1 = CalendarDay.from(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH)+1,calendar.get(Calendar.DAY_OF_MONTH));
-        Constants.contactLogCal.setSelectedDate(CalendarDay.today());
+        calendarView.setSelectedDate(CalendarDay.today());
 
-        Constants.contactLogCal.state().edit()
+        calendarView.state().edit()
                 .setFirstDayOfWeek(DayOfWeek.SUNDAY)
                 .setMinimumDate(d1)
                 .setMaximumDate(CalendarDay.today())
                 .setCalendarDisplayMode(CalendarMode.WEEKS)
                 .commit();
 
-        Constants.contactLogCal.setOnDateChangedListener(new OnDateSelectedListener() {
-            @Override
-            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                Log.e("contact","on date selected "+date.toString());
-                Log.e("contact","on date selected "+date.getYear()+","+date.getMonth()+","+date.getDay());
-                if (selected) {
-                    Constants.contactLogMonthCalendar.set(date.getYear(), date.getMonth() - 1, date.getDay());
-                    updateLocationView(date, getContext());
-                }
+        calendarView.setOnDateChangedListener((widget, date, selected) -> {
+            Log.e("contact","on date selected "+date.toString());
+            Log.e("contact","on date selected "+date.getYear()+","+date.getMonth()+","+date.getDay());
+            if (selected) {
+                Constants.contactLogMonthCalendar.set(date.getYear(),date.getMonth()-1,date.getDay());
+                updateLocationView(date, getContext());
             }
         });
     }
 
-    public static void updateLocationView(CalendarDay dd, Context cxt) {
+    public void updateLocationView(CalendarDay dd, Context cxt) {
         if (!Constants.contactLogCal.getMinimumDate().isAfter(dd) &&
             !Constants.contactLogCal.getMaximumDate().isBefore(dd)) {
-            Constants.contactLogCal.setCurrentDate(dd);
-            Constants.contactLogCal.setSelectedDate(dd);
+            calendarView.setCurrentDate(dd);
+            calendarView.setSelectedDate(dd);
         }
 
         markDays(cxt);
@@ -155,8 +157,10 @@ public class LocationFragment extends Fragment {
             Date date = format.parse(dd.getYear() + "/" + dd.getMonth() + "/" + dd.getDay());
 
             SimpleDateFormat format2 = new SimpleDateFormat("EEEE, MMMM dd");
-            TextView dayTitle = (TextView)view.findViewById(R.id.dayTitle);
-            dayTitle.setText(format2.format(date));
+            TextView dayTitle = inflatedView.findViewById(R.id.dayTitle);
+            if(date != null && dayTitle != null){
+                dayTitle.setText(format2.format(date));
+            }
 
             List<GpsRecord> filtRecords = new LinkedList<GpsRecord>();
             for (GpsRecord record : changedRecords) {
@@ -176,7 +180,7 @@ public class LocationFragment extends Fragment {
         }
     }
 
-    public static void markDays(Context cxt) {
+    public void markDays(Context cxt) {
         Log.e("symptoms","update days");
         List<CalendarDay> markedDays = new LinkedList<>();
         SimpleDateFormat year = new SimpleDateFormat("yyyy");
@@ -193,8 +197,8 @@ public class LocationFragment extends Fragment {
         }
 
         if (cxt != null) {
-            Constants.contactLogCal.removeDecorators();
-            Constants.contactLogCal.addDecorators(new LocationFragment.EventDecorator(cxt.getColor(R.color.purpleDark),
+            calendarView.removeDecorators();
+            calendarView.addDecorators(new LocationFragment.EventDecorator(cxt.getColor(R.color.purpleDark),
                     markedDays));
         }
     }
@@ -230,8 +234,10 @@ public class LocationFragment extends Fragment {
         }
         if (gpsDbChanged ) {
             Log.e("contact","db changed ");
-            updateLocationView(Constants.contactLogCal.getSelectedDate(), getContext());
+            updateLocationView(calendarView.getSelectedDate(), getContext());
             gpsDbChanged = false;
         }
     }
+
+
 }

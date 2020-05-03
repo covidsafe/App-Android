@@ -35,6 +35,7 @@ import java.util.Date;
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.contact_trace.ContactStepFragment;
 import edu.uw.covidsafe.contact_trace.HumanOpsAsyncTask;
+import edu.uw.covidsafe.json.Location;
 import edu.uw.covidsafe.gps.ImportLocationHistoryFragment;
 import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.preferences.LocaleHelper;
@@ -356,10 +357,11 @@ public class MainActivity extends AppCompatActivity {
                 int month = finalMyCalendar.get(Calendar.MONTH)+1;
                 int day = finalMyCalendar.get(Calendar.DAY_OF_MONTH);
                 Log.e("date","ok "+year+","+month+","+day);
-                Log.e("justin",Constants.CurrentFragment.getClass().toString());
                 if (Constants.CurrentFragment.getClass().toString().contains(Constants.LocationFragment.getClass().toString())) {
-                    LocationFragment.updateLocationView(CalendarDay.from(year,month,day),
-                            getApplicationContext());
+                    Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                    if (fragment instanceof LocationFragment && fragment.isVisible()){
+                         ((LocationFragment) fragment).updateLocationView(CalendarDay.from(year, month, day), getApplicationContext());
+                    }
                 }
                 else if (Constants.CurrentFragment.getClass().toString().contains(Constants.HealthFragment.getClass().toString())) {
                     SymptomTrackerFragment.updateFeaturedDate(CalendarDay.from(year,month,day),
