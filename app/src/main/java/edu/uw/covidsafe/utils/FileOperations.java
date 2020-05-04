@@ -8,6 +8,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 
 public class FileOperations {
@@ -69,5 +72,55 @@ public class FileOperations {
         inp.close();
 
         return out;
+    }
+
+    // mapping from ID => RSSI threshold
+    public static HashMap<Integer,Integer> readDeviceThresholds(Context context, int id) {
+        HashMap<Integer,Integer> bleThresh = new HashMap<>();
+
+        Scanner inp = new Scanner(context.getResources().openRawResource(id));
+        inp.nextLine();
+
+        int counter = 1;
+        while (inp.hasNextLine()) {
+            String[] elts = inp.nextLine().split(",");
+            bleThresh.put(counter, (int)Double.parseDouble(elts[5]));
+            counter += 1;
+        }
+        inp.close();
+
+        return bleThresh;
+    }
+
+    // list of phone names
+    public static List<String> readDeviceList(Context context, int id) {
+        List<String> devices = new LinkedList<>();
+
+        Scanner inp = new Scanner(context.getResources().openRawResource(id));
+        inp.nextLine();
+
+        while (inp.hasNextLine()) {
+            String[] elts = inp.nextLine().split(",");
+            devices.add(elts[2].toLowerCase());
+        }
+        inp.close();
+
+        return devices;
+    }
+
+    // list of manufacturer
+    public static List<String> readManufacturerList(Context context, int id) {
+        List<String> devices = new LinkedList<>();
+
+        Scanner inp = new Scanner(context.getResources().openRawResource(id));
+        inp.nextLine();
+
+        while (inp.hasNextLine()) {
+            String[] elts = inp.nextLine().split(",");
+            devices.add(elts[0].toLowerCase());
+        }
+        inp.close();
+
+        return devices;
     }
 }

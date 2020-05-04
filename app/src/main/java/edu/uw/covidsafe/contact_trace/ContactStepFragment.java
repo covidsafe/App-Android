@@ -32,6 +32,7 @@ import edu.uw.covidsafe.gps.GpsDbModel;
 import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.symptoms.SymptomDbModel;
 import edu.uw.covidsafe.symptoms.SymptomsRecord;
+import edu.uw.covidsafe.ui.MainFragment;
 import edu.uw.covidsafe.utils.Constants;
 
 public class ContactStepFragment extends Fragment {
@@ -142,7 +143,7 @@ public class ContactStepFragment extends Fragment {
                         Constants.changedContactSympRecords = symptomRecords;
                         Constants.symptomRecords = symptomRecords;
                         Log.e("symptom","mainfragment - symptom list changed");
-                        if (Constants.CurrentFragment.toString().toLowerCase().contains("mainfragment")) {
+                        if (Constants.CurrentFragment.getClass().toString().contains(MainFragment.class.toString())) {
                             Log.e("symptom","mainfragment - symptom list changing");
                             symptomAdapter.setRecords(symptomRecords);
                             sympDbChanged = false;
@@ -172,7 +173,7 @@ public class ContactStepFragment extends Fragment {
                         gpsDbChanged = true;
                         changedContactGpsRecords = gpsRecords;
                         Log.e("contact","db on changed "+(changedContactGpsRecords.size()));
-                        if (Constants.CurrentFragment.toString().toLowerCase().contains("contactstep")) {
+                        if (Constants.CurrentFragment.getClass().toString().contains(ContactStepFragment.class.toString())) {
                             Log.e("contact","db on changing");
                             Constants.contactGpsAdapter.setRecords(changedContactGpsRecords, getContext());
                             gpsDbChanged = false;
@@ -215,7 +216,7 @@ public class ContactStepFragment extends Fragment {
                         Log.e("human","onchanged");
                         humanDbChanged = true;
                         Constants.changedContactHumanRecords = humanRecords;
-                        if (Constants.CurrentFragment.toString().toLowerCase().contains("contactstep")) {
+                        if (Constants.CurrentFragment.getClass().toString().contains(ContactStepFragment.class.toString())) {
                             humanAdapter.setRecords(humanRecords);
                             humanDbChanged = false;
                         }

@@ -40,6 +40,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.uw.covidsafe.ui.MainActivity;
+import edu.uw.covidsafe.ui.health.HealthFragment;
 import edu.uw.covidsafe.utils.Constants;
 
 public class SymptomTrackerFragment extends Fragment {
@@ -86,7 +87,7 @@ public class SymptomTrackerFragment extends Fragment {
                 changedRecords = symptomRecords;
                 Constants.symptomRecords = symptomRecords;
                 Log.e("symptom", "symptomtracker - symptom list changed");
-                if (Constants.CurrentFragment.toString().toLowerCase().contains("health")) {
+                if (Constants.CurrentFragment.getClass().toString().contains(HealthFragment.class.toString())) {
                     markDays();
                     Log.e("symptom", "symptomtracker - symptom list changing");
                     updateFeaturedDate(cal.getSelectedDate(), getContext(), getActivity());
@@ -121,8 +122,10 @@ public class SymptomTrackerFragment extends Fragment {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 Log.e("symptom","on date selected "+date.toString());
-                Constants.symptomTrackerMonthCalendar.set(date.getYear(),date.getMonth()-1,date.getDay());
-                updateFeaturedDate(date, getContext(), getActivity());
+                if (selected) {
+                    Constants.symptomTrackerMonthCalendar.set(date.getYear(), date.getMonth() - 1, date.getDay());
+                    updateFeaturedDate(date, getContext(), getActivity());
+                }
             }
         });
     }
@@ -169,8 +172,12 @@ public class SymptomTrackerFragment extends Fragment {
     }
 
     public static void updateFeaturedDate(CalendarDay calDay, Context cxt, Activity av) {
-        cal.setSelectedDate(calDay);
-        cal.setCurrentDate(calDay);
+        if (!cal.getMinimumDate().isAfter(calDay) &&
+            !cal.getMaximumDate().isBefore(calDay)) {
+            cal.setSelectedDate(calDay);
+            cal.setCurrentDate(calDay);
+        }
+
         Log.e("symptom","update featured date");
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         try {

@@ -61,49 +61,49 @@ public class PullFromServerTaskTest {
             if (testCase == 1) {
                 bleRecords.add(new BleRecord(
                         "6f6d3cf7-ec31-7a3b-2563-2aab28ec37bb",
-                        t0 + (60000 * 12), 0
+                        t0 + (60000 * 12), 0, 0
                 ));
                 bleRecords.add(new BleRecord(
                         "ff268fd5-9ed9-46a4-556d-352936e9f064",
-                        t0 + (60000 * 17), 0
+                        t0 + (60000 * 17), 0, 0
                 ));
             } else if (testCase == 2) {
                 bleRecords.add(new BleRecord(
                         "6f6d3cf7-ec31-7a3b-2563-2aab28ec37bb",
-                        t0 + (60000 * 3), 0
+                        t0 + (60000 * 3), 0, 0
                 ));
                 bleRecords.add(new BleRecord(
                         "6f6d3cf7-ec31-7a3b-2563-2aab28ec37bb",
-                        t0 + (60000 * 8), 0
+                        t0 + (60000 * 8), 0, 0
                 ));
                 bleRecords.add(new BleRecord(
                         "6f6d3cf7-ec31-7a3b-2563-2aab28ec37bb",
-                        t0 + (60000 * 13), 0
+                        t0 + (60000 * 13), 0, 0
                 ));
                 bleRecords.add(new BleRecord(
                         "ff268fd5-9ed9-46a4-556d-352936e9f064",
-                        t0 + (60000 * 18), 0
+                        t0 + (60000 * 18), 0, 0
                 ));
             } else if (testCase == 3) {
                 bleRecords.add(new BleRecord(
                         "6f6d3cf7-ec31-7a3b-2563-2aab28ec37bb",
-                        t0 + (60000 * 3), 0
+                        t0 + (60000 * 3), 0, 0
                 ));
                 bleRecords.add(new BleRecord(
                         "6f6d3cf7-ec31-7a3b-2563-2aab28ec37bb",
-                        t0 + (60000 * 8), 0
+                        t0 + (60000 * 8), 0, 0
                 ));
                 bleRecords.add(new BleRecord(
                         "6f6d3cf7-ec31-7a3b-2563-2aab28ec37bb",
-                        t0 + (60000 * 12), 0
+                        t0 + (60000 * 12), 0, 0
                 ));
                 bleRecords.add(new BleRecord(
                         "ff268fd5-9ed9-46a4-556d-352936e9f064",
-                        t0 + (60000 * 18), 0
+                        t0 + (60000 * 18), 0, 0
                 ));
                 bleRecords.add(new BleRecord(
                         "ff268fd5-9ed9-46a4-556d-352936e9f064",
-                        t0 + (60000 * 20), 0
+                        t0 + (60000 * 20), 0, 0
                 ));
             }
             for (BleRecord bleRecord : bleRecords) {

@@ -55,100 +55,108 @@ public class BluetoothServerHelper {
     }
 
     public static BluetoothGattServerCallback gattServerCallback =
-        new BluetoothGattServerCallback() {
-            @Override
-            public void onCharacteristicReadRequest(BluetoothDevice device, int requestId, int offset, BluetoothGattCharacteristic characteristic) {
-                super.onCharacteristicReadRequest(device, requestId, offset, characteristic);
-                Log.e("bleserver","read request "+characteristic.getUuid().toString());
-                if (characteristic.getUuid().equals(Constants.CHARACTERISTIC_UUID)) {
-                    Log.e("bleserver","going to send "+Constants.contactUUID);
-                    byte[] contactUuidBytes = ByteUtils.uuid2bytes(Constants.contactUUID);
-                    Log.e("bleserver","converted to bytes "+contactUuidBytes.length);
-                    boolean status = Constants.gattServer.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, 0,
-                            contactUuidBytes);
-                    Log.e("bleserver","status "+status);
-                }
-                Log.e("bleserver","finished read");
-            }
-
-            @Override
-            public void onCharacteristicWriteRequest(BluetoothDevice device, int requestId, BluetoothGattCharacteristic characteristic, boolean preparedWrite, boolean responseNeeded, int offset, byte[] value) {
-                super.onCharacteristicWriteRequest(device, requestId, characteristic, preparedWrite, responseNeeded, offset, value);
-                Log.e("bleserver","write request "+characteristic.getUuid().toString());
-                Log.e("bleserver","preparedwrite "+preparedWrite);
-                Log.e("bleserver","responseNeeded "+responseNeeded);
-
-                if (responseNeeded) {
-                    Constants.gattServer.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, offset, null);
+            new BluetoothGattServerCallback() {
+                @Override
+                public void onCharacteristicReadRequest(BluetoothDevice device, int requestId, int offset, BluetoothGattCharacteristic characteristic) {
+                    super.onCharacteristicReadRequest(device, requestId, offset, characteristic);
+                    Log.e("bleserver","read request "+characteristic.getUuid().toString());
+                    if (characteristic.getUuid().equals(Constants.CHARACTERISTIC_UUID)) {
+                        Log.e("bleserver","going to send "+Constants.contactUUID);
+                        byte[] contactUuidBytes = ByteUtils.uuid2bytes(Constants.contactUUID);
+                        Log.e("bleserver","converted to bytes "+contactUuidBytes.length);
+                        boolean status = Constants.gattServer.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, 0,
+                                contactUuidBytes);
+                        Log.e("bleserver","status "+status);
+                    }
+                    Log.e("bleserver","finished read");
                 }
 
-                if (value != null) {
-                    Log.e("bleserver","data len "+value.length);
-                    if (value.length == 16 || value.length == 17) {
-                        byte[] uuidByte = Arrays.copyOfRange(value,0,16);
-                        String contactUuid = ByteUtils.byte2UUIDstring(uuidByte);
-                        Log.e("bleserver","contactuuid "+contactUuid);
-                        int rssi = 0;
-                        String[] elts = contactUuid.split("-");
+                @Override
+                public void onCharacteristicWriteRequest(BluetoothDevice device, int requestId, BluetoothGattCharacteristic characteristic, boolean preparedWrite, boolean responseNeeded, int offset, byte[] value) {
+                    super.onCharacteristicWriteRequest(device, requestId, characteristic, preparedWrite, responseNeeded, offset, value);
+                    Log.e("bleserver","write request "+characteristic.getUuid().toString());
+                    Log.e("bleserver","preparedwrite "+preparedWrite);
+                    Log.e("bleserver","responseNeeded "+responseNeeded);
 
-                        // byte[-128,127] => int[0,255] => rssi[-255,0]
-                        if (value.length == 17) {
-                            rssi = -ByteUtils.byteConvert(value[16]);
-                            Log.e("bleserver","received an rssi value of "+rssi);
+                    if (responseNeeded) {
+                        Constants.gattServer.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, offset, null);
+                    }
+
+                    // 0-15: UUID
+                    // 16: RSSI
+                    // 17: phone model
+                    if (value != null) {
+                        Log.e("bleserver","data len "+value.length);
+                        if (value.length == 16 || value.length == 17 || value.length == 18) {
+                            //
+                            byte[] uuidByte = Arrays.copyOfRange(value,0,16);
+                            String contactUuid = ByteUtils.byte2UUIDstring(uuidByte);
+                            Log.e("bleserver","contactuuid "+contactUuid);
+
+                            int rssi = 0;
+                            // byte[-128,127] => int[0,255] => rssi[-255,0]
+                            if (value.length >= 17) {
+                                rssi = -ByteUtils.byteConvert(value[16]);
+                                Log.e("bleserver","received an rssi value of "+rssi);
+                            }
+                            else {
+                                Log.e("bleserver","rssi value not received");
+                            }
+                            Log.e("bleserver","rssi "+rssi+","+device.getAddress());
+
+                            int deviceID = 0;
+                            if (value.length == 18) {
+                                deviceID = value[17];
+                            }
+
+                            if (!Constants.writtenUUIDs.contains(contactUuid) &&
+                                BluetoothUtils.rssiThresholdCheck(rssi,deviceID)) {
+                                Constants.writtenUUIDs.add(contactUuid);
+                                Utils.bleLogToDatabase(cxt, contactUuid, rssi, TimeUtils.getTime(), deviceID);
+                            }
                         }
                         else {
-                            Log.e("bleserver","rssi value not received");
-                        }
-                        Log.e("bleserver","rssi "+rssi+","+device.getAddress());
-
-                        if (!Constants.writtenUUIDs.contains(contactUuid) &&
-                            rssi > Constants.rssiCutoff) {
-                            Constants.writtenUUIDs.add(contactUuid);
-                            Utils.bleLogToDatabase(cxt, contactUuid, rssi, TimeUtils.getTime());
+                            for(Byte b : value) {
+                                Log.e("bleserver",b+"");
+                            }
                         }
                     }
                     else {
-                        for(Byte b : value) {
-                            Log.e("bleserver",b+"");
-                        }
+                        Log.e("bleserver","write data is null");
+                    }
+                    Log.e("bleserver","finished write");
+                }
+
+                @Override
+                public void onConnectionStateChange(BluetoothDevice device, int status, int newState) {
+                    super.onConnectionStateChange(device, status, newState);
+                    if (newState == BluetoothProfile.STATE_CONNECTED) {
+                        Log.e("bleserver","connected "+device.getAddress());
+                    } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                        Log.e("bleserver","disconnected");
                     }
                 }
-                else {
-                    Log.e("bleserver","write data is null");
-                }
-                Log.e("bleserver","finished write");
-            }
 
-            @Override
-            public void onConnectionStateChange(BluetoothDevice device, int status, int newState) {
-                super.onConnectionStateChange(device, status, newState);
-                if (newState == BluetoothProfile.STATE_CONNECTED) {
-                    Log.e("bleserver","connected "+device.getAddress());
-                } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-                    Log.e("bleserver","disconnected");
-                }
-            }
-
-            @Override
-            public void onServiceAdded(int status, BluetoothGattService service) {
-                super.onServiceAdded(status, service);
-                if (service != null) {
-                    Log.e("bleserver", "service added " + service.getUuid());
-                    List<BluetoothGattCharacteristic> characs = service.getCharacteristics();
-                    if (characs != null) {
-                        for (BluetoothGattCharacteristic charac : characs) {
-                            Log.e("bleserver", "charac " + charac.getUuid());
-                            if (charac != null) {
-                                byte[] bb = charac.getValue();
-                                if (bb != null) {
-                                    for (Byte b : bb) {
-                                        Log.e("bleserver", b + "");
+                @Override
+                public void onServiceAdded(int status, BluetoothGattService service) {
+                    super.onServiceAdded(status, service);
+                    if (service != null) {
+                        Log.e("bleserver", "service added " + service.getUuid());
+                        List<BluetoothGattCharacteristic> characs = service.getCharacteristics();
+                        if (characs != null) {
+                            for (BluetoothGattCharacteristic charac : characs) {
+                                Log.e("bleserver", "charac " + charac.getUuid());
+                                if (charac != null) {
+                                    byte[] bb = charac.getValue();
+                                    if (bb != null) {
+                                        for (Byte b : bb) {
+                                            Log.e("bleserver", b + "");
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
-            }
-        };
+            };
 }

@@ -22,6 +22,7 @@
     <string name="default_exposed_notif">Based on your location history, we believe you might have been in the same place as people infected with COVID-19.</string>
     <string name="exposed_notif2">Please contact your healthcare professional.</string>
 
+    <string name="select_contact">Select Contacts</string>
     <string name="warning">Warning</string>
     <string name="logging_now_off">Logging is now turned off.</string>
     <string name="inter_prep">Interview Preparation</string>
