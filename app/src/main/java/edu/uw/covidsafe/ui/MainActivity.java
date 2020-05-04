@@ -362,16 +362,13 @@ public class MainActivity extends AppCompatActivity {
               
                 Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
                 if (fragment instanceof ContactLogFragment && fragment.isVisible()) {
-                    TabLayout layout =fragment.getView().findViewById(R.id.tabLayout);
+                    TabLayout layout = fragment.getView().findViewById(R.id.tabLayout);
                     if(layout != null){
-                        int position = layout.getSelectedTabPosition();
-                        TabLayout.Tab tab =layout.getTabAt(0);
-
-                        if(position == 0){
-                            ContactLogPageAdapter adapter =((ContactLogPageAdapter)Constants.contactLogViewPager.getAdapter());
-                            Fragment fragment1 = adapter.getItem(0);
-                            if(fragment1 instanceof LocationFragment){
-                                ((LocationFragment) fragment1).updateLocationView(CalendarDay.from(year, month, day), getApplicationContext());
+                        if (layout.getSelectedTabPosition() == 0) {
+                            ContactLogPageAdapter adapter = ((ContactLogPageAdapter)Constants.contactLogViewPager.getAdapter());
+                            Fragment locationFragment = adapter.getItem(0);
+                            if(locationFragment instanceof LocationFragment){
+                                ((LocationFragment) locationFragment).updateLocationView(CalendarDay.from(year, month, day), getApplicationContext());
                             }
                         }
                     }
@@ -420,14 +417,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void initView() {
         if (Constants.CurrentFragment != null &&
-            !Constants.CurrentFragment.toString().contains(PermissionFragment.class.toString()) &&
-                !Constants.CurrentFragment.toString().contains(ContactStepFragment.class.toString())&&
-                !Constants.CurrentFragment.toString().contains(PeopleFragment.class.toString())&&
-                !Constants.CurrentFragment.toString().contains(LocationFragment.class.toString())) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.CurrentFragment).commit();
-        } else if (Constants.CurrentFragment != null&&Constants.CurrentFragment.getClass().toString().contains(ContactStepFragment.class.toString())) {
+            !Constants.CurrentFragment.getClass().toString().contains(PermissionFragment.class.toString()) &&
+                !Constants.CurrentFragment.getClass().toString().contains(ContactStepFragment.class.toString())&&
+                !Constants.CurrentFragment.getClass().toString().contains(PeopleFragment.class.toString())&&
+                !Constants.CurrentFragment.getClass().toString().contains(LocationFragment.class.toString())) {
+             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.CurrentFragment).commit();
+        } else if (Constants.CurrentFragment != null && Constants.CurrentFragment.getClass().toString().contains(ContactStepFragment.class.toString())) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.ContactTraceFragment).commit();
-        }else if (Constants.CurrentFragment != null&&Constants.CurrentFragment.getClass().toString().contains(PeopleFragment.class.toString())) {
+        }else if (Constants.CurrentFragment != null && Constants.CurrentFragment.getClass().toString().contains(PeopleFragment.class.toString())) {
             Bundle data = new Bundle();
             data.putInt("pg", 1);
             if (Constants.ContactLogFragment == null) {
@@ -436,7 +433,7 @@ public class MainActivity extends AppCompatActivity {
             Constants.ContactLogFragment.setArguments(data);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.ContactLogFragment).commit();
         }
-        else if (Constants.CurrentFragment != null&&Constants.CurrentFragment.toString().contains(LocationFragment.class.toString())) {
+        else if (Constants.CurrentFragment != null && Constants.CurrentFragment.getClass().toString().contains(LocationFragment.class.toString())) {
             Bundle data = new Bundle();
             data.putInt("pg", 0);
             if (Constants.ContactLogFragment == null) {
@@ -476,7 +473,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.action_report:
                         selectedFragment = Constants.HealthFragment;
-                        if (Constants.CurrentFragment.toString().contains(ContactStepFragment.class.toString())) {
+                        if (Constants.CurrentFragment.getClass().toString().contains(ContactStepFragment.class.toString())) {
                             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, Constants.HealthFragment).commit();
                             return true;
                         }

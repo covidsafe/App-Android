@@ -136,7 +136,7 @@ public class PeopleFragment extends Fragment {
         Constants.CurrentFragment = this;
 
         if (Constants.menu != null && Constants.menu.findItem(R.id.mybutton) != null) {
-            Constants.menu.findItem(R.id.mybutton).setVisible(false);
+            Constants.menu.findItem(R.id.mybutton).setVisible(true);
         }
         if (humanDbChanged) {
             Log.e("contact","db changed ");
