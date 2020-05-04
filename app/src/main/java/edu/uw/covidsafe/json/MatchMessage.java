@@ -8,7 +8,7 @@ public class MatchMessage {
     public String boolExpression;
     public AreaMatch[] areaMatches;
     public BlueToothSeed[] bluetoothSeeds;
-    public String blue_tooth_match_message;
+    public String bluetooth_match_message;
 
     public JSONObject toJSON() throws JSONException {
         JSONObject matchMessage = new JSONObject();
@@ -28,8 +28,8 @@ public class MatchMessage {
             }
             matchMessage.put("areaMatches", arr2);
         }
-        if (blue_tooth_match_message != null) {
-            matchMessage.put("blue_tooth_match_message", blue_tooth_match_message);
+        if (bluetooth_match_message != null) {
+            matchMessage.put("bluetooth_match_message", bluetooth_match_message);
         }
 
         return matchMessage;
@@ -54,8 +54,8 @@ public class MatchMessage {
                 matchMessage.bluetoothSeeds[i] = BlueToothSeed.parse(arr.getJSONObject(i));
             }
         }
-        if (obj.has("blue_tooth_match_message")) {
-            matchMessage.blue_tooth_match_message = obj.getString("blue_tooth_match_message");
+        if (obj.has("bluetooth_match_message")) {
+            matchMessage.bluetooth_match_message = obj.getString("bluetooth_match_message");
         }
         return matchMessage;
     }
