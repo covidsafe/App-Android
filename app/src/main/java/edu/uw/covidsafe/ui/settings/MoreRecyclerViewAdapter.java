@@ -66,7 +66,7 @@ public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         ((MoreCard)holder).title.setText(titles.get(position));
 //        ((MoreCard)holder).desc.setText(desc.get(position));
         ((MoreCard)holder).icon.setImageDrawable(icons.get(position));
-        if (titles.get(position).equals(cxt.getString(R.string.share_text).toLowerCase())) {
+        if (titles.get(position).equals(cxt.getString(R.string.share_text))) {
             ((MoreCard)holder).card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -80,7 +80,7 @@ public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 }
             });
         }
-        else if (titles.get(position).toLowerCase().contains(cxt.getString(R.string.about_covidsafe).toLowerCase())) {
+        else if (titles.get(position).contains(cxt.getString(R.string.about_covidsafe))) {
             ((MoreCard)holder).card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -89,7 +89,7 @@ public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 }
             });
         }
-        else if (titles.get(position).toLowerCase().contains(cxt.getString(R.string.faq).toLowerCase())) {
+        else if (titles.get(position).contains(cxt.getString(R.string.faq))) {
             ((MoreCard)holder).card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
