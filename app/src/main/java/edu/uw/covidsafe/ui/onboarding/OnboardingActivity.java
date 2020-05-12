@@ -16,6 +16,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.covidsafe.R;
+import com.microsoft.appcenter.AppCenter;
+import com.microsoft.appcenter.analytics.Analytics;
+import com.microsoft.appcenter.crashes.Crashes;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -45,6 +48,10 @@ public class OnboardingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        AppCenter.start(getApplication(), Constants.AnalyticsSecret, Analytics.class, Crashes.class);
+        Crashes.setEnabled(true);
+
         this.activity = this;
         String manufacturer = Build.MANUFACTURER;
         String model = Build.MODEL;

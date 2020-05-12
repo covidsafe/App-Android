@@ -103,9 +103,6 @@ public class MainActivity extends AppCompatActivity {
         Log.e("metadata","MANUFACTURER "+manufacturer);
         Log.e("metadata","MODEL "+model);
 
-        AppCenter.start(getApplication(), Constants.AnalyticsSecret, Analytics.class, Crashes.class);
-        Crashes.setEnabled(true);
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.getMenu().clear();
         bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_release);
