@@ -27,7 +27,7 @@
     <string name="logging_now_off">El registro ahora está desactivado.</string>
     <string name="inter_prep">Preparación de entrevistas</string>
     <string name="email_subject">Paquete de información de la entrevista de CovidSafe Contact Tracer</string>
-    <string name="symptom_logs">Registros de síntomas</string>
+    <string name="symptom_logs">Registros de síntomas [DEMO]</string>
     <string name="location_logs">Registros de ubicación</string>
     <string name="contact_logs">Registros de contacto</string>
     <string name="send_email">Enviar correo electrónico</string>
@@ -267,7 +267,7 @@
     <string comment="button string for taking the user to the CDC guidance" name="cdc_guidance_text">Guía de los CDC</string>
     <string comment="symptom tracker text" name="symptom_tracker_text">Rastreador de síntomas</string>
     <string name="time_am">A.M</string>
-    <string name="time_pm">PM</string>
+    <string name="time_pm">P.M</string>
     <string name="saved_text">Salvado</string>
     <string name="not_logged_text">No registrado</string>
     <string name="prepare_for_contact_tracer_interview">Prepárese para su entrevista de contacto</string>
