@@ -76,6 +76,7 @@ import com.microsoft.appcenter.crashes.Crashes;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.wafflecopter.multicontactpicker.ContactResult;
 import com.wafflecopter.multicontactpicker.MultiContactPicker;
+import com.wafflecopter.multicontactpicker.RxContacts.PhoneNumber;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -279,7 +280,12 @@ public class MainActivity extends AppCompatActivity {
                         uri = contactResult.getPhoto().toString();
                     }
 
-                    new HumanOpsAsyncTask(this, contactResult.getPhoneNumbers().get(0).getNumber(), contactResult.getDisplayName(), uri, email).execute();
+                    List<PhoneNumber> phoneNumbers = contactResult.getPhoneNumbers();
+                    String phoneNum = "";
+                    if (phoneNumbers.size() > 0) {
+                        phoneNum = phoneNumbers.get(0).getNumber();
+                    }
+                    new HumanOpsAsyncTask(this, phoneNum, contactResult.getDisplayName(), uri, email).execute();
                 }
             }
         }
