@@ -262,23 +262,25 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         else if (requestCode == 3) {
-            List<ContactResult> results = MultiContactPicker.obtainResult(data);
-            String email = null;
-            String uri;
-            for (ContactResult contactResult : results) {
-                if (!contactResult.getEmails().isEmpty()) {
-                    email = contactResult.getEmails().get(0);
-                } else {
-                    email = null;
-                }
+            if (data != null) {
+                List<ContactResult> results = MultiContactPicker.obtainResult(data);
+                String email = null;
+                String uri;
+                for (ContactResult contactResult : results) {
+                    if (!contactResult.getEmails().isEmpty()) {
+                        email = contactResult.getEmails().get(0);
+                    } else {
+                        email = null;
+                    }
 
-                if (contactResult.getPhoto() == null) {
-                    uri = null;
-                } else {
-                    uri = contactResult.getPhoto().toString();
-                }
+                    if (contactResult.getPhoto() == null) {
+                        uri = null;
+                    } else {
+                        uri = contactResult.getPhoto().toString();
+                    }
 
-                new HumanOpsAsyncTask(this, contactResult.getPhoneNumbers().get(0).getNumber(), contactResult.getDisplayName(), uri, email).execute();
+                    new HumanOpsAsyncTask(this, contactResult.getPhoneNumbers().get(0).getNumber(), contactResult.getDisplayName(), uri, email).execute();
+                }
             }
         }
     }
