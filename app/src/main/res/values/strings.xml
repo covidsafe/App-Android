@@ -331,7 +331,7 @@ Contact tracing is a process that helps identify all the people who may have com
         Any information you contribute is protected. Learn more about how your information is used and protected on the Privacy page in Settings.
     </string>
     <string name="startText">
-        Let\s slow the spread of COVID-19 together.
+        Let\'s slow the spread of COVID-19 together.
     </string>
 
     <string name="emergency_text" comment="This is the emergency text that needs to be shown to the user in the symptom tab">
@@ -393,7 +393,7 @@ Contact tracing is a process that helps identify all the people who may have com
     <string name="dismiss_text">Dismiss</string>
     <string name="disclaimer_text">Disclaimer</string>
     <string name="cdc_guidance_text" comment="button string for taking the user to the CDC guidance">CDC Guidance</string>
-    <string name="symptom_tracker_text" comment="symptom tracker text">Symptom Tracker</string>
+    <string name="symptom_tracker_text" comment="symptom tracker text">Symptom Tracker [DEMO]</string>
     <string name="time_am">AM</string>
     <string name="time_pm">PM</string>
     <string name="saved_text">Saved</string>
