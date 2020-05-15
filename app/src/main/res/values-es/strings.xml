@@ -280,6 +280,7 @@
     <string name="symptoms_text">Síntomas</string>
     <string name="location_text">Ubicación</string>
     <string name="locations_text">Localizaciones</string>
+    <string name="locations_timeline_text">Cronograma</string>
     <string name="people_text">Personas</string>
     <string name="socialize_text">Agregue de forma segura a las personas con las que ha estado en contacto directamente desde su lista de contactos, o una a la vez.</string>
     <string name="summary_text">Resumen</string>
