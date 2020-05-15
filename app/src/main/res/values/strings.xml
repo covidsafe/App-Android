@@ -411,6 +411,7 @@ Contact tracing is a process that helps identify all the people who may have com
     <string name="locations_timeline_text">Timeline</string>
     <string name="people_text">People</string>
     <string name="socialize_text">Safely add people you’ve been in contact with directly from your contacts list, or one at a time. </string>
+    <string name="social_interaction_text">Social Interactions</string>
     <string name="summary_text">Summary</string>
     <string name="review_which_symptoms_to_include">Review which symptoms you would like to include.</string>
     <string name="we_have_detected_severe_symptoms_in_your_report">We’ve detected severe symptoms in your recent reports, and collected them below. We use this to determine lorem ipsum dolor consect. Learn More</string>

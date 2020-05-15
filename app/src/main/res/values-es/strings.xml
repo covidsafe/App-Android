@@ -22,7 +22,7 @@
     <string name="default_exposed_notif">Según su historial de ubicaciones, creemos que podría haber estado en el mismo lugar que las personas infectadas con COVID-19.</string>
     <string name="exposed_notif2">Por favor contacte a su profesional de la salud.</string>
 
-    <string name="select_contact">Select Contacts</string>
+    <string name="select_contact">Selecciona tus contactos</string>
     <string name="warning">Advertencia</string>
     <string name="logging_now_off">El registro ahora está desactivado.</string>
     <string name="inter_prep">Preparación de entrevistas</string>
@@ -283,6 +283,7 @@
     <string name="locations_timeline_text">Cronograma</string>
     <string name="people_text">Personas</string>
     <string name="socialize_text">Agregue de forma segura a las personas con las que ha estado en contacto directamente desde su lista de contactos, o una a la vez.</string>
+    <string name="social_interaction_text">Interacciones Sociales</string>
     <string name="summary_text">Resumen</string>
     <string name="review_which_symptoms_to_include">Revise qué síntomas le gustaría incluir.</string>
     <string name="we_have_detected_severe_symptoms_in_your_report">Hemos detectado síntomas graves en sus informes recientes y los hemos recopilado a continuación. Usamos esto para determinar el consentimiento del lorem ipsum dolor. Aprende más</string>
