@@ -56,10 +56,10 @@ public class SymptomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         feverSpinner.add("°F");
         feverSpinner.add("°C");
 
-        coughSeverity = new LinkedList<>();
-        coughSeverity.add("Mild");
-        coughSeverity.add("Moderate");
-        coughSeverity.add("Severe");
+//        coughSeverity = new LinkedList<>();
+//        coughSeverity.add("Mild");
+//        coughSeverity.add("Moderate");
+//        coughSeverity.add("Severe");
     }
 
     @NonNull
@@ -112,6 +112,10 @@ public class SymptomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         else if (symptom.contains(mContext.getString(R.string.vomiting_txt))) {
             if (cb != null) { cb.setChecked(dataIn.isVomiting()); }
             else { dataOut.setVomiting(isChecked); }
+        }
+        else if (symptom.contains(mContext.getString(R.string.no_symptoms_txt))) {
+            if (cb != null) { cb.setChecked(dataIn.isNone()); }
+            else { dataOut.setNone(isChecked); }
         }
     }
 

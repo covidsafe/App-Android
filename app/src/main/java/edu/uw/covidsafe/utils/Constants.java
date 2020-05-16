@@ -296,6 +296,7 @@ public class Constants {
             symptomDesc.add(av.getString(R.string.headache_desc));
             symptomDesc.add(av.getString(R.string.sore_throat_desc));
             symptomDesc.add(av.getString(R.string.vomiting_desc));
+            symptomDesc.add(av.getString(R.string.no_symptoms_desc));
         }
 
         if (symptoms.size() == 0) {
@@ -308,6 +309,7 @@ public class Constants {
             symptoms.add(av.getString(R.string.headache_txt));
             symptoms.add(av.getString(R.string.sore_throat_txt));
             symptoms.add(av.getString(R.string.vomiting_txt));
+            symptoms.add(av.getString(R.string.no_symptoms_txt));
         }
 
         if (bleThresholds.keySet().size() == 0) {

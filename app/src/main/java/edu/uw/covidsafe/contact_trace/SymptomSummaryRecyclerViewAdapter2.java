@@ -130,6 +130,9 @@ public class SymptomSummaryRecyclerViewAdapter2 extends RecyclerView.Adapter<Rec
         else if (symptom.equals(mContext.getString(R.string.vomiting_txt))) {
             ((SymptomSummaryHolder) holder).symptom.setText(R.string.vomiting_txt);
         }
+        else if (symptom.equals(mContext.getString(R.string.no_symptoms_txt))) {
+            ((SymptomSummaryHolder) holder).symptom.setText(R.string.no_symptoms_txt);
+        }
         else {
             ((SymptomSummaryHolder) holder).layout.setVisibility(View.GONE);
         }

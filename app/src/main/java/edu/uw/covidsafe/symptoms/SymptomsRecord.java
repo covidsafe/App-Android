@@ -97,6 +97,14 @@ public class SymptomsRecord implements Serializable {
     private boolean soreThroat;
 
     @NonNull
+    @ColumnInfo(name = "none")
+    private boolean none;
+
+    public boolean isNone() { return none; }
+
+    public void setNone(boolean none) {this.none = none;}
+
+    @NonNull
     @ColumnInfo(name = "vomiting")
     private boolean vomiting;
 
@@ -326,6 +334,9 @@ public class SymptomsRecord implements Serializable {
         }
         if (this.vomiting) {
             values.add(mContext.getString(R.string.vomiting_txt));
+        }
+        if (this.none) {
+            values.add(mContext.getString(R.string.no_symptoms_txt));
         }
         return values;
     }

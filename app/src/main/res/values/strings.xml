@@ -386,6 +386,7 @@ Contact tracing is a process that helps identify all the people who may have com
     <string name="terms_text">Terms and Conditions</string>
     <string name="release_text">Release information</string>
     <string name="import_text">Import location history</string>
+    <string name="import_desc">Sync your location history directly from Google by importing your timeline data.</string>
     <string name="share_text">Share</string>
     <string name="you_might_have_exposed" comment="text shown to the user if they have been exposed to the virus">You might have been exposed</string>
     <string name="exposure_notification_description_text" comment="description for the notifcation">Based on your location history, we believe you might have been in the same place as people infected with COVID-19</string>
@@ -430,6 +431,7 @@ Contact tracing is a process that helps identify all the people who may have com
     <string name="headache_desc">A painful sensation in any part of the head, ranging from sharp to dull, that may occur with other symptoms.</string>
     <string name="sore_throat_desc">Pain or irritation in the throat that can occur with or without swallowing, often accompanies infections.</string>
     <string name="vomiting_desc">Forcefully expelling the stomach\'s contents out of the mouth.</string>
+    <string name="no_symptoms_desc">No symptoms were experienced today.</string>
 
     <string name="next_btn_text">Next</string>
     <string name="previous_btn_text">Previous</string>
@@ -471,7 +473,8 @@ You can prepare a list of informaton they will ask about based on information co
     <string name="headache_txt">Headache</string>
     <string name="chest_pain_txt">Chest pains</string>
     <string name="sore_throat_txt">Sore throat</string>
-    <string name="vomiting_txt">Vomtting</string>
+    <string name="vomiting_txt">Vomiting</string>
+    <string name="no_symptoms_txt">No symptoms</string>
     <string name="announcement_txt">Announcement</string>
     <string name="bluetooth_is_disabled_on_this_device">Bluetooth is disabled on this device</string>
     <string name="not_logged_txt">Not logged</string>

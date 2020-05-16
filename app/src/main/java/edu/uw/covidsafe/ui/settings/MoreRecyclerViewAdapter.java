@@ -42,7 +42,8 @@ public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         if (section == 0) {
             titles.add(cxt.getString(R.string.import_text));
-            icons.add(cxt.getDrawable(R.drawable.ic_file_download_black_24dp));
+            desc.add(cxt.getString(R.string.import_desc));
+            icons.add(cxt.getDrawable(R.drawable.importicon));
         }
         else if (section == 1) {
             titles.add(cxt.getString(R.string.share_text));
@@ -64,7 +65,9 @@ public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ((MoreCard)holder).title.setText(titles.get(position));
-//        ((MoreCard)holder).desc.setText(desc.get(position));
+        if (desc.size() > position) {
+            ((MoreCard) holder).desc.setText(desc.get(position));
+        }
         ((MoreCard)holder).icon.setImageDrawable(icons.get(position));
         if (titles.get(position).equals(cxt.getString(R.string.share_text))) {
             ((MoreCard)holder).card.setOnClickListener(new View.OnClickListener() {
@@ -128,7 +131,7 @@ public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     public class MoreCard extends RecyclerView.ViewHolder {
         ImageView icon;
         TextView title;
-//        TextView desc;
+        TextView desc;
         MaterialCardView card;
 
         MoreCard(@NonNull View itemView) {
@@ -136,7 +139,7 @@ public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
             this.card = itemView.findViewById(R.id.materialCardView);
             this.icon = itemView.findViewById(R.id.imageView11);
             this.title = itemView.findViewById(R.id.share);
-//            this.desc = itemView.findViewById(R.id.perm1desc);
+            this.desc = itemView.findViewById(R.id.desc);
         }
     }
 }
