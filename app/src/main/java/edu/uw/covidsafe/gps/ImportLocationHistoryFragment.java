@@ -177,7 +177,7 @@ public class ImportLocationHistoryFragment extends Fragment {
                         R.anim.enter_left_to_right, R.anim.exit_left_to_right,
                         R.anim.enter_left_to_right, R.anim.exit_left_to_right);
                 if (getActivity().getClass().toString().equals(MainActivity.class.toString())) {
-                    tx.replace(R.id.fragment_container, Constants.SettingsFragment).commit();
+                    tx.replace(R.id.fragment_container, Constants.CurrentFragment).commit();
                 }
                 else {
                     tx.replace(R.id.fragment_container_onboarding, Constants.PermissionsFragment).commit();
@@ -193,7 +193,7 @@ public class ImportLocationHistoryFragment extends Fragment {
     public void onResume() {
         super.onResume();
 //        Constants.SettingsFragment = this;
-        Constants.CurrentFragment = this;
+//        Constants.CurrentFragment = this;
 //        Constants.MainFragmentState = this;
 
         if (Constants.menu != null && Constants.menu.findItem(R.id.mybutton) != null) {

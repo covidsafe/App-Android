@@ -1,8 +1,10 @@
 package edu.uw.covidsafe.ui.contact_log;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,11 +15,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -42,11 +49,14 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
+import edu.uw.covidsafe.comms.NetworkHelper;
 import edu.uw.covidsafe.gps.GpsDbModel;
 import edu.uw.covidsafe.gps.GpsHistoryRecyclerViewAdapter;
 import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.ui.MainActivity;
+import edu.uw.covidsafe.ui.onboarding.OnboardingActivity;
 import edu.uw.covidsafe.utils.Constants;
+import edu.uw.covidsafe.utils.Utils;
 
 public class LocationFragment extends Fragment {
 
@@ -87,19 +97,48 @@ public class LocationFragment extends Fragment {
         rview.setLayoutManager(new LinearLayoutManager(getActivity()));
         initCal();
 
+        ConstraintLayout layout = view.findViewById(R.id.container_import_view);
+        Button importButton = view.findViewById(R.id.importButton);
+        importButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!NetworkHelper.isNetworkAvailable(getActivity())) {
+                    Utils.mkSnack(getActivity(), view, getContext().getString(R.string.network_down));
+                }
+                else if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    FragmentTransaction tx;
+                    tx = ((MainActivity) getActivity()).getSupportFragmentManager().beginTransaction();
+                    tx.setCustomAnimations(
+                            R.anim.enter_right_to_left,R.anim.exit_right_to_left,
+                            R.anim.enter_right_to_left,R.anim.exit_right_to_left);
+                    tx.replace(R.id.fragment_container, Constants.ImportLocationHistoryFragment).commit();
+                }
+                else {
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
+                }
+            }
+        });
+
         GpsDbModel smodel = ViewModelProviders.of(getActivity()).get(GpsDbModel.class);
         smodel.getAllSorted().observe(getActivity(), new Observer<List<GpsRecord>>() {
             @Override
             public void onChanged(List<GpsRecord> gpsRecords) {
                 //something in db has changed, update
-                gpsDbChanged = true;
-                changedRecords = gpsRecords;
-                Log.e("contact","db on changed "+(changedRecords.size()));
+                if (gpsRecords.size() == 0) {
+                    layout.setVisibility(View.VISIBLE);
+                }
+                else {
+                    layout.setVisibility(View.GONE);
+                    gpsDbChanged = true;
+                    changedRecords = gpsRecords;
+
+                    Log.e("contact", "db on changed " + (changedRecords.size()));
 //                if (Constants.CurrentFragment.toString().toLowerCase().contains("location")) {
-                    Log.e("contact","db on changing");
+                    Log.e("contact", "db on changing");
                     updateLocationView(Constants.contactLogCal.getSelectedDate(), getContext());
                     gpsDbChanged = false;
 //                }
+                }
             }
         });
 

@@ -71,6 +71,10 @@ public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         if (desc.size() > position) {
             ((MoreCard) holder).desc.setText(desc.get(position));
         }
+        else {
+            ((MoreCard) holder).desc.setText("");
+        }
+        ((MoreCard)holder).button.setVisibility(View.GONE);
         ((MoreCard)holder).icon.setImageDrawable(icons.get(position));
         if (titles.get(position).equals(cxt.getString(R.string.share_text))) {
             ((MoreCard)holder).card.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +109,7 @@ public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
             });
         }
         else if (titles.get(position).contains(cxt.getString(R.string.import_text))) {
+            ((MoreCard)holder).button.setVisibility(View.VISIBLE);
             ((MoreCard)holder).card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
