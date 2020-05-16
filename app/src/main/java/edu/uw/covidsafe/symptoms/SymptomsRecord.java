@@ -254,7 +254,7 @@ public class SymptomsRecord implements Serializable {
                           int feverDaysExperienced, boolean abdominalPain, boolean chills,
                           boolean cough, long coughOnset, int coughDaysExperienced,
                           String coughSeverity, boolean diarrhea, boolean troubleBreathing,
-                          boolean headache, boolean soreThroat, boolean vomiting) {
+                          boolean headache, boolean soreThroat, boolean vomiting, boolean none) {
         this.ts = ts;
         this.logTime = logTime;
         this.fever = fever;
@@ -273,6 +273,7 @@ public class SymptomsRecord implements Serializable {
         this.headache = headache;
         this.soreThroat = soreThroat;
         this.vomiting = vomiting;
+        this.none = none;
     }
 
     public SymptomsRecord copy() {
@@ -295,13 +296,14 @@ public class SymptomsRecord implements Serializable {
         out.headache = headache;
         out.soreThroat = soreThroat;
         out.vomiting = vomiting;
+        out.none = none;
         return out;
     }
 
     public int numSymptoms() {
         List<Boolean> values = Lists.newArrayList(
                 fever, abdominalPain, chills, cough, diarrhea, troubleBreathing, headache,
-                soreThroat, vomiting
+                soreThroat, vomiting, none
         );
         return Booleans.countTrue(Booleans.toArray(values));
     }
@@ -341,53 +343,56 @@ public class SymptomsRecord implements Serializable {
         return values;
     }
 
-    public String toString() {
+    public String toString(Context cxt) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm");
         SimpleDateFormat format2 = new SimpleDateFormat("MM/dd");
         String ts = format.format(this.getTs());
         String rep = ts+" - ";
         if (this.fever) {
-            rep += "Fever";
+            rep += cxt.getString(R.string.fever_txt)+"\n";
             if (this.getFeverTemp() != 0) {
                 rep += " ("+this.getFeverTemp()+"°"+this.getFeverUnit()+")\n";
             }
             if (this.getFeverOnset() != 0) {
-                rep += "Onset date: "+format2.format(this.feverOnset)+"\n";
+                rep += cxt.getString(R.string.onset_date)+": "+format2.format(this.feverOnset)+"\n";
             }
             if (this.getFeverDaysExperienced() != 0) {
-                rep += "Days experienced: "+this.feverDaysExperienced+"\n";
+                rep += cxt.getString(R.string.card_onset_days_experienced)+": "+this.feverDaysExperienced+"\n";
             }
             rep += "\n";
         }
         if (this.abdominalPain) {
-            rep += "Abdominal pain\n";
+            rep += cxt.getString(R.string.abdominal_pain_txt)+"\n";
         }
         if (this.chills) {
-            rep += "Chills\n";
+            rep += cxt.getString(R.string.chills_txt)+"\n";
         }
         if (this.cough) {
-            rep += "Cough";
+            rep += cxt.getString(R.string.cough_txt);
             if (this.getCoughOnset() != 0) {
-                rep += "Onset date: "+format2.format(this.coughOnset)+"\n";
+                rep += cxt.getString(R.string.onset_date)+": "+format2.format(this.coughOnset)+"\n";
             }
             if (this.getCoughDaysExperienced() != 0) {
-                rep += "Days experienced: "+this.coughDaysExperienced+"\n";
+                rep += cxt.getString(R.string.card_onset_days_experienced)+": "+this.coughDaysExperienced+"\n";
             }
         }
         if (this.diarrhea) {
-            rep += "Diarrhea\n";
+            rep += cxt.getString(R.string.diarrhea_txt)+"\n";
         }
         if (this.troubleBreathing) {
-            rep += "Difficulty breathing (not severe)\n";
+            rep += cxt.getString(R.string.difficult_in_breathing_not_severe)+"\n";
         }
         if (this.headache) {
-            rep += "Headache\n";
+            rep += cxt.getString(R.string.headache_txt)+"\n";
         }
         if (this.soreThroat) {
-            rep += "Sore throat\n";
+            rep += cxt.getString(R.string.sore_throat_txt)+"\n";
         }
         if (this.vomiting) {
-            rep += "Vomitting\n";
+            rep += cxt.getString(R.string.vomiting_txt)+"\n";
+        }
+        if (this.none) {
+            rep += cxt.getString(R.string.no_symptoms_txt)+"\n";
         }
         return rep;
     }

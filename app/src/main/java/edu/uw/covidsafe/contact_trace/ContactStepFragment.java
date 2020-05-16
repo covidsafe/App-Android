@@ -248,7 +248,7 @@ public class ContactStepFragment extends Fragment {
     public void exportAsEmail() {
         String rep=getContext().getString(R.string.symptom_logs)+":\n";
         for (SymptomsRecord record : Constants.changedContactSympRecords) {
-            rep += record.toString();
+            rep += record.toString(getContext());
         }
         rep+="\n"+getContext().getString(R.string.location_logs)+":\n";
         for (GpsRecord record : Constants.contactGpsAdapter.records) {
