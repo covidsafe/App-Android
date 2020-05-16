@@ -386,6 +386,7 @@ Contact tracing is a process that helps identify all the people who may have com
     <string name="terms_text">Terms and Conditions</string>
     <string name="release_text">Release information</string>
     <string name="import_text">Import location history</string>
+    <string name="import_only_text">Import</string>
     <string name="import_desc">Sync your location history directly from Google by importing your timeline data.</string>
     <string name="share_text">Share</string>
     <string name="you_might_have_exposed" comment="text shown to the user if they have been exposed to the virus">You might have been exposed</string>
