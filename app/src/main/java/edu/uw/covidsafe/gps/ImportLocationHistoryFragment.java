@@ -1,6 +1,7 @@
 package edu.uw.covidsafe.gps;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -39,6 +40,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.uw.covidsafe.ui.MainActivity;
+import edu.uw.covidsafe.ui.onboarding.OnboardingActivity;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
@@ -93,13 +95,23 @@ public class ImportLocationHistoryFragment extends Fragment {
 
         getContext().registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
 
-        ((MainActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(getActivity().getDrawable(R.drawable.ic_close_black_24dp));
+        if (getActivity().getClass().toString().equals(MainActivity.class.toString())) {
+            ((MainActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(getActivity().getDrawable(R.drawable.ic_close_black_24dp));
+            ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getColor(R.color.white)));
+            ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
+            ((MainActivity) getActivity()).getSupportActionBar().show();
+            ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((MainActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(getActivity().getString(R.string.settings_header_text)));
+        }
+        else {
+            ((OnboardingActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(getActivity().getDrawable(R.drawable.ic_close_black_24dp));
+            ((OnboardingActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getColor(R.color.white)));
+            ((OnboardingActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
+            ((OnboardingActivity) getActivity()).getSupportActionBar().show();
+            ((OnboardingActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((OnboardingActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(getActivity().getString(R.string.settings_header_text)));
+        }
 
-        ((MainActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getActivity().getColor(R.color.white)));
-        ((MainActivity) getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
-        ((MainActivity) getActivity()).getSupportActionBar().show();
-        ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(getActivity().getString(R.string.settings_header_text)));
 
         SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
         SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
@@ -164,7 +176,12 @@ public class ImportLocationHistoryFragment extends Fragment {
                 tx.setCustomAnimations(
                         R.anim.enter_left_to_right, R.anim.exit_left_to_right,
                         R.anim.enter_left_to_right, R.anim.exit_left_to_right);
-                tx.replace(R.id.fragment_container, Constants.SettingsFragment).commit();
+                if (getActivity().getClass().toString().equals(MainActivity.class.toString())) {
+                    tx.replace(R.id.fragment_container, Constants.SettingsFragment).commit();
+                }
+                else {
+                    tx.replace(R.id.fragment_container_onboarding, Constants.PermissionsFragment).commit();
+                }
             }
         });
 

@@ -2,6 +2,7 @@
 
 <ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:background="@color/gray"
     android:layout_height="wrap_content">
@@ -46,21 +47,40 @@
             app:strokeColor="@color/gray"
             app:strokeWidth="1dp">
 
-            <RelativeLayout
-                android:id="@+id/perms"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/privacyText">
+                android:layout_height="wrap_content">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewPerms"
+                <RelativeLayout
+                    android:id="@+id/perms"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-            </RelativeLayout>
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerViewPerms"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/perms2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/perms">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerViewPerms2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                </RelativeLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <androidx.constraintlayout.widget.Guideline
@@ -93,26 +113,6 @@
             app:layout_constraintTop_toBottomOf="@+id/materialCardViewParent"
             app:layout_constraintEnd_toStartOf="@+id/guidelineV95"
             app:layout_constraintStart_toStartOf="@+id/guidelineV5" />
-
-        <Button
-            android:id="@+id/button4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="292dp"
-            android:text="Button"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/button5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            android:layout_marginEnd="6dp"
-            android:text="Button"
-            app:layout_constraintEnd_toEndOf="@+id/button4"
-            app:layout_constraintTop_toBottomOf="@+id/button4" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +28,7 @@ import java.util.ArrayList;
 
 import edu.uw.covidsafe.comms.NetworkHelper;
 import edu.uw.covidsafe.ui.MainActivity;
+import edu.uw.covidsafe.ui.onboarding.OnboardingActivity;
 import edu.uw.covidsafe.utils.Constants;
 
 public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -105,21 +108,41 @@ public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
             ((MoreCard)holder).card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!NetworkHelper.isNetworkAvailable(av)) {
-                        Toast.makeText(cxt,cxt.getString(R.string.network_down), Toast.LENGTH_LONG).show();
-                    }
-                    else if (ActivityCompat.checkSelfPermission(cxt, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                        FragmentTransaction tx = ((MainActivity)av).getSupportFragmentManager().beginTransaction();
-                        tx.setCustomAnimations(
-                                R.anim.enter_right_to_left,R.anim.exit_right_to_left,
-                                R.anim.enter_right_to_left,R.anim.exit_right_to_left);
-                        tx.replace(R.id.fragment_container, Constants.ImportLocationHistoryFragment).commit();
-                    }
-                    else {
-                        ActivityCompat.requestPermissions(av, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
-                    }
+                    onClickBehavior();
                 }
             });
+            ((MoreCard)holder).button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onClickBehavior();
+                }
+            });
+        }
+    }
+
+    public void onClickBehavior() {
+        if (!NetworkHelper.isNetworkAvailable(av)) {
+            Toast.makeText(cxt,cxt.getString(R.string.network_down), Toast.LENGTH_LONG).show();
+        }
+        else if (ActivityCompat.checkSelfPermission(cxt, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            FragmentTransaction tx;
+            if (av.getClass().toString().equals(MainActivity.class.toString())) {
+                tx = ((MainActivity) av).getSupportFragmentManager().beginTransaction();
+                tx.setCustomAnimations(
+                        R.anim.enter_right_to_left,R.anim.exit_right_to_left,
+                        R.anim.enter_right_to_left,R.anim.exit_right_to_left);
+                tx.replace(R.id.fragment_container, Constants.ImportLocationHistoryFragment).commit();
+            }
+            else {
+                tx = ((OnboardingActivity) av).getSupportFragmentManager().beginTransaction();
+                tx.setCustomAnimations(
+                        R.anim.enter_right_to_left,R.anim.exit_right_to_left,
+                        R.anim.enter_right_to_left,R.anim.exit_right_to_left);
+                tx.replace(R.id.fragment_container_onboarding, Constants.ImportLocationHistoryFragment).commit();
+            }
+        }
+        else {
+            ActivityCompat.requestPermissions(av, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
         }
     }
 
@@ -133,6 +156,7 @@ public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         TextView title;
         TextView desc;
         MaterialCardView card;
+        Button button;
 
         MoreCard(@NonNull View itemView) {
             super(itemView);
@@ -140,6 +164,7 @@ public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
             this.icon = itemView.findViewById(R.id.imageView11);
             this.title = itemView.findViewById(R.id.share);
             this.desc = itemView.findViewById(R.id.desc);
+            this.button = itemView.findViewById(R.id.button);
         }
     }
 }

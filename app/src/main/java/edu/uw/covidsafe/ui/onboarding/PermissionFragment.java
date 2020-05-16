@@ -26,6 +26,7 @@ import com.example.covidsafe.R;
 
 import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.ui.MainActivity;
+import edu.uw.covidsafe.ui.settings.MoreRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.settings.PermissionsRecyclerViewAdapter;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
@@ -60,6 +61,11 @@ public class PermissionFragment extends Fragment {
         rview3.setAdapter(adapter3);
         rview3.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        RecyclerView rview4 = view.findViewById(R.id.recyclerViewPerms2);
+        MoreRecyclerViewAdapter adapter4 = new MoreRecyclerViewAdapter(getContext(),getActivity(), 0);
+        rview4.setAdapter(adapter4);
+        rview4.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         Button nextButton = (Button) view.findViewById(R.id.nextButton);
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,32 +76,6 @@ public class PermissionFragment extends Fragment {
 
         TextView privacy = view.findViewById(R.id.privacyText);
         Utils.linkify(privacy,getString(R.string.privacyLink1));
-
-        // test buttons
-        Button bb = (Button) view.findViewById(R.id.button4);
-        bb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean s1 = AppPreferencesHelper.areNotificationsEnabled(getActivity());
-                boolean s2 = AppPreferencesHelper.isGPSEnabled(getActivity());
-                boolean s3 = AppPreferencesHelper.isBluetoothEnabled(getActivity());
-                Log.e("perms","PERM STATE "+s1+","+s2+","+s3);
-            }
-        });
-
-        Button bb2 = (Button) view.findViewById(R.id.button5);
-        bb2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
-                intent.setData(uri);
-                getActivity().startActivity(intent);
-            }
-        });
-
-        bb.setVisibility(View.GONE);
-        bb2.setVisibility(View.GONE);
 
         return view;
     }
