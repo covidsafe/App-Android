@@ -1,4 +1,4 @@
-package edu.uw.covidsafe.contact_trace;
+package edu.uw.covidsafe.ui.contact_trace;
 
 import android.annotation.SuppressLint;
 import android.graphics.drawable.ColorDrawable;

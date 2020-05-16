@@ -210,6 +210,9 @@ Contact tracing is a process that helps identify all the people who may have com
     <string name="perm_write_rationale">Without this permission, we will be unable to import your location history. Are you sure you want to deny this permission?</string>
     <string name="perm_ble_ask">We require access to Bluetooth information when the app is closed. Would you like to open app settings to enable this?</string>
 
+    <string name="contactTitle">You have no added Contacts</string>
+    <string name="contactDesc">Safely add people you’ve been in contact with directly from your contacts list,  or one at a time.</string>
+
     <string name="importTitle">Import your location history</string>
     <string name="importFromGoogle">Import From Google</string>
     <string name="importDesc">Import your timeline data from Google or add locations one by one.</string>

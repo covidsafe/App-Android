@@ -25,14 +25,14 @@ import java.util.Date;
 
 import edu.uw.covidsafe.ble.BluetoothUtils;
 import edu.uw.covidsafe.comms.NetworkConstant;
-import edu.uw.covidsafe.contact_trace.HumanOpsAsyncTask;
+import edu.uw.covidsafe.ui.contact_trace.HumanOpsAsyncTask;
 import edu.uw.covidsafe.gps.GpsOpsAsyncTask;
 import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.preferences.LocaleHelper;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDOpsAsyncTask;
-import edu.uw.covidsafe.symptoms.SymptomsOpsAsyncTask;
-import edu.uw.covidsafe.symptoms.SymptomsRecord;
+import edu.uw.covidsafe.ui.symptoms.SymptomsOpsAsyncTask;
+import edu.uw.covidsafe.ui.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.ui.PermissionLogic;
 import edu.uw.covidsafe.ui.settings.PermUtils;

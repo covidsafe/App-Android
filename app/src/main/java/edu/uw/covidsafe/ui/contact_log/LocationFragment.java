@@ -126,6 +126,7 @@ public class LocationFragment extends Fragment {
                 //something in db has changed, update
                 if (gpsRecords.size() == 0) {
                     layout.setVisibility(View.VISIBLE);
+                    updateLocationView(Constants.contactLogCal.getSelectedDate(), getContext());
                 }
                 else {
                     layout.setVisibility(View.GONE);

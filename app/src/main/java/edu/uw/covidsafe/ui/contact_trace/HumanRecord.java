@@ -1,4 +1,4 @@
-package edu.uw.covidsafe.contact_trace;
+package edu.uw.covidsafe.ui.contact_trace;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

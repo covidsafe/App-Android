@@ -1,4 +1,4 @@
-package edu.uw.covidsafe.contact_trace;
+package edu.uw.covidsafe.ui.symptoms;
 
 import android.content.Context;
 
@@ -11,13 +11,13 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {HumanRecord.class}, version = 1, exportSchema = false)
-public abstract class HumanDbRecordRoomDatabase extends RoomDatabase {
+@Database(entities = {SymptomsRecord.class}, version = 1, exportSchema = false)
+public abstract class SymptomsDbRecordRoomDatabase extends RoomDatabase {
 
     private static final int NUMBER_OF_THREADS = 4;
     static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
-    private static volatile HumanDbRecordRoomDatabase INSTANCE;
+    private static volatile SymptomsDbRecordRoomDatabase INSTANCE;
     private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
@@ -37,12 +37,12 @@ public abstract class HumanDbRecordRoomDatabase extends RoomDatabase {
         }
     };
 
-    static HumanDbRecordRoomDatabase getDatabase(final Context context) {
+    static SymptomsDbRecordRoomDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
-            synchronized (HumanDbRecordRoomDatabase.class) {
+            synchronized (SymptomsDbRecordRoomDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context,
-                            HumanDbRecordRoomDatabase.class, "human_record_database")
+                            SymptomsDbRecordRoomDatabase.class, "symptoms_record_database")
                             .build();
                 }
             }
@@ -51,5 +51,5 @@ public abstract class HumanDbRecordRoomDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    public abstract HumanDbRecordDao recordDao();
+    public abstract SymptomsDbRecordDao recordDao();
 }

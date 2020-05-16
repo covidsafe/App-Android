@@ -1,4 +1,4 @@
-package edu.uw.covidsafe.contact_trace;
+package edu.uw.covidsafe.ui.contact_trace;
 
 import android.content.Context;
 import android.util.Log;
@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 
-import edu.uw.covidsafe.symptoms.SymptomsRecord;
+import edu.uw.covidsafe.ui.symptoms.SymptomsRecord;
 
 public class SymptomSummaryRecyclerViewAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

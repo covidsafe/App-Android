@@ -19,7 +19,7 @@ import java.util.Date;
 import edu.uw.covidsafe.ble.BleDbRecordRepository;
 import edu.uw.covidsafe.gps.GpsDbRecordRepository;
 import edu.uw.covidsafe.seed_uuid.SeedUUIDDbRecordRepository;
-import edu.uw.covidsafe.symptoms.SymptomsDbRecordRepository;
+import edu.uw.covidsafe.ui.symptoms.SymptomsDbRecordRepository;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.TimeUtils;
 import io.reactivex.plugins.RxJavaPlugins;

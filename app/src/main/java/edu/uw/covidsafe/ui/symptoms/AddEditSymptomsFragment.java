@@ -1,4 +1,4 @@
-package edu.uw.covidsafe.symptoms;
+package edu.uw.covidsafe.ui.symptoms;
 
 import android.annotation.SuppressLint;
 import android.graphics.drawable.ColorDrawable;

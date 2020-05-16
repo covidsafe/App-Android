@@ -45,9 +45,9 @@ import java.util.Objects;
 
 import edu.uw.covidsafe.comms.PullFromServerTaskDemo2;
 import edu.uw.covidsafe.preferences.AppPreferencesHelper;
-import edu.uw.covidsafe.symptoms.SymptomDbModel;
-import edu.uw.covidsafe.symptoms.SymptomUtils;
-import edu.uw.covidsafe.symptoms.SymptomsRecord;
+import edu.uw.covidsafe.ui.symptoms.SymptomDbModel;
+import edu.uw.covidsafe.ui.symptoms.SymptomUtils;
+import edu.uw.covidsafe.ui.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.health.ResourceRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.notif.NotifDbModel;
 import edu.uw.covidsafe.ui.notif.NotifOpsAsyncTask;

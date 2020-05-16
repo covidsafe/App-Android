@@ -1,4 +1,4 @@
-package edu.uw.covidsafe.contact_trace;
+package edu.uw.covidsafe.ui.contact_trace;
 
 import android.Manifest;
 import android.content.Intent;
@@ -30,8 +30,8 @@ import java.util.List;
 
 import edu.uw.covidsafe.gps.GpsDbModel;
 import edu.uw.covidsafe.gps.GpsRecord;
-import edu.uw.covidsafe.symptoms.SymptomDbModel;
-import edu.uw.covidsafe.symptoms.SymptomsRecord;
+import edu.uw.covidsafe.ui.symptoms.SymptomDbModel;
+import edu.uw.covidsafe.ui.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.MainFragment;
 import edu.uw.covidsafe.utils.Constants;
 

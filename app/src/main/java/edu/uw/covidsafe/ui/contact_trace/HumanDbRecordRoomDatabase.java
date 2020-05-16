@@ -1,4 +1,4 @@
-package edu.uw.covidsafe.symptoms;
+package edu.uw.covidsafe.ui.contact_trace;
 
 import android.content.Context;
 
@@ -11,13 +11,13 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {SymptomsRecord.class}, version = 1, exportSchema = false)
-public abstract class SymptomsDbRecordRoomDatabase extends RoomDatabase {
+@Database(entities = {HumanRecord.class}, version = 1, exportSchema = false)
+public abstract class HumanDbRecordRoomDatabase extends RoomDatabase {
 
     private static final int NUMBER_OF_THREADS = 4;
     static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
-    private static volatile SymptomsDbRecordRoomDatabase INSTANCE;
+    private static volatile HumanDbRecordRoomDatabase INSTANCE;
     private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
@@ -37,12 +37,12 @@ public abstract class SymptomsDbRecordRoomDatabase extends RoomDatabase {
         }
     };
 
-    static SymptomsDbRecordRoomDatabase getDatabase(final Context context) {
+    static HumanDbRecordRoomDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
-            synchronized (SymptomsDbRecordRoomDatabase.class) {
+            synchronized (HumanDbRecordRoomDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context,
-                            SymptomsDbRecordRoomDatabase.class, "symptoms_record_database")
+                            HumanDbRecordRoomDatabase.class, "human_record_database")
                             .build();
                 }
             }
@@ -51,5 +51,5 @@ public abstract class SymptomsDbRecordRoomDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    public abstract SymptomsDbRecordDao recordDao();
+    public abstract HumanDbRecordDao recordDao();
 }

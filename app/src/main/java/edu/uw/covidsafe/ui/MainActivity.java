@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.DatePicker;
-import android.widget.TableLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -26,23 +25,20 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.covidsafe.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
-import com.microsoft.appcenter.AppCenter;
-import com.microsoft.appcenter.analytics.Analytics;
-import com.microsoft.appcenter.crashes.Crashes;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.Calendar;
 import java.util.Date;
 
 import edu.uw.covidsafe.ble.BluetoothUtils;
-import edu.uw.covidsafe.contact_trace.ContactStepFragment;
-import edu.uw.covidsafe.contact_trace.HumanOpsAsyncTask;
+import edu.uw.covidsafe.ui.contact_trace.ContactStepFragment;
+import edu.uw.covidsafe.ui.contact_trace.HumanOpsAsyncTask;
 import edu.uw.covidsafe.gps.ImportLocationHistoryFragment;
 import edu.uw.covidsafe.preferences.AppPreferencesHelper;
 import edu.uw.covidsafe.preferences.LocaleHelper;
-import edu.uw.covidsafe.symptoms.AddEditSymptomsFragment;
-import edu.uw.covidsafe.symptoms.SymptomConfirmFragment;
-import edu.uw.covidsafe.symptoms.SymptomTrackerFragment;
+import edu.uw.covidsafe.ui.symptoms.AddEditSymptomsFragment;
+import edu.uw.covidsafe.ui.symptoms.SymptomConfirmFragment;
+import edu.uw.covidsafe.ui.symptoms.SymptomTrackerFragment;
 import edu.uw.covidsafe.ui.contact_log.ContactLogFragment;
 import edu.uw.covidsafe.ui.contact_log.ContactLogPageAdapter;
 import edu.uw.covidsafe.ui.contact_log.LocationFragment;
@@ -57,30 +53,11 @@ import edu.uw.covidsafe.ui.settings.SettingsFragment;
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.TimeUtils;
 import edu.uw.covidsafe.utils.Utils;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.datepicker.MaterialDatePicker;
-import com.microsoft.appcenter.AppCenter;
-import com.microsoft.appcenter.analytics.Analytics;
-import com.microsoft.appcenter.crashes.Crashes;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.datepicker.MaterialDatePicker;
-import com.microsoft.appcenter.AppCenter;
-import com.microsoft.appcenter.analytics.Analytics;
-import com.microsoft.appcenter.crashes.Crashes;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.wafflecopter.multicontactpicker.ContactResult;
 import com.wafflecopter.multicontactpicker.MultiContactPicker;
 import com.wafflecopter.multicontactpicker.RxContacts.PhoneNumber;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {

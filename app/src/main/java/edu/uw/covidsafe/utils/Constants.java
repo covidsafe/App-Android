@@ -30,14 +30,14 @@ import java.util.concurrent.ScheduledFuture;
 
 import javax.crypto.SecretKey;
 
-import edu.uw.covidsafe.contact_trace.ContactTraceFragment;
-import edu.uw.covidsafe.contact_trace.GpsHistoryRecyclerViewAdapter2;
-import edu.uw.covidsafe.contact_trace.HumanRecord;
+import edu.uw.covidsafe.ui.contact_trace.ContactTraceFragment;
+import edu.uw.covidsafe.ui.contact_trace.GpsHistoryRecyclerViewAdapter2;
+import edu.uw.covidsafe.ui.contact_trace.HumanRecord;
 import edu.uw.covidsafe.gps.GpsRecord;
 import edu.uw.covidsafe.gps.ImportLocationHistoryFragment;
 import edu.uw.covidsafe.preferences.AppPreferencesHelper;
-import edu.uw.covidsafe.symptoms.SymptomTrackerFragment;
-import edu.uw.covidsafe.symptoms.SymptomsRecord;
+import edu.uw.covidsafe.ui.symptoms.SymptomTrackerFragment;
+import edu.uw.covidsafe.ui.symptoms.SymptomsRecord;
 import edu.uw.covidsafe.ui.MainFragment;
 import edu.uw.covidsafe.ui.contact_log.ContactLogFragment;
 import edu.uw.covidsafe.ui.contact_log.LocationFragment;

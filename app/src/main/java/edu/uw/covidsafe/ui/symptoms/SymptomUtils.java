@@ -1,4 +1,4 @@
-package edu.uw.covidsafe.symptoms;
+package edu.uw.covidsafe.ui.symptoms;
 
 import android.app.Activity;
 import android.content.Context;

@@ -21,6 +21,7 @@ import com.wafflecopter.multicontactpicker.MultiContactPicker;
 
 import java.util.List;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -30,9 +31,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.covidsafe.R;
 
-import edu.uw.covidsafe.contact_trace.HumanDbModel;
-import edu.uw.covidsafe.contact_trace.HumanRecord;
-import edu.uw.covidsafe.contact_trace.HumanSummaryRecyclerViewAdapter;
+import edu.uw.covidsafe.ui.contact_trace.HumanDbModel;
+import edu.uw.covidsafe.ui.contact_trace.HumanRecord;
+import edu.uw.covidsafe.ui.contact_trace.HumanSummaryRecyclerViewAdapter;
 import edu.uw.covidsafe.ui.MainActivity;
 import edu.uw.covidsafe.utils.Constants;
 
@@ -93,17 +94,26 @@ public class PeopleFragment extends Fragment {
         tipView.setAdapter(humanAdapter);
         tipView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        ConstraintLayout clayout = view.findViewById(R.id.contactView);
+
         HumanDbModel smodel = ViewModelProviders.of(getActivity()).get(HumanDbModel.class);
         smodel.getAllSorted().observe(getActivity(), new Observer<List<HumanRecord>>() {
             @Override
             public void onChanged(List<HumanRecord> humanRecords) {
-                Log.e("human","onchanged "+humanRecords.size());
-                humanDbChanged = true;
-                Constants.changedContactHumanRecords = humanRecords;
+                if (humanRecords.size() == 0) {
+                   clayout.setVisibility(View.VISIBLE);
+                    humanAdapter.setRecords(humanRecords);
+                }
+                else {
+                    clayout.setVisibility(View.GONE);
+                    Log.e("human", "onchanged " + humanRecords.size());
+                    humanDbChanged = true;
+                    Constants.changedContactHumanRecords = humanRecords;
 //                if (Constants.CurrentFragment.toString().toLowerCase().contains("people")) {
                     humanAdapter.setRecords(humanRecords);
                     humanDbChanged = false;
 //                }
+                }
             }
         });
 
