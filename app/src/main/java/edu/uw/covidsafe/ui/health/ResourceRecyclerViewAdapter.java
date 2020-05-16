@@ -72,16 +72,14 @@ public class ResourceRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         ImageView icon;
         TextView title;
 //        TextView desc;
-        MaterialCardView card;
-        ConstraintLayout parentLayout;
+        ConstraintLayout card;
 
         ResourceCard(@NonNull View itemView) {
             super(itemView);
             this.icon = itemView.findViewById(R.id.imageView3);
             this.title = itemView.findViewById(R.id.textView);
 //            this.desc = itemView.findViewById(R.id.resdesc);
-            this.card = itemView.findViewById(R.id.cdcView);
-            this.parentLayout = itemView.findViewById(R.id.parent);
+            this.card = itemView.findViewById(R.id.parent);
         }
     }
 }

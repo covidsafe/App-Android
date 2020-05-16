@@ -96,6 +96,7 @@
         </RelativeLayout>
 
         <include
+            android:layout_marginTop="20dp"
             android:id="@+id/container_header_lyt"
             layout="@layout/resource_links"
             android:layout_width="fill_parent"
