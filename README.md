@@ -1,5 +1,5 @@
 
-<img src="https://github.com/covidsafe/App-Android/blob/master/imgs/logo_purple.png" width=100px>
+<img src="https://github.com/covidsafe/App-Android/blob/master/imgs/logo_purple2.png" width=100px>
 
 # CovidSafe
 
