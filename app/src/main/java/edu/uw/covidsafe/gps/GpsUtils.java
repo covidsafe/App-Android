@@ -1,10 +1,16 @@
 package edu.uw.covidsafe.gps;
 
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import edu.uw.covidsafe.utils.Constants;
 import edu.uw.covidsafe.utils.Utils;
@@ -166,5 +172,23 @@ public class GpsUtils {
         } catch (Exception e) {
             Log.e("logme", e.getMessage());
         }
+    }
+
+    public static List<AddressTS> reverseGEOCode(Context context, List<LocationData> locationDataList) {
+        List<AddressTS> places = new ArrayList<>();
+        Geocoder geocoder = new Geocoder(context);
+        for(LocationData location : locationDataList){
+            double lat = location.getLatitude();
+            double lon = location.getLongitude();
+            double timestamp = location.getTime();
+            try {
+                List<Address> addresses = geocoder.getFromLocation(lat, lon, 1);
+                places.add(new AddressTS("", addresses.get(0).getAddressLine(0), timestamp));
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return places;
     }
 }
